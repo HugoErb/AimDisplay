@@ -88,7 +88,6 @@ $black2: #999;
     border-bottom-left-radius: 30px;
 }
 
-/* Styles pour les pseudo-éléments sur hover et active */
 /* Styles pour les pseudo-éléments sur hover, à l'exception du premier élément <li> */
 .sidebar ul li:not(:first-child):hover a::before,
 .sidebar ul li:not(:first-child):hover a::after {
@@ -116,7 +115,6 @@ $black2: #999;
     box-shadow: 35px 35px 0 10px $background;
     pointer-events: none;
 }
-
 
 .sidebar ul li:not(:first-child):hover a::after,
 .active::after {
