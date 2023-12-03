@@ -6,5 +6,9 @@ import { Component } from '@angular/core';
   styleUrls: ['./creation.component.scss']
 })
 export class CreationComponent {
+  isCollapsed = false;
 
+  toggleSidebar() {
+    this.isCollapsed = !this.isCollapsed;
+  }
 }
