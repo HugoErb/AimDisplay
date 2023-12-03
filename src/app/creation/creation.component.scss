@@ -4,14 +4,15 @@ $primary2: #0062ff;
 $black1: #222;
 $black2: #999;
 
-/****************************************** Side Bar *******************************************/
-
 .container {
     position: relative;
     width: 100%;
 }
 
-.navigation {
+/****************************************** Side Bar *******************************************/
+
+/* Styles de base pour la sidebar */
+.sidebar {
     position: fixed;
     width: 250px;
     height: 100%;
@@ -19,20 +20,17 @@ $black2: #999;
     border-left: 10px solid $primary;
     overflow: hidden;
     transition: 0.5s;
-    -webkit-transition: 0.5s;
-    -moz-transition: 0.5s;
-    -ms-transition: 0.5s;
-    -o-transition: 0.5s;
 }
 
-.navigation ul {
+/* Styles pour les éléments de la liste */
+.sidebar ul {
     position: absolute;
     width: 100%;
     top: 0;
     left: 0;
 }
 
-.navigation ul li {
+.sidebar ul li {
     position: relative;
     width: 100%;
     list-style: none;
@@ -40,23 +38,17 @@ $black2: #999;
     border-bottom-left-radius: 30px;
 }
 
-#dashboardName {
+/* Style spécifique pour le premier élément (titre de l'application et logo) */
+.applicationName {
+    margin-bottom: 30px;
+    pointer-events: none;
     font-weight: bolder;
     font-size: 1.2em;
     margin-left: -10px;
-    transition: 0.5s;
 }
 
-.navigation ul li:hover {
-    background: $background;
-}
-
-.navigation ul li:nth-child(1) {
-    margin-bottom: 30px;
-    pointer-events: none;
-}
-
-.navigation ul li a {
+/* Styles communs pour les liens et les hover */
+.sidebar ul li a {
     position: relative;
     width: 100%;
     display: flex;
@@ -64,103 +56,66 @@ $black2: #999;
     color: $background;
 }
 
-.navigation ul li:hover a {
-    color: $primary;
-}
-
-.navigation ul li a .icon {
-    position: relative;
+.sidebar ul li a .icon,
+.sidebar ul li a .title {
     display: block;
-    margin-left: 25px;
     line-height: 60px;
     text-align: center;
+    font-size: 1.09em;
 }
 
-.navigation ul li a i {
-    font-size: 1.1em
+.sidebar ul li a .icon {
+    margin-left: 25px;
 }
 
-.navigation ul li a .title {
-    position: relative;
-    display: block;
+.sidebar ul li a .title {
     padding: 0 25px;
     height: 60px;
-    line-height: 60px;
-    font-size: 1.1em;
     white-space: nowrap;
     text-align: start;
 }
 
-.navigation ul li:hover a::before {
-    content: '';
-    position: absolute;
-    right: 0;
-    width: 50px;
-    height: 50px;
-    background: transparent;
-    top: -50px;
-    border-radius: 50%;
-    -webkit-border-radius: 50%;
-    -moz-border-radius: 50%;
-    -ms-border-radius: 50%;
-    -o-border-radius: 50%;
-    box-shadow: 35px 35px 0 10px $background;
-    pointer-events: none;
+/* Styles pour le hover sur les éléments de la liste */
+.sidebar ul li:hover {
+    background: $background;
 }
 
-.navigation ul li:hover a::after {
-    content: '';
-    position: absolute;
-    right: 0;
-    width: 50px;
-    height: 50px;
-    background: transparent;
-    bottom: -50px;
-    border-radius: 50%;
-    -webkit-border-radius: 50%;
-    -moz-border-radius: 50%;
-    -ms-border-radius: 50%;
-    -o-border-radius: 50%;
-    box-shadow: 35px -35px 0 10px $background;
-    pointer-events: none;
-}
-
-#active {
+.sidebar ul li:hover a {
     color: $primary;
+}
+
+/* Style pour les éléments avec la classe active */
+.active,
+.sidebar ul li a .icon .active {
+    color: $primary !important;
+    background: $background;
     border-top-left-radius: 30px;
     border-bottom-left-radius: 30px;
 }
 
-.navigation ul li a .icon #active {
-    color: $primary;
-}
-
-.navigation #active {
-    background: $background;
-}
-
-#active::before {
+/* Styles pour les pseudo-éléments sur hover et active */
+.sidebar ul li:hover a::before,
+.sidebar ul li:hover a::after,
+.active::before,
+.active::after {
     content: '';
     position: absolute;
     right: 0;
     width: 50px;
     height: 50px;
     background: transparent;
-    top: -50px;
     border-radius: 50%;
     box-shadow: 35px 35px 0 10px $background;
     pointer-events: none;
 }
 
-#active::after {
-    content: '';
-    position: absolute;
-    right: 0;
-    width: 50px;
-    height: 50px;
-    background: transparent;
+.sidebar ul li:hover a::after,
+.active::after {
     bottom: -50px;
-    border-radius: 50%;
     box-shadow: 35px -35px 0 10px $background;
-    pointer-events: none;
+}
+
+.sidebar ul li:hover a::before,
+.active::before {
+    top: -50px;
 }
