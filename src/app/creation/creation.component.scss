@@ -21,38 +21,17 @@ $black2: #999;
     transition: width 0.5s ease;
 }
 
+.sidebar:not(:first-child) {
+    overflow: hidden !important;
+}
+
 .sidebar-collapsed {
     width: 85px;
 }
 
-/* Styles du bouton de collapse */
-.sidebar-button {
-    position: absolute;
-    top: 15px;
-    left: 100%;
-    transform: translateX(-50%);
-    border-radius: 50%;
-    width: 30px;
-    height: 30px;
-    font-size: 1.3em;
-    background: $background;
-    color: $primary;
-    border: 1px solid grey;
-    cursor: pointer;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 100;
-}
-
-.rotate-icon {
-    transform: rotate(-180deg);
-    transition: transform 0.3s ease-in-out;
-}
-
-.rotate-icon-back {
-    transform: rotate(0deg);
-    transition: transform 0.3s ease-in-out;
+.sidebar-collapsed-text{
+    padding: 0 35px !important;
+    transition: 0.5s ease;
 }
 
 /* Style spécifique pour le premier élément (titre de l'application et logo) */
@@ -165,15 +144,47 @@ $black2: #999;
     top: -50px;
 }
 
+/* Styles du bouton de collapse */
+.sidebar-button {
+    position: absolute;
+    top: 15px;
+    transform: translateX(-50%);
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    font-size: 1.3em;
+    background: $background;
+    transition: 0.5s ease;
+    color: $primary;
+    border: 1px solid grey;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1;
+}
+
+.rotate-icon {
+    transform: rotate(-180deg);
+    padding-top: 1px;
+    transition: transform 0.3s ease-in-out;
+}
+
+.rotate-icon-back {
+    transform: rotate(0deg);
+    transition: transform 0.3s ease-in-out;
+}
+
 /* Style pour le footer de la sidebar */
 .sidebar-footer {
     position: absolute;
     bottom: 0;
-    width: 100%;
+    width: 190px;
     display: flex;
     align-items: center;
     padding-left: 15px;
     padding-bottom: 20px;
+    overflow: hidden;
 }
 
 /* Style pour l'icône de l'utilisateur */
@@ -213,5 +224,6 @@ $black2: #999;
     flex-grow: 1;
     padding: 10px;
     background-color: #222;
-    height: 100vh;
-  }
+    height: 100%;
+    min-height: 100vh;
+}
