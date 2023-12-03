@@ -144,7 +144,8 @@ $black2: #999;
     top: -50px;
 }
 
-/* Styles du bouton de collapse */
+/****************************************** Sidebar Collapse Button *******************************************/
+
 .sidebar-button {
     position: absolute;
     top: 15px;
@@ -164,6 +165,12 @@ $black2: #999;
     z-index: 1;
 }
 
+.sidebar-button:hover{
+    background-color: $primary;
+    color: $background;
+    border-color: $background;
+}
+
 .rotate-icon {
     transform: rotate(-180deg);
     padding-top: 1px;
@@ -175,16 +182,15 @@ $black2: #999;
     transition: transform 0.3s ease-in-out;
 }
 
-/* Style pour le footer de la sidebar */
+/****************************************** Sidebar Footer *******************************************/
+
 .sidebar-footer {
     position: absolute;
     bottom: 0;
-    width: 190px;
     display: flex;
     align-items: center;
-    padding-left: 15px;
+    padding-left: 10px;
     padding-bottom: 20px;
-    overflow: hidden;
 }
 
 /* Style pour l'icône de l'utilisateur */
@@ -205,6 +211,7 @@ $black2: #999;
 .sidebar-footer .user-info .user-name {
     font-weight: bold;
     color: $background;
+    width: 190px;
 }
 
 .sidebar-footer .user-info a {
