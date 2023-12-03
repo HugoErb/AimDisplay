@@ -4,11 +4,6 @@ $primary2: #0062ff;
 $black1: #222;
 $black2: #999;
 
-.container {
-    position: relative;
-    width: 100%;
-}
-
 /****************************************** Side Bar *******************************************/
 
 /* Styles de base pour la sidebar */
@@ -76,11 +71,11 @@ $black2: #999;
 }
 
 /* Styles pour le hover sur les éléments de la liste */
-.sidebar ul li:hover {
+.sidebar ul li:not(:first-child):hover {
     background: $background;
 }
 
-.sidebar ul li:hover a {
+.sidebar ul li:not(:first-child):hover a {
     color: $primary;
 }
 
@@ -94,8 +89,21 @@ $black2: #999;
 }
 
 /* Styles pour les pseudo-éléments sur hover et active */
-.sidebar ul li:hover a::before,
-.sidebar ul li:hover a::after,
+/* Styles pour les pseudo-éléments sur hover, à l'exception du premier élément <li> */
+.sidebar ul li:not(:first-child):hover a::before,
+.sidebar ul li:not(:first-child):hover a::after {
+    content: '';
+    position: absolute;
+    right: 0;
+    width: 50px;
+    height: 50px;
+    background: transparent;
+    border-radius: 50%;
+    box-shadow: 35px 35px 0 10px $background;
+    pointer-events: none;
+}
+
+/* Styles pour les pseudo-éléments sur les éléments actifs */
 .active::before,
 .active::after {
     content: '';
@@ -109,7 +117,8 @@ $black2: #999;
     pointer-events: none;
 }
 
-.sidebar ul li:hover a::after,
+
+.sidebar ul li:not(:first-child):hover a::after,
 .active::after {
     bottom: -50px;
     box-shadow: 35px -35px 0 10px $background;
@@ -119,3 +128,47 @@ $black2: #999;
 .active::before {
     top: -50px;
 }
+
+/* Style pour le footer de la sidebar */
+.sidebar-footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    padding-left: 15px;
+    padding-bottom: 20px;
+}
+
+/* Style pour l'icône de l'utilisateur */
+.sidebar-footer .user-icon {
+    width: fit-content;
+    padding: 5px 10px 5px 10px;
+    border-radius: 10px;
+    background-color: $background;
+    color: $primary;
+    font-size: 1.8em;
+}
+
+/* Style pour les informations de l'utilisateur */
+.sidebar-footer .user-info {
+    margin-left: 10px;
+}
+
+.sidebar-footer .user-info .user-name {
+    font-weight: bold;
+    color: $background;
+}
+
+.sidebar-footer .user-info a {
+    display: block;
+    color: $background;
+    text-decoration: none;
+    margin-top: 3px;
+}
+
+.sidebar-footer .user-info a:hover {
+    text-decoration: underline;
+}
+
+/****************************************** Page *******************************************/
