@@ -1,22 +1,34 @@
-h1{
-    margin: 10px 0 10px;
+h1 {
+    margin: 0px 0 10px;
 }
 
 /********************************* Tableau *********************************/
 
+.table-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 25px;
+}
+
+::ng-deep .p-datatable {
+    min-width: 100%;
+    border: 1px solid rgb(226, 226, 226);
+    border-radius: 6px;
+}
+
 th:first-child {
-    border-top-left-radius: 6px !important;
+    border-top-left-radius: 6px;
 }
 
 th:last-child {
-    border-top-right-radius: 6px !important;
+    border-top-right-radius: 6px;
 }
 
-tr:hover{
+tr:hover {
     background-color: rgb(236, 236, 236);
 }
 
-.icon-div{
+.icon-div {
     font-size: 15px;
 }
 

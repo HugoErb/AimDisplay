@@ -3,14 +3,14 @@ $primary: #3B82F6;
 $primary2: #0062ff;
 $black1: #303030;
 
-h1{
-    margin: 10px 0 10px;
+h1 {
+    margin: 0px 0 10px;
 }
 
 .circle-group {
     display: flex;
     justify-content: center;
-    gap: 50px; 
+    gap: 50px;
     margin-top: 50px;
 }
 
@@ -21,7 +21,7 @@ h1{
 }
 
 .circle {
-    background-color: $primary; /* Utilisation de la variable CSS pour la couleur */
+    background-color: $primary;
     color: $background;
     width: 120px;
     height: 120px;
@@ -33,10 +33,11 @@ h1{
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
-.fa-user{
+.fa-user {
     font-size: 50px;
 }
 
 .circle-container p {
-    margin-top: 10px; /* Espace entre le cercle et le texte */
+    margin-top: 10px;
+    /* Espace entre le cercle et le texte */
 }
