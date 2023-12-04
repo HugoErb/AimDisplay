@@ -1,0 +1,28 @@
+h1{
+    margin: 10px 0 10px;
+}
+
+/********************************* Tableau *********************************/
+
+th:first-child {
+    border-top-left-radius: 6px !important;
+}
+
+th:last-child {
+    border-top-right-radius: 6px !important;
+}
+
+tr:hover{
+    background-color: rgb(236, 236, 236);
+}
+
+.icon-div{
+    font-size: 15px;
+}
+
+::ng-deep .p-paginator {
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 6px;
+    border-bottom-left-radius: 6px;
+}
