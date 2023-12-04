@@ -11,6 +11,12 @@ import { ManageAccountComponent } from './manage-account/manage-account.componen
 import { SettingsComponent } from './settings/settings.component';
 import { ConsultationComponent } from './consultation/consultation.component';
 
+import { TableModule } from 'primeng/table';
+import { PaginatorModule } from 'primeng/paginator';
+import { InputSwitchModule } from 'primeng/inputswitch';
+import { InputNumberModule } from 'primeng/inputnumber';
+import { DropdownModule } from 'primeng/dropdown';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -24,7 +30,12 @@ import { ConsultationComponent } from './consultation/consultation.component';
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule
+    AppRoutingModule,
+    TableModule,
+    PaginatorModule,
+    InputSwitchModule,
+    InputNumberModule,
+    DropdownModule
   ],
   providers: [],
   bootstrap: [AppComponent]

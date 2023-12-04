@@ -42,7 +42,6 @@ $sidebar_size_collapsed: 85px;
     margin-bottom: 30px;
     pointer-events: none;
     font-weight: bolder;
-    font-size: 1.2em;
     margin-left: -10px;
 }
 
@@ -239,6 +238,20 @@ $sidebar_size_collapsed: 85px;
     margin-left: calc($sidebar_size + 30px);
     transition: margin-left 0.5s ease;
     color: $black;
+    overflow: hidden;
+}
+
+.blob {
+    opacity: 0.8;
+    position: fixed;
+    right: -100px;
+    bottom: -100px;
+    width: 400px;
+    height: 370px;
+    background-size: cover;
+    background-position: center center;
+    background-repeat: repeat;
+    background-image: url("data:image/svg+xml;utf8,%3Csvg viewBox=%220 0 1000 1000%22 xmlns=%22http:%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cdefs%3E%3ClinearGradient id=%22b%22%3E%3Cstop offset=%220%25%22 stop-color=%22%233B82F6%22%2F%3E%3Cstop offset=%22100%25%22 stop-color=%22%230062ff%22%2F%3E%3C%2FlinearGradient%3E%3CclipPath id=%22a%22%3E%3Cpath fill=%22currentColor%22 d=%22M831.5 642.5Q664 785 501 783T170 640.5Q2 500 133 296t337-152.5q206 51.5 367.5 204t-6 295Z%22%2F%3E%3C%2FclipPath%3E%3C%2Fdefs%3E%3Cg clip-path=%22url(%23a)%22%3E%3Cpath fill=%22url(%23b)%22 d=%22M831.5 642.5Q664 785 501 783T170 640.5Q2 500 133 296t337-152.5q206 51.5 367.5 204t-6 295Z%22%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E");
 }
 
 .content-expanded {
