@@ -1,70 +1,71 @@
 <h1>Modification de données</h1>
-<p class="explications">Cette page est dédiée à la modification des données des compétitions, des tireurs, ou des club de tir sportif.</p>
+<p class="explications">Cette page est dédiée à la modification des données des compétitions, des tireurs, ou des club
+    de tir sportif.</p>
 <p-table dataKey="id" [rows]="15" [showCurrentPageReport]="true" [paginator]="true">
-        <ng-template pTemplate="header">
-            <tr class="animate__animated animate__fadeIn">
-                <th>
-                    <div class="flex align-items-center">
-                        Nom
-                        <p-columnFilter type="text" field="lastName" display="menu"></p-columnFilter>
-                    </div>
-                </th>
-                <th>
-                    <div class="flex align-items-center">
-                        Prénom
-                        <p-columnFilter type="text" field="firstName" display="menu"></p-columnFilter>
-                    </div>
-                </th>
-                <th>
-                    <div class="flex align-items-center">
-                        Compétition
-                        <p-columnFilter type="text" field="competitionName" display="menu"></p-columnFilter>
-                    </div>
-                </th>
-                <th>
-                    <div class="flex align-items-center">
-                        Club
-                        <p-columnFilter type="text" field="clubName" display="menu"></p-columnFilter>
-                    </div>
-                </th>
-                <th>
-                    <div class="flex align-items-center">
-                        Catégorie
-                        <p-columnFilter type="text" field="categoryName" display="menu"></p-columnFilter>
-                    </div>
-                </th>
-                <th style="width: 4.5rem"></th>
-                <th style="width: 4.5rem"></th>
-            </tr>
-        </ng-template>
-        <ng-template pTemplate="body" let-situation let-i="rowIndex">
-            <tr>
-                <td>
-                    {{ situation.name }}
-                </td>
-                <td>
-                    {{ situation.dealerMissingTokens }}
-                </td>
-                <td>
-                    {{ situation.nbPlayer }}
-                </td>
-                <td>
-                    {{ situation.dealer!}}
-                </td>
-                <td>
-                    {{ situation.opponentLevel!}}
-                </td>
-                <td>
-                    <i class="fa-solid fa-pen-to-square"></i>
-                </td>
-                <td>
-                    <i class="fa-solid fa-trash"></i>
-                </td>
-            </tr>
-        </ng-template>
-        <ng-template pTemplate="emptymessage">
-            <tr>
-                <td colspan="7">Aucune donnée trouvée.</td>
-            </tr>
-        </ng-template>
-    </p-table>
+    <ng-template pTemplate="header">
+        <tr>
+            <th>
+                <div class="flex align-items-center">
+                    Nom
+                    <p-columnFilter type="text" field="lastName" display="menu"></p-columnFilter>
+                </div>
+            </th>
+            <th>
+                <div class="flex align-items-center">
+                    Prénom
+                    <p-columnFilter type="text" field="firstName" display="menu"></p-columnFilter>
+                </div>
+            </th>
+            <th>
+                <div class="flex align-items-center">
+                    Compétition
+                    <p-columnFilter type="text" field="competitionName" display="menu"></p-columnFilter>
+                </div>
+            </th>
+            <th>
+                <div class="flex align-items-center">
+                    Club
+                    <p-columnFilter type="text" field="clubName" display="menu"></p-columnFilter>
+                </div>
+            </th>
+            <th>
+                <div class="flex align-items-center">
+                    Catégorie
+                    <p-columnFilter type="text" field="categoryName" display="menu"></p-columnFilter>
+                </div>
+            </th>
+            <th style="width: 4.5rem"></th>
+            <th style="width: 4.5rem"></th>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-situation let-i="rowIndex">
+        <tr>
+            <td>
+                {{ situation.name }}
+            </td>
+            <td>
+                {{ situation.dealerMissingTokens }}
+            </td>
+            <td>
+                {{ situation.nbPlayer }}
+            </td>
+            <td>
+                {{ situation.dealer!}}
+            </td>
+            <td>
+                {{ situation.opponentLevel!}}
+            </td>
+            <td>
+                <i class="fa-solid fa-pen-to-square"></i>
+            </td>
+            <td>
+                <i class="fa-solid fa-trash"></i>
+            </td>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="emptymessage">
+        <tr>
+            <td colspan="7">Aucune donnée trouvée.</td>
+        </tr>
+    </ng-template>
+</p-table>
