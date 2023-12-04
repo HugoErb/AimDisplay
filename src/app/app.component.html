@@ -23,14 +23,16 @@
                 </a>
             </li>
             <li>
-                <a [routerLink]="['/modification']" [class.active]="currentRoute === '/modification'"><span class="icon">
+                <a [routerLink]="['/modification']" [class.active]="currentRoute === '/modification'"><span
+                        class="icon">
                         <i class="fa-solid fa-user-pen"></i>
                     </span>
                     <span class="title" [class.sidebar-collapsed-text]="isCollapsed">Modification</span>
                 </a>
             </li>
             <li>
-                <a [routerLink]="['/consultation']" [class.active]="currentRoute === '/consultation'"><span class="icon">
+                <a [routerLink]="['/consultation']" [class.active]="currentRoute === '/consultation'"><span
+                        class="icon">
                         <i class="fa-solid fa-chart-line"></i>
                     </span>
                     <span class="title" [class.sidebar-collapsed-text]="isCollapsed">Consultation</span>
@@ -66,5 +68,6 @@
     </button>
     <div class="content" [class.content-expanded]="isCollapsed">
         <router-outlet></router-outlet>
+        <div class="blob"></div>
     </div>
 </div>
