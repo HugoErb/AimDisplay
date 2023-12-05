@@ -2,66 +2,52 @@
 <p class="subtitle">Cette page est dédiée à la modification des données des compétitions, des tireurs, ou des club
     de tir sportif.</p>
 <div class="table-container">
-    <p-table dataKey="id" [rows]="15" [showCurrentPageReport]="true" [paginator]="true">
+    <p-table [value]="shooters" dataKey="id" [rows]="10" [paginator]="true">
         <ng-template pTemplate="header">
             <tr>
                 <th>
                     <div class="flex align-items-center">
-                        Nom
+                        <span class="thead">Nom</span>
                         <p-columnFilter type="text" field="lastName" display="menu"></p-columnFilter>
                     </div>
                 </th>
                 <th>
                     <div class="flex align-items-center">
-                        Prénom
+                        <span class="thead">Prénom</span>
                         <p-columnFilter type="text" field="firstName" display="menu"></p-columnFilter>
                     </div>
                 </th>
                 <th>
                     <div class="flex align-items-center">
-                        Compétition
+                        <span class="thead">Compétition</span>
                         <p-columnFilter type="text" field="competitionName" display="menu"></p-columnFilter>
                     </div>
                 </th>
                 <th>
                     <div class="flex align-items-center">
-                        Club
+                        <span class="thead">Club</span>
                         <p-columnFilter type="text" field="clubName" display="menu"></p-columnFilter>
                     </div>
                 </th>
                 <th>
                     <div class="flex align-items-center">
-                        Catégorie
+                        <span class="thead">Catégorie</span>
                         <p-columnFilter type="text" field="categoryName" display="menu"></p-columnFilter>
                     </div>
                 </th>
-                <th style="width: 4.5rem"></th>
-                <th style="width: 4.5rem"></th>
+                <th style="width: 5rem"></th>
+                <th style="width: 5rem"></th>
             </tr>
         </ng-template>
-        <ng-template pTemplate="body" let-situation let-i="rowIndex">
+        <ng-template pTemplate="body" let-shooter>
             <tr>
-                <td>
-                    {{ situation.name }}
-                </td>
-                <td>
-                    {{ situation.dealerMissingTokens }}
-                </td>
-                <td>
-                    {{ situation.nbPlayer }}
-                </td>
-                <td>
-                    {{ situation.dealer!}}
-                </td>
-                <td>
-                    {{ situation.opponentLevel!}}
-                </td>
-                <td>
-                    <i class="fa-solid fa-pen-to-square"></i>
-                </td>
-                <td>
-                    <i class="fa-solid fa-trash"></i>
-                </td>
+                <td>{{ shooter.lastName }}</td>
+                <td>{{ shooter.firstName }}</td>
+                <td>{{ shooter.competitionName }}</td>
+                <td>{{ shooter.clubName }}</td>
+                <td>{{ shooter.categoryName }}</td>
+                <td><i class="fa-solid fa-pen-to-square icon-div"></i></td>
+                <td><i class="fa-solid fa-trash-can icon-div"></i></td>
             </tr>
         </ng-template>
         <ng-template pTemplate="emptymessage">
