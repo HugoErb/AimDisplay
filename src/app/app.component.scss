@@ -18,8 +18,7 @@ $sidebar_size_collapsed: 85px;
     position: fixed;
     width: $sidebar_size;
     height: 100%;
-    background: $primary;
-    border-left: 10px solid $primary;
+    background: linear-gradient(to bottom, $primary, $primary2);
     overflow: hidden;
     transition: width 0.5s ease;
 }
@@ -41,12 +40,14 @@ $sidebar_size_collapsed: 85px;
 .applicationName {
     margin-bottom: 30px;
     pointer-events: none;
-    font-weight: bolder;
+    font-weight: 600;
     margin-left: -10px;
+    font-size: 19.2px !important;
 }
 
 /* Styles pour les éléments de la liste */
 .sidebar ul {
+    padding-left: 10px;
     position: absolute;
     width: 100%;
     top: 0;
@@ -75,11 +76,11 @@ $sidebar_size_collapsed: 85px;
     display: block;
     line-height: 60px;
     text-align: center;
-    font-size: 1.09em;
 }
 
 .sidebar ul li a .icon {
     margin-left: 25px;
+    font-size: 1.09em;
 }
 
 .sidebar ul li a .title {
@@ -87,6 +88,7 @@ $sidebar_size_collapsed: 85px;
     height: 60px;
     white-space: nowrap;
     text-align: start;
+    font-size: 1em;
 }
 
 /* Styles pour le hover sur les éléments de la liste */
@@ -191,7 +193,7 @@ $sidebar_size_collapsed: 85px;
     bottom: 0;
     display: flex;
     align-items: center;
-    padding-left: 10px;
+    padding-left: 20px;
     padding-bottom: 20px;
 }
 
@@ -211,7 +213,7 @@ $sidebar_size_collapsed: 85px;
 }
 
 .sidebar-footer .user-info .user-name {
-    font-weight: bold;
+    font-weight: 600;
     color: $background;
     width: 190px;
 }
