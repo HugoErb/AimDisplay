@@ -5,10 +5,11 @@ $black1: #303030;
 
 .header {
     margin-left: 2%;
+    margin-top: 10px;
 }
 
 h2 {
-    margin: 0px 0 10px;
+    margin-bottom: 6px;
     font-size: 39.81px;
     font-weight: 600;
     color: $primary;
@@ -36,7 +37,7 @@ h2 {
     border-radius: 6px;
 }
 
-th, td,::ng-deep .p-paginator{
+th, tr,::ng-deep .p-paginator{
     background-color: $background !important;
 }
 
@@ -55,7 +56,7 @@ th:last-child {
 }
 
 tr:hover {
-    background-color: rgb(236, 236, 236);
+    background-color: rgb(240, 240, 240) !important;
 }
 
 .icon-div {
