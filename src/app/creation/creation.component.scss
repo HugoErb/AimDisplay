@@ -19,6 +19,8 @@ h2 {
     font-size: 18.5px;
 }
 
+/****************************************** Cercles div *******************************************/
+
 .circle-group {
     display: flex;
     justify-content: center;
@@ -51,4 +53,59 @@ h2 {
 
 .circle-container p {
     margin-top: 10px;
+}
+
+/****************************************** Formulaire *******************************************/
+
+.custom-form {
+    margin-top: 250px;
+    width: 50%;
+    margin: 0 auto;
+}
+
+.form-row {
+    display: flex;
+    flex-wrap: wrap;
+    margin-bottom: 15px;
+}
+
+.form-group {
+    width: 50%;
+    padding: 0 15px;
+    margin-bottom: 15px;
+}
+
+label {
+    display: block;
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    font-weight: bold;
+    margin-bottom: 5px;
+    color: $black1;
+}
+
+select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+button {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: $primary;
+    color: white;
+    border-radius: 4px;
+    border: none;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: $primary2;
+}
+
+::ng-deep .p-inputtext{
+    width: 100% !important;
 }
