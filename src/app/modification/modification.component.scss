@@ -1,11 +1,21 @@
+$background: #fff;
+$primary: #3B82F6;
+$primary2: #0062ff;
+$black1: #303030;
+
+.header {
+    margin-left: 2%;
+}
+
 h2 {
     margin: 0px 0 10px;
     font-size: 39.81px;
     font-weight: 600;
+    color: $primary;
 }
 
 .subtitle {
-    font-size: 19.2px;
+    font-size: 18.5px;
 }
 
 /********************************* Tableau *********************************/
@@ -17,9 +27,12 @@ h2 {
     margin-top: 35px;
 }
 
+::ng-deep p-table{
+    width: 96%;
+}
+
 ::ng-deep .p-datatable {
     border-radius: 6px;
-    width: 80vw;
 }
 
 .thead {
@@ -44,6 +57,7 @@ tr:hover {
     font-size: 17px;
     padding: 5px;
     cursor: pointer;
+    color: $primary;
 }
 
 ::ng-deep .p-paginator {
