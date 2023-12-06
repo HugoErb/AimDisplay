@@ -14,9 +14,12 @@ import { ConsultationComponent } from './consultation/consultation.component';
 
 import { TableModule } from 'primeng/table';
 import { PaginatorModule } from 'primeng/paginator';
+import { InputTextModule } from 'primeng/inputtext';
 import { InputSwitchModule } from 'primeng/inputswitch';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { DropdownModule } from 'primeng/dropdown';
+import { CascadeSelectModule } from 'primeng/cascadeselect';
+import { AutoCompleteModule } from 'primeng/autocomplete';
 
 @NgModule({
   declarations: [
@@ -37,7 +40,10 @@ import { DropdownModule } from 'primeng/dropdown';
     InputSwitchModule,
     InputNumberModule,
     DropdownModule,
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
+    InputTextModule,
+    CascadeSelectModule,
+    AutoCompleteModule
   ],
   providers: [],
   bootstrap: [AppComponent]
