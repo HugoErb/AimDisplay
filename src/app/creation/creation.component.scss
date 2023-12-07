@@ -113,13 +113,12 @@ p-inputnumber {
 ///////////////////////////////////////////////
 
 ::ng-deep .p-cascadeselect-sublist{
-    width: fit-content;
+    width: calc(fit-content + 500px);
     min-width: unset;
 }
 
 ::ng-deep .p-cascadeselect-panel{
     width: fit-content;
-    min-width: unset;
 }
 
 ::ng-deep .p-cascadeselect-label{
