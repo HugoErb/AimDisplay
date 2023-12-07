@@ -10,7 +10,6 @@ export class CreationComponent {
   lastName: string = "";
   competitionName: string = "";
   categoryName: string = "";
-  selectedCode: string = "";
   clubName: string = "";
   scoreSerie1: number = 0;
   scoreSerie2: number = 0;
@@ -22,14 +21,17 @@ export class CreationComponent {
   categories: any[] = [
     {
       "name": "10 Mètres",
+      "cname": "10 Mètres",
       "code": "10M",
       "categories": [
         {
           "name": "Pistolet",
+          "cname": "Pistolet",
           "code": "PIS",
           "divisions": [
             {
               "name": "Homme",
+              "cname": "Homme",
               "code": "H",
               "ages": [
                 { "cname": "Benjamin", "code": "10M-PIS-H-BEN" },
@@ -40,6 +42,7 @@ export class CreationComponent {
             },
             {
               "name": "Femme",
+              "cname": "Femme",
               "code": "F",
               "ages": [
                 { "cname": "Benjamin", "code": "10M-PIS-F-BEN" },
@@ -52,10 +55,12 @@ export class CreationComponent {
         },
         {
           "name": "Carabine",
+          "cname": "Carabine",
           "code": "CAR",
           "divisions": [
             {
               "name": "Homme",
+              "cname": "Homme",
               "code": "H",
               "ages": [
                 { "cname": "Benjamin", "code": "10M-CAR-H-BEN" },
@@ -66,6 +71,7 @@ export class CreationComponent {
             },
             {
               "name": "Femme",
+              "cname": "Femme",
               "code": "F",
               "ages": [
                 { "cname": "Benjamin", "code": "10M-CAR-F-BEN" },
@@ -80,14 +86,17 @@ export class CreationComponent {
     },
     {
       "name": "25 Mètres",
+      "cname": "25 Mètres",
       "code": "25M",
       "categories": [
         {
           "name": "Pistolet",
+          "cname": "Pistolet",
           "code": "PIS",
           "divisions": [
             {
               "name": "Homme",
+              "cname": "Homme",
               "code": "H",
               "ages": [
                 { "cname": "Benjamin", "code": "25M-PIS-H-BEN" },
@@ -98,6 +107,7 @@ export class CreationComponent {
             },
             {
               "name": "Femme",
+              "cname": "Femme",
               "code": "F",
               "ages": [
                 { "cname": "Benjamin", "code": "25M-PIS-F-BEN" },
@@ -110,10 +120,12 @@ export class CreationComponent {
         },
         {
           "name": "Carabine",
+          "cname": "Carabine",
           "code": "CAR",
           "divisions": [
             {
               "name": "Homme",
+              "cname": "Homme",
               "code": "H",
               "ages": [
                 { "cname": "Benjamin", "code": "25M-CAR-H-BEN" },
@@ -124,6 +136,7 @@ export class CreationComponent {
             },
             {
               "name": "Femme",
+              "cname": "Femme",
               "code": "F",
               "ages": [
                 { "cname": "Benjamin", "code": "25M-CAR-F-BEN" },
@@ -138,14 +151,17 @@ export class CreationComponent {
     },
     {
       "name": "50 Mètres",
+      "cname": "50 Mètres",
       "code": "50M",
       "categories": [
         {
           "name": "Pistolet",
+          "cname": "Pistolet",
           "code": "PIS",
           "divisions": [
             {
               "name": "Homme",
+              "cname": "Homme",
               "code": "H",
               "ages": [
                 { "cname": "Benjamin", "code": "50M-PIS-H-BEN" },
@@ -156,6 +172,7 @@ export class CreationComponent {
             },
             {
               "name": "Femme",
+              "cname": "Femme",
               "code": "F",
               "ages": [
                 { "cname": "Benjamin", "code": "50M-PIS-F-BEN" },
@@ -168,10 +185,12 @@ export class CreationComponent {
         },
         {
           "name": "Carabine",
+          "cname": "Carabine",
           "code": "CAR",
           "divisions": [
             {
               "name": "Homme",
+              "cname": "Homme",
               "code": "H",
               "ages": [
                 { "cname": "Benjamin", "code": "50M-CAR-H-BEN" },
@@ -182,6 +201,7 @@ export class CreationComponent {
             },
             {
               "name": "Femme",
+              "cname": "Femme",
               "code": "F",
               "ages": [
                 { "cname": "Benjamin", "code": "50M-CAR-F-BEN" },
@@ -244,14 +264,6 @@ export class CreationComponent {
     }
 
     this.filteredClubs = filtered;
-  }
-
-  onCategoryChange(event: any): void{
-    if (event.value && event.value.code) {
-      this.selectedCode = event.value.code;
-    } else {
-      this.selectedCode = '';
-    }
   }
 
 
