@@ -38,64 +38,72 @@
     <div class="form-row">
         <div class="form-group">
             <label>Catégorie</label>
-            <p-cascadeSelect [(ngModel)]="categoryName" [options]="categories" optionLabel="cname" optionGroupLabel="name" [optionGroupChildren]="['categories', 'divisions','ages']" placeholder="Selectionnez une catégorie"></p-cascadeSelect>
+            <p-cascadeSelect [(ngModel)]="categoryName" (onChange)="onCategoryChange($event)" 
+                [options]="categories" optionLabel="cname" optionGroupLabel="name" 
+                [optionGroupChildren]="['categories', 'divisions','ages']" 
+                placeholder="Selectionnez une catégorie">
+            </p-cascadeSelect>
+            <span>{{ selectedCode }}</span>
         </div>
+        
+
         <div class="form-group">
             <label>Compétition</label>
-            <p-autoComplete [(ngModel)]="competitionName" [forceSelection]="true" [suggestions]="filteredCompetitions" (completeMethod)="filterCompetition($event)" field="name" [dropdown]="true" placeholder="Sélectionnez une compétition"></p-autoComplete>
+            <p-autoComplete [(ngModel)]="competitionName" [forceSelection]="true" [suggestions]="filteredCompetitions"
+                (completeMethod)="filterCompetition($event)" field="name" [dropdown]="true"
+                placeholder="Sélectionnez une compétition"></p-autoComplete>
         </div>
     </div>
 
     <div class="form-row">
         <div class="form-group">
-            <label for="grid-club">Club</label>
-            <select id="grid-club">
-                <option value="">Select a Club</option>
-                <!-- Ajoutez plus d'options ici -->
-            </select>
+            <label>Club</label>
+            <p-autoComplete [(ngModel)]="clubName" [forceSelection]="true" [suggestions]="filteredClubs"
+                (completeMethod)="filterClub($event)" field="name" [dropdown]="true"
+                placeholder="Sélectionnez un club"></p-autoComplete>
         </div>
     </div>
 
     <div class="form-row">
         <div class="form-group">
             <label>Série 1</label>
-            <p-inputNumber [(ngModel)]="scoreSerie1" mode="decimal" [minFractionDigits]="2"
-                [min]="0" [max]="100.10" [showButtons]="true" [maxFractionDigits]="2" placeholder="Score série 1">
+            <p-inputNumber [(ngModel)]="scoreSerie1" mode="decimal" [minFractionDigits]="2" [min]="0" [max]="100.10"
+                [showButtons]="true" [maxFractionDigits]="2" placeholder="Score série 1">
             </p-inputNumber>
         </div>
         <div class="form-group">
             <label>Série 2</label>
-            <p-inputNumber [(ngModel)]="scoreSerie2" mode="decimal" [minFractionDigits]="2"
-                [min]="0" [max]="100.10" [showButtons]="true" [maxFractionDigits]="2" placeholder="Score série 2">
+            <p-inputNumber [(ngModel)]="scoreSerie2" mode="decimal" [minFractionDigits]="2" [min]="0" [max]="100.10"
+                [showButtons]="true" [maxFractionDigits]="2" placeholder="Score série 2">
             </p-inputNumber>
         </div>
         <div class="form-group">
             <label>Série 3</label>
-            <p-inputNumber [(ngModel)]="scoreSerie3" mode="decimal" [minFractionDigits]="2"
-                [min]="0" [max]="100.10" [showButtons]="true" [maxFractionDigits]="2" placeholder="Score série 3">
+            <p-inputNumber [(ngModel)]="scoreSerie3" mode="decimal" [minFractionDigits]="2" [min]="0" [max]="100.10"
+                [showButtons]="true" [maxFractionDigits]="2" placeholder="Score série 3">
             </p-inputNumber>
         </div>
         <div class="form-group">
             <label>Série 4</label>
-            <p-inputNumber [(ngModel)]="scoreSerie4" mode="decimal" [minFractionDigits]="2"
-                [min]="0" [max]="100.10" [showButtons]="true" [maxFractionDigits]="2" placeholder="Score série 4">
+            <p-inputNumber [(ngModel)]="scoreSerie4" mode="decimal" [minFractionDigits]="2" [min]="0" [max]="100.10"
+                [showButtons]="true" [maxFractionDigits]="2" placeholder="Score série 4">
             </p-inputNumber>
         </div>
         <div class="form-group">
             <label>Série 5</label>
-            <p-inputNumber [(ngModel)]="scoreSerie5" mode="decimal" [minFractionDigits]="2"
-                [min]="0" [max]="100.10" [showButtons]="true" [maxFractionDigits]="2" placeholder="Score série 5">
+            <p-inputNumber [(ngModel)]="scoreSerie5" mode="decimal" [minFractionDigits]="2" [min]="0" [max]="100.10"
+                [showButtons]="true" [maxFractionDigits]="2" placeholder="Score série 5">
             </p-inputNumber>
         </div>
         <div class="form-group">
             <label>Série 6</label>
-            <p-inputNumber [(ngModel)]="scoreSerie6" mode="decimal" [minFractionDigits]="2"
-                [min]="0" [max]="100.10" [showButtons]="true" [maxFractionDigits]="2" placeholder="Score série 6">
+            <p-inputNumber [(ngModel)]="scoreSerie6" mode="decimal" [minFractionDigits]="2" [min]="0" [max]="100.10"
+                [showButtons]="true" [maxFractionDigits]="2" placeholder="Score série 6">
             </p-inputNumber>
         </div>
     </div>
 
     <div class="form-action">
-        <button type="submit">Enregistrer</button>
+        <div class="submit-button">Enregistrer</div>
     </div>
 </div>
