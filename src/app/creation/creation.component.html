@@ -23,7 +23,7 @@
         <p>Un club</p>
     </div>
 </div> -->
-<div class="custom-form">
+<div class="form">
     <div class="form-row">
         <div class="form-group">
             <label>Nom</label>
@@ -34,19 +34,13 @@
             <input type="text" pInputText [(ngModel)]="firstName" />
         </div>
     </div>
-
     <div class="form-row">
         <div class="form-group">
-            <label>Catégorie</label>
-            <p-cascadeSelect [(ngModel)]="categoryName" (onChange)="onCategoryChange($event)" 
-                [options]="categories" optionLabel="cname" optionGroupLabel="name" 
-                [optionGroupChildren]="['categories', 'divisions','ages']" 
-                placeholder="Selectionnez une catégorie">
-            </p-cascadeSelect>
-            <span>{{ selectedCode }}</span>
+            <label>Club</label>
+            <p-autoComplete [(ngModel)]="clubName" [forceSelection]="true" [suggestions]="filteredClubs"
+                (completeMethod)="filterClub($event)" field="name" [dropdown]="true"
+                placeholder="Sélectionnez un club"></p-autoComplete>
         </div>
-        
-
         <div class="form-group">
             <label>Compétition</label>
             <p-autoComplete [(ngModel)]="competitionName" [forceSelection]="true" [suggestions]="filteredCompetitions"
@@ -57,10 +51,15 @@
 
     <div class="form-row">
         <div class="form-group">
-            <label>Club</label>
-            <p-autoComplete [(ngModel)]="clubName" [forceSelection]="true" [suggestions]="filteredClubs"
-                (completeMethod)="filterClub($event)" field="name" [dropdown]="true"
-                placeholder="Sélectionnez un club"></p-autoComplete>
+            <label>Catégorie</label>
+            <p-cascadeSelect [(ngModel)]="categoryName"
+                [options]="categories" optionLabel="code" optionGroupLabel="name" 
+                [optionGroupChildren]="['categories', 'divisions','ages']" 
+                placeholder="Selectionnez une catégorie">
+                <ng-template let-option pTemplate="option">
+                    {{ option.cname }}
+                 </ng-template>
+            </p-cascadeSelect>
         </div>
     </div>
 
