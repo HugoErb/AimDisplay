@@ -1,10 +1,5 @@
 import { Component } from '@angular/core';
 
-interface AutoCompleteCompleteEvent {
-  originalEvent: Event;
-  query: string;
-}
-
 @Component({
   selector: 'app-creation',
   templateUrl: './creation.component.html',
@@ -15,6 +10,7 @@ export class CreationComponent {
   lastName: string = "";
   competitionName: string = "";
   categoryName: string = "";
+  selectedCode: string = "";
   clubName: string = "";
   scoreSerie1: number = 0;
   scoreSerie2: number = 0;
@@ -207,18 +203,56 @@ export class CreationComponent {
   ];
   filteredCompetitions: any[] = [];
 
-  filterCompetition(event: AutoCompleteCompleteEvent) {
-    let filtered: any[] = [];
-    let query = event.query;
+  clubs: any[] = [
+    { "name": "Club de Marennes" },
+    { "name": "Club de Rochefort" },
+    { "name": "Club de Pau" },
+  ];
+  filteredClubs: any[] = [];
 
-    for (let i = 0; i < (this.competitions as any[]).length; i++) {
-      let country = (this.competitions as any[])[i];
-      if (country.name.toLowerCase().indexOf(query.toLowerCase()) == 0) {
-        filtered.push(country);
+  /**
+  * Filtre les compétitions en fonction de la recherche de compétition entrée.
+  *
+  * @param event - L'événement contenant la recherche de compétition entrée.
+  */
+  filterCompetition(event: any): void {
+    const filtered: any[] = [];
+    const query: string = event.query.toLowerCase();
+
+    for (const competition of this.competitions) {
+      if (competition.name.toLowerCase().includes(query)) {
+        filtered.push(competition);
       }
     }
 
     this.filteredCompetitions = filtered;
   }
+
+  /**
+  * Filtre les clubs en fonction de la recherche du club entré.
+  *
+  * @param event - L'événement contenant la recherche du club entré.
+  */
+  filterClub(event: any): void {
+    const filtered: any[] = [];
+    const query: string = event.query.toLowerCase();
+
+    for (const club of this.clubs) {
+      if (club.name.toLowerCase().includes(query)) {
+        filtered.push(club);
+      }
+    }
+
+    this.filteredClubs = filtered;
+  }
+
+  onCategoryChange(event: any): void{
+    if (event.value && event.value.code) {
+      this.selectedCode = event.value.code;
+    } else {
+      this.selectedCode = '';
+    }
+  }
+
 
 }
