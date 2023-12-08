@@ -27,11 +27,11 @@
     <div class="form-row">
         <div class="form-group">
             <label>Nom</label>
-            <input type="text" pInputText [(ngModel)]="lastName" placeholder="Entrez le nom"/>
+            <input type="text" pInputText [(ngModel)]="lastName" placeholder="Entrez le nom" />
         </div>
         <div class="form-group">
             <label>Prénom</label>
-            <input type="text" pInputText [(ngModel)]="firstName" placeholder="Entrez le prénom"/>
+            <input type="text" pInputText [(ngModel)]="firstName" placeholder="Entrez le prénom" />
         </div>
     </div>
     <div class="form-row">
@@ -52,13 +52,12 @@
     <div class="form-row">
         <div class="form-group">
             <label>Catégorie</label>
-            <p-cascadeSelect [(ngModel)]="categoryName"
-                [options]="categories" optionLabel="code" optionGroupLabel="name" 
-                [optionGroupChildren]="['categories', 'divisions','ages']" 
+            <p-cascadeSelect [(ngModel)]="categoryName" [options]="categories" optionLabel="code"
+                optionGroupLabel="name" [optionGroupChildren]="['categories', 'divisions','ages']"
                 placeholder="Selectionnez une catégorie">
                 <ng-template let-option pTemplate="option">
                     {{ option.cname }}
-                 </ng-template>
+                </ng-template>
             </p-cascadeSelect>
         </div>
     </div>
@@ -102,7 +101,5 @@
         </div>
     </div>
 
-    <div class="form-action">
-        <div class="submit-button">Enregistrer</div>
-    </div>
+    <div class="submit-button">Enregistrer</div>
 </div>
