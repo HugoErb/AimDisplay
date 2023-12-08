@@ -23,15 +23,17 @@
         <p>Un club</p>
     </div>
 </div> -->
+
+
 <div class="form">
     <div class="form-row">
         <div class="form-group">
             <label>Nom</label>
-            <input type="text" pInputText [(ngModel)]="lastName" placeholder="Entrez le nom" />
+            <input type="text" pInputText [(ngModel)]="lastName" placeholder="Nom du tireur" />
         </div>
         <div class="form-group">
             <label>Prénom</label>
-            <input type="text" pInputText [(ngModel)]="firstName" placeholder="Entrez le prénom" />
+            <input type="text" pInputText [(ngModel)]="firstName" placeholder="Prénom du tireur" />
         </div>
     </div>
     <div class="form-row">
@@ -54,7 +56,7 @@
             <label>Catégorie</label>
             <p-cascadeSelect [(ngModel)]="categoryName" [options]="categories" optionLabel="code"
                 optionGroupLabel="name" [optionGroupChildren]="['categories', 'divisions','ages']"
-                placeholder="Selectionnez une catégorie">
+                placeholder="Sélectionnez une catégorie">
                 <ng-template let-option pTemplate="option">
                     {{ option.cname }}
                 </ng-template>
@@ -103,3 +105,19 @@
 
     <div class="submit-button">Enregistrer</div>
 </div>
+
+<!-- <div class="form">
+    <div class="form-row">
+        <div class="form-group">
+            <label>Nom de la compétition</label>
+            <input type="text" pInputText [(ngModel)]="lastName" placeholder="Nom de la compétition" />
+        </div>
+        <div class="form-group">
+            <label>Dates de la compétition</label>
+            <p-calendar [(ngModel)]="competitionDate" [showIcon]="true" placeholder="Dates de la compétition"
+                dateFormat="dd/mm/yy" selectionMode="range"></p-calendar>
+        </div>
+    </div>
+
+    <div class="submit-button">Enregistrer</div>
+</div> -->
