@@ -18,6 +18,8 @@ export class CreationComponent {
   scoreSerie5: number = 0;
   scoreSerie6: number = 0;
 
+  competitionDate: string = "";
+
   categories: any[] = [
     {
       "name": "10 Mètres",
@@ -34,10 +36,14 @@ export class CreationComponent {
               "cname": "Homme",
               "code": "H",
               "ages": [
-                { "cname": "Benjamin", "code": "10M-PIS-H-BEN" },
-                { "cname": "Cadet", "code": "10M-PIS-H-CAD" },
-                { "cname": "Junior", "code": "10M-PIS-H-JUN" },
-                { "cname": "Senior", "code": "10M-PIS-H-SEN" }
+                { "cname": "Poussin", "code": "10M-PIS-POU-G" },
+                { "cname": "Minime", "code": "10M-PIS-MIN-G" },
+                { "cname": "Benjamin", "code": "10M-PIS-BEN-G" },
+                { "cname": "Cadet", "code": "10M-PIS-CAD-G" },
+                { "cname": "Junior", "code": "10M-PIS-JUN-G" },
+                { "cname": "Senior 1", "code": "10M-PIS-SEN1" },
+                { "cname": "Senior 2", "code": "10M-PIS-SEN2" },
+                { "cname": "Senior 3", "code": "10M-PIS-SEN3" }
               ]
             },
             {
@@ -45,10 +51,14 @@ export class CreationComponent {
               "cname": "Femme",
               "code": "F",
               "ages": [
-                { "cname": "Benjamin", "code": "10M-PIS-F-BEN" },
-                { "cname": "Cadet", "code": "10M-PIS-F-CAD" },
-                { "cname": "Junior", "code": "10M-PIS-F-JUN" },
-                { "cname": "Senior", "code": "10M-PIS-F-SEN" }
+                { "cname": "Poussin", "code": "10M-PIS-POU-F" },
+                { "cname": "Minime", "code": "10M-PIS-MIN-F" },
+                { "cname": "Benjamin", "code": "10M-PIS-BEN-F" },
+                { "cname": "Cadet", "code": "10M-PIS-CAD-F" },
+                { "cname": "Junior", "code": "10M-PIS-JUN-F" },
+                { "cname": "Dame 1", "code": "10M-PIS-DAM1" },
+                { "cname": "Dame 2", "code": "10M-PIS-DAM2" },
+                { "cname": "Dame 3", "code": "10M-PIS-DAM3" }
               ]
             }
           ]
@@ -63,10 +73,14 @@ export class CreationComponent {
               "cname": "Homme",
               "code": "H",
               "ages": [
-                { "cname": "Benjamin", "code": "10M-CAR-H-BEN" },
-                { "cname": "Cadet", "code": "10M-CAR-H-CAD" },
-                { "cname": "Junior", "code": "10M-CAR-H-JUN" },
-                { "cname": "Senior", "code": "10M-CAR-H-SEN" }
+                { "cname": "Poussin", "code": "10M-CAR-POU-G" },
+                { "cname": "Minime", "code": "10M-CAR-MIN-G" },
+                { "cname": "Benjamin", "code": "10M-CAR-BEN-G" },
+                { "cname": "Cadet", "code": "10M-CAR-CAD-G" },
+                { "cname": "Junior", "code": "10M-CAR-JUN-G" },
+                { "cname": "Senior 1", "code": "10M-CAR-SEN1" },
+                { "cname": "Senior 2", "code": "10M-CAR-SEN2" },
+                { "cname": "Senior 3", "code": "10M-CAR-SEN3" }
               ]
             },
             {
@@ -74,10 +88,125 @@ export class CreationComponent {
               "cname": "Femme",
               "code": "F",
               "ages": [
-                { "cname": "Benjamin", "code": "10M-CAR-F-BEN" },
-                { "cname": "Cadet", "code": "10M-CAR-F-CAD" },
-                { "cname": "Junior", "code": "10M-CAR-F-JUN" },
-                { "cname": "Senior", "code": "10M-CAR-F-SEN" }
+                { "cname": "Poussin", "code": "10M-CAR-POU-F" },
+                { "cname": "Minime", "code": "10M-CAR-MIN-F" },
+                { "cname": "Benjamin", "code": "10M-CAR-BEN-F" },
+                { "cname": "Cadet", "code": "10M-CAR-CAD-F" },
+                { "cname": "Junior", "code": "10M-CAR-JUN-F" },
+                { "cname": "Dame 1", "code": "10M-CAR-DAM1" },
+                { "cname": "Dame 2", "code": "10M-CAR-DAM2" },
+                { "cname": "Dame 3", "code": "10M-CAR-DAM3" }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Arbalète",
+          "cname": "Arbalète",
+          "code": "ARB",
+          "divisions": [
+            {
+              "name": "Homme",
+              "cname": "Homme",
+              "code": "H",
+              "ages": [
+                { "cname": "Poussin", "code": "10M-ARB-POU-G" },
+                { "cname": "Minime", "code": "10M-ARB-MIN-G" },
+                { "cname": "Benjamin", "code": "10M-ARB-BEN-G" },
+                { "cname": "Cadet", "code": "10M-ARB-CAD-G" },
+                { "cname": "Junior", "code": "10M-ARB-JUN-G" },
+                { "cname": "Senior 1", "code": "10M-ARB-SEN1" },
+                { "cname": "Senior 2", "code": "10M-ARB-SEN2" },
+                { "cname": "Senior 3", "code": "10M-ARB-SEN3" }
+              ]
+            },
+            {
+              "name": "Femme",
+              "cname": "Femme",
+              "code": "F",
+              "ages": [
+                { "cname": "Poussin", "code": "10M-ARB-POU-F" },
+                { "cname": "Minime", "code": "10M-ARB-MIN-F" },
+                { "cname": "Benjamin", "code": "10M-ARB-BEN-F" },
+                { "cname": "Cadet", "code": "10M-ARB-CAD-F" },
+                { "cname": "Junior", "code": "10M-ARB-JUN-F" },
+                { "cname": "Dame 1", "code": "10M-ARB-DAM1" },
+                { "cname": "Dame 2", "code": "10M-ARB-DAM2" },
+                { "cname": "Dame 3", "code": "10M-ARB-DAM3" }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Pistolet Vitesse",
+          "cname": "Pistolet Vitesse",
+          "code": "PV",
+          "divisions": [
+            {
+              "name": "Homme",
+              "cname": "Homme",
+              "code": "H",
+              "ages": [
+                { "cname": "Poussin", "code": "10M-PV-POU-G" },
+                { "cname": "Minime", "code": "10M-PV-MIN-G" },
+                { "cname": "Benjamin", "code": "10M-PV-BEN-G" },
+                { "cname": "Cadet", "code": "10M-PV-CAD-G" },
+                { "cname": "Junior", "code": "10M-PV-JUN-G" },
+                { "cname": "Senior 1", "code": "10M-PV-SEN1" },
+                { "cname": "Senior 2", "code": "10M-PV-SEN2" },
+                { "cname": "Senior 3", "code": "10M-PV-SEN3" }
+              ]
+            },
+            {
+              "name": "Femme",
+              "cname": "Femme",
+              "code": "F",
+              "ages": [
+                { "cname": "Poussin", "code": "10M-PV-POU-F" },
+                { "cname": "Minime", "code": "10M-PV-MIN-F" },
+                { "cname": "Benjamin", "code": "10M-PV-BEN-F" },
+                { "cname": "Cadet", "code": "10M-PV-CAD-F" },
+                { "cname": "Junior", "code": "10M-PV-JUN-F" },
+                { "cname": "Dame 1", "code": "10M-PV-DAM1" },
+                { "cname": "Dame 2", "code": "10M-PV-DAM2" },
+                { "cname": "Dame 3", "code": "10M-PV-DAM3" }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Pistolet Percussion",
+          "cname": "Pistolet Percussion",
+          "code": "PP",
+          "divisions": [
+            {
+              "name": "Homme",
+              "cname": "Homme",
+              "code": "H",
+              "ages": [
+                { "cname": "Poussin", "code": "10M-PP-POU-G" },
+                { "cname": "Minime", "code": "10M-PP-MIN-G" },
+                { "cname": "Benjamin", "code": "10M-PP-BEN-G" },
+                { "cname": "Cadet", "code": "10M-PP-CAD-G" },
+                { "cname": "Junior", "code": "10M-PP-JUN-G" },
+                { "cname": "Senior 1", "code": "10M-PP-SEN1" },
+                { "cname": "Senior 2", "code": "10M-PP-SEN2" },
+                { "cname": "Senior 3", "code": "10M-PP-SEN3" }
+              ]
+            },
+            {
+              "name": "Femme",
+              "cname": "Femme",
+              "code": "F",
+              "ages": [
+                { "cname": "Poussin", "code": "10M-PP-POU-F" },
+                { "cname": "Minime", "code": "10M-PP-MIN-F" },
+                { "cname": "Benjamin", "code": "10M-PP-BEN-F" },
+                { "cname": "Cadet", "code": "10M-PP-CAD-F" },
+                { "cname": "Junior", "code": "10M-PP-JUN-F" },
+                { "cname": "Dame 1", "code": "10M-PP-DAM1" },
+                { "cname": "Dame 2", "code": "10M-PP-DAM2" },
+                { "cname": "Dame 3", "code": "10M-PP-DAM3" }
               ]
             }
           ]
@@ -99,10 +228,14 @@ export class CreationComponent {
               "cname": "Homme",
               "code": "H",
               "ages": [
-                { "cname": "Benjamin", "code": "25M-PIS-H-BEN" },
-                { "cname": "Cadet", "code": "25M-PIS-H-CAD" },
-                { "cname": "Junior", "code": "25M-PIS-H-JUN" },
-                { "cname": "Senior", "code": "25M-PIS-H-SEN" }
+                { "cname": "Poussin", "code": "25M-PIS-POU-G" },
+                { "cname": "Minime", "code": "25M-PIS-MIN-G" },
+                { "cname": "Benjamin", "code": "25M-PIS-BEN-G" },
+                { "cname": "Cadet", "code": "25M-PIS-CAD-G" },
+                { "cname": "Junior", "code": "25M-PIS-JUN-G" },
+                { "cname": "Senior 1", "code": "25M-PIS-SEN1" },
+                { "cname": "Senior 2", "code": "25M-PIS-SEN2" },
+                { "cname": "Senior 3", "code": "25M-PIS-SEN3" }
               ]
             },
             {
@@ -110,10 +243,14 @@ export class CreationComponent {
               "cname": "Femme",
               "code": "F",
               "ages": [
-                { "cname": "Benjamin", "code": "25M-PIS-F-BEN" },
-                { "cname": "Cadet", "code": "25M-PIS-F-CAD" },
-                { "cname": "Junior", "code": "25M-PIS-F-JUN" },
-                { "cname": "Senior", "code": "25M-PIS-F-SEN" }
+                { "cname": "Poussin", "code": "25M-PIS-POU-F" },
+                { "cname": "Minime", "code": "25M-PIS-MIN-F" },
+                { "cname": "Benjamin", "code": "25M-PIS-BEN-F" },
+                { "cname": "Cadet", "code": "25M-PIS-CAD-F" },
+                { "cname": "Junior", "code": "25M-PIS-JUN-F" },
+                { "cname": "Dame 1", "code": "25M-PIS-DAM1" },
+                { "cname": "Dame 2", "code": "25M-PIS-DAM2" },
+                { "cname": "Dame 3", "code": "25M-PIS-DAM3" }
               ]
             }
           ]
@@ -128,10 +265,14 @@ export class CreationComponent {
               "cname": "Homme",
               "code": "H",
               "ages": [
-                { "cname": "Benjamin", "code": "25M-CAR-H-BEN" },
-                { "cname": "Cadet", "code": "25M-CAR-H-CAD" },
-                { "cname": "Junior", "code": "25M-CAR-H-JUN" },
-                { "cname": "Senior", "code": "25M-CAR-H-SEN" }
+                { "cname": "Poussin", "code": "25M-CAR-POU-G" },
+                { "cname": "Minime", "code": "25M-CAR-MIN-G" },
+                { "cname": "Benjamin", "code": "25M-CAR-BEN-G" },
+                { "cname": "Cadet", "code": "25M-CAR-CAD-G" },
+                { "cname": "Junior", "code": "25M-CAR-JUN-G" },
+                { "cname": "Senior 1", "code": "25M-CAR-SEN1" },
+                { "cname": "Senior 2", "code": "25M-CAR-SEN2" },
+                { "cname": "Senior 3", "code": "25M-CAR-SEN3" }
               ]
             },
             {
@@ -139,10 +280,14 @@ export class CreationComponent {
               "cname": "Femme",
               "code": "F",
               "ages": [
-                { "cname": "Benjamin", "code": "25M-CAR-F-BEN" },
-                { "cname": "Cadet", "code": "25M-CAR-F-CAD" },
-                { "cname": "Junior", "code": "25M-CAR-F-JUN" },
-                { "cname": "Senior", "code": "25M-CAR-F-SEN" }
+                { "cname": "Poussin", "code": "25M-CAR-POU-F" },
+                { "cname": "Minime", "code": "25M-CAR-MIN-F" },
+                { "cname": "Benjamin", "code": "25M-CAR-BEN-F" },
+                { "cname": "Cadet", "code": "25M-CAR-CAD-F" },
+                { "cname": "Junior", "code": "25M-CAR-JUN-F" },
+                { "cname": "Dame 1", "code": "25M-CAR-DAM1" },
+                { "cname": "Dame 2", "code": "25M-CAR-DAM2" },
+                { "cname": "Dame 3", "code": "25M-CAR-DAM3" }
               ]
             }
           ]
@@ -164,10 +309,14 @@ export class CreationComponent {
               "cname": "Homme",
               "code": "H",
               "ages": [
-                { "cname": "Benjamin", "code": "50M-PIS-H-BEN" },
-                { "cname": "Cadet", "code": "50M-PIS-H-CAD" },
-                { "cname": "Junior", "code": "50M-PIS-H-JUN" },
-                { "cname": "Senior", "code": "50M-PIS-H-SEN" }
+                { "cname": "Poussin", "code": "50M-PIS-POU-G" },
+                { "cname": "Minime", "code": "50M-PIS-MIN-G" },
+                { "cname": "Benjamin", "code": "50M-PIS-BEN-G" },
+                { "cname": "Cadet", "code": "50M-PIS-CAD-G" },
+                { "cname": "Junior", "code": "50M-PIS-JUN-G" },
+                { "cname": "Senior 1", "code": "50M-PIS-SEN1" },
+                { "cname": "Senior 2", "code": "50M-PIS-SEN2" },
+                { "cname": "Senior 3", "code": "50M-PIS-SEN3" }
               ]
             },
             {
@@ -175,10 +324,14 @@ export class CreationComponent {
               "cname": "Femme",
               "code": "F",
               "ages": [
-                { "cname": "Benjamin", "code": "50M-PIS-F-BEN" },
-                { "cname": "Cadet", "code": "50M-PIS-F-CAD" },
-                { "cname": "Junior", "code": "50M-PIS-F-JUN" },
-                { "cname": "Senior", "code": "50M-PIS-F-SEN" }
+                { "cname": "Poussin", "code": "50M-PIS-POU-F" },
+                { "cname": "Minime", "code": "50M-PIS-MIN-F" },
+                { "cname": "Benjamin", "code": "50M-PIS-BEN-F" },
+                { "cname": "Cadet", "code": "50M-PIS-CAD-F" },
+                { "cname": "Junior", "code": "50M-PIS-JUN-F" },
+                { "cname": "Dame 1", "code": "50M-PIS-DAM1" },
+                { "cname": "Dame 2", "code": "50M-PIS-DAM2" },
+                { "cname": "Dame 3", "code": "50M-PIS-DAM3" }
               ]
             }
           ]
@@ -193,10 +346,14 @@ export class CreationComponent {
               "cname": "Homme",
               "code": "H",
               "ages": [
-                { "cname": "Benjamin", "code": "50M-CAR-H-BEN" },
-                { "cname": "Cadet", "code": "50M-CAR-H-CAD" },
-                { "cname": "Junior", "code": "50M-CAR-H-JUN" },
-                { "cname": "Senior", "code": "50M-CAR-H-SEN" }
+                { "cname": "Poussin", "code": "50M-CAR-POU-G" },
+                { "cname": "Minime", "code": "50M-CAR-MIN-G" },
+                { "cname": "Benjamin", "code": "50M-CAR-BEN-G" },
+                { "cname": "Cadet", "code": "50M-CAR-CAD-G" },
+                { "cname": "Junior", "code": "50M-CAR-JUN-G" },
+                { "cname": "Senior 1", "code": "50M-CAR-SEN1" },
+                { "cname": "Senior 2", "code": "50M-CAR-SEN2" },
+                { "cname": "Senior 3", "code": "50M-CAR-SEN3" }
               ]
             },
             {
@@ -204,10 +361,14 @@ export class CreationComponent {
               "cname": "Femme",
               "code": "F",
               "ages": [
-                { "cname": "Benjamin", "code": "50M-CAR-F-BEN" },
-                { "cname": "Cadet", "code": "50M-CAR-F-CAD" },
-                { "cname": "Junior", "code": "50M-CAR-F-JUN" },
-                { "cname": "Senior", "code": "50M-CAR-F-SEN" }
+                { "cname": "Poussin", "code": "50M-CAR-POU-F" },
+                { "cname": "Minime", "code": "50M-CAR-MIN-F" },
+                { "cname": "Benjamin", "code": "50M-CAR-BEN-F" },
+                { "cname": "Cadet", "code": "50M-CAR-CAD-F" },
+                { "cname": "Junior", "code": "50M-CAR-JUN-F" },
+                { "cname": "Dame 1", "code": "50M-CAR-DAM1" },
+                { "cname": "Dame 2", "code": "50M-CAR-DAM2" },
+                { "cname": "Dame 3", "code": "50M-CAR-DAM3" }
               ]
             }
           ]
