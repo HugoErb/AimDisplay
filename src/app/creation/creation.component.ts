@@ -6,11 +6,11 @@ import { Component } from '@angular/core';
   styleUrls: ['./creation.component.scss']
 })
 export class CreationComponent {
-  firstName: string = "";
-  lastName: string = "";
-  competitionName: string = "";
-  categoryName: string = "";
-  clubName: string = "";
+  shooterFirstName: string = "";
+  shooterLastName: string = "";
+  shooterCompetitionName: string = "";
+  shooterCategoryName: string = "";
+  shooterClubName: string = "";
   scoreSerie1: number = 0;
   scoreSerie2: number = 0;
   scoreSerie3: number = 0;
@@ -19,6 +19,9 @@ export class CreationComponent {
   scoreSerie6: number = 0;
 
   competitionDate: string = "";
+  competitionName: string = "";
+
+  clubName: string = "";
 
   categories: any[] = [
     {

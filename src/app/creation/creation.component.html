@@ -3,6 +3,8 @@
     <p class="subtitle">Cette page est dédiée à la création de données, tel que des compétitions, des tireurs, ou un
         club de tir sportif.</p>
 </div>
+
+
 <!-- <div class="circle-group">
     <div class="circle-container">
         <div class="circle">
@@ -25,27 +27,28 @@
 </div> -->
 
 <!-- Formulaire du tireur -->
-<!-- <div class="form">
+<h3>Création d'un nouveau tireur</h3>
+    <div class="form">
     <div class="form-row">
         <div class="form-group">
             <label>Nom</label>
-            <input type="text" pInputText [(ngModel)]="lastName" placeholder="Nom du tireur" />
+            <input type="text" pInputText [(ngModel)]="shooterLastName" placeholder="Nom du tireur" />
         </div>
         <div class="form-group">
             <label>Prénom</label>
-            <input type="text" pInputText [(ngModel)]="firstName" placeholder="Prénom du tireur" />
+            <input type="text" pInputText [(ngModel)]="shooterFirstName" placeholder="Prénom du tireur" />
         </div>
     </div>
     <div class="form-row">
         <div class="form-group">
             <label>Club</label>
-            <p-autoComplete [(ngModel)]="clubName" [forceSelection]="true" [suggestions]="filteredClubs"
+            <p-autoComplete [(ngModel)]="shooterClubName" [forceSelection]="true" [suggestions]="filteredClubs"
                 (completeMethod)="filterClub($event)" field="name" [dropdown]="true"
                 placeholder="Sélectionnez un club"></p-autoComplete>
         </div>
         <div class="form-group">
             <label>Compétition</label>
-            <p-autoComplete [(ngModel)]="competitionName" [forceSelection]="true" [suggestions]="filteredCompetitions"
+            <p-autoComplete [(ngModel)]="shooterCompetitionName" [forceSelection]="true" [suggestions]="filteredCompetitions"
                 (completeMethod)="filterCompetition($event)" field="name" [dropdown]="true"
                 placeholder="Sélectionnez une compétition"></p-autoComplete>
         </div>
@@ -53,7 +56,7 @@
     <div class="form-row">
         <div class="form-group">
             <label>Catégorie</label>
-            <p-cascadeSelect [(ngModel)]="categoryName" [options]="categories" optionLabel="code"
+            <p-cascadeSelect [(ngModel)]="shooterCategoryName" [options]="categories" optionLabel="code"
                 optionGroupLabel="name" [optionGroupChildren]="['categories', 'divisions','ages']"
                 placeholder="Sélectionnez une catégorie">
                 <ng-template let-option pTemplate="option">
@@ -102,14 +105,15 @@
     </div>
 
     <div class="submit-button">Enregistrer</div>
-</div> -->
+</div>
 
 <!-- Formulaire de la compétition -->
-<!-- <div class="form">
+<h3>Création d'une nouvelle compétition</h3>
+ <div class="form">
     <div class="form-row">
         <div class="form-group">
             <label>Nom de la compétition</label>
-            <input type="text" pInputText [(ngModel)]="lastName" placeholder="Nom de la compétition" />
+            <input type="text" pInputText [(ngModel)]="competitionName" placeholder="Nom de la compétition" />
         </div>
         <div class="form-group">
             <label>Dates de la compétition</label>
@@ -119,10 +123,11 @@
     </div>
 
     <div class="submit-button">Enregistrer</div>
-</div> -->
+</div>
 
 <!-- Formulaire du club -->
-<div class="form">
+<h3>Création d'un nouveau club</h3>
+<div class="form last-form">
     <div class="form-row">
         <div class="form-group">
             <label>Nom du club</label>
