@@ -15,6 +15,14 @@ h2 {
     color: $primary;
 }
 
+h3 {
+    margin-left: 2%;
+    margin-top: 50px;
+    font-size: 33.18px;
+    font-weight: 500;
+    color: $primary;
+}
+
 .subtitle {
     font-size: 18.5px;
 }
@@ -59,8 +67,12 @@ h2 {
 
 .form {
     margin: auto;
-    margin-top: 50px;
+    margin-top: 30px;
     width: 40%;
+}
+
+.last-form{
+    margin-bottom: 50px;
 }
 
 .form-row {
