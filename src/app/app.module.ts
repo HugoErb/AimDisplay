@@ -20,6 +20,7 @@ import { InputNumberModule } from 'primeng/inputnumber';
 import { DropdownModule } from 'primeng/dropdown';
 import { CascadeSelectModule } from 'primeng/cascadeselect';
 import { AutoCompleteModule } from 'primeng/autocomplete';
+import { CalendarModule } from 'primeng/calendar';
 
 @NgModule({
   declarations: [
@@ -43,7 +44,8 @@ import { AutoCompleteModule } from 'primeng/autocomplete';
     BrowserAnimationsModule,
     InputTextModule,
     CascadeSelectModule,
-    AutoCompleteModule
+    AutoCompleteModule,
+    CalendarModule
   ],
   providers: [],
   bootstrap: [AppComponent]
