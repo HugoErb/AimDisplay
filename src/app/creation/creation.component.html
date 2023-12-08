@@ -28,7 +28,7 @@
 
 <!-- Formulaire du tireur -->
 <h3>Création d'un nouveau tireur</h3>
-    <div class="form">
+<div class="form">
     <div class="form-row">
         <div class="form-group">
             <label>Nom</label>
@@ -48,16 +48,16 @@
         </div>
         <div class="form-group">
             <label>Compétition</label>
-            <p-autoComplete [(ngModel)]="shooterCompetitionName" [forceSelection]="true" [suggestions]="filteredCompetitions"
-                (completeMethod)="filterCompetition($event)" field="name" [dropdown]="true"
-                placeholder="Sélectionnez une compétition"></p-autoComplete>
+            <p-autoComplete [(ngModel)]="shooterCompetitionName" [forceSelection]="true"
+                [suggestions]="filteredCompetitions" (completeMethod)="filterCompetition($event)" field="name"
+                [dropdown]="true" placeholder="Sélectionnez une compétition"></p-autoComplete>
         </div>
     </div>
     <div class="form-row">
         <div class="form-group">
             <label>Catégorie</label>
             <p-cascadeSelect [(ngModel)]="shooterCategoryName" [options]="categories" optionLabel="code"
-                optionGroupLabel="name" [optionGroupChildren]="['categories', 'divisions','ages']"
+                optionGroupLabel="name" [optionGroupChildren]="['categories', 'divisions', 'ages']"
                 placeholder="Sélectionnez une catégorie">
                 <ng-template let-option pTemplate="option">
                     {{ option.cname }}
@@ -109,7 +109,7 @@
 
 <!-- Formulaire de la compétition -->
 <h3>Création d'une nouvelle compétition</h3>
- <div class="form">
+<div class="form">
     <div class="form-row">
         <div class="form-group">
             <label>Nom de la compétition</label>
