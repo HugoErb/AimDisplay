@@ -106,22 +106,34 @@ p-inputnumber {
     width: 100% !important;
 }
 
-::ng-deep .p-inputtext, ::ng-deep .p-autocomplete, ::ng-deep .p-cascadeselect, ::ng-deep .p-inputnumber{
+::ng-deep .p-inputtext,
+::ng-deep .p-autocomplete,
+::ng-deep .p-cascadeselect,
+::ng-deep .p-inputnumber {
     width: 100% !important;
 }
 
 ///////////////////////////////////////////////
 
-::ng-deep .p-cascadeselect-sublist{
-    width: calc(fit-content + 500px);
-    min-width: unset;
+::ng-deep .p-cascadeselect-sublist {
+    min-width: unset !important;
 }
 
-::ng-deep .p-cascadeselect-panel{
-    width: fit-content;
+::ng-deep .p-overlay {
+    min-width: unset !important;
+    width: fit-content !important;
 }
 
-::ng-deep .p-cascadeselect-label{
-    font-family: 'Inter', sans-serif !important;
-    font-weight: 300;
+::ng-deep .p-cascadeselect-group-icon {
+    padding-left: 10px !important;
 }
+
+::ng-deep .p-cascadeselect-trigger{
+    background-color: $primary !important;
+    color: #fff !important;
+}
+
+// ::ng-deep .p-cascadeselect-label {
+//     font-family: 'Inter', sans-serif !important;
+//     font-weight: 300;
+// }
