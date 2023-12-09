@@ -21,6 +21,7 @@ import { DropdownModule } from 'primeng/dropdown';
 import { CascadeSelectModule } from 'primeng/cascadeselect';
 import { AutoCompleteModule } from 'primeng/autocomplete';
 import { CalendarModule } from 'primeng/calendar';
+import { ChartModule } from 'primeng/chart';
 
 @NgModule({
   declarations: [
@@ -45,7 +46,8 @@ import { CalendarModule } from 'primeng/calendar';
     InputTextModule,
     CascadeSelectModule,
     AutoCompleteModule,
-    CalendarModule
+    CalendarModule,
+    ChartModule
   ],
   providers: [],
   bootstrap: [AppComponent]
