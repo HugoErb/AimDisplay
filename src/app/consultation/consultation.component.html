@@ -75,7 +75,14 @@
         </div>
     </div>
 </div>
-<div class="chart-div">
+<div class="chart-div line-chart">
+    <div class="chart-div-header">
+        <h3>Score moyen par série</h3>
+        <p class="subtitle">Sur l'ensemble des catégories</p>
+    </div>
+    <p-chart type="line" [data]="clubsTirSportif" [options]="options"></p-chart>
+</div>
+<div class="chart-div pie-chart">
     <div class="chart-div-header">
         <h3>Meilleur club</h3>
         <p class="subtitle">Par nombre de tireur premier</p>
