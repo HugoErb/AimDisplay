@@ -16,10 +16,9 @@ h2 {
 }
 
 h3 {
-    margin-left: 2%;
-    margin-top: 30px;
     font-size: 33.18px;
     color: $primary;
+    font-weight: 600;
 }
 
 .subtitle {
@@ -27,6 +26,19 @@ h3 {
 }
 
 /****************************************** Formulaire *******************************************/
+
+.form-title{
+    display: flex;
+    align-items: center;
+    margin-top: 60px;
+    margin-left: 2%;
+}
+
+.form-icon{
+    color: $primary;
+    margin-right: 20px;
+    font-size: 25px;
+}
 
 .form {
     margin: auto;
