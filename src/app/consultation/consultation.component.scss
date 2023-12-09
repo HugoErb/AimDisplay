@@ -1,7 +1,10 @@
+@import url('https://fonts.googleapis.com/css2?family=Ubuntu:wght@300;400;500;700&display=swap');
+
 $background: #f9fafb;
 $primary: #3B82F6;
 $primary2: #0062ff;
 $black1: #303030;
+$black2: #868686;
 
 .header {
     margin-left: 2%;
@@ -17,4 +20,74 @@ h2 {
 
 .subtitle {
     font-size: 18.5px;
+}
+
+/****************************************** Cardbox *******************************************/
+
+.cardBox {
+    position: relative;
+    width: 100%;
+    padding: 20px;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-gap: 30px;
+}
+
+.cardBox .card {
+    position: relative;
+    background: $background;
+    padding: 30px;
+    display: flex;
+    justify-content: space-between;
+    box-shadow: 0 3px 25px rgba(0, 0, 0, 0.15);
+    border-radius: 20px;
+    transition: 0.3s ease;
+}
+
+.cardBox .card:hover {
+    background: $primary;
+}
+
+.cardBox .card .numbers {
+    position: relative;
+    font-weight: 500;
+    font-size: 2em;
+    color: $primary;
+    font-weight: 600;
+    transition: 0.3s ease;
+}
+
+.cardBox .card .cardName {
+    font-size: 1.1em;
+    color: $black2;
+    margin-top: 5px;
+    transition: 0.3s ease;
+}
+
+.cardBox .card .iconBx {
+    font-size: 3em;
+    color: $primary;
+    transition: 0.3s ease;
+}
+
+.cardBox a {
+    text-decoration: none;
+    color: $primary;
+    font-size: 0.8em;
+    margin-bottom: 6px;
+    padding-top: 7px;
+}
+
+.cardBox a:hover {
+    text-decoration: underline;
+}
+
+.cardBox .card:hover a {
+    color: $background;
+}
+
+.cardBox .card:hover .numbers,
+.cardBox .card:hover .cardName,
+.cardBox .card:hover .iconBx{
+    color: $background !important;
 }
