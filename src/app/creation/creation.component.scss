@@ -19,7 +19,6 @@ h3 {
     margin-left: 2%;
     margin-top: 50px;
     font-size: 33.18px;
-    font-weight: 500;
     color: $primary;
 }
 
@@ -68,7 +67,11 @@ h3 {
 .form {
     margin: auto;
     margin-top: 30px;
-    width: 40%;
+    width: 50%;
+    background: $background;
+    padding: 30px;
+    box-shadow: 0 3px 25px rgba(0, 0, 0, 0.15);
+    border-radius: 20px;
 }
 
 .last-form {
@@ -101,7 +104,6 @@ label {
     padding: 13px 22px;
     background-color: $primary;
     color: white;
-    letter-spacing: 0.5px;
     border-radius: 4px;
     border: none;
     cursor: pointer;
@@ -121,7 +123,8 @@ p-inputnumber {
 ::ng-deep .p-inputtext,
 ::ng-deep .p-autocomplete,
 ::ng-deep .p-cascadeselect,
-::ng-deep .p-inputnumber {
+::ng-deep .p-inputnumber,
+::ng-deep .p-calendar {
     width: 100% !important;
 }
 
