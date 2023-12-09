@@ -67,7 +67,9 @@
         <i class="fa-solid fa-angle-left" [class.rotate-icon]="isCollapsed" [class.rotate-icon-back]="!isCollapsed"></i>
     </button>
     <div class="content" [class.content-expanded]="isCollapsed">
-        <router-outlet></router-outlet>
+        <div class="page-content">
+            <router-outlet></router-outlet>
+        </div>
         <!-- <div class="blob"></div> -->
     </div>
 </div>
