@@ -6,11 +6,6 @@ $primary2: #0062ff;
 $black1: #303030;
 $black2: #868686;
 
-.page-content {
-    margin-left: 2%;
-    margin-top: 10px;
-}
-
 h2 {
     margin-bottom: 6px;
     font-size: 39.81px;
@@ -26,7 +21,7 @@ h2 {
 
 .cardBox {
     width: 100%;
-    padding: 20px 20px 20px 0px;
+    padding: 20px 0px 20px 0px;
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     grid-gap: 30px;
@@ -49,7 +44,6 @@ h2 {
 
 .cardBox .card .numbers {
     position: relative;
-    font-weight: 500;
     font-size: 2em;
     color: $primary;
     font-weight: 600;
@@ -69,22 +63,6 @@ h2 {
     transition: 0.3s ease;
 }
 
-.cardBox a {
-    text-decoration: none;
-    color: $primary;
-    font-size: 0.8em;
-    margin-bottom: 6px;
-    padding-top: 7px;
-}
-
-.cardBox a:hover {
-    text-decoration: underline;
-}
-
-.cardBox .card:hover a {
-    color: $background;
-}
-
 .cardBox .card:hover .numbers,
 .cardBox .card:hover .cardName,
 .cardBox .card:hover .iconBx {
@@ -93,22 +71,26 @@ h2 {
 
 /****************************************** Chart *******************************************/
 
-.chart {
-    width: fit-content;
+.chart-div {
+    width: 30%;
     background: $background;
     padding: 20px;
     box-shadow: 0 7px 25px rgba(0, 0, 0, .08);
     border-radius: 20px;
+    margin-top: 15px;
 }
 
-.cardHeader {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    color: $black1;
+.chart-div-header {
+    margin-bottom: 15px;
 }
 
-.cardHeader h3 {
+.chart-div-header h3 {
     font-size: 33.18px;
     color: $primary;
+    font-weight: 600;
+}
+
+.chart-div-header .subtitle {
+    font-size: 17px;
+    color: $black2;
 }
