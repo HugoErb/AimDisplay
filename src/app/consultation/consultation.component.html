@@ -1,85 +1,84 @@
-<div class="page-content">
-    <h2>Consultation de données</h2>
-    <p class="subtitle">Cette page est dédiée à la consultation des données. Vous y trouverez des informations et
-        des graphiques.</p>
-    <div class="cardBox">
-        <div class="card">
-            <div>
-                <div class="numbers" id="connected_state">30</div>
-                <div class="cardName">Participation moyenne</div>
-            </div>
-            <div class="iconBx">
-                <i class="fa-solid fa-users"></i>
-            </div>
+<h2>Consultation de données</h2>
+<p class="subtitle">Cette page est dédiée à la consultation des données. Vous y trouverez des informations et
+    des graphiques.</p>
+<div class="cardBox">
+    <div class="card">
+        <div>
+            <div class="numbers" id="connected_state">30</div>
+            <div class="cardName">Participation moyenne</div>
         </div>
-        <div class="card">
-            <div>
-                <div class="numbers">25</div>
-                <div class="cardName">Participation maximale</div>
-            </div>
-            <div class="iconBx">
-                <i class="fa-solid fa-user-plus"></i>
-            </div>
-        </div>
-        <div class="card">
-            <div>
-                <div class="numbers">15</div>
-                <div class="cardName">Participation minimale</div>
-            </div>
-            <div class="iconBx">
-                <i class="fa-solid fa-user-minus"></i>
-            </div>
-        </div>
-        <div class="card">
-            <div>
-                <div class="numbers">16</div>
-                <div class="cardName">Compétitions organisées</div>
-            </div>
-            <div class="iconBx">
-                <i class="fa-solid fa-ranking-star"></i>
-            </div>
-        </div>
-        <div class="card">
-            <div>
-                <div class="numbers">16</div>
-                <div class="cardName">Clubs ayant participés</div>
-            </div>
-            <div class="iconBx">
-                <i class="fa-solid fa-people-roof"></i>
-            </div>
-        </div>
-        <div class="card">
-            <div>
-                <div class="numbers">16</div>
-                <div class="cardName">Score maximal 6 séries</div>
-            </div>
-            <div class="iconBx">
-                <i class="fa-solid fa-medal"></i>
-            </div>
-        </div>
-        <div class="card">
-            <div>
-                <div class="numbers">16</div>
-                <div class="cardName">Score maximal 4 séries</div>
-            </div>
-            <div class="iconBx">
-                <i class="fa-solid fa-medal"></i>
-            </div>
-        </div>
-        <div class="card">
-            <div>
-                <div class="numbers">16</div>
-                <div class="cardName">Score minimal</div>
-            </div>
-            <div class="iconBx">
-                <i class="fa-solid fa-face-frown"></i>
-            </div>
+        <div class="iconBx">
+            <i class="fa-solid fa-users"></i>
         </div>
     </div>
-    <div class="chart">
-        <div class="cardHeader">
-            <h3>Top 1 par club</h3>
+    <div class="card">
+        <div>
+            <div class="numbers">25</div>
+            <div class="cardName">Participation maximale</div>
         </div>
-        <p-chart type="pie" [data]="clubsTirSportif" [options]="options"></p-chart>
+        <div class="iconBx">
+            <i class="fa-solid fa-user-plus"></i>
+        </div>
     </div>
+    <div class="card">
+        <div>
+            <div class="numbers">15</div>
+            <div class="cardName">Participation minimale</div>
+        </div>
+        <div class="iconBx">
+            <i class="fa-solid fa-user-minus"></i>
+        </div>
+    </div>
+    <div class="card">
+        <div>
+            <div class="numbers">16</div>
+            <div class="cardName">Compétitions organisées</div>
+        </div>
+        <div class="iconBx">
+            <i class="fa-solid fa-ranking-star"></i>
+        </div>
+    </div>
+    <div class="card">
+        <div>
+            <div class="numbers">16</div>
+            <div class="cardName">Clubs ayant participés</div>
+        </div>
+        <div class="iconBx">
+            <i class="fa-solid fa-people-roof"></i>
+        </div>
+    </div>
+    <div class="card">
+        <div>
+            <div class="numbers">16</div>
+            <div class="cardName">Score maximal 6 séries</div>
+        </div>
+        <div class="iconBx">
+            <i class="fa-solid fa-medal"></i>
+        </div>
+    </div>
+    <div class="card">
+        <div>
+            <div class="numbers">16</div>
+            <div class="cardName">Score maximal 4 séries</div>
+        </div>
+        <div class="iconBx">
+            <i class="fa-solid fa-medal"></i>
+        </div>
+    </div>
+    <div class="card">
+        <div>
+            <div class="numbers">16</div>
+            <div class="cardName">Score minimal</div>
+        </div>
+        <div class="iconBx">
+            <i class="fa-solid fa-face-frown"></i>
+        </div>
+    </div>
+</div>
+<div class="chart-div">
+    <div class="chart-div-header">
+        <h3>Meilleur club</h3>
+        <p class="subtitle">Par nombre de tireur premier</p>
+    </div>
+    <p-chart type="pie" [data]="clubsTirSportif" [options]="options"></p-chart>
 </div>

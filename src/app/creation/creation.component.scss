@@ -3,11 +3,6 @@ $primary: #3B82F6;
 $primary2: #0062ff;
 $black1: #303030;
 
-.header {
-    margin-left: 2%;
-    margin-top: 10px;
-}
-
 h2 {
     margin-bottom: 6px;
     font-size: 39.81px;
@@ -31,7 +26,6 @@ h3 {
     display: flex;
     align-items: center;
     margin-top: 60px;
-    margin-left: 2%;
 }
 
 .form-icon{
@@ -48,10 +42,6 @@ h3 {
     padding: 30px;
     box-shadow: 0 3px 25px rgba(0, 0, 0, 0.15);
     border-radius: 20px;
-}
-
-.last-form {
-    margin-bottom: 50px;
 }
 
 .form-row {

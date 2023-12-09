@@ -3,11 +3,6 @@ $primary: #3B82F6;
 $primary2: #0062ff;
 $black1: #303030;
 
-.header {
-    margin-left: 2%;
-    margin-top: 10px;
-}
-
 h2 {
     margin-bottom: 6px;
     font-size: 39.81px;
@@ -22,15 +17,11 @@ h2 {
 /********************************* Tableau *********************************/
 
 .table-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
     margin-top: 35px;
-    
 }
 
 ::ng-deep p-table {
-    width: 96%;
+    width: 100%;
 }
 
 ::ng-deep .p-datatable {
