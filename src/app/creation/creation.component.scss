@@ -17,49 +17,13 @@ h2 {
 
 h3 {
     margin-left: 2%;
-    margin-top: 50px;
+    margin-top: 30px;
     font-size: 33.18px;
     color: $primary;
 }
 
 .subtitle {
     font-size: 18.5px;
-}
-
-/****************************************** Cercles div *******************************************/
-
-.circle-group {
-    display: flex;
-    justify-content: center;
-    gap: 50px;
-    margin-top: 50px;
-}
-
-.circle-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-.circle {
-    background-color: $primary;
-    color: $background;
-    width: 200px;
-    height: 200px;
-    border-radius: 50%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    cursor: pointer;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-}
-
-.circle-icon {
-    font-size: 75px;
-}
-
-.circle-container p {
-    margin-top: 10px;
 }
 
 /****************************************** Formulaire *******************************************/

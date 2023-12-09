@@ -6,7 +6,7 @@ $primary2: #0062ff;
 $black1: #303030;
 $black2: #868686;
 
-.header {
+.page-content {
     margin-left: 2%;
     margin-top: 10px;
 }
@@ -25,16 +25,15 @@ h2 {
 /****************************************** Cardbox *******************************************/
 
 .cardBox {
-    position: relative;
     width: 100%;
-    padding: 20px;
+    padding: 20px 20px 20px 0px;
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     grid-gap: 30px;
+    margin-top: 25px;
 }
 
 .cardBox .card {
-    position: relative;
     background: $background;
     padding: 30px;
     display: flex;
@@ -88,6 +87,28 @@ h2 {
 
 .cardBox .card:hover .numbers,
 .cardBox .card:hover .cardName,
-.cardBox .card:hover .iconBx{
+.cardBox .card:hover .iconBx {
     color: $background !important;
+}
+
+/****************************************** Chart *******************************************/
+
+.chart {
+    width: fit-content;
+    background: $background;
+    padding: 20px;
+    box-shadow: 0 7px 25px rgba(0, 0, 0, .08);
+    border-radius: 20px;
+}
+
+.cardHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    color: $black1;
+}
+
+.cardHeader h3 {
+    font-size: 33.18px;
+    color: $primary;
 }
