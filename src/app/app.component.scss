@@ -64,7 +64,6 @@ $sidebar_size_collapsed: 85px;
 
 /* Styles communs pour les liens et les hover */
 .sidebar ul li a {
-    position: relative;
     width: 100%;
     display: flex;
     text-decoration: none;
@@ -81,6 +80,7 @@ $sidebar_size_collapsed: 85px;
 .sidebar ul li a .icon {
     margin-left: 25px;
     font-size: 1.09em;
+    width: 17px;
 }
 
 .sidebar ul li a .title {
