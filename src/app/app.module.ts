@@ -2,6 +2,8 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
+
+/**********************  Pages ***********************/
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { HomeComponent } from './home/home.component';
@@ -12,6 +14,8 @@ import { ManageAccountComponent } from './manage-account/manage-account.componen
 import { SettingsComponent } from './settings/settings.component';
 import { ConsultationComponent } from './consultation/consultation.component';
 
+
+/**********************  PrimeNG ***********************/
 import { TableModule } from 'primeng/table';
 import { PaginatorModule } from 'primeng/paginator';
 import { InputTextModule } from 'primeng/inputtext';
@@ -22,6 +26,7 @@ import { CascadeSelectModule } from 'primeng/cascadeselect';
 import { AutoCompleteModule } from 'primeng/autocomplete';
 import { CalendarModule } from 'primeng/calendar';
 import { ChartModule } from 'primeng/chart';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
 
 @NgModule({
   declarations: [
@@ -47,7 +52,8 @@ import { ChartModule } from 'primeng/chart';
     CascadeSelectModule,
     AutoCompleteModule,
     CalendarModule,
-    ChartModule
+    ChartModule,
+    ConfirmDialogModule
   ],
   providers: [],
   bootstrap: [AppComponent]
