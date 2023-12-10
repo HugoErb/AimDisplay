@@ -84,6 +84,10 @@ h2 {
     width: 35.5%;
 }
 
+.chart-container {
+    text-align: center !important; /* Ne fonctionne pas */
+}
+
 .line-chart {
     width: 62.5%;
 }
