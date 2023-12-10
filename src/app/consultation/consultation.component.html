@@ -87,7 +87,9 @@
         <h3>Meilleur club</h3>
         <p class="subtitle">Par nombre de tireur premier sur sa catégorie</p>
     </div>
-    <p-chart type="pie" [data]="clubsTirSportif" [options]="optionClubsTirSportif"></p-chart>
+    <div class="chart-container">
+        <p-chart type="pie" [data]="clubsTirSportif" [options]="optionClubsTirSportif"></p-chart>
+    </div>
 </div>
 <div class="second-line-charts">
     <div class="chart-div pie-chart">
@@ -95,7 +97,9 @@
             <h3>Classement</h3>
             <p class="subtitle">Par score, toutes catégories confondues</p>
         </div>
-        <p-chart type="pie" [data]="clubsTirSportif" [options]="optionClubsTirSportif"></p-chart>
+        <div class="chart-container">
+            <p-chart type="pie" [data]="clubsTirSportif" [options]="optionClubsTirSportif"></p-chart>
+        </div>
     </div>
     <div class="chart-div line-chart right-chart">
         <div class="chart-div-header">

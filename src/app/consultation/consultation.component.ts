@@ -22,6 +22,7 @@ export class ConsultationComponent {
 
   optionsNbreParticipants = {
     maintainAspectRatio: false,
+    responsive: true,
     aspectRatio: 0.6,
     plugins: {
       legend: {
@@ -53,7 +54,9 @@ export class ConsultationComponent {
       }
     ]
   };
+
   optionClubsTirSportif = {
+    responsive: true,
     plugins: {
       legend: {
         labels: {
@@ -86,6 +89,7 @@ export class ConsultationComponent {
 
   optionsResultatsSeries = {
     maintainAspectRatio: false,
+    responsive: true,
     aspectRatio: 0.6,
     plugins: {
       legend: {
