@@ -72,20 +72,28 @@ h2 {
 /****************************************** Chart *******************************************/
 
 .chart-div {
-    width: 30%;
+    display: inline-block;
     background: $background;
     padding: 20px;
-    box-shadow: 0 7px 25px rgba(0, 0, 0, .08);
+    box-shadow: 0 3px 25px rgba(0, 0, 0, 0.15);
     border-radius: 20px;
     margin-top: 15px;
 }
 
-.pie-chart{
-    width: 30%;
+.pie-chart {
+    width: 35.5%;
 }
 
 .line-chart {
-    width: 60%;
+    width: 62.5%;
+}
+
+.second-line-charts {
+    margin-top: 20px;
+}
+
+.right-chart {
+    margin-left: 2%;
 }
 
 .chart-div-header {
