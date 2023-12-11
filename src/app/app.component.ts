@@ -7,7 +7,7 @@ import { Router, ActivatedRoute } from '@angular/router';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  title = 'AimDisplay';
+  title = 'Aim Display';
   isCollapsed = false;
   currentRoute: string = 'home';
 
