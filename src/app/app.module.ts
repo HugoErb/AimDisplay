@@ -10,7 +10,6 @@ import { HomeComponent } from './home/home.component';
 import { CreationComponent } from './creation/creation.component';
 import { ModificationComponent } from './modification/modification.component';
 import { DisplayComponent } from './display/display.component';
-import { ManageAccountComponent } from './manage-account/manage-account.component';
 import { SettingsComponent } from './settings/settings.component';
 import { ConsultationComponent } from './consultation/consultation.component';
 
@@ -35,7 +34,6 @@ import { ConfirmDialogModule } from 'primeng/confirmdialog';
     CreationComponent,
     ModificationComponent,
     DisplayComponent,
-    ManageAccountComponent,
     SettingsComponent,
     ConsultationComponent
   ],

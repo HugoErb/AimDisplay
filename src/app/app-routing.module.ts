@@ -6,7 +6,6 @@ import { ModificationComponent } from './modification/modification.component';
 import { ConsultationComponent } from './consultation/consultation.component';
 import { DisplayComponent } from './display/display.component';
 import { SettingsComponent } from './settings/settings.component';
-import { ManageAccountComponent } from './manage-account/manage-account.component';
 
 const routes: Routes = [
   {
@@ -32,10 +31,6 @@ const routes: Routes = [
   {
     path: "settings",
     component: SettingsComponent
-  },
-  {
-    path: "manage-account",
-    component: ManageAccountComponent
   }
 ];
 
