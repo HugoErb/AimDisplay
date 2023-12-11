@@ -1,28 +1,49 @@
 <h2>Paramètres</h2>
 <p class="subtitle">Ajustez ici les paramètres de l'application selon vos préférences.</p>
 <div class="settings-container">
-    <h3 class="settings-container-title">Préférences</h3>
-    Dark mode
-    Langue
-    Couleur primaire
-</div>
-<div class="settings-container">
-    <h3 class="settings-container-title">Gestion du compte</h3>
-    Photo
-    nom d'utilisateur
-    localisation du club : code postal , ville
-    Changement de mot de passe, déconnexion
-</div>
-<div class="settings-container">
-    <h3 class="settings-container-title">Gestion des abonnements</h3>
-    Affichage des différentes offres
-    Offre actuelle : acheter, modifier, annuler
-    Historique des transactions
-</div>
-<div class="settings-container">
-    <h3 class="settings-container-title">Nous contacter</h3>
-    formulaire de contact
-    discord
-    documentation
-    faq
+    <div class="setting-container">
+        <h3 class="setting-container-title">Préférences</h3>
+        <div class="setting-container-subtitle">Remplissez le formulaire ci-dessous et nous vous répondrons dans les plus brefs délais.</div>
+        Dark mode
+        Langue
+        Couleur primaire
+    </div>
+    <div class="setting-container">
+        <h3 class="setting-container-title">Gestion du compte</h3>
+        <div class="setting-container-subtitle">Remplissez le formulaire ci-dessous et nous vous répondrons dans les plus brefs délais.</div>
+        Photo
+        nom d'utilisateur
+        localisation du club : code postal , ville
+        Changement de mot de passe, déconnexion
+    </div>
+    <div class="setting-container">
+        <h3 class="setting-container-title">Gestion des abonnements</h3>
+        <div class="setting-container-subtitle">Remplissez le formulaire ci-dessous et nous vous répondrons dans les plus brefs délais.</div>
+        Affichage des différentes offres
+        Offre actuelle : acheter, modifier, annuler
+        Historique des transactions
+    </div>
+    <div class="setting-container">
+        <h3 class="setting-container-title">Nous contacter</h3>
+        <div class="setting-container-subtitle">Remplissez le formulaire ci-dessous et nous vous répondrons dans les plus brefs délais.</div>
+        <div class="form">
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Nom</label>
+                    <input type="text" pInputText [(ngModel)]="email" placeholder="Adresse e-mail" />
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Message</label>
+                    <textarea rows="5" cols="30" pInputTextarea [autoResize]="true"></textarea>
+                </div>
+        
+            <div class="submit-button">Enregistrer</div>
+        </div>
+        formulaire de contact
+        discord
+        documentation
+        faq
+    </div>
 </div>

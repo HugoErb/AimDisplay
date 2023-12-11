@@ -2,6 +2,7 @@ $background: #f9fafb;
 $primary: #3B82F6;
 $primary2: #0062ff;
 $black1: #303030;
+$black2: #868686;
 
 h2 {
     margin-bottom: 6px;
@@ -15,7 +16,14 @@ h2 {
 }
 
 .settings-container{
-    width: 75%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.setting-container{
+    width: 85%;
     background: $background;
     padding: 20px;
     box-shadow: 0 3px 25px rgba(0, 0, 0, 0.15);
@@ -24,8 +32,13 @@ h2 {
     margin-bottom: 30px;
 }
 
-.settings-container-title{
+.setting-container-title{
     font-size: 31px;
     color: $primary;
     font-weight: 600;
+}
+
+.setting-container-subtitle{
+    font-size: 17px;
+    color: $black2;
 }
