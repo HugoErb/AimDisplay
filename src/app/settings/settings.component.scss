@@ -13,3 +13,19 @@ h2 {
 .subtitle {
     font-size: 18.5px;
 }
+
+.settings-container{
+    width: 75%;
+    background: $background;
+    padding: 20px;
+    box-shadow: 0 3px 25px rgba(0, 0, 0, 0.15);
+    border-radius: 20px;
+    margin-top: 30px;
+    margin-bottom: 30px;
+}
+
+.settings-container-title{
+    font-size: 31px;
+    color: $primary;
+    font-weight: 600;
+}
