@@ -26,6 +26,7 @@ import { AutoCompleteModule } from 'primeng/autocomplete';
 import { CalendarModule } from 'primeng/calendar';
 import { ChartModule } from 'primeng/chart';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { InputTextareaModule } from 'primeng/inputtextarea';
 
 @NgModule({
   declarations: [
@@ -51,7 +52,8 @@ import { ConfirmDialogModule } from 'primeng/confirmdialog';
     AutoCompleteModule,
     CalendarModule,
     ChartModule,
-    ConfirmDialogModule
+    ConfirmDialogModule,
+    InputTextareaModule
   ],
   providers: [],
   bootstrap: [AppComponent]
