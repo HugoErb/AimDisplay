@@ -15,14 +15,14 @@ h2 {
     font-size: 18.5px;
 }
 
-.settings-container{
+.settings-container {
     display: flex;
     justify-content: center;
     align-items: center;
     flex-direction: column;
 }
 
-.setting-container{
+.setting-container {
     width: 85%;
     background: $background;
     padding: 20px;
@@ -32,13 +32,13 @@ h2 {
     margin-bottom: 30px;
 }
 
-.setting-container-title{
+.setting-container-title {
     font-size: 31px;
     color: $primary;
     font-weight: 600;
 }
 
-.setting-container-subtitle{
+.setting-container-subtitle {
     font-size: 17px;
     color: $black2;
 }
@@ -90,8 +90,28 @@ label {
     background-color: $primary2;
 }
 
-p-inputnumber {
-    width: 100% !important;
+.form-social-media {
+    display: flex;
+    align-items: center;
+    gap: 40px;
+    cursor: pointer;
+    justify-content: center;
+    margin-top: 40px;
+}
+
+.social-item {
+    display: flex;
+    align-items: center;
+    color: $primary;
+    transition: text-decoration 0.3s;
+}
+
+.social-item i {
+    margin-right: 10px;
+}
+
+.social-item:hover span {
+    text-decoration: underline;
 }
 
 ::ng-deep .p-inputtext,
