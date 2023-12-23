@@ -1,5 +1,8 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap');
-
+$background: #f9fafb;
+$primary: #3B82F6;
+$primary2: #0062ff;
+$black: #303030;
 
 * {
     margin: 0;
@@ -7,4 +10,11 @@
     box-sizing: border-box;
     font-family: 'Inter', sans-serif;
     font-weight: 300;
+}
+
+/********************************* Confirm Dialog *********************************/
+
+.confirm-dialog-icon{
+    color: #3B82F6;
+    margin-right: 0px;
 }
