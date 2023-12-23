@@ -47,7 +47,7 @@
                 <td>{{ shooter.clubName }}</td>
                 <td>{{ shooter.categoryName }}</td>
                 <td><i class="fa-solid fa-pen-to-square icon-div"></i></td>
-                <td><i class="fa-solid fa-trash-can icon-div"></i></td>
+                <td><i class="fa-solid fa-trash-can icon-div" (click)="confirmDeletion($event)"></i></td>
             </tr>
         </ng-template>
         <ng-template pTemplate="emptymessage">
@@ -57,3 +57,4 @@
         </ng-template>
     </p-table>
 </div>
+<p-confirmDialog></p-confirmDialog>
