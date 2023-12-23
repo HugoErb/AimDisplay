@@ -20,6 +20,8 @@ export class CreationComponent {
 
   competitionDate: string = "";
   competitionName: string = "";
+  prixInscription: number = 0;
+  prixCategSup: number = 0;
 
   clubName: string = "";
 
