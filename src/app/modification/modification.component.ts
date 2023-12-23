@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { ConfirmationService, MessageService, ConfirmEventType } from 'primeng/api';
 
 @Component({
   selector: 'app-modification',
@@ -6,6 +7,8 @@ import { Component } from '@angular/core';
   styleUrls: ['./modification.component.scss']
 })
 export class ModificationComponent {
+  constructor(private confirmationService: ConfirmationService, private messageService: MessageService) { }
+
   shooters: Shooter[] = [
     { id: 1, lastName: 'Martin', firstName: 'Lucas', competitionName: 'Championnat National', clubName: 'Arc Club Paris', categoryName: 'Senior' },
     { id: 2, lastName: 'Bernard', firstName: 'Émilie', competitionName: 'Tir Régional', clubName: 'Les Flèches de Lyon', categoryName: 'Junior' },
@@ -28,6 +31,26 @@ export class ModificationComponent {
     { id: 19, lastName: 'Germain', firstName: 'Charlotte', competitionName: 'Tir de Loisir', clubName: 'Arc Club Toulon', categoryName: 'Senior' },
     { id: 20, lastName: 'Moulin', firstName: 'Quentin', competitionName: 'Tournoi Interscolaire', clubName: 'Les Flèches de Rouen', categoryName: 'Cadet' }
   ];
+
+
+  confirmDeletion(event: Event) {
+    this.confirmationService.confirm({
+      target: event.target as EventTarget,
+      message: 'Attention, cela est irréversible. Voulez vous vraiment supprimer cette ligne ?',
+      header: 'Confirmation de suppression',
+      icon: 'fa-solid fa-triangle-exclamation confirm-dialog-icon',
+      acceptIcon: "none",
+      rejectIcon: "none",
+      acceptLabel: 'Oui',
+      rejectLabel: 'Non',
+      rejectButtonStyleClass: "p-button-text",
+      accept: () => {
+        this.messageService.add({ severity: 'info', summary: 'Confirmed', detail: 'Ligne supprimée' });
+      },
+      reject: () => {
+      }
+    });
+  }
 }
 
 export interface Shooter {
