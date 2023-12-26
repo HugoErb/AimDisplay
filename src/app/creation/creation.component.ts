@@ -1,4 +1,8 @@
 import { Component } from '@angular/core';
+interface Category {
+  cname: string;
+  code: string;
+}
 
 @Component({
   selector: 'app-creation',
@@ -6,10 +10,14 @@ import { Component } from '@angular/core';
   styleUrls: ['./creation.component.scss']
 })
 export class CreationComponent {
+  constructor() {
+    this.shooterCategoryName = { cname: '', code: '' };
+  }
   shooterFirstName: string = "";
   shooterLastName: string = "";
   shooterCompetitionName: string = "";
-  shooterCategoryName: string = "";
+  shooterCategoryName: Category;
+  isSeniorOrDameCategory: boolean = false;
   shooterClubName: string = "";
   scoreSerie1: number = 0;
   scoreSerie2: number = 0;
@@ -398,7 +406,6 @@ export class CreationComponent {
 
   /**
   * Filtre les compétitions en fonction de la recherche de compétition entrée.
-  *
   * @param event - L'événement contenant la recherche de compétition entrée.
   */
   filterCompetition(event: any): void {
@@ -416,7 +423,6 @@ export class CreationComponent {
 
   /**
   * Filtre les clubs en fonction de la recherche du club entré.
-  *
   * @param event - L'événement contenant la recherche du club entré.
   */
   filterClub(event: any): void {
@@ -432,5 +438,15 @@ export class CreationComponent {
     this.filteredClubs = filtered;
   }
 
-
+  /**
+  * Vérifie si la catégorie du tireur contient 'SEN' ou 'DAM' suivi d'un chiffre unique.
+  */
+  setIsSeniorOrDameCategory(): void {
+    if (this.shooterCategoryName && this.shooterCategoryName.code) {
+      const categoryCode = this.shooterCategoryName.code;
+      this.isSeniorOrDameCategory = /SEN\d|DAM\d/.test(categoryCode);
+    } else {
+      this.isSeniorOrDameCategory = false;
+    }
+  }
 }
