@@ -149,6 +149,56 @@ h2 {
     transform: translate(-50%, -50%);
 }
 
+/********************************* Tableau *********************************/
+
+.table-container {
+    margin-top: 35px;
+}
+
+::ng-deep p-table {
+    width: 100%;
+}
+
+::ng-deep .p-datatable {
+    border-radius: 6px;
+}
+
+th, tr,::ng-deep .p-paginator{
+    background-color: $background !important;
+}
+
+.thead {
+    font-weight: 600;
+    margin-right: 7px;
+    color: $primary;
+}
+
+th:first-child {
+    border-top-left-radius: 6px;
+}
+
+th:last-child {
+    border-top-right-radius: 6px;
+}
+
+tr:hover {
+    background-color: rgb(240, 240, 240) !important;
+}
+
+.icon-div {
+    font-size: 17px;
+    padding: 5px;
+    cursor: pointer;
+    color: $primary;
+}
+
+::ng-deep .p-paginator {
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 6px;
+    border-bottom-left-radius: 6px;
+}
+
 /****************************************** Contact *******************************************/
 
 .form {

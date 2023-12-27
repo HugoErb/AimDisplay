@@ -20,8 +20,7 @@
     </div>
     <div class="setting-container">
         <h3 class="setting-container-title">Gestion des abonnements</h3>
-        <div class="setting-container-subtitle">Remplissez le formulaire ci-dessous et nous vous répondrons dans les
-            plus brefs délais.</div>
+        <div class="setting-container-subtitle">Gérez ici votre offre d'abonnement et consultez votre historique de transaction.</div>
         <div class="subscription-plans">
             <div class="plan-container">
                 <div class="plan">
@@ -101,6 +100,51 @@
 
         Offre actuelle : acheter, modifier, annuler
         Historique des transactions
+        <div class="table-container">
+            <p-table [value]="transactions" dataKey="id" [rows]="10" [paginator]="true">
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th>
+                            <div class="flex align-items-center">
+                                <span class="thead">Date</span>
+                                <p-columnFilter type="text" field="date" display="menu"></p-columnFilter>
+                            </div>
+                        </th>
+                        <th>
+                            <div class="flex align-items-center">
+                                <span class="thead">Montant</span>
+                                <p-columnFilter type="text" field="montant" display="menu"></p-columnFilter>
+                            </div>
+                        </th>
+                        <th>
+                            <div class="flex align-items-center">
+                                <span class="thead">Offre</span>
+                                <p-columnFilter type="text" field="typeOffre" display="menu"></p-columnFilter>
+                            </div>
+                        </th>
+                        <th>
+                            <div class="flex align-items-center">
+                                <span class="thead">Statut</span>
+                                <p-columnFilter type="text" field="statutPaiement" display="menu"></p-columnFilter>
+                            </div>
+                        </th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-transaction>
+                    <tr>
+                        <td>{{ transaction.date }}</td>
+                        <td>{{ transaction.montant }}€</td>
+                        <td>{{ transaction.typeOffre }}</td>
+                        <td>{{ transaction.statutPaiement }}</td>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="emptymessage">
+                    <tr>
+                        <td colspan="7">Aucune transaction effectuée.</td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div>
     </div>
     <div class="setting-container">
         <h3 class="setting-container-title">Nous contacter</h3>
