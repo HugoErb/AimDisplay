@@ -2,22 +2,30 @@ import { Component } from '@angular/core';
 
 @Component({
   selector: 'app-consultation',
+  standalone: true,
+  imports: [],
   templateUrl: './consultation.component.html',
-  styleUrls: ['./consultation.component.scss']
+  styleUrls: ['./consultation.component.scss'],
 })
 export class ConsultationComponent {
-
   // Graphique en ligne du score moyen par série
   nbreParticipants: any = {
-    labels: ['Challenge Rochefortais', 'Grand concours', 'Master', 'Championnat départemental', 'Championnat régional', 'Championnat de france'],
+    labels: [
+      'Challenge Rochefortais',
+      'Grand concours',
+      'Master',
+      'Championnat départemental',
+      'Championnat régional',
+      'Championnat de france',
+    ],
     datasets: [
       {
         label: 'Nombre de participants',
         data: [71, 81, 88, 81, 71, 69],
         fill: false,
-        tension: 0.4
-      }
-    ]
+        tension: 0.4,
+      },
+    ],
   };
 
   optionsNbreParticipants = {
@@ -27,22 +35,22 @@ export class ConsultationComponent {
     plugins: {
       legend: {
         labels: {
-          color: '#303030'
-        }
-      }
+          color: '#303030',
+        },
+      },
     },
     scales: {
       x: {
         grid: {
-          drawBorder: false
-        }
+          drawBorder: false,
+        },
       },
       y: {
         grid: {
-          drawBorder: false
-        }
-      }
-    }
+          drawBorder: false,
+        },
+      },
+    },
   };
 
   // Graphique en camembert du meilleur club
@@ -51,8 +59,8 @@ export class ConsultationComponent {
     datasets: [
       {
         data: [540, 325, 702],
-      }
-    ]
+      },
+    ],
   };
 
   optionClubsTirSportif = {
@@ -61,12 +69,11 @@ export class ConsultationComponent {
       legend: {
         labels: {
           usePointStyle: true,
-          color: '#303030'
-        }
-      }
-    }
+          color: '#303030',
+        },
+      },
+    },
   };
-
 
   // Graphique en ligne du score moyen par série
   resultatsSeries: any = {
@@ -76,15 +83,15 @@ export class ConsultationComponent {
         label: 'Score moyen 6 séries',
         data: [71, 81, 88, 81, 71, 69],
         fill: false,
-        tension: 0.4
+        tension: 0.4,
       },
       {
         label: 'Score moyen 4 séries',
         data: [68, 75, 82, 87],
         fill: false,
-        tension: 0.4
-      }
-    ]
+        tension: 0.4,
+      },
+    ],
   };
 
   optionsResultatsSeries = {
@@ -94,25 +101,21 @@ export class ConsultationComponent {
     plugins: {
       legend: {
         labels: {
-          color: '#303030'
-        }
-      }
+          color: '#303030',
+        },
+      },
     },
     scales: {
       x: {
-
         grid: {
-          drawBorder: false
-        }
+          drawBorder: false,
+        },
       },
       y: {
-
         grid: {
-          drawBorder: false
-        }
-      }
-    }
+          drawBorder: false,
+        },
+      },
+    },
   };
-
-
 }
