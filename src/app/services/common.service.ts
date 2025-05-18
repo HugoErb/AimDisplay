@@ -3,15 +3,12 @@ import { Router } from '@angular/router';
 import Swal from 'sweetalert2';
 
 @Injectable({
-    providedIn: 'root'
+    providedIn: 'root',
 })
 export class CommonService {
-
     private darkMode = signal<boolean>(false);
 
-    constructor(
-        private router: Router
-    ) { }
+    constructor(private router: Router) {}
 
     public isCollapsed: boolean = false;
 
@@ -25,11 +22,11 @@ export class CommonService {
     }
 
     /**
-    * Affiche une notification toast avec SweetAlert2.
-    * 
-    * @param {string} message - Le message à afficher dans la notification.
-    * @param {'success' | 'error' | 'warning' | 'info' | 'question'} [icon='success'] - L'icône à afficher dans la notification. Peut être 'success', 'error', 'warning', 'info' ou 'question'.
-    */
+     * Affiche une notification toast avec SweetAlert2.
+     *
+     * @param {string} message - Le message à afficher dans la notification.
+     * @param {'success' | 'error' | 'warning' | 'info' | 'question'} [icon='success'] - L'icône à afficher dans la notification. Peut être 'success', 'error', 'warning', 'info' ou 'question'.
+     */
     showSwalToast(message: string, icon: 'success' | 'error' | 'warning' | 'info' | 'question' = 'success') {
         Swal.fire({
             position: 'top-end',
@@ -43,28 +40,28 @@ export class CommonService {
     }
 
     /**
-    * Renvoie un message d'erreur correspondant au code d'erreur fourni.
-    *
-    * @param {string} errorCode - Le code d'erreur retourné par le service d'authentification.
-    * @returns {string} - Le message d'erreur correspondant.
-    */
+     * Renvoie un message d'erreur correspondant au code d'erreur fourni.
+     *
+     * @param {string} errorCode - Le code d'erreur retourné par le service d'authentification.
+     * @returns {string} - Le message d'erreur correspondant.
+     */
     getErrorMessage(errorCode: string): string {
         const errorMessages: { [key: string]: string } = {
             'auth/wrong-password': 'Le mot de passe actuel est incorrect.',
             'auth/weak-password': 'Le nouveau mot de passe est trop faible.',
             'auth/requires-recent-login': 'Cette opération nécessite une connexion récente. Veuillez vous reconnecter et réessayer.',
-            'auth/invalid-email': 'L\'adresse email n\'est pas valide.',
-            'auth/user-not-found': 'Aucun utilisateur trouvé avec cette adresse email.'
+            'auth/invalid-email': "L'adresse email n'est pas valide.",
+            'auth/user-not-found': 'Aucun utilisateur trouvé avec cette adresse email.',
         };
 
         return errorMessages[errorCode] || 'Une erreur est survenue. Veuillez réessayer.';
     }
 
     /**
-    * Affiche une modal spécifiée par son identifiant.
-    * 
-    * @param {string} id - L'identifiant de l'élément modal à afficher.
-    */
+     * Affiche une modal spécifiée par son identifiant.
+     *
+     * @param {string} id - L'identifiant de l'élément modal à afficher.
+     */
     showModal(id: string) {
         const modal = document.getElementById(id) as HTMLDialogElement;
         if (modal) {
@@ -73,10 +70,10 @@ export class CommonService {
     }
 
     /**
-    * Ferme une modal spécifiée par son identifiant.
-    * 
-    * @param {string} id - L'identifiant de l'élément modal à fermer.
-    */
+     * Ferme une modal spécifiée par son identifiant.
+     *
+     * @param {string} id - L'identifiant de l'élément modal à fermer.
+     */
     closeModal(id: string) {
         const modal = document.getElementById(id) as HTMLDialogElement;
         if (modal) {

@@ -1,5 +1,5 @@
 $background: #f9fafb;
-$primary: #3B82F6;
+$primary: #3b82f6;
 $primary2: #0062ff;
 $black1: #303030;
 
@@ -28,7 +28,9 @@ h2 {
     border-radius: 6px;
 }
 
-th, tr,::ng-deep .p-paginator{
+th,
+tr,
+::ng-deep .p-paginator {
     background-color: $background !important;
 }
 

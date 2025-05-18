@@ -1,22 +1,15 @@
-<!-- <h2>Paramètres</h2>
+<h2>Paramètres</h2>
 <p class="subtitle">Ajustez ici les paramètres de l'application selon vos préférences.</p>
 <div class="settings-container">
     <div class="setting-container">
         <h3 class="setting-container-title">Préférences</h3>
-        <div class="setting-container-subtitle">Remplissez le formulaire ci-dessous et nous vous répondrons dans les
-            plus brefs délais.</div>
-        Dark mode
-        Langue
-        Couleur primaire
+        <div class="setting-container-subtitle">Remplissez le formulaire ci-dessous et nous vous répondrons dans les plus brefs délais.</div>
+        Dark mode Langue Couleur primaire
     </div>
     <div class="setting-container">
         <h3 class="setting-container-title">Gestion du compte</h3>
-        <div class="setting-container-subtitle">Remplissez le formulaire ci-dessous et nous vous répondrons dans les
-            plus brefs délais.</div>
-        Photo
-        nom d'utilisateur
-        localisation du club : code postal , ville
-        Changement de mot de passe, déconnexion
+        <div class="setting-container-subtitle">Remplissez le formulaire ci-dessous et nous vous répondrons dans les plus brefs délais.</div>
+        Photo nom d'utilisateur localisation du club : code postal , ville Changement de mot de passe, déconnexion
     </div>
     <div class="setting-container">
         <h3 class="setting-container-title">Gestion des abonnements</h3>
@@ -25,81 +18,85 @@
             <div class="plan-container">
                 <div class="plan">
                     <div class="plan-header">Basique</div>
-                    <div class="plan-price">€7
+                    <div class="plan-price">
+                        €7
                         <div class="price-per-month">.99/mois</div>
                     </div>
                     <ul class="plan-features">
                         <li class="feature">
-                            <i class="fas fa-check feature-icon-check"></i> Gestion de 2 compétitions par mois
+                            <i class="fas fa-check feature-icon-check"></i>
+                            Gestion de 2 compétitions par mois
                         </li>
                         <li class="feature">
-                            <i class="fas fa-check feature-icon-check"></i> Génération de rapport de compétition
+                            <i class="fas fa-check feature-icon-check"></i>
+                            Génération de rapport de compétition
                         </li>
                         <li class="feature">
-                            <i class="fas fa-check feature-icon-check"></i> Dashboard des données
+                            <i class="fas fa-check feature-icon-check"></i>
+                            Dashboard des données
                         </li>
                     </ul>
-                    <div class="plan-button">
-                        Commencer
-                    </div>
+                    <div class="plan-button">Commencer</div>
                 </div>
 
                 <div class="plan popular-plan">
                     <div class="plan-badge">Populaire</div>
                     <div class="plan-header">Pro</div>
-                    <div class="plan-price">€14
+                    <div class="plan-price">
+                        €14
                         <div class="price-per-month">.99/mois</div>
                     </div>
                     <ul class="plan-features">
                         <li class="feature">
-                            <i class="fas fa-check feature-icon-check"></i> Fonctionnalités de l'abonnement Basique
+                            <i class="fas fa-check feature-icon-check"></i>
+                            Fonctionnalités de l'abonnement Basique
                         </li>
                         <li class="feature">
-                            <i class="fas fa-check feature-icon-check"></i> Gestion de 4 compétitions par mois
+                            <i class="fas fa-check feature-icon-check"></i>
+                            Gestion de 4 compétitions par mois
                         </li>
                         <li class="feature">
-                            <i class="fas fa-check feature-icon-check"></i> Génération de rapport personnalisé par
-                            tireur
+                            <i class="fas fa-check feature-icon-check"></i>
+                            Génération de rapport personnalisé par tireur
                         </li>
                         <li class="feature">
-                            <i class="fas fa-check feature-icon-check"></i> Conseils personnalisés pour les tireurs
+                            <i class="fas fa-check feature-icon-check"></i>
+                            Conseils personnalisés pour les tireurs
                         </li>
                     </ul>
-                    <div class="plan-button popular-button">
-                        Commencer
-                    </div>
+                    <div class="plan-button popular-button">Commencer</div>
                 </div>
 
                 <div class="plan">
                     <div class="plan-header">VIP</div>
-                    <div class="plan-price">€19
+                    <div class="plan-price">
+                        €19
                         <div class="price-per-month">.99/mois</div>
                     </div>
                     <ul class="plan-features">
                         <li class="feature">
-                            <i class="fas fa-check feature-icon-check"></i> Fonctionnalités de l'abonnement Pro
+                            <i class="fas fa-check feature-icon-check"></i>
+                            Fonctionnalités de l'abonnement Pro
                         </li>
                         <li class="feature">
-                            <i class="fas fa-check feature-icon-check"></i> Gestion de compétitions illimitée
+                            <i class="fas fa-check feature-icon-check"></i>
+                            Gestion de compétitions illimitée
                         </li>
                         <li class="feature">
-                            <i class="fas fa-check feature-icon-check"></i> Génération de QR Code de consultation du
-                            classement
+                            <i class="fas fa-check feature-icon-check"></i>
+                            Génération de QR Code de consultation du classement
                         </li>
                         <li class="feature">
-                            <i class="fas fa-check feature-icon-check"></i> Support dédié
+                            <i class="fas fa-check feature-icon-check"></i>
+                            Support dédié
                         </li>
                     </ul>
-                    <div class="plan-button">
-                        Commencer
-                    </div>
+                    <div class="plan-button">Commencer</div>
                 </div>
             </div>
         </div>
 
-
-        Offre actuelle : acheter, modifier, annuler
-        Historique des transactions
+        Offre actuelle : acheter, modifier, annuler Historique des transactions
         <div class="table-container">
             <p-table [value]="transactions" dataKey="id" [rows]="10" [paginator]="true">
                 <ng-template pTemplate="header">
@@ -148,8 +145,7 @@
     </div>
     <div class="setting-container">
         <h3 class="setting-container-title">Nous contacter</h3>
-        <div class="setting-container-subtitle">Remplissez le formulaire ci-dessous et nous vous répondrons dans les
-            plus brefs délais.</div>
+        <div class="setting-container-subtitle">Remplissez le formulaire ci-dessous et nous vous répondrons dans les plus brefs délais.</div>
         <div class="form">
             <div class="form-row">
                 <div class="form-group">
@@ -160,8 +156,7 @@
             <div class="form-row">
                 <div class="form-group">
                     <label>Message</label>
-                    <textarea rows="5" cols="30" pInputTextarea [autoResize]="true"
-                        placeholder="Votre message..."></textarea>
+                    <textarea rows="5" cols="30" pInputTextarea [autoResize]="true" placeholder="Votre message..."></textarea>
                 </div>
                 <div class="submit-button">Envoyer</div>
             </div>
@@ -176,4 +171,5 @@
                 </div>
             </div>
         </div>
-    </div> -->
+    </div>
+</div>

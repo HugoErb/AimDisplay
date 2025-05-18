@@ -1,47 +1,71 @@
-<div [ngStyle]="{ 'width': commonService.isCollapsed ? '80px' : '255px' }"
-    class="fixed h-full whitespace-nowrap overflow-hidden transition-all duration-500 bg-white dark:bg-secondary-dark-bg shadow-xl">
+<div
+    [ngStyle]="{ width: commonService.isCollapsed ? '80px' : '255px' }"
+    class="fixed h-full whitespace-nowrap overflow-hidden transition-all duration-500 bg-white dark:bg-secondary-dark-bg shadow-xl"
+>
     <ul class="absolute w-full list-none m-0 p-0">
         <li class="mb-6 ml-3 mt-4 w-fit">
-            <div (click)="commonService.redirectTo('home')" class="flex items-center cursor-pointer p-3 ">
-                <img src="../../../assets/img/logo.png" alt="Logo" class="h-8 w-8">
-                <span class="ml-4 text-xl font-bold text-gray-800 dark:text-gray-300 transition-all duration-500">Poker
-                    HL</span>
+            <div (click)="commonService.redirectTo('home')" class="flex items-center cursor-pointer p-3">
+                <img src="../../../assets/img/logo.png" alt="Logo" class="h-8 w-8" />
+                <span class="ml-4 text-xl font-bold text-gray-800 dark:text-gray-300 transition-all duration-500">Poker HL</span>
             </div>
         </li>
-        <li
-            class="transition-all text-gray-800 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600 cursor-pointer w-full">
-            <div (click)="commonService.redirectTo('situations-list-training')"
-                class="flex items-center justify-start px-3 py-4 text-gray-800 dark:text-gray-300">
-                <i class="fa-solid fa-play ml-5 text-xl  transition-all duration-500"></i>
-                <span [ngClass]="{ 'ml-8': commonService.isCollapsed, 'ml-6': !commonService.isCollapsed }"
-                    class="flex items-center justify-center text-md transition-all duration-500">Entraînement</span>
+        <li class="transition-all text-gray-800 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600 cursor-pointer w-full">
+            <div (click)="commonService.redirectTo('home')" class="flex items-center justify-start px-3 py-4 text-gray-800 dark:text-gray-300">
+                <i class="fa-solid fa-play ml-5 text-xl transition-all duration-500"></i>
+                <span
+                    [ngClass]="{
+                        'ml-8': commonService.isCollapsed,
+                        'ml-6': !commonService.isCollapsed
+                    }"
+                    class="flex items-center justify-center text-md transition-all duration-500"
+                >
+                    Accueil
+                </span>
             </div>
         </li>
-        <li
-            class="transition-all text-gray-800 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600 cursor-pointer w-full">
-            <div (click)="commonService.redirectTo('situations-list-manager')"
-                class="flex items-center justify-start px-3 py-4 text-gray-800 dark:text-gray-300">
+        <li class="transition-all text-gray-800 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600 cursor-pointer w-full">
+            <div (click)="commonService.redirectTo('creation')" class="flex items-center justify-start px-3 py-4 text-gray-800 dark:text-gray-300">
                 <i class="fa-solid fa-tasks ml-5 text-lg transition-all duration-500"></i>
-                <span [ngClass]="{ 'ml-8': commonService.isCollapsed, 'ml-6': !commonService.isCollapsed }"
-                    class="flex items-center justify-center text-md transition-all duration-500">Situations</span>
+                <span
+                    [ngClass]="{
+                        'ml-8': commonService.isCollapsed,
+                        'ml-6': !commonService.isCollapsed
+                    }"
+                    class="flex items-center justify-center text-md transition-all duration-500"
+                >
+                    Création
+                </span>
             </div>
         </li>
-        <li
-            class="transition-all text-gray-800 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600 cursor-pointer w-full">
-            <a href="https://www.clubpoker.net/lexique-poker" target="_blank"
-                class="flex items-center justify-start px-3 py-4 no-underline text-gray-800 dark:text-gray-300">
+        <li class="transition-all text-gray-800 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600 cursor-pointer w-full">
+            <div
+                (click)="commonService.redirectTo('modification')"
+                class="flex items-center justify-start px-3 py-4 no-underline text-gray-800 dark:text-gray-300"
+            >
                 <i class="fa-solid fa-book ml-5 text-lg transition-all duration-500"></i>
-                <span [ngClass]="{ 'ml-8': commonService.isCollapsed, 'ml-6': !commonService.isCollapsed }"
-                    class="flex items-center justify-center text-md transition-all duration-500">Lexique</span>
-            </a>
+                <span
+                    [ngClass]="{
+                        'ml-8': commonService.isCollapsed,
+                        'ml-6': !commonService.isCollapsed
+                    }"
+                    class="flex items-center justify-center text-md transition-all duration-500"
+                >
+                    Modification
+                </span>
+            </div>
         </li>
-        <li
-            class="transition-all text-gray-800 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600 cursor-pointer w-full">
-            <div (click)="commonService.redirectTo('settings')"
-                class="flex items-center justify-start px-3 py-4 text-gray-800 dark:text-gray-300">
+        <li class="transition-all text-gray-800 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600 cursor-pointer w-full">
+            <div (click)="commonService.redirectTo('settings')" class="flex items-center justify-start px-3 py-4 text-gray-800 dark:text-gray-300">
                 <i class="fa-solid fa-gear ml-5 text-lg transition-all duration-500"></i>
-                <span [ngClass]="{ 'ml-8': commonService.isCollapsed, 'ml-6': !commonService.isCollapsed }"
-                    class="flex items-center justify-center text-md transition-all duration-500">Paramètres</span>
+                <span
+                    [ngClass]="{
+                        'ml-8': commonService.isCollapsed,
+                        'ml-6': !commonService.isCollapsed
+                    }"
+                    class="flex items-center justify-center text-md transition-all duration-500"
+                >
+                    Paramètres
+                </span>
             </div>
         </li>
     </ul>
@@ -53,27 +77,44 @@
                 } @else {
                     <img src="https://imgs.search.brave.com/6Abd5TBbHIoBHK1py-tGSUv7eRH_hf3KVb5Px1DBNMs/rs:fit:860:0:0/g:ce/aHR0cHM6Ly90NC5m/dGNkbi5uZXQvanBn/LzA4LzIzLzkxLzU1/LzM2MF9GXzgyMzkx/NTUzM19PalFLUGtD/TTNzaGRxRmdwWjVz/d01LV3U1cHhnMzls/VS5qcGc" />
                 } -->
-                <img src="https://imgs.search.brave.com/6Abd5TBbHIoBHK1py-tGSUv7eRH_hf3KVb5Px1DBNMs/rs:fit:860:0:0/g:ce/aHR0cHM6Ly90NC5m/dGNkbi5uZXQvanBn/LzA4LzIzLzkxLzU1/LzM2MF9GXzgyMzkx/NTUzM19PalFLUGtD/TTNzaGRxRmdwWjVz/d01LV3U1cHhnMzls/VS5qcGc" />
+                <img
+                    src="https://imgs.search.brave.com/6Abd5TBbHIoBHK1py-tGSUv7eRH_hf3KVb5Px1DBNMs/rs:fit:860:0:0/g:ce/aHR0cHM6Ly90NC5m/dGNkbi5uZXQvanBn/LzA4LzIzLzkxLzU1/LzM2MF9GXzgyMzkx/NTUzM19PalFLUGtD/TTNzaGRxRmdwWjVz/d01LV3U1cHhnMzls/VS5qcGc"
+                />
             </div>
         </div>
-        <div [ngClass]="{ 'whitespace-nowrap overflow-hidden': commonService.isCollapsed }" class="ml-4">
+        <div
+            [ngClass]="{
+                'whitespace-nowrap overflow-hidden': commonService.isCollapsed
+            }"
+            class="ml-4"
+        >
             <p class="font-semibold text-gray-800 dark:text-gray-300 transition-all duration-500 m-0 mb-1">
                 <!-- @if (authService.getUserDisplayName()) {
                     {{ authService.getUserDisplayName() }}
                 } @else {
                     Joueur
                 } -->
-                    Joueur
+                Joueur
             </p>
-            <div (click)="commonService.redirectTo('settings')"
-                class="hover:underline text-gray-800 dark:text-gray-300 cursor-pointer transition-all duration-500">
+            <div
+                (click)="commonService.redirectTo('settings')"
+                class="hover:underline text-gray-800 dark:text-gray-300 cursor-pointer transition-all duration-500"
+            >
                 Gérer le compte
             </div>
         </div>
     </div>
 </div>
-<div [ngStyle]="{ left: commonService.isCollapsed ? '80px' : '255px' }" (click)="toggleSidebar()"
-    class="border-solid border border-gray-400 flex justify-center items-center z-10 fixed top-8 transform -translate-x-1/2 rounded-full w-7 h-7 text-xl transition-all duration-500 bg-white dark:bg-secondary-dark-bg text-gray-800 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600 cursor-pointer">
-    <i class="fa-solid fa-angle-left text-base"
-        [ngClass]="{ 'transform rotate-180': commonService.isCollapsed, 'transform rotate-0': !commonService.isCollapsed }"></i>
+<div
+    [ngStyle]="{ left: commonService.isCollapsed ? '80px' : '255px' }"
+    (click)="toggleSidebar()"
+    class="border-solid border border-gray-400 flex justify-center items-center z-10 fixed top-8 transform -translate-x-1/2 rounded-full w-7 h-7 text-xl transition-all duration-500 bg-white dark:bg-secondary-dark-bg text-gray-800 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600 cursor-pointer"
+>
+    <i
+        class="fa-solid fa-angle-left text-base"
+        [ngClass]="{
+            'transform rotate-180': commonService.isCollapsed,
+            'transform rotate-0': !commonService.isCollapsed
+        }"
+    ></i>
 </div>
