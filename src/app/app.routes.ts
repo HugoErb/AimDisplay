@@ -8,39 +8,39 @@ import { SettingsComponent } from './settings/settings.component';
 import { BaseLayoutComponent } from './components/base-layout/base-layout.component';
 
 export const routes: Routes = [
-  {
-    path: '',
-    redirectTo: 'home',
-    pathMatch: 'full',
-  },
-  {
-    path: '',
-    component: BaseLayoutComponent,
-    children: [
-      {
-        path: 'home',
-        component: HomeComponent,
-      },
-      {
-        path: 'creation',
-        component: CreationComponent,
-      },
-      {
-        path: 'modification',
-        component: ModificationComponent,
-      },
-      {
-        path: 'consultation',
-        component: ConsultationComponent,
-      },
-      {
-        path: 'display',
-        component: DisplayComponent,
-      },
-      {
-        path: 'settings',
-        component: SettingsComponent,
-      },
-    ],
-  },
+    {
+        path: '',
+        redirectTo: 'home',
+        pathMatch: 'full',
+    },
+    {
+        path: '',
+        component: BaseLayoutComponent,
+        children: [
+            {
+                path: 'home',
+                component: HomeComponent,
+            },
+            {
+                path: 'creation',
+                component: CreationComponent,
+            },
+            {
+                path: 'modification',
+                component: ModificationComponent,
+            },
+            {
+                path: 'consultation',
+                component: ConsultationComponent,
+            },
+            {
+                path: 'display',
+                component: DisplayComponent,
+            },
+            {
+                path: 'settings',
+                component: SettingsComponent,
+            },
+        ],
+    },
 ];

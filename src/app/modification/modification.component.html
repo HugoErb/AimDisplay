@@ -1,6 +1,5 @@
 <h2>Modification de données</h2>
-<p class="subtitle">Cette page est dédiée à la modification des données des compétitions, des tireurs, ou des clubs
-    de tir sportif.</p>
+<p class="subtitle">Cette page est dédiée à la modification des données des compétitions, des tireurs, ou des clubs de tir sportif.</p>
 <div class="table-container">
     <p-table [value]="shooters" dataKey="id" [rows]="10" [paginator]="true">
         <ng-template pTemplate="header">
@@ -47,7 +46,7 @@
                 <td>{{ shooter.clubName }}</td>
                 <td>{{ shooter.categoryName }}</td>
                 <td><i class="fa-solid fa-pen-to-square icon-div"></i></td>
-                <td><i class="fa-solid fa-trash-can icon-div" (click)="confirmDeletion($event)"></i></td>
+                <td><i class="fa-solid fa-trash-can icon-div"></i></td>
             </tr>
         </ng-template>
         <ng-template pTemplate="emptymessage">
