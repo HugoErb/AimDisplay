@@ -3,8 +3,9 @@ import { AutoCompleteModule } from 'primeng/autocomplete';
 import { CascadeSelectModule } from 'primeng/cascadeselect';
 import { FormsModule } from '@angular/forms';
 import { InputNumberModule } from 'primeng/inputnumber';
-import { CalendarModule } from 'primeng/calendar';
+import { DatePickerModule } from 'primeng/datepicker';
 import { CommonModule } from '@angular/common';
+import { InputTextModule } from 'primeng/inputtext';
 
 interface Category {
     cname: string;
@@ -14,7 +15,7 @@ interface Category {
 @Component({
     selector: 'app-creation',
     standalone: true,
-    imports: [AutoCompleteModule, CascadeSelectModule, FormsModule, InputNumberModule, CalendarModule, CommonModule],
+    imports: [AutoCompleteModule, CascadeSelectModule, FormsModule, InputNumberModule, DatePickerModule, CommonModule, InputTextModule],
     templateUrl: './creation.component.html',
     styleUrls: ['./creation.component.scss'],
 })
