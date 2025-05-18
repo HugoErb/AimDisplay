@@ -10,16 +10,13 @@ import { CommonService } from '../../services/common.service';
     templateUrl: './sidebar.component.html',
 })
 export class SidebarComponent {
-
-    constructor(
-        protected commonService: CommonService,
-        // protected authService: AuthService
-    ) { }
+    constructor(protected commonService: CommonService) // protected authService: AuthService
+    {}
 
     /**
-    * Inverse la valeur de la propriété `isCollapsed`,
-    * permettant d'afficher ou de masquer la barre latérale.
-    */
+     * Inverse la valeur de la propriété `isCollapsed`,
+     * permettant d'afficher ou de masquer la barre latérale.
+     */
     toggleSidebar() {
         this.commonService.isCollapsed = !this.commonService.isCollapsed;
     }

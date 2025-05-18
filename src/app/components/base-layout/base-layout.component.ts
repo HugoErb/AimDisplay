@@ -11,9 +11,5 @@ import { SidebarComponent } from '../sidebar/sidebar.component';
     templateUrl: './base-layout.component.html',
 })
 export class BaseLayoutComponent {
-
-    constructor(
-        protected commonService: CommonService
-    ) { }
-
+    constructor(protected commonService: CommonService) {}
 }

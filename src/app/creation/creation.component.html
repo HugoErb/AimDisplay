@@ -1,6 +1,5 @@
 <h2>Création de données</h2>
-<p class="subtitle">Cette page est dédiée à la création de données, tel que des compétitions, des tireurs, ou un
-    club de tir sportif.</p>
+<p class="subtitle">Cette page est dédiée à la création de données, tel que des compétitions, des tireurs, ou un club de tir sportif.</p>
 
 <!-- Formulaire du tireur -->
 <div class="form-title">
@@ -21,23 +20,41 @@
     <div class="form-row">
         <div class="form-group">
             <label>Club</label>
-            <p-autoComplete [(ngModel)]="shooterClubName" [forceSelection]="true" [suggestions]="filteredClubs"
-                (completeMethod)="filterClub($event)" field="name" [dropdown]="true"
-                placeholder="Sélectionnez un club"></p-autoComplete>
+            <p-autoComplete
+                [(ngModel)]="shooterClubName"
+                [forceSelection]="true"
+                [suggestions]="filteredClubs"
+                (completeMethod)="filterClub($event)"
+                field="name"
+                [dropdown]="true"
+                placeholder="Sélectionnez un club"
+            ></p-autoComplete>
         </div>
         <div class="form-group">
             <label>Compétition</label>
-            <p-autoComplete [(ngModel)]="shooterCompetitionName" [forceSelection]="true"
-                [suggestions]="filteredCompetitions" (completeMethod)="filterCompetition($event)" field="name"
-                [dropdown]="true" placeholder="Sélectionnez une compétition"></p-autoComplete>
+            <p-autoComplete
+                [(ngModel)]="shooterCompetitionName"
+                [forceSelection]="true"
+                [suggestions]="filteredCompetitions"
+                (completeMethod)="filterCompetition($event)"
+                field="name"
+                [dropdown]="true"
+                placeholder="Sélectionnez une compétition"
+            ></p-autoComplete>
         </div>
     </div>
     <div class="form-row">
         <div class="form-group">
             <label>Catégorie</label>
-            <p-cascadeSelect [(ngModel)]="shooterCategoryName" (ngModelChange)="setIsSeniorOrDameCategory()"
-                [options]="categories" optionLabel="code" optionGroupLabel="name"
-                [optionGroupChildren]="['categories', 'divisions', 'ages']" placeholder="Sélectionnez une catégorie">
+            <p-cascadeSelect
+                [(ngModel)]="shooterCategoryName"
+                (ngModelChange)="setIsSeniorOrDameCategory()"
+                [options]="categories"
+                optionLabel="code"
+                optionGroupLabel="name"
+                [optionGroupChildren]="['categories', 'divisions', 'ages']"
+                placeholder="Sélectionnez une catégorie"
+            >
                 <ng-template let-option pTemplate="option">
                     {{ option.cname }}
                 </ng-template>
@@ -47,39 +64,81 @@
     <div class="form-row">
         <div class="form-group">
             <label>Série 1</label>
-            <p-inputNumber [(ngModel)]="scoreSerie1" mode="decimal" [minFractionDigits]="2" [min]="0" [max]="100.10"
-                [showButtons]="true" [maxFractionDigits]="2" placeholder="Score série 1">
-            </p-inputNumber>
+            <p-inputNumber
+                [(ngModel)]="scoreSerie1"
+                mode="decimal"
+                [minFractionDigits]="2"
+                [min]="0"
+                [max]="100.1"
+                [showButtons]="true"
+                [maxFractionDigits]="2"
+                placeholder="Score série 1"
+            ></p-inputNumber>
         </div>
         <div class="form-group">
             <label>Série 2</label>
-            <p-inputNumber [(ngModel)]="scoreSerie2" mode="decimal" [minFractionDigits]="2" [min]="0" [max]="100.10"
-                [showButtons]="true" [maxFractionDigits]="2" placeholder="Score série 2">
-            </p-inputNumber>
+            <p-inputNumber
+                [(ngModel)]="scoreSerie2"
+                mode="decimal"
+                [minFractionDigits]="2"
+                [min]="0"
+                [max]="100.1"
+                [showButtons]="true"
+                [maxFractionDigits]="2"
+                placeholder="Score série 2"
+            ></p-inputNumber>
         </div>
         <div class="form-group">
             <label>Série 3</label>
-            <p-inputNumber [(ngModel)]="scoreSerie3" mode="decimal" [minFractionDigits]="2" [min]="0" [max]="100.10"
-                [showButtons]="true" [maxFractionDigits]="2" placeholder="Score série 3">
-            </p-inputNumber>
+            <p-inputNumber
+                [(ngModel)]="scoreSerie3"
+                mode="decimal"
+                [minFractionDigits]="2"
+                [min]="0"
+                [max]="100.1"
+                [showButtons]="true"
+                [maxFractionDigits]="2"
+                placeholder="Score série 3"
+            ></p-inputNumber>
         </div>
         <div class="form-group">
             <label>Série 4</label>
-            <p-inputNumber [(ngModel)]="scoreSerie4" mode="decimal" [minFractionDigits]="2" [min]="0" [max]="100.10"
-                [showButtons]="true" [maxFractionDigits]="2" placeholder="Score série 4">
-            </p-inputNumber>
+            <p-inputNumber
+                [(ngModel)]="scoreSerie4"
+                mode="decimal"
+                [minFractionDigits]="2"
+                [min]="0"
+                [max]="100.1"
+                [showButtons]="true"
+                [maxFractionDigits]="2"
+                placeholder="Score série 4"
+            ></p-inputNumber>
         </div>
         <div *ngIf="this.isSeniorOrDameCategory" class="form-group">
             <label>Série 5</label>
-            <p-inputNumber [(ngModel)]="scoreSerie5" mode="decimal" [minFractionDigits]="2" [min]="0" [max]="100.10"
-                [showButtons]="true" [maxFractionDigits]="2" placeholder="Score série 5">
-            </p-inputNumber>
+            <p-inputNumber
+                [(ngModel)]="scoreSerie5"
+                mode="decimal"
+                [minFractionDigits]="2"
+                [min]="0"
+                [max]="100.1"
+                [showButtons]="true"
+                [maxFractionDigits]="2"
+                placeholder="Score série 5"
+            ></p-inputNumber>
         </div>
         <div *ngIf="this.isSeniorOrDameCategory" class="form-group">
             <label>Série 6</label>
-            <p-inputNumber [(ngModel)]="scoreSerie6" mode="decimal" [minFractionDigits]="2" [min]="0" [max]="100.10"
-                [showButtons]="true" [maxFractionDigits]="2" placeholder="Score série 6">
-            </p-inputNumber>
+            <p-inputNumber
+                [(ngModel)]="scoreSerie6"
+                mode="decimal"
+                [minFractionDigits]="2"
+                [min]="0"
+                [max]="100.1"
+                [showButtons]="true"
+                [maxFractionDigits]="2"
+                placeholder="Score série 6"
+            ></p-inputNumber>
         </div>
     </div>
 
@@ -99,22 +158,39 @@
         </div>
         <div class="form-group">
             <label>Dates de la compétition</label>
-            <p-calendar [(ngModel)]="competitionDate" [showIcon]="true" placeholder="Dates de la compétition"
-                dateFormat="dd/mm/yy" selectionMode="range"></p-calendar>
+            <p-calendar
+                [(ngModel)]="competitionDate"
+                [showIcon]="true"
+                placeholder="Dates de la compétition"
+                dateFormat="dd/mm/yy"
+                selectionMode="range"
+            ></p-calendar>
         </div>
     </div>
     <div class="form-row">
         <div class="form-group">
             <label>Prix d'inscription</label>
-            <p-inputNumber [(ngModel)]="prixInscription" mode="decimal" [minFractionDigits]="2" [min]="0"
-                [showButtons]="true" [maxFractionDigits]="2" placeholder="Prix d'inscription">
-            </p-inputNumber>
+            <p-inputNumber
+                [(ngModel)]="prixInscription"
+                mode="decimal"
+                [minFractionDigits]="2"
+                [min]="0"
+                [showButtons]="true"
+                [maxFractionDigits]="2"
+                placeholder="Prix d'inscription"
+            ></p-inputNumber>
         </div>
         <div class="form-group">
             <label>Prix de catégorie supplémentaire</label>
-            <p-inputNumber [(ngModel)]="prixCategSup" mode="decimal" [minFractionDigits]="2" [min]="0"
-                [showButtons]="true" [maxFractionDigits]="2" placeholder="Prix de catégorie supplémentaire">
-            </p-inputNumber>
+            <p-inputNumber
+                [(ngModel)]="prixCategSup"
+                mode="decimal"
+                [minFractionDigits]="2"
+                [min]="0"
+                [showButtons]="true"
+                [maxFractionDigits]="2"
+                placeholder="Prix de catégorie supplémentaire"
+            ></p-inputNumber>
         </div>
     </div>
     <div class="submit-button">Enregistrer</div>
