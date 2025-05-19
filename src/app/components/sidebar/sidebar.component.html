@@ -2,13 +2,13 @@
 	<ul class="absolute w-full list-none m-0 p-0">
 		<li class="mb-6 ml-3 mt-4 w-fit">
 			<div (click)="commonService.redirectTo('home')" class="flex items-center cursor-pointer p-3">
-				<img src="../../../assets/img/logo.png" alt="Logo" class="h-8 w-8" />
-				<span class="ml-4 text-xl font-bold text-gray-800 dark:text-gray-300 transition-all duration-500">Poker HL</span>
+				<img src="../../../assets/img/logo.png" alt="Logo" class="h-10 w-10" />
+				<span class="ml-4 text-xl font-bold text-gray-800 dark:text-gray-300 transition-all duration-500">Aim Display</span>
 			</div>
 		</li>
 		<li class="transition-all text-gray-800 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600 cursor-pointer w-full">
 			<div (click)="commonService.redirectTo('home')" class="flex items-center justify-start px-3 py-4 text-gray-800 dark:text-gray-300">
-				<i class="fa-solid fa-play ml-5 text-xl transition-all duration-500"></i>
+				<iconify-icon icon="famicons:home-sharp" class="text-[1.45rem] ml-5 text-lg transition-all duration-500"></iconify-icon>
 				<span
 					[ngClass]="{
 						'ml-8': commonService.isCollapsed,
@@ -22,7 +22,7 @@
 		</li>
 		<li class="transition-all text-gray-800 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600 cursor-pointer w-full">
 			<div (click)="commonService.redirectTo('creation')" class="flex items-center justify-start px-3 py-4 text-gray-800 dark:text-gray-300">
-				<i class="fa-solid fa-tasks ml-5 text-lg transition-all duration-500"></i>
+				<iconify-icon icon="icon-park-solid:add" class="text-[1.45rem] ml-5 text-lg transition-all duration-500"></iconify-icon>
 				<span
 					[ngClass]="{
 						'ml-8': commonService.isCollapsed,
@@ -36,7 +36,7 @@
 		</li>
 		<li class="transition-all text-gray-800 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600 cursor-pointer w-full">
 			<div (click)="commonService.redirectTo('modification')" class="flex items-center justify-start px-3 py-4 no-underline text-gray-800 dark:text-gray-300">
-				<i class="fa-solid fa-book ml-5 text-lg transition-all duration-500"></i>
+				<iconify-icon icon="mdi:pencil" class="text-[1.45rem] ml-5 text-lg transition-all duration-500"></iconify-icon>
 				<span
 					[ngClass]="{
 						'ml-8': commonService.isCollapsed,
@@ -50,7 +50,35 @@
 		</li>
 		<li class="transition-all text-gray-800 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600 cursor-pointer w-full">
 			<div (click)="commonService.redirectTo('settings')" class="flex items-center justify-start px-3 py-4 text-gray-800 dark:text-gray-300">
-				<i class="fa-solid fa-gear ml-5 text-lg transition-all duration-500"></i>
+				<iconify-icon icon="streamline:screen-1-solid" class="text-[1.45rem] ml-5 text-lg transition-all duration-500"></iconify-icon>
+				<span
+					[ngClass]="{
+						'ml-8': commonService.isCollapsed,
+						'ml-6': !commonService.isCollapsed
+					}"
+					class="flex items-center justify-center text-md transition-all duration-500"
+				>
+					Affichage
+				</span>
+			</div>
+		</li>
+		<li class="transition-all text-gray-800 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600 cursor-pointer w-full">
+			<div (click)="commonService.redirectTo('settings')" class="flex items-center justify-start px-3 py-4 text-gray-800 dark:text-gray-300">
+				<iconify-icon icon="fa6-solid:chart-line" class="text-[1.45rem] ml-5 text-lg transition-all duration-500"></iconify-icon>
+				<span
+					[ngClass]="{
+						'ml-8': commonService.isCollapsed,
+						'ml-6': !commonService.isCollapsed
+					}"
+					class="flex items-center justify-center text-md transition-all duration-500"
+				>
+					????
+				</span>
+			</div>
+		</li>
+		<li class="transition-all text-gray-800 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600 cursor-pointer w-full">
+			<div (click)="commonService.redirectTo('settings')" class="flex items-center justify-start px-3 py-4 text-gray-800 dark:text-gray-300">
+				<iconify-icon icon="material-symbols:settings" class="text-[1.45rem] ml-5 text-lg transition-all duration-500"></iconify-icon>
 				<span
 					[ngClass]="{
 						'ml-8': commonService.isCollapsed,
@@ -97,13 +125,14 @@
 <div
 	[ngStyle]="{ left: commonService.isCollapsed ? '80px' : '255px' }"
 	(click)="toggleSidebar()"
-	class="border-solid border border-gray-400 flex justify-center items-center z-10 fixed top-8 transform -translate-x-1/2 rounded-full w-7 h-7 text-xl transition-all duration-500 bg-white dark:bg-secondary-dark-bg text-gray-800 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600 cursor-pointer"
+	class="border-solid border border-gray-300 flex justify-center items-center z-10 fixed top-8 transform -translate-x-1/2 rounded-full w-7 h-7 text-xl transition-all duration-500 bg-white dark:bg-secondary-dark-bg text-gray-800 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600 cursor-pointer"
 >
-	<i
-		class="fa-solid fa-angle-left text-base"
+	<iconify-icon
+		icon="tabler:chevron-left"
+		class="text-base"
 		[ngClass]="{
 			'transform rotate-180': commonService.isCollapsed,
 			'transform rotate-0': !commonService.isCollapsed
 		}"
-	></i>
+	></iconify-icon>
 </div>
