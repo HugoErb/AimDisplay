@@ -2,22 +2,25 @@ import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 // import { AuthService } from '../../services/auth.service';
 import { CommonService } from '../../services/common.service';
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 
 @Component({
-    selector: 'app-sidebar',
-    standalone: true,
-    imports: [CommonModule],
-    templateUrl: './sidebar.component.html',
+	selector: 'app-sidebar',
+	standalone: true,
+	imports: [CommonModule],
+	templateUrl: './sidebar.component.html',
+	schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class SidebarComponent {
-    constructor(protected commonService: CommonService) // protected authService: AuthService
-    {}
+	constructor(
+		protected commonService: CommonService // protected authService: AuthService
+	) {}
 
-    /**
-     * Inverse la valeur de la propriété `isCollapsed`,
-     * permettant d'afficher ou de masquer la barre latérale.
-     */
-    toggleSidebar() {
-        this.commonService.isCollapsed = !this.commonService.isCollapsed;
-    }
+	/**
+	 * Inverse la valeur de la propriété `isCollapsed`,
+	 * permettant d'afficher ou de masquer la barre latérale.
+	 */
+	toggleSidebar() {
+		this.commonService.isCollapsed = !this.commonService.isCollapsed;
+	}
 }
