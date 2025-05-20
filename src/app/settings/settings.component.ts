@@ -1,18 +1,26 @@
 import { Component } from '@angular/core';
-import { TextareaModule } from 'primeng/textarea';
 import { FormsModule } from '@angular/forms';
-import { TableModule } from 'primeng/table';
+import { DropdownModule } from 'primeng/dropdown';
+import { InputSwitchModule } from 'primeng/inputswitch';
 import { InputTextModule } from 'primeng/inputtext';
+import { CommonService } from './../services/common.service';
+import { UserParams } from '../interfaces/user-params';
 
 @Component({
-	selector: 'settings',
-	templateUrl: './settings.component.html',
+	selector: 'app-settings',
 	standalone: true,
-	imports: [TextareaModule, FormsModule, TableModule, InputTextModule],
+	imports: [DropdownModule, InputSwitchModule, FormsModule, InputTextModule],
+	templateUrl: './settings.component.html',
 	styleUrls: ['./settings.component.scss'],
 })
 export class SettingsComponent {
+	constructor(protected commonService: CommonService) {}
+
+	userParamsName: string = 'userParamsAimDisplay';
+	themeName: string = 'themeAimDisplay';
 	email: string = '';
+	darkMode: boolean = false;
+	newUserName: string = '';
 
 	transactions: Transaction[] = [
 		{
@@ -51,12 +59,29 @@ export class SettingsComponent {
 			statutPaiement: 'Annulé',
 		},
 	];
+
+	ngOnInit() {
+		const userParams: UserParams = JSON.parse(localStorage.getItem(this.userParamsName)!);
+		localStorage.getItem(this.themeName) === 'light' ? (this.darkMode = false) : (this.darkMode = true);
+	}
+
+	/**
+	 * Bascule le mode sombre et met à jour le thème dans le localStorage.
+	 *
+	 * @returns {void}
+	 */
+	toggleDarkMode(): void {
+		const htmlElement = document.documentElement;
+		this.darkMode ? htmlElement.classList.add('dark') : htmlElement.classList.remove('dark');
+		localStorage.setItem(this.themeName, this.darkMode ? 'dark' : 'light');
+		this.commonService.setDarkMode(this.darkMode);
+	}
 }
 
 interface Transaction {
-    id: number;
-    date: string;
-    montant: number;
-    typeOffre: string;
-    statutPaiement: string;
+	id: number;
+	date: string;
+	montant: number;
+	typeOffre: string;
+	statutPaiement: string;
 }
