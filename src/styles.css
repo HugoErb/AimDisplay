@@ -1,5 +1,4 @@
-@import 'tailwindcss/theme.css' layer(theme);
-@import 'tailwindcss/utilities.css' layer(utilities);
+@import 'tailwindcss';
 
 @custom-variant dark (&:where(.dark, .dark *));
 
@@ -17,6 +16,13 @@
 	font-weight: 100 900;
 	font-style: italic;
 	font-display: swap;
+}
+
+.bg-custom {
+	background-image: url('./assets/img/layered-waves.svg');
+	background-repeat: no-repeat;
+	background-position: right;
+	background-size: cover;
 }
 
 @theme {
@@ -38,6 +44,7 @@
 	--color-main-dark-bg: #191a1a;
 	--color-secondary-dark-bg: #232726;
 	--color-light-gray: #efefef;
+    --color-prime-blue: #3b82f6;
 	--color-half-transparent: rgba(0, 0, 0, 0.5);
 
 	/* Animations */
