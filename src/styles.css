@@ -1,99 +1,112 @@
-@import "tailwindcss/theme.css" layer(theme);
-@import "tailwindcss/utilities.css" layer(utilities);
+@import 'tailwindcss/theme.css' layer(theme);
+@import 'tailwindcss/utilities.css' layer(utilities);
 
-/* ➕ Optionnel : variante dark (si tu veux utiliser .dark dans le HTML) */
 @custom-variant dark (&:where(.dark, .dark *));
 
+/* Import des polices d'écriture */
+@font-face {
+	font-family: 'Inter Full';
+	src: url('/assets/fonts/InterVariable.ttf') format('truetype');
+	font-weight: 100 900;
+	font-display: swap;
+}
+
+@font-face {
+	font-family: 'Inter Full';
+	src: url('/assets/fonts/InterVariable-Italic.ttf') format('truetype');
+	font-weight: 100 900;
+	font-style: italic;
+	font-display: swap;
+}
+
 @theme {
-  /* Polices */
-  --font-sans: "Inter var", sans-serif;
+	/* Breakpoints */
+	--breakpoint-sm: 640px;
+	--breakpoint-md: 768px;
+	--breakpoint-md2: 1080px;
+	--breakpoint-lg: 1024px;
+	--breakpoint-xl: 1280px;
 
-  /* Breakpoints */
-  --breakpoint-sm: 640px;
-  --breakpoint-md: 768px;
-  --breakpoint-md2: 1080px;
-  --breakpoint-lg: 1024px;
-  --breakpoint-xl: 1280px;
+	/* Largeurs personnalisées */
+	--width-110: 27.5rem;
+	--width-115: 28.75rem;
+	--width-120: 30rem;
+	--width-125: 31.25rem;
 
-  /* Largeurs personnalisées */
-  --width-110: 27.5rem;
-  --width-115: 28.75rem;
-  --width-120: 30rem;
-  --width-125: 31.25rem;
+	/* Couleurs personnalisées */
+	--color-main-bg: #fafbfb;
+	--color-main-dark-bg: #191a1a;
+	--color-secondary-dark-bg: #232726;
+	--color-light-gray: #efefef;
+	--color-half-transparent: rgba(0, 0, 0, 0.5);
 
-  /* Couleurs personnalisées */
-  --color-main-bg: #FAFBFB;
-  --color-main-dark-bg: #191a1a;
-  --color-secondary-dark-bg: #232726;
-  --color-light-gray: #EFEFEF;
-  --color-half-transparent: rgba(0, 0, 0, 0.5);
+	/* Animations */
+	--animate-appear: appear 0.5s ease forwards;
+	--animate-fadeIn: fadeIn 0.25s ease-in-out;
 
-  /* Animations */
-  --animate-appear: appear 0.5s ease forwards;
-  --animate-fadeIn: fadeIn 0.25s ease-in-out;
+	/* Delais d'animation */
+	--animation-delay-50: 50ms;
+	--animation-delay-100: 100ms;
+	--animation-delay-150: 150ms;
+	--animation-delay-200: 200ms;
 
-  /* Delais d'animation */
-  --animation-delay-50: 50ms;
-  --animation-delay-100: 100ms;
-  --animation-delay-150: 150ms;
-  --animation-delay-200: 200ms;
-
-  /* Transform origin et scale */
-  --transform-origin-center: center;
-  --scale-0: 0;
-  --scale-100: 1;
+	/* Transform origin et scale */
+	--transform-origin-center: center;
+	--scale-0: 0;
+	--scale-100: 1;
 }
 
 @layer base {
-  * {
-    font-family: var(--font-sans);
-  }
+	html {
+		font-family: 'Inter Full', sans-serif;
+		font-feature-settings: 'cv11', 'ss01', 'cv01', 'cv02', 'cv03', 'cv04';
+	}
 
-  @keyframes appear {
-    0% {
-      transform: translateY(-50px);
-      opacity: 0;
-    }
-    100% {
-      transform: translateY(5px);
-      opacity: 1;
-    }
-  }
+	@keyframes appear {
+		0% {
+			transform: translateY(-50px);
+			opacity: 0;
+		}
+		100% {
+			transform: translateY(5px);
+			opacity: 1;
+		}
+	}
 
-  @keyframes fadeIn {
-    0% {
-      opacity: 0;
-    }
-    100% {
-      opacity: 1;
-    }
-  }
+	@keyframes fadeIn {
+		0% {
+			opacity: 0;
+		}
+		100% {
+			opacity: 1;
+		}
+	}
 }
 
 @layer utilities {
-  .animation-delay-50 {
-    animation-delay: var(--animation-delay-50);
-  }
-  .animation-delay-100 {
-    animation-delay: var(--animation-delay-100);
-  }
-  .animation-delay-150 {
-    animation-delay: var(--animation-delay-150);
-  }
-  .animation-delay-200 {
-    animation-delay: var(--animation-delay-200);
-  }
+	.animation-delay-50 {
+		animation-delay: var(--animation-delay-50);
+	}
+	.animation-delay-100 {
+		animation-delay: var(--animation-delay-100);
+	}
+	.animation-delay-150 {
+		animation-delay: var(--animation-delay-150);
+	}
+	.animation-delay-200 {
+		animation-delay: var(--animation-delay-200);
+	}
 
-  .w-110 {
-    width: var(--width-110);
-  }
-  .w-115 {
-    width: var(--width-115);
-  }
-  .w-120 {
-    width: var(--width-120);
-  }
-  .w-125 {
-    width: var(--width-125);
-  }
+	.w-110 {
+		width: var(--width-110);
+	}
+	.w-115 {
+		width: var(--width-115);
+	}
+	.w-120 {
+		width: var(--width-120);
+	}
+	.w-125 {
+		width: var(--width-125);
+	}
 }
