@@ -14,7 +14,6 @@ import { categories } from '../../assets/data/categories';
 	standalone: true,
 	imports: [AutoCompleteModule, CascadeSelectModule, FormsModule, InputNumberModule, DatePickerModule, CommonModule, InputTextModule],
 	templateUrl: './creation.component.html',
-	styleUrls: ['./creation.component.scss'],
 	schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class CreationComponent {
