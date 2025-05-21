@@ -1,32 +1,27 @@
-import { AsyncPipe, NgClass } from '@angular/common';
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { PrimeNG } from 'primeng/config';
+import { ThemeService } from './services/theme.service';
 
 @Component({
 	selector: 'app-root',
 	standalone: true,
-	imports: [RouterOutlet, NgClass],
+	imports: [RouterOutlet],
 	templateUrl: './app.component.html',
 })
 export class AppComponent {
-	themeName: string = 'themeAimDisplay';
 	theme: string | null = '';
 	title = 'AimDisplay';
 
-	constructor(private config: PrimeNG, private translateService: TranslateService) {}
+	constructor(private config: PrimeNG, private translateService: TranslateService, private themeService: ThemeService) {}
 
 	ngOnInit() {
 		this.translateService.addLangs(['fr']);
 		this.translateService.setDefaultLang('fr');
 		this.translate('fr');
 
-		this.theme = localStorage.getItem(this.themeName);
-		if (this.theme !== 'dark' && this.theme !== 'light') {
-			localStorage.setItem(this.themeName, 'light');
-			this.theme = 'light';
-		}
+		this.themeService.getTheme();
 	}
 
 	translate(lang: string) {

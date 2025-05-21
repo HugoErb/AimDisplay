@@ -6,6 +6,7 @@ import { InputTextModule } from 'primeng/inputtext';
 import { CommonService } from './../services/common.service';
 import { UserParams } from '../interfaces/user-params';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { ThemeService } from '../services/theme.service';
 
 @Component({
 	selector: 'app-settings',
@@ -16,10 +17,9 @@ import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 	schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class SettingsComponent {
-	constructor(protected commonService: CommonService) {}
+	constructor(protected commonService: CommonService, private themeService: ThemeService) {}
 
 	userParamsName: string = 'userParamsAimDisplay';
-	themeName: string = 'themeAimDisplay';
 	email: string = '';
 	darkMode: boolean = false;
 	newUserName: string = '';
@@ -64,7 +64,7 @@ export class SettingsComponent {
 
 	ngOnInit() {
 		const userParams: UserParams = JSON.parse(localStorage.getItem(this.userParamsName)!);
-		localStorage.getItem(this.themeName) === 'light' ? (this.darkMode = false) : (this.darkMode = true);
+		this.darkMode = this.themeService.getTheme() === 'dark';
 	}
 
 	/**
@@ -73,10 +73,8 @@ export class SettingsComponent {
 	 * @returns {void}
 	 */
 	toggleDarkMode(): void {
-		const htmlElement = document.documentElement;
-		this.darkMode ? htmlElement.classList.add('dark') : htmlElement.classList.remove('dark');
-		localStorage.setItem(this.themeName, this.darkMode ? 'dark' : 'light');
-		this.commonService.setDarkMode(this.darkMode);
+		const theme = this.darkMode ? 'dark' : 'light';
+		this.themeService.setTheme(theme);
 	}
 }
 
