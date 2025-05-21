@@ -54,10 +54,10 @@
 		<div class="w-1/2 px-[15px] mb-[15px]">
 			<label class="block uppercase text-xs font-bold mb-[5px] text-[#303030]">Catégorie</label>
 			<p-cascadeSelect
-				[(ngModel)]="shooterCategoryName"
+				[(ngModel)]="selectedCategory"
 				(ngModelChange)="setIsSeniorOrDameCategory()"
 				[options]="categories"
-				optionLabel="code"
+				optionLabel="cname"
 				optionGroupLabel="name"
 				[optionGroupChildren]="['categories', 'divisions', 'ages']"
 				placeholder="Sélectionnez une catégorie"
