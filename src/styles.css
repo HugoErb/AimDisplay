@@ -124,28 +124,9 @@
 		width: 100% !important;
 	}
 
-	/* Cascadeselect dropdown fixes */
-	:where(.p-cascadeselect-sublist) {
-		min-width: unset !important;
-	}
-
 	:where(.p-overlay) {
 		min-width: unset !important;
 		width: fit-content !important;
-	}
-
-	:where(.p-cascadeselect-group-icon) {
-		padding-left: 10px !important;
-	}
-
-	:where(.p-cascadeselect-trigger) {
-		background-color: var(--color-prime-blue) !important;
-		color: #fff !important;
-	}
-
-	:where(.p-cascadeselect-label) {
-		font-weight: 400;
-		font-size: 16px !important;
 	}
 
 	:where(
@@ -174,7 +155,7 @@
 		color: white !important;
 	}
 
-	:where(.p-autocomplete-dropdown, .p-datepicker-dropdown ) {
+	:where(.p-autocomplete-dropdown, .p-datepicker-dropdown) {
 		width: 53px !important;
 	}
 }
