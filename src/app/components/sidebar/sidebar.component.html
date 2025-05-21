@@ -1,7 +1,10 @@
-<div [ngStyle]="{ width: commonService.isCollapsed ? '80px' : '255px' }" class="fixed h-full whitespace-nowrap overflow-hidden transition-all duration-500 bg-white dark:bg-secondary-dark-bg shadow-xl">
+<div
+	[ngStyle]="{ width: commonService.isCollapsed ? '80px' : '255px' }"
+	class="fixed h-full whitespace-nowrap overflow-hidden transition-all duration-500 bg-white dark:bg-secondary-dark-bg shadow-xl"
+>
 	<ul class="absolute w-full list-none m-0 p-0">
 		<li class="mb-6 ml-3 mt-4 w-fit">
-			<div (click)="commonService.redirectTo('home')" class="flex items-center cursor-pointer pl-3.5 pt-3">
+			<div (click)="commonService.redirectTo('home')" class="flex items-center cursor-pointer pl-3.5 pt-3.5">
 				<img src="../../../assets/img/logo.png" alt="Logo" class="h-7 w-7" />
 				<span class="ml-4 text-xl font-bold text-gray-800 dark:text-gray-300 transition-all duration-500">Aim Display</span>
 			</div>
@@ -35,7 +38,10 @@
 			</div>
 		</li>
 		<li class="transition-all text-gray-800 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600 cursor-pointer w-full">
-			<div (click)="commonService.redirectTo('modification')" class="flex items-center justify-start px-3 py-4 no-underline text-gray-800 dark:text-gray-300">
+			<div
+				(click)="commonService.redirectTo('modification')"
+				class="flex items-center justify-start px-3 py-4 no-underline text-gray-800 dark:text-gray-300"
+			>
 				<iconify-icon icon="mdi:pencil" class="text-[1.45rem] ml-4 text-lg transition-all duration-500"></iconify-icon>
 				<span
 					[ngClass]="{
@@ -49,7 +55,7 @@
 			</div>
 		</li>
 		<li class="transition-all text-gray-800 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600 cursor-pointer w-full">
-			<div (click)="commonService.redirectTo('settings')" class="flex items-center justify-start px-3 py-4 text-gray-800 dark:text-gray-300">
+			<div (click)="commonService.redirectTo('display')" class="flex items-center justify-start px-3 py-4 text-gray-800 dark:text-gray-300">
 				<iconify-icon icon="streamline:screen-1-solid" class="text-[1.45rem] ml-4 text-lg transition-all duration-500"></iconify-icon>
 				<span
 					[ngClass]="{
@@ -100,7 +106,7 @@
                     <img src="https://imgs.search.brave.com/6Abd5TBbHIoBHK1py-tGSUv7eRH_hf3KVb5Px1DBNMs/rs:fit:860:0:0/g:ce/aHR0cHM6Ly90NC5m/dGNkbi5uZXQvanBn/LzA4LzIzLzkxLzU1/LzM2MF9GXzgyMzkx/NTUzM19PalFLUGtD/TTNzaGRxRmdwWjVz/d01LV3U1cHhnMzls/VS5qcGc" />
                 } -->
 				<img
-					src="https://imgs.search.brave.com/6Abd5TBbHIoBHK1py-tGSUv7eRH_hf3KVb5Px1DBNMs/rs:fit:860:0:0/g:ce/aHR0cHM6Ly90NC5m/dGNkbi5uZXQvanBn/LzA4LzIzLzkxLzU1/LzM2MF9GXzgyMzkx/NTUzM19PalFLUGtD/TTNzaGRxRmdwWjVz/d01LV3U1cHhnMzls/VS5qcGc"
+					src="https://imgs.search.brave.com/7-JIOwvMcwI5bMQ3-tSuAtb3dEiB9Gtk990_bsZRyS4/rs:fit:500:0:0:0/g:ce/aHR0cHM6Ly93d3cu/ZGljdGlvbmFyeS5j/b20vZS93cC1jb250/ZW50L3VwbG9hZHMv/MjAxOC8wMy9UaGUt/RHVjay1Tb25nLTMw/MHgzMDAuanBn"
 				/>
 			</div>
 		</div>
@@ -118,7 +124,12 @@
                 } -->
 				Joueur
 			</p>
-			<div (click)="commonService.redirectTo('settings')" class="hover:underline text-gray-800 dark:text-gray-300 cursor-pointer transition-all duration-500">Gérer le compte</div>
+			<div
+				(click)="commonService.redirectTo('settings')"
+				class="hover:underline text-gray-800 dark:text-gray-300 cursor-pointer transition-all duration-500"
+			>
+				Gérer le compte
+			</div>
 		</div>
 	</div>
 </div>

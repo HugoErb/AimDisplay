@@ -5,6 +5,7 @@ import { InputSwitchModule } from 'primeng/inputswitch';
 import { InputTextModule } from 'primeng/inputtext';
 import { CommonService } from './../services/common.service';
 import { UserParams } from '../interfaces/user-params';
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 
 @Component({
 	selector: 'app-settings',
@@ -12,6 +13,7 @@ import { UserParams } from '../interfaces/user-params';
 	imports: [DropdownModule, InputSwitchModule, FormsModule, InputTextModule],
 	templateUrl: './settings.component.html',
 	styleUrls: ['./settings.component.scss'],
+	schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class SettingsComponent {
 	constructor(protected commonService: CommonService) {}
