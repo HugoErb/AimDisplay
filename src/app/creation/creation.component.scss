@@ -2,39 +2,3 @@ $background: #f9fafb;
 $primary: #3b82f6;
 $primary2: #0062ff;
 $black1: #303030;
-
-p-inputnumber,
-::ng-deep .p-inputtext,
-::ng-deep .p-autocomplete,
-::ng-deep .p-cascadeselect,
-::ng-deep .p-inputnumber,
-::ng-deep .p-datepicker {
-    width: 100% !important;
-}
-
-::ng-deep .p-cascadeselect-sublist {
-    min-width: unset !important;
-}
-
-::ng-deep .p-overlay {
-    min-width: unset !important;
-    width: fit-content !important;
-}
-
-::ng-deep .p-cascadeselect-group-icon {
-    padding-left: 10px !important;
-}
-
-::ng-deep .p-cascadeselect-trigger {
-    background-color: $primary !important;
-    color: #fff !important;
-}
-
-::ng-deep .p-autocomplete-dropdown {
-    width: 57px !important;
-}
-
-::ng-deep .p-cascadeselect-label {
-    font-weight: 400;
-    font-size: 16px !important;
-}
