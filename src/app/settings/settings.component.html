@@ -1,11 +1,23 @@
-<h3 class="text-4xl font-bold md:text-5xl text-prime-blue dark:text-gray-300 animate-appear opacity-0 transition-colors duration-500 m-0">Paramètres</h3>
-<p class="text-gray-500 dark:text-gray-400 text-xl mt-2 mb-0 text-left animate-appear opacity-0 transition-colors duration-500">Ajustez les paramètres selon vos préférences.</p>
+<h3 class="text-4xl font-bold md:text-5xl text-prime-blue dark:text-gray-300 animate-appear opacity-0 transition-colors duration-500 m-0">
+	Paramètres
+</h3>
+<p class="text-gray-500 dark:text-gray-400 text-xl mt-2 mb-0 text-left animate-appear opacity-0 transition-colors duration-500">
+	Ajustez les paramètres selon vos préférences.
+</p>
 <div class="flex">
 	<div class="w-1/2 min-w-[400px] mr-6">
-		<div class="mx-auto mt-10 p-5 rounded-lg shadow-lg bg-white dark:bg-secondary-dark-bg animate-appear opacity-0 animation-delay-50 transition-colors duration-500">
-			<h4 class="m-0 mb-4 text-left text-lg font-semibold uppercase text-gray-800 dark:text-gray-300 tracking-wider transition-colors duration-500">Global</h4>
+		<div
+			class="mx-auto mt-10 p-5 rounded-lg shadow-lg bg-white dark:bg-secondary-dark-bg animate-appear opacity-0 animation-delay-50 transition-colors duration-500"
+		>
+			<h4
+				class="m-0 mb-4 text-left text-lg font-semibold uppercase text-gray-800 dark:text-gray-300 tracking-wider transition-colors duration-500"
+			>
+				Global
+			</h4>
 			<div class="flex items-center justify-between w-full mt-4">
-				<div class="text-left text-gray-800 dark:text-gray-300 text-lg tracking-wider transition-colors duration-500">Activer le mode sombre</div>
+				<div class="text-left text-gray-800 dark:text-gray-300 text-lg tracking-wider transition-colors duration-500">
+					Activer le mode sombre
+				</div>
 				<p-inputSwitch styleClass="custom-inputSwitch" [(ngModel)]="darkMode" (onChange)="toggleDarkMode()"></p-inputSwitch>
 			</div>
 			<!-- <div class="flex items-center justify-between w-full mt-4">
@@ -13,11 +25,20 @@
 				<p-inputSwitch styleClass="custom-inputSwitch" [(ngModel)]="showParticules" (onChange)="toggleShowParticules()"></p-inputSwitch>
 			</div> -->
 		</div>
-		<div class="mx-auto mt-10 p-5 rounded-lg shadow-lg bg-white dark:bg-secondary-dark-bg animate-appear opacity-0 animation-delay-150 transition-colors duration-500">
-			<h4 class="m-0 mb-4 text-left text-lg font-semibold uppercase text-gray-800 dark:text-gray-300 tracking-wider transition-colors duration-500">Compte</h4>
+		<div
+			class="mx-auto mt-10 p-5 rounded-lg shadow-lg bg-white dark:bg-secondary-dark-bg animate-appear opacity-0 animation-delay-150 transition-colors duration-500"
+		>
+			<h4
+				class="m-0 mb-4 text-left text-lg font-semibold uppercase text-gray-800 dark:text-gray-300 tracking-wider transition-colors duration-500"
+			>
+				Compte
+			</h4>
 			<div class="flex items-center justify-between w-full mt-4">
 				<div class="flex items-center w-full my-1.5">
-					<div class="relative w-24 h-24 rounded-full hover:cursor-pointer overflow-hidden group transition-all duration-300" (click)="avatarInput.click()">
+					<div
+						class="relative w-24 h-24 rounded-full hover:cursor-pointer overflow-hidden group transition-all duration-300"
+						(click)="avatarInput.click()"
+					>
 						<!-- @if (authService.getUserAvatar()) {
 						<img [src]="authService.getUserAvatar()" class="w-full h-full object-cover transition-all duration-300" />
 						} @else { -->
@@ -28,7 +49,9 @@
 						<!-- } -->
 						<input type="file" #avatarInput class="hidden" />
 						<!-- <input type="file" #avatarInput (change)="onChangeAvatar($event)" class="hidden" /> -->
-						<div class="absolute inset-0 flex items-center justify-center bg-black bg-opacity-0 group-hover:bg-opacity-50 transition-all duration-300">
+						<div
+							class="absolute inset-0 flex items-center justify-center bg-black bg-opacity-0 group-hover:bg-opacity-50 transition-all duration-300"
+						>
 							<i class="fas fa-pencil-alt text-white text-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></i>
 						</div>
 					</div>
@@ -37,35 +60,41 @@
 							<!-- @if (authService.getUserDisplayName()) {
 							{{ authService.getUserDisplayName() }}
 							} @else {  -->
-                                Nom d'utilisateur 
-                            <!-- } -->
+							Nom d'utilisateur
+							<!-- } -->
 						</p>
 					</div>
 				</div>
 				<div
 					(click)="this.commonService.showModal('change-user-name')"
-					class="inline-flex h-12 items-center justify-center rounded-md bg-gray-800 text-white dark:text-gray-300 hover:bg-gray-700 dark:bg-gray-700 dark:hover:bg-gray-600 px-5 text-base font-medium shadow transition-colors duration-500 cursor-pointer"
+					class="inline-flex h-12 items-center justify-center rounded-md bg-prime-blue text-white dark:text-gray-300 hover:bg-gray-700 dark:bg-gray-700 dark:hover:bg-gray-600 px-5 text-base font-medium shadow transition-colors duration-500 cursor-pointer"
 				>
-					<i class="fa-solid fa-pencil-alt mr-4 h-4 w-4"></i>
+					<iconify-icon icon="mdi:pencil" class="text-[1.5rem] mr-4"></iconify-icon>
 					Modification
 				</div>
 			</div>
 			<div class="flex items-center justify-between w-full mt-4">
-				<div class="text-left text-gray-800 dark:text-gray-300 text-lg tracking-wider transition-colors duration-500">Changer votre mot de passe</div>
+				<div class="text-left text-gray-800 dark:text-gray-300 text-lg tracking-wider transition-colors duration-500">
+					Changer votre mot de passe
+				</div>
 				<div
 					(click)="commonService.redirectTo('change-password')"
-					class="inline-flex h-12 items-center justify-center rounded-md bg-gray-800 text-white dark:text-gray-300 hover:bg-gray-700 dark:bg-gray-700 dark:hover:bg-gray-600 px-5 text-base font-medium shadow transition-colors duration-500 cursor-pointer"
+					class="inline-flex h-12 items-center justify-center rounded-md bg-prime-blue text-white dark:text-gray-300 hover:bg-gray-700 dark:bg-gray-700 dark:hover:bg-gray-600 px-5 text-base font-medium shadow transition-colors duration-500 cursor-pointer"
 				>
-					<i class="fa-solid fa-rotate mr-4 h-4 w-4"></i>
+					<iconify-icon icon="mdi:password-reset" class="text-[1.5rem] mr-4"></iconify-icon>
 					Changement
 				</div>
 			</div>
 			<div class="flex items-center justify-between w-full mt-4">
-				<div class="text-left text-gray-800 dark:text-gray-300 text-lg tracking-wider transition-colors duration-500">Se déconnecter de votre compte</div>
+				<div class="text-left text-gray-800 dark:text-gray-300 text-lg tracking-wider transition-colors duration-500">
+					Se déconnecter de votre compte
+				</div>
 				<!-- <div					(click)="authService.signOut()"
-					class="inline-flex h-12 items-center justify-center rounded-md bg-gray-800 text-white dark:text-gray-300 hover:bg-gray-700 dark:bg-gray-700 dark:hover:bg-gray-600 px-5 text-base font-medium shadow transition-colors duration-500 cursor-pointer"> -->
-                    <div class="inline-flex h-12 items-center justify-center rounded-md bg-gray-800 text-white dark:text-gray-300 hover:bg-gray-700 dark:bg-gray-700 dark:hover:bg-gray-600 px-5 text-base font-medium shadow transition-colors duration-500 cursor-pointer">
-					<i class="fa-solid fa-arrow-right-from-bracket mr-4 h-4 w-4"></i>
+					class="inline-flex h-12 items-center justify-center rounded-md bg-prime-blue text-white dark:text-gray-300 hover:bg-gray-700 dark:bg-gray-700 dark:hover:bg-gray-600 px-5 text-base font-medium shadow transition-colors duration-500 cursor-pointer"> -->
+				<div
+					class="inline-flex h-12 items-center justify-center rounded-md bg-prime-blue text-white dark:text-gray-300 hover:bg-gray-700 dark:bg-gray-700 dark:hover:bg-gray-600 px-5 text-base font-medium shadow transition-colors duration-500 cursor-pointer"
+				>
+					<iconify-icon icon="fluent:plug-disconnected-24-filled" class="text-[1.5rem] mr-4"></iconify-icon>
 					Déconnexion
 				</div>
 			</div>
@@ -82,7 +111,7 @@
 				<div class="text-left text-gray-800 dark:text-gray-300 text-lg tracking-wider transition-colors duration-500">Importer des situations</div>
 				<div
 					(click)="fileImportInput.click()"
-					class="inline-flex h-12 items-center justify-center rounded-md bg-gray-800 text-white dark:text-gray-300 hover:bg-gray-700 dark:bg-gray-700 dark:hover:bg-gray-600 px-5 text-base font-medium shadow transition-colors duration-500 cursor-pointer"
+					class="inline-flex h-12 items-center justify-center rounded-md bg-prime-blue text-white dark:text-gray-300 hover:bg-gray-700 dark:bg-gray-700 dark:hover:bg-gray-600 px-5 text-base font-medium shadow transition-colors duration-500 cursor-pointer"
 				>
 					<i class="fa-solid fa-download mr-4 h-4 w-4"></i>
 					Importer
@@ -93,7 +122,7 @@
 				<div class="text-left text-gray-800 dark:text-gray-300 text-lg tracking-wider transition-colors duration-500">Exporter vos situations</div>
 				<div
 					(click)="onClickFileExport()"
-					class="inline-flex h-12 items-center justify-center rounded-md bg-gray-800 text-white dark:text-gray-300 hover:bg-gray-700 dark:bg-gray-700 dark:hover:bg-gray-600 px-5 text-base font-medium shadow transition-colors duration-500 cursor-pointer"
+					class="inline-flex h-12 items-center justify-center rounded-md bg-prime-blue text-white dark:text-gray-300 hover:bg-gray-700 dark:bg-gray-700 dark:hover:bg-gray-600 px-5 text-base font-medium shadow transition-colors duration-500 cursor-pointer"
 				>
 					<i class="fa-solid fa-upload mr-4 h-4 w-4"></i>
 					Exporter
@@ -123,15 +152,28 @@
 		<form method="dialog">
 			<button class="dui-btn dui-btn-sm dui-btn-circle dui-btn-ghost absolute right-2 top-2 outline-none">✕</button>
 		</form>
-		<h4 class="m-0 mb-4 text-left text-lg font-semibold uppercase text-gray-800 dark:text-gray-300 tracking-wider">Modification du nom d'utilisateur</h4>
-		<input class="my-2 w-full" type="text" placeholder="Entrez votre nouveau nom d'utilisateur" name="newUserName" id="newUserName" autocomplete="off" pInputText [(ngModel)]="newUserName" [maxlength]="16" />
+		<h4 class="m-0 mb-4 text-left text-lg font-semibold uppercase text-gray-800 dark:text-gray-300 tracking-wider">
+			Modification du nom d'utilisateur
+		</h4>
+		<input
+			class="my-2 w-full"
+			type="text"
+			placeholder="Entrez votre nouveau nom d'utilisateur"
+			name="newUserName"
+			id="newUserName"
+			autocomplete="off"
+			pInputText
+			[(ngModel)]="newUserName"
+			[maxlength]="16"
+		/>
 		<div class="flex justify-center items-center mt-5">
 			<div
-				class="flex h-12 items-center w-fit justify-center rounded-md bg-gray-800 text-white dark:text-gray-300 hover:bg-gray-700 dark:bg-gray-700 dark:hover:bg-gray-600 px-6 text-base font-medium shadow transition-colors cursor-pointer"
+				class="inline-flex h-12 items-center justify-center rounded-md bg-prime-blue text-white dark:text-gray-300 hover:bg-hover-prime-blue dark:bg-gray-700 dark:hover:bg-gray-600 px-5 text-base font-medium shadow transition-colors duration-250 cursor-pointer"
 			>
-				<!-- <div class="flex h-12 items-center w-fit justify-center rounded-md bg-gray-800 text-white dark:text-gray-300 hover:bg-gray-700 dark:bg-gray-700 dark:hover:bg-gray-600 px-6 text-base font-medium shadow transition-colors cursor-pointer"
-                (click)="changeUserName()"> -->
-				<i class="fa-solid fa-save mr-4 h-4 w-5"></i>
+				<!-- <div (click)="changeUserName()"
+				class="inline-flex h-12 items-center justify-center rounded-md bg-prime-blue text-white dark:text-gray-300 hover:bg-hover-prime-blue dark:bg-gray-700 dark:hover:bg-gray-600 px-5 text-base font-medium shadow transition-colors duration-250 cursor-pointer"
+			> -->
+				<iconify-icon icon="material-symbols-light:save-rounded" class="text-[1.5rem] mr-4"></iconify-icon>
 				Enregistrer
 			</div>
 		</div>
