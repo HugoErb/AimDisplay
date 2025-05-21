@@ -1,25 +1,25 @@
-@import 'tailwindcss';
+@import "tailwindcss";
 
 @custom-variant dark (&:where(.dark, .dark *));
 
 /* Import des polices d'écriture */
 @font-face {
-	font-family: 'Inter Full';
-	src: url('/assets/fonts/InterVariable.ttf') format('truetype');
+	font-family: "Inter Full";
+	src: url("/assets/fonts/InterVariable.ttf") format("truetype");
 	font-weight: 100 900;
 	font-display: swap;
 }
 
 @font-face {
-	font-family: 'Inter Full';
-	src: url('/assets/fonts/InterVariable-Italic.ttf') format('truetype');
+	font-family: "Inter Full";
+	src: url("/assets/fonts/InterVariable-Italic.ttf") format("truetype");
 	font-weight: 100 900;
 	font-style: italic;
 	font-display: swap;
 }
 
 .bg-custom {
-	background-image: url('./assets/img/layered-waves.svg');
+	background-image: url("./assets/img/layered-waves.svg");
 	background-repeat: no-repeat;
 	background-position: right;
 	background-size: cover;
@@ -44,8 +44,8 @@
 	--color-main-dark-bg: #191a1a;
 	--color-secondary-dark-bg: #232726;
 	--color-light-gray: #efefef;
-    --color-prime-blue: #3b80f6;
-    --color-hover-prime-blue: #1e63e0;
+	--color-prime-blue: #3b80f6;
+	--color-hover-prime-blue: #1e63e0;
 	--color-half-transparent: rgba(0, 0, 0, 0.5);
 
 	/* Animations */
@@ -66,8 +66,8 @@
 
 @layer base {
 	html {
-		font-family: 'Inter Full', sans-serif;
-		font-feature-settings: 'cv11', 'ss01', 'cv01', 'cv02', 'cv03', 'cv04';
+		font-family: "Inter Full", sans-serif;
+		font-feature-settings: "cv11", "ss01", "cv01", "cv02", "cv03", "cv04";
 	}
 
 	@keyframes appear {
@@ -116,5 +116,65 @@
 	}
 	.w-125 {
 		width: var(--width-125);
+	}
+
+	/* PrimeNG input width full */
+	p-inputnumber,
+	:where(.p-inputtext, .p-autocomplete, .p-cascadeselect, .p-inputnumber, .p-datepicker) {
+		width: 100% !important;
+	}
+
+	/* Cascadeselect dropdown fixes */
+	:where(.p-cascadeselect-sublist) {
+		min-width: unset !important;
+	}
+
+	:where(.p-overlay) {
+		min-width: unset !important;
+		width: fit-content !important;
+	}
+
+	:where(.p-cascadeselect-group-icon) {
+		padding-left: 10px !important;
+	}
+
+	:where(.p-cascadeselect-trigger) {
+		background-color: var(--color-prime-blue) !important;
+		color: #fff !important;
+	}
+
+	:where(.p-cascadeselect-label) {
+		font-weight: 400;
+		font-size: 16px !important;
+	}
+
+	:where(
+			.p-autocomplete-dropdown,
+			.p-datepicker-dropdown,
+			.p-cascadeselect-trigger,
+			.p-cascadeselect-dropdown,
+			.p-dropdown-trigger,
+			.p-inputnumber-button
+		) {
+		background-color: var(--color-prime-blue) !important;
+		color: white !important;
+		width: 45px !important;
+		transition: background-color 0.2s ease;
+	}
+
+	:where(
+			.p-autocomplete-dropdown:hover,
+			.p-datepicker-dropdown:hover,
+			.p-cascadeselect-trigger:hover,
+			.p-cascadeselect-dropdown:hover,
+			.p-dropdown-trigger:hover,
+			.p-inputnumber-button:hover
+		) {
+		background-color: var(--color-hover-prime-blue) !important;
+		color: white !important;
+	}
+
+	:where(.p-autocomplete-dropdown, .p-datepicker-dropdown) {
+		width: 53px !important;
 	}
 }
