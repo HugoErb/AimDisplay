@@ -9,11 +9,6 @@ import { InputTextModule } from 'primeng/inputtext';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { categories } from '../../assets/data/categories';
 
-interface Category {
-	cname: string;
-	code: string;
-}
-
 @Component({
 	selector: 'app-creation',
 	standalone: true,
@@ -23,13 +18,10 @@ interface Category {
 	schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class CreationComponent {
-	constructor() {
-		this.selectedCategory = { cname: '', code: '' };
-	}
 	shooterFirstName: string = '';
 	shooterLastName: string = '';
 	shooterCompetitionName: string = '';
-	selectedCategory: Category;
+	selectedCategory: any = [];
 	isSeniorOrDameCategory: boolean = false;
 	shooterClubName: string = '';
 	scoreSerie1: number = 0;
