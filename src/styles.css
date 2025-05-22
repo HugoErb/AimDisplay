@@ -175,6 +175,10 @@
 		border-color: #374151 !important; /* gray-700 */
 	}
 
+	:where(.dark) .p-datatable tr {
+		background-color: var(--color-secondary-dark-bg) !important;
+	}
+
 	/* Fond du paginator */
 	.dark .p-paginator {
 		border: none;
