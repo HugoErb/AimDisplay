@@ -127,7 +127,6 @@
 	/* Réduction de la taille des dropdown cascadeSelect */
 	:where(.p-overlay) {
 		min-width: unset !important;
-		width: fit-content !important;
 	}
 
 	/* Harmonisation des styles des boutons des inputs PrimeNG */
@@ -144,6 +143,33 @@
 		width: 45px !important;
 		transition: background-color 0.2s ease;
 	}
+
+	/* Delete bordures boutons primeNG */
+	/* .p-inputnumber-button,
+	.p-autocomplete-dropdown,
+	.p-datepicker-dropdown {
+		border-left: none !important;
+		border-top: 1px solid var(--color-prime-blue) !important;
+		border-bottom: 1px solid var(--color-prime-blue) !important;
+		border-right: 1px solid var(--color-prime-blue) !important;
+	} */
+
+	/* Delete bordures boutons cascadeSelect primeNG */
+	/* .p-cascadeselect{
+        border-top: 1px solid var(--color-prime-blue) !important;
+		border-bottom: 1px solid var(--color-prime-blue) !important;
+		border-right: 1px solid var(--color-prime-blue) !important;
+        background-color: var(--color-prime-blue) !important;
+    } */
+
+	/* Delete bordures boutons cascadeSelect primeNG */
+	/* .p-cascadeselect-label{
+        background-color: white !important;
+        border-top-left-radius: 5px;
+        border-bottom-left-radius: 5px;
+        border-top: 1px solid white !important;
+		border-bottom: 1px solid white !important;
+    } */
 
 	:where(
 			.p-autocomplete-dropdown:hover,
