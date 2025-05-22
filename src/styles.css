@@ -118,17 +118,19 @@
 		width: var(--width-125);
 	}
 
-	/* PrimeNG input width full */
+	/* Harmonisation des styles des inputs PrimeNG */
 	p-inputnumber,
 	:where(.p-inputtext, .p-autocomplete, .p-cascadeselect, .p-inputnumber, .p-datepicker) {
 		width: 100% !important;
 	}
 
+	/* Réduction de la taille des dropdown cascadeSelect */
 	:where(.p-overlay) {
 		min-width: unset !important;
 		width: fit-content !important;
 	}
 
+	/* Harmonisation des styles des boutons des inputs PrimeNG */
 	:where(
 			.p-autocomplete-dropdown,
 			.p-datepicker-dropdown,
@@ -155,7 +157,54 @@
 		color: white !important;
 	}
 
+	/* Augmentation de la taille des boutons des dropdown et datepicker car plus petit de base */
 	:where(.p-autocomplete-dropdown, .p-datepicker-dropdown) {
 		width: 53px !important;
+	}
+
+	/* DarkMode du tableau primeNG */
+	:where(.dark) .p-datatable {
+		background-color: var(--color-secondary-dark-bg) !important;
+		color: #d1d5db !important; /* gray-300 */
+	}
+
+	:where(.dark) .p-datatable th,
+	:where(.dark) .p-datatable td {
+		background-color: var(--color-secondary-dark-bg) !important;
+		color: #d1d5db !important;
+		border-color: #374151 !important; /* gray-700 */
+	}
+
+	/* Fond du paginator */
+	.dark .p-paginator {
+		border: none;
+		border-top-left-radius: 0;
+		border-top-right-radius: 0;
+		border-bottom-left-radius: 0.375rem;
+		border-bottom-right-radius: 0.375rem;
+		background-color: var(--color-secondary-dark-bg) !important;
+		color: #d1d5db !important;
+	}
+
+	/* Applique le style aux boutons du paginator */
+	.dark .p-paginator .p-ripple {
+		color: #d1d5db !important;
+		min-width: 2.5rem;
+		max-height: 2.5rem;
+		background-color: transparent !important;
+	}
+
+	/* Hover sur n'importe quel bouton du paginator */
+	.dark .p-paginator .p-ripple:hover {
+		color: #1f2937 !important;
+		background-color: var(--color-light-gray) !important;
+		transition: background-color 0.3s ease, color 0.3s ease;
+	}
+
+	.dark .p-paginator .p-paginator-page-selected,
+	.p-paginator .p-paginator-page-selected {
+		background-color: var(--color-prime-blue) !important;
+		color: white !important;
+		border-radius: 0.375rem;
 	}
 }

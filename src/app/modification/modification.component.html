@@ -1,39 +1,38 @@
-<h3 class="text-4xl font-bold md:text-5xl text-prime-blue dark:text-gray-300 animate-appear opacity-0 transition-colors duration-500 m-0">
-	Modification de données
-</h3>
-<p class="text-gray-500 dark:text-gray-400 text-xl mt-2 mb-10 text-left animate-appear opacity-0 transition-colors duration-500">
+<h3 class="text-4xl font-bold md:text-5xl text-prime-blue animate-appear opacity-0 transition-colors duration-500 m-0">Modification de données</h3>
+
+<p class="text-gray-500 text-xl mt-2 mb-10 text-left animate-appear opacity-0 transition-colors duration-500">
 	Modifiez ici vos compétitions, les tireurs ainsi que leur club de tir sportif créés précédemment.
 </p>
 
 <div class="animate-appear opacity-0 animation-delay-100 w-11/12 min-w-[525px] mx-auto shadow-lg">
 	<p-table [value]="shooters" dataKey="id" [paginator]="true" [rows]="nbRowsPerPage">
 		<ng-template pTemplate="header">
-			<tr class="dark:text-gray-300 dark:bg-secondary-dark-bg">
-				<th class="bg-white dark:text-gray-300 dark:bg-secondary-dark-bg rounded-tl-md dark:border-gray-700">
+			<tr>
+				<th class="rounded-tl-md">
 					<div class="flex items-center">
 						<span class="thead">Nom</span>
 						<p-columnFilter type="text" field="name" display="menu" class="ml-2"></p-columnFilter>
 					</div>
 				</th>
-				<th class="bg-white dark:text-gray-300 dark:bg-secondary-dark-bg dark:border-gray-700">
+				<th>
 					<div class="flex items-center">
 						<span class="thead">Prénom</span>
 						<p-columnFilter type="text" field="firstName" display="menu"></p-columnFilter>
 					</div>
 				</th>
-				<th class="bg-white dark:text-gray-300 dark:bg-secondary-dark-bg dark:border-gray-700">
+				<th>
 					<div class="flex items-center">
 						<span class="thead">Compétition</span>
 						<p-columnFilter type="text" field="competitionName" display="menu"></p-columnFilter>
 					</div>
 				</th>
-				<th class="bg-white dark:text-gray-300 dark:bg-secondary-dark-bg dark:border-gray-700">
+				<th>
 					<div class="flex items-center">
 						<span class="thead">Club</span>
 						<p-columnFilter type="text" field="clubName" display="menu"></p-columnFilter>
 					</div>
 				</th>
-				<th class="bg-white dark:text-gray-300 dark:bg-secondary-dark-bg dark:border-gray-700">
+				<th>
 					<div class="flex items-center">
 						<span class="thead">Catégorie</span>
 						<p-columnFilter type="text" field="categoryName" display="menu"></p-columnFilter>
@@ -43,6 +42,7 @@
 				<th style="width: 5rem"></th>
 			</tr>
 		</ng-template>
+
 		<ng-template pTemplate="body" let-shooter>
 			<tr>
 				<td>{{ shooter.lastName }}</td>
@@ -50,10 +50,15 @@
 				<td>{{ shooter.competitionName }}</td>
 				<td>{{ shooter.clubName }}</td>
 				<td>{{ shooter.categoryName }}</td>
-				<td><iconify-icon icon="fa6-solid:pen-to-square" class="cursor-pointer text-[1.2rem]"></iconify-icon></td>
-				<td><iconify-icon icon="iconamoon:trash-fill" class="cursor-pointer text-[1.2rem]"></iconify-icon></td>
+				<td>
+					<iconify-icon icon="fa6-solid:pen-to-square" class="cursor-pointer text-[1.2rem]"></iconify-icon>
+				</td>
+				<td>
+					<iconify-icon icon="iconamoon:trash-fill" class="cursor-pointer text-[1.2rem]"></iconify-icon>
+				</td>
 			</tr>
 		</ng-template>
+
 		<ng-template pTemplate="emptymessage">
 			<tr>
 				<td colspan="7">Aucune donnée trouvée.</td>
