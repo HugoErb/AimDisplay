@@ -7,11 +7,13 @@ import { CommonService } from './../services/common.service';
 import { UserParams } from '../interfaces/user-params';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { ThemeService } from '../services/theme.service';
+import { TextareaModule } from 'primeng/textarea';
+import { TableModule } from 'primeng/table';
 
 @Component({
 	selector: 'app-settings',
 	standalone: true,
-	imports: [DropdownModule, InputSwitchModule, FormsModule, InputTextModule],
+	imports: [DropdownModule, InputSwitchModule, FormsModule, InputTextModule, TextareaModule, TableModule],
 	templateUrl: './settings.component.html',
 	styleUrls: ['./settings.component.scss'],
 	schemas: [CUSTOM_ELEMENTS_SCHEMA],

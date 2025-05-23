@@ -18,11 +18,23 @@
 				<div class="text-left text-gray-800 dark:text-gray-300 text-lg tracking-wider transition-colors duration-500">
 					Activer le mode sombre
 				</div>
-				<p-inputSwitch styleClass="custom-inputSwitch" [(ngModel)]="darkMode" (onChange)="toggleDarkMode()"></p-inputSwitch>
+				<p-inputSwitch [(ngModel)]="darkMode" (onChange)="toggleDarkMode()"></p-inputSwitch>
+			</div>
+			<div class="flex items-center justify-between w-full mt-4">
+				<div class="text-left text-gray-800 dark:text-gray-300 text-lg tracking-wider transition-colors duration-500">
+					Thème
+				</div>
+				<p-inputSwitch [(ngModel)]="darkMode" (onChange)="toggleDarkMode()"></p-inputSwitch>
+			</div>
+			<div class="flex items-center justify-between w-full mt-4">
+				<div class="text-left text-gray-800 dark:text-gray-300 text-lg tracking-wider transition-colors duration-500">
+					Langue
+				</div>
+				<p-inputSwitch [(ngModel)]="darkMode" (onChange)="toggleDarkMode()"></p-inputSwitch>
 			</div>
 			<!-- <div class="flex items-center justify-between w-full mt-4">
 				<div class="text-left text-gray-800 dark:text-gray-300 text-lg tracking-wider transition-colors duration-500">Activer les particules</div>
-				<p-inputSwitch styleClass="custom-inputSwitch" [(ngModel)]="showParticules" (onChange)="toggleShowParticules()"></p-inputSwitch>
+				<p-inputSwitch [(ngModel)]="showParticules" (onChange)="toggleShowParticules()"></p-inputSwitch>
 			</div> -->
 		</div>
 		<div
@@ -105,7 +117,7 @@
 			<h4 class="m-0 mb-4 text-left text-lg font-semibold uppercase text-gray-800 dark:text-gray-300 tracking-wider transition-colors duration-500">Situations</h4>
 			<div class="flex items-center justify-between w-full mt-4">
 				<div class="text-left text-gray-800 dark:text-gray-300 text-lg tracking-wider transition-colors duration-500">Nom de situation multiple auto</div>
-				<p-inputSwitch styleClass="custom-inputSwitch" [(ngModel)]="autoMultipleSolutionName" (onChange)="updateUserParam('autoMultipleSolutionName', autoMultipleSolutionName)"></p-inputSwitch>
+				<p-inputSwitch [(ngModel)]="autoMultipleSolutionName" (onChange)="updateUserParam('autoMultipleSolutionName', autoMultipleSolutionName)"></p-inputSwitch>
 			</div>
 			<div class="flex items-center justify-between w-full mt-4">
 				<div class="text-left text-gray-800 dark:text-gray-300 text-lg tracking-wider transition-colors duration-500">Importer des situations</div>
@@ -133,7 +145,7 @@
 			<h4 class="m-0 mb-4 font-semibold text-left text-lg uppercase text-gray-800 dark:text-gray-300 tracking-wider transition-colors duration-500">Entraînement</h4>
 			<div class="flex items-center justify-between w-full mt-4">
 				<div class="text-left text-gray-800 dark:text-gray-300 text-lg tracking-wider transition-colors duration-500">Affichage de la solution lors d'une erreur</div>
-				<p-inputSwitch styleClass="custom-inputSwitch" [(ngModel)]="displaySolutionOnError" (onChange)="updateUserParam('displaySolution', displaySolutionOnError)"></p-inputSwitch>
+				<p-inputSwitch [(ngModel)]="displaySolutionOnError" (onChange)="updateUserParam('displaySolution', displaySolutionOnError)"></p-inputSwitch>
 			</div>
 			<div class="flex items-center justify-between w-full mt-4">
 				<div class="text-left text-gray-800 dark:text-gray-300 text-lg tracking-wider transition-colors duration-500">Style des cartes</div>
@@ -180,177 +192,173 @@
 	</div>
 </dialog>
 
-<!-- 
 <div class="settings-container">
-    <div class="setting-container">
-        <h3 class="setting-container-title">Préférences</h3>
-        <div class="setting-container-subtitle">Remplissez le formulaire ci-dessous et nous vous répondrons dans les plus brefs délais.</div>
-        Dark mode Langue Couleur primaire
-    </div>
-    <div class="setting-container">
-        <h3 class="setting-container-title">Gestion du compte</h3>
-        <div class="setting-container-subtitle">Remplissez le formulaire ci-dessous et nous vous répondrons dans les plus brefs délais.</div>
-        Photo nom d'utilisateur localisation du club : code postal , ville Changement de mot de passe, déconnexion
-    </div>
-    <div class="setting-container">
-        <h3 class="setting-container-title">Gestion des abonnements</h3>
-        <div class="setting-container-subtitle">Gérez ici votre offre d'abonnement et consultez votre historique de transaction.</div>
-        <div class="subscription-plans">
-            <div class="plan-container">
-                <div class="plan">
-                    <div class="plan-header">Basique</div>
-                    <div class="plan-price">
-                        €7
-                        <div class="price-per-month">.99/mois</div>
-                    </div>
-                    <ul class="plan-features">
-                        <li class="feature">
-                            <i class="fas fa-check feature-icon-check"></i>
-                            Gestion de 2 compétitions par mois
-                        </li>
-                        <li class="feature">
-                            <i class="fas fa-check feature-icon-check"></i>
-                            Génération de rapport de compétition
-                        </li>
-                        <li class="feature">
-                            <i class="fas fa-check feature-icon-check"></i>
-                            Dashboard des données
-                        </li>
-                    </ul>
-                    <div class="plan-button">Commencer</div>
-                </div>
+	<div class="setting-container">
+		<h3 class="setting-container-title">Gestion des abonnements</h3>
+		<div class="setting-container-subtitle">Gérez ici votre offre d'abonnement et consultez votre historique de transaction.</div>
+		<div class="subscription-plans">
+			<div class="plan-container">
+				<div class="plan">
+					<div class="plan-header">Basique</div>
+					<div class="plan-price">
+						€7
+						<div class="price-per-month">.99/mois</div>
+					</div>
+					<ul class="plan-features">
+						<li class="feature">
+							<i class="fas fa-check feature-icon-check"></i>
+							Gestion de 2 compétitions par mois
+						</li>
+						<li class="feature">
+							<i class="fas fa-check feature-icon-check"></i>
+							Génération de rapport de compétition
+						</li>
+						<li class="feature">
+							<i class="fas fa-check feature-icon-check"></i>
+							Dashboard des données
+						</li>
+					</ul>
+					<div class="plan-button">Commencer</div>
+				</div>
 
-                <div class="plan popular-plan">
-                    <div class="plan-badge">Populaire</div>
-                    <div class="plan-header">Pro</div>
-                    <div class="plan-price">
-                        €14
-                        <div class="price-per-month">.99/mois</div>
-                    </div>
-                    <ul class="plan-features">
-                        <li class="feature">
-                            <i class="fas fa-check feature-icon-check"></i>
-                            Fonctionnalités de l'abonnement Basique
-                        </li>
-                        <li class="feature">
-                            <i class="fas fa-check feature-icon-check"></i>
-                            Gestion de 4 compétitions par mois
-                        </li>
-                        <li class="feature">
-                            <i class="fas fa-check feature-icon-check"></i>
-                            Génération de rapport personnalisé par tireur
-                        </li>
-                        <li class="feature">
-                            <i class="fas fa-check feature-icon-check"></i>
-                            Conseils personnalisés pour les tireurs
-                        </li>
-                    </ul>
-                    <div class="plan-button popular-button">Commencer</div>
-                </div>
+				<div class="plan popular-plan">
+					<div class="plan-badge">Populaire</div>
+					<div class="plan-header">Pro</div>
+					<div class="plan-price">
+						€14
+						<div class="price-per-month">.99/mois</div>
+					</div>
+					<ul class="plan-features">
+						<li class="feature">
+							<i class="fas fa-check feature-icon-check"></i>
+							Fonctionnalités de l'abonnement Basique
+						</li>
+						<li class="feature">
+							<i class="fas fa-check feature-icon-check"></i>
+							Gestion de 4 compétitions par mois
+						</li>
+						<li class="feature">
+							<i class="fas fa-check feature-icon-check"></i>
+							Génération de rapport personnalisé par tireur
+						</li>
+						<li class="feature">
+							<i class="fas fa-check feature-icon-check"></i>
+							Conseils personnalisés pour les tireurs
+						</li>
+					</ul>
+					<div class="plan-button popular-button">Commencer</div>
+				</div>
 
-                <div class="plan">
-                    <div class="plan-header">VIP</div>
-                    <div class="plan-price">
-                        €19
-                        <div class="price-per-month">.99/mois</div>
-                    </div>
-                    <ul class="plan-features">
-                        <li class="feature">
-                            <i class="fas fa-check feature-icon-check"></i>
-                            Fonctionnalités de l'abonnement Pro
-                        </li>
-                        <li class="feature">
-                            <i class="fas fa-check feature-icon-check"></i>
-                            Gestion de compétitions illimitée
-                        </li>
-                        <li class="feature">
-                            <i class="fas fa-check feature-icon-check"></i>
-                            Génération de QR Code de consultation du classement
-                        </li>
-                        <li class="feature">
-                            <i class="fas fa-check feature-icon-check"></i>
-                            Support dédié
-                        </li>
-                    </ul>
-                    <div class="plan-button">Commencer</div>
-                </div>
-            </div>
-        </div>
+				<div class="plan">
+					<div class="plan-header">VIP</div>
+					<div class="plan-price">
+						€19
+						<div class="price-per-month">.99/mois</div>
+					</div>
+					<ul class="plan-features">
+						<li class="feature">
+							<i class="fas fa-check feature-icon-check"></i>
+							Fonctionnalités de l'abonnement Pro
+						</li>
+						<li class="feature">
+							<i class="fas fa-check feature-icon-check"></i>
+							Gestion de compétitions illimitée
+						</li>
+						<li class="feature">
+							<i class="fas fa-check feature-icon-check"></i>
+							Génération de QR Code de consultation du classement
+						</li>
+						<li class="feature">
+							<i class="fas fa-check feature-icon-check"></i>
+							Support dédié
+						</li>
+					</ul>
+					<div class="plan-button">Commencer</div>
+				</div>
+			</div>
+		</div>
 
-        Offre actuelle : acheter, modifier, annuler Historique des transactions
-        <div class="table-container">
-            <p-table [value]="transactions" dataKey="id" [rows]="10" [paginator]="true">
-                <ng-template pTemplate="header">
-                    <tr>
-                        <th>
-                            <div class="flex align-items-center">
-                                <span class="thead">Date</span>
-                                <p-columnFilter type="text" field="date" display="menu"></p-columnFilter>
-                            </div>
-                        </th>
-                        <th>
-                            <div class="flex align-items-center">
-                                <span class="thead">Montant</span>
-                                <p-columnFilter type="text" field="montant" display="menu"></p-columnFilter>
-                            </div>
-                        </th>
-                        <th>
-                            <div class="flex align-items-center">
-                                <span class="thead">Offre</span>
-                                <p-columnFilter type="text" field="typeOffre" display="menu"></p-columnFilter>
-                            </div>
-                        </th>
-                        <th>
-                            <div class="flex align-items-center">
-                                <span class="thead">Statut</span>
-                                <p-columnFilter type="text" field="statutPaiement" display="menu"></p-columnFilter>
-                            </div>
-                        </th>
-                    </tr>
-                </ng-template>
-                <ng-template pTemplate="body" let-transaction>
-                    <tr>
-                        <td>{{ transaction.date }}</td>
-                        <td>{{ transaction.montant }}€</td>
-                        <td>{{ transaction.typeOffre }}</td>
-                        <td>{{ transaction.statutPaiement }}</td>
-                    </tr>
-                </ng-template>
-                <ng-template pTemplate="emptymessage">
-                    <tr>
-                        <td colspan="7">Aucune transaction effectuée.</td>
-                    </tr>
-                </ng-template>
-            </p-table>
-        </div>
-    </div>
-    <div class="setting-container">
-        <h3 class="setting-container-title">Nous contacter</h3>
-        <div class="setting-container-subtitle">Remplissez le formulaire ci-dessous et nous vous répondrons dans les plus brefs délais.</div>
-        <div class="form">
-            <div class="form-row">
-                <div class="form-group">
-                    <label>Adresse e-mail</label>
-                    <input type="email" pInputText [(ngModel)]="email" placeholder="Adresse e-mail" />
-                </div>
-            </div>
-            <div class="form-row">
-                <div class="form-group">
+		Offre actuelle : acheter, modifier, annuler Historique des transactions
+		<div>
+			<p-table [value]="transactions" dataKey="id" [rows]="10" [paginator]="true">
+				<ng-template pTemplate="header">
+					<tr>
+						<th class="rounded-t-md">
+							<div>
+								<span class="text-prime-blue dark:text-gray-300 mr-2">Date</span>
+								<p-columnFilter type="text" field="date" display="menu"></p-columnFilter>
+							</div>
+						</th>
+						<th>
+							<div class="flex align-items-center">
+								<span class="text-prime-blue dark:text-gray-300 mr-2">Montant</span>
+								<p-columnFilter type="text" field="montant" display="menu"></p-columnFilter>
+							</div>
+						</th>
+						<th>
+							<div class="flex align-items-center">
+								<span class="text-prime-blue dark:text-gray-300 mr-2">Offre</span>
+								<p-columnFilter type="text" field="typeOffre" display="menu"></p-columnFilter>
+							</div>
+						</th>
+						<th class="rounded-t-md">
+							<div class="flex align-items-center">
+								<span class="text-prime-blue dark:text-gray-300 mr-2">Statut</span>
+								<p-columnFilter type="text" field="statutPaiement" display="menu"></p-columnFilter>
+							</div>
+						</th>
+					</tr>
+				</ng-template>
+				<ng-template pTemplate="body" let-transaction>
+					<tr>
+						<td>{{ transaction.date }}</td>
+						<td>{{ transaction.montant }}€</td>
+						<td>{{ transaction.typeOffre }}</td>
+						<td>{{ transaction.statutPaiement }}</td>
+					</tr>
+				</ng-template>
+				<ng-template pTemplate="emptymessage">
+					<tr>
+						<td colspan="7">Aucune transaction effectuée.</td>
+					</tr>
+				</ng-template>
+			</p-table>
+		</div>
+	</div>
+	<div class="setting-container">
+		<h3 class="setting-container-title">Nous contacter</h3>
+		<div class="setting-container-subtitle">Remplissez le formulaire ci-dessous et nous vous répondrons dans les plus brefs délais.</div>
+		<div class="form">
+			<div class="form-row">
+				<div class="form-group">
+					<label>Adresse e-mail</label>
+					<input type="email" pInputText [(ngModel)]="email" placeholder="Adresse e-mail" />
+				</div>
+			</div>
+			<div class="form-row">
+				<div class="form-group">
                     <label>Message</label>
-                    <textarea rows="5" cols="30" pInputTextarea [autoResize]="true" placeholder="Votre message..."></textarea>
+                    <textarea rows="5" cols="30" pTextarea [autoResize]="true" placeholder="Votre message..."></textarea>
                 </div>
-                <div class="submit-button">Envoyer</div>
-            </div>
-            <div class="form-social-media">
-                <div class="social-item">
-                    <i class="fa-brands fa-discord"></i>
-                    <span>Discord</span>
-                </div>
-                <div class="social-item">
-                    <i class="fa-solid fa-book"></i>
-                    <span>Documentation</span>
+			</div>
+            <div class="flex justify-center items-center">
+                <div
+                    class="inline-flex h-12 items-center justify-center rounded-md bg-prime-blue text-white dark:text-gray-300 hover:bg-hover-prime-blue dark:bg-gray-700 dark:hover:bg-gray-600 px-5 text-base font-medium shadow transition-colors duration-250 cursor-pointer"
+                >
+                    <iconify-icon icon="material-symbols-light:save-rounded" class="text-[1.5rem] mr-4"></iconify-icon>
+                    Enregistrer
                 </div>
             </div>
-        </div>
-    </div>
-</div> -->
+			<div class="form-social-media">
+				<div class="social-item">
+					<iconify-icon icon="ic:baseline-discord" class="text-[1.5rem] mr-1.5"></iconify-icon>
+					<span>Discord</span>
+				</div>
+				<div class="social-item">
+					<iconify-icon icon="icon-park-solid:doc-search" class="text-[1.5rem] mr-1"></iconify-icon>
+					<span>Documentation</span>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

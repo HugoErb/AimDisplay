@@ -188,6 +188,10 @@
 		width: 53px !important;
 	}
 
+	.p-datatable {
+		border-radius: 6px !important;
+	}
+
 	/* DarkMode du tableau primeNG */
 	:where(.dark) .p-datatable {
 		background-color: var(--color-secondary-dark-bg) !important;
