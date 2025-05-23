@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, HostListener } from '@angular/core';
 import { TableModule } from 'primeng/table';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { CommonService } from './../services/common.service';
 
 @Component({
 	selector: 'modification',
@@ -11,6 +12,8 @@ import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 	schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class ModificationComponent {
+	constructor(protected commonService: CommonService) {}
+
 	shooters: Shooter[] = [
 		{
 			id: 1,
@@ -173,8 +176,19 @@ export class ModificationComponent {
 			categoryName: 'Cadet',
 		},
 	];
-
 	nbRowsPerPage = 11;
+
+	ngOnInit(): void {
+        console.log(window.innerHeight);
+        
+		this.nbRowsPerPage = this.commonService.getNbRowsPerPage(window.innerHeight);
+	}
+
+	@HostListener('window:resize', ['$event'])
+	onResize(event: any) {
+        console.log(window.innerHeight);
+		this.nbRowsPerPage = this.commonService.getNbRowsPerPage(event.target.innerHeight);
+	}
 
 	//   confirmDeletion(event: Event) {
 	//     this.confirmationService.confirm({
@@ -201,10 +215,10 @@ export class ModificationComponent {
 }
 
 export interface Shooter {
-    id: number;
-    lastName: string;
-    firstName: string;
-    competitionName: string;
-    clubName: string;
-    categoryName: string;
+	id: number;
+	lastName: string;
+	firstName: string;
+	competitionName: string;
+	clubName: string;
+	categoryName: string;
 }
