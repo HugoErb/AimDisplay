@@ -8,7 +8,6 @@ import { CommonService } from './../services/common.service';
 	standalone: true,
 	imports: [TableModule],
 	templateUrl: './modification.component.html',
-	styleUrls: ['./modification.component.scss'],
 	schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class ModificationComponent {
