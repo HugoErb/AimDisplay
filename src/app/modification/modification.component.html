@@ -9,38 +9,38 @@
 	<p-table [value]="shooters" dataKey="id" [paginator]="true" [rows]="nbRowsPerPage">
 		<ng-template pTemplate="header">
 			<tr>
-				<th class="rounded-tl-md">
+				<th class="rounded-t-md">
 					<div class="flex items-center">
-						<span class="thead">Nom</span>
+						<span class="text-prime-blue dark:text-gray-300 mr-2">Nom</span>
 						<p-columnFilter type="text" field="name" display="menu" class="ml-2"></p-columnFilter>
 					</div>
 				</th>
 				<th>
 					<div class="flex items-center">
-						<span class="thead">Prénom</span>
+						<span class="text-prime-blue dark:text-gray-300 mr-2">Prénom</span>
 						<p-columnFilter type="text" field="firstName" display="menu"></p-columnFilter>
 					</div>
 				</th>
 				<th>
 					<div class="flex items-center">
-						<span class="thead">Compétition</span>
+						<span class="text-prime-blue dark:text-gray-300 mr-2">Compétition</span>
 						<p-columnFilter type="text" field="competitionName" display="menu"></p-columnFilter>
 					</div>
 				</th>
 				<th>
 					<div class="flex items-center">
-						<span class="thead">Club</span>
+						<span class="text-prime-blue dark:text-gray-300 mr-2">Club</span>
 						<p-columnFilter type="text" field="clubName" display="menu"></p-columnFilter>
 					</div>
 				</th>
 				<th>
 					<div class="flex items-center">
-						<span class="thead">Catégorie</span>
+						<span class="text-prime-blue dark:text-gray-300 mr-2">Catégorie</span>
 						<p-columnFilter type="text" field="categoryName" display="menu"></p-columnFilter>
 					</div>
 				</th>
 				<th style="width: 5rem"></th>
-				<th style="width: 5rem"></th>
+				<th style="width: 5rem" class="rounded-t-md"></th>
 			</tr>
 		</ng-template>
 
@@ -52,10 +52,10 @@
 				<td>{{ shooter.clubName }}</td>
 				<td>{{ shooter.categoryName }}</td>
 				<td>
-					<iconify-icon icon="fa6-solid:pen-to-square" class="cursor-pointer text-[1.2rem]"></iconify-icon>
+					<iconify-icon icon="fa6-solid:pen-to-square" class="cursor-pointer text-[1.2rem] mt-1"></iconify-icon>
 				</td>
 				<td>
-					<iconify-icon icon="iconamoon:trash-fill" class="cursor-pointer text-[1.2rem]"></iconify-icon>
+					<iconify-icon icon="iconamoon:trash-fill" class="cursor-pointer text-[1.2rem] mt-1"></iconify-icon>
 				</td>
 			</tr>
 		</ng-template>
