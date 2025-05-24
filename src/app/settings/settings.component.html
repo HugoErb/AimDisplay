@@ -21,15 +21,11 @@
 				<p-inputSwitch [(ngModel)]="darkMode" (onChange)="toggleDarkMode()"></p-inputSwitch>
 			</div>
 			<div class="flex items-center justify-between w-full mt-4">
-				<div class="text-left text-gray-800 dark:text-gray-300 text-lg tracking-wider transition-colors duration-500">
-					Thème
-				</div>
+				<div class="text-left text-gray-800 dark:text-gray-300 text-lg tracking-wider transition-colors duration-500">Thème</div>
 				<p-inputSwitch [(ngModel)]="darkMode" (onChange)="toggleDarkMode()"></p-inputSwitch>
 			</div>
 			<div class="flex items-center justify-between w-full mt-4">
-				<div class="text-left text-gray-800 dark:text-gray-300 text-lg tracking-wider transition-colors duration-500">
-					Langue
-				</div>
+				<div class="text-left text-gray-800 dark:text-gray-300 text-lg tracking-wider transition-colors duration-500">Langue</div>
 				<p-inputSwitch [(ngModel)]="darkMode" (onChange)="toggleDarkMode()"></p-inputSwitch>
 			</div>
 			<!-- <div class="flex items-center justify-between w-full mt-4">
@@ -337,24 +333,24 @@
 			</div>
 			<div class="form-row">
 				<div class="form-group">
-                    <label>Message</label>
-                    <textarea rows="5" cols="30" pTextarea [autoResize]="true" placeholder="Votre message..."></textarea>
-                </div>
+					<label>Message</label>
+					<textarea rows="5" cols="30" pTextarea [autoResize]="true" placeholder="Votre message..."></textarea>
+				</div>
 			</div>
-            <div class="flex justify-center items-center">
-                <div
-                    class="inline-flex h-12 items-center justify-center rounded-md bg-prime-blue text-white dark:text-gray-300 hover:bg-hover-prime-blue dark:bg-gray-700 dark:hover:bg-gray-600 px-5 text-base font-medium shadow transition-colors duration-250 cursor-pointer"
-                >
-                    <iconify-icon icon="material-symbols-light:save-rounded" class="text-[1.5rem] mr-4"></iconify-icon>
-                    Enregistrer
-                </div>
-            </div>
-			<div class="form-social-media">
-				<div class="social-item">
+			<div class="flex justify-center items-center">
+				<div
+					class="inline-flex h-12 items-center justify-center rounded-md bg-prime-blue text-white dark:text-gray-300 hover:bg-hover-prime-blue dark:bg-gray-700 dark:hover:bg-gray-600 px-5 text-base font-medium shadow transition-colors duration-250 cursor-pointer"
+				>
+					<iconify-icon icon="mdi:email-send" class="text-[1.5rem] mr-4"></iconify-icon>
+					Envoyer
+				</div>
+			</div>
+			<div class="flex items-center justify-center gap-10 mt-6 cursor-pointer text-prime-blue dark:text-gray-300">
+				<div class="flex items-center text-primary transition hover:underline">
 					<iconify-icon icon="ic:baseline-discord" class="text-[1.5rem] mr-1.5"></iconify-icon>
 					<span>Discord</span>
 				</div>
-				<div class="social-item">
+				<div class="flex items-center text-primary transition hover:underline">
 					<iconify-icon icon="icon-park-solid:doc-search" class="text-[1.5rem] mr-1"></iconify-icon>
 					<span>Documentation</span>
 				</div>
