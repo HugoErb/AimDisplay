@@ -5,246 +5,293 @@
 	Créez ici vos compétitions, les tireurs ainsi que leur club de tir sportif.
 </p>
 
-<!-- Formulaire du tireur -->
-<div class="flex items-center mt-[60px] text-prime-blue dark:text-gray-300 opacity-0 animate-appear animation-delay-100 duration-500">
+<!-- Choix du formulaire -->
+<div class="flex items-center mt-[50px] text-prime-blue dark:text-gray-300 opacity-0 animate-appear animation-delay-100 duration-500">
 	<iconify-icon icon="fa6-solid:person-rifle" class="text-[1.5rem]"></iconify-icon>
-	<h3 class="font-bold text-[2rem] ml-4">Création d'un nouveau tireur</h3>
+	<h3 class="font-bold text-[2rem] ml-4">Que voulez-vous créer ?</h3>
 </div>
 
-<div class="mx-auto mt-[30px] w-1/2 min-w-[750px] bg-white dark:bg-secondary-dark-bg p-[30px] shadow-lg rounded-[20px] opacity-0 animate-appear animation-delay-100 duration-500">
-	<div class="flex flex-wrap mb-[15px]">
-		<div class="w-1/2 px-[15px] mb-[15px]">
-			<label class="block uppercase text-xs font-bold mb-[5px] text-gray-800 dark:text-gray-300">Nom</label>
-			<input type="text" pInputText [(ngModel)]="shooterLastName" placeholder="Nom du tireur" />
-		</div>
-		<div class="w-1/2 px-[15px] mb-[15px]">
-			<label class="block uppercase text-xs font-bold mb-[5px] text-gray-800 dark:text-gray-300">Prénom</label>
-			<input type="text" pInputText [(ngModel)]="shooterFirstName" placeholder="Prénom du tireur" />
-		</div>
+<div class="flex justify-center gap-8 mt-10">
+	<!-- Bouton Tireur -->
+	<div
+		class="flex flex-col items-center justify-center bg-prime-blue text-white px-6 py-5 rounded-md hover:bg-hover-prime-blue transition cursor-pointer shadow-lg w-[140px] h-[140px] opacity-0 animate-appear animation-delay-100 duration-500"
+		(click)="selectedForm = 'shooter'"
+	>
+		<iconify-icon icon="fa6-solid:person-rifle" class="text-[2rem] mb-2"></iconify-icon>
+		<span class="text-lg font-medium">Tireur</span>
 	</div>
 
-	<div class="flex flex-wrap mb-[15px]">
-		<div class="w-1/2 px-[15px] mb-[15px]">
-			<label class="block uppercase text-xs font-bold mb-[5px] text-gray-800 dark:text-gray-300">Club</label>
-			<p-autoComplete
-				[(ngModel)]="shooterClubName"
-				[forceSelection]="true"
-				[suggestions]="filteredClubs"
-				(completeMethod)="filterClub($event)"
-				field="name"
-				[dropdown]="true"
-				placeholder="Sélectionnez un club"
-			></p-autoComplete>
-		</div>
-		<div class="w-1/2 px-[15px] mb-[15px]">
-			<label class="block uppercase text-xs font-bold mb-[5px] text-gray-800 dark:text-gray-300">Compétition</label>
-			<p-autoComplete
-				[(ngModel)]="shooterCompetitionName"
-				[forceSelection]="true"
-				[suggestions]="filteredCompetitions"
-				(completeMethod)="filterCompetition($event)"
-				field="name"
-				[dropdown]="true"
-				placeholder="Sélectionnez une compétition"
-			></p-autoComplete>
-		</div>
+	<!-- Bouton Compétition -->
+	<div
+		class="flex flex-col items-center justify-center bg-prime-blue text-white px-6 py-5 rounded-md hover:bg-hover-prime-blue transition cursor-pointer shadow-lg w-[140px] h-[140px] opacity-0 animate-appear animation-delay-150 duration-500"
+		(click)="selectedForm = 'competition'"
+	>
+		<iconify-icon icon="fa6-solid:ranking-star" class="text-[2rem] mb-2"></iconify-icon>
+		<span class="text-lg font-medium">Compétition</span>
 	</div>
 
-	<div class="flex flex-wrap mb-[15px]">
-		<div class="w-1/2 px-[15px] mb-[15px]">
-			<label class="block uppercase text-xs font-bold mb-[5px] text-gray-800 dark:text-gray-300">Catégorie</label>
-			<p-cascadeSelect
-				[(ngModel)]="selectedCategory"
-				(ngModelChange)="setIsSeniorOrDameCategory()"
-				[options]="categories"
-				optionLabel="code"
-				optionGroupLabel="name"
-				[optionGroupChildren]="['categories', 'divisions', 'ages']"
-				placeholder="Sélectionnez une catégorie"
+	<!-- Bouton Club -->
+	<div
+		class="flex flex-col items-center justify-center bg-prime-blue text-white px-6 py-5 rounded-md hover:bg-hover-prime-blue transition cursor-pointer shadow-lg w-[140px] h-[140px] opacity-0 animate-appear animation-delay-200 duration-500"
+		(click)="selectedForm = 'club'"
+	>
+		<iconify-icon icon="fa6-solid:people-roof" class="text-[2rem] mb-2"></iconify-icon>
+		<span class="text-lg font-medium">Club</span>
+	</div>
+</div>
+
+<!-- Formulaire du tireur -->
+<div *ngIf="selectedForm === 'shooter'">
+	<div class="flex items-center mt-[50px] text-prime-blue dark:text-gray-300 opacity-0 animate-appear animation-delay-100 duration-500">
+		<iconify-icon icon="fa6-solid:person-rifle" class="text-[1.5rem]"></iconify-icon>
+		<h3 class="font-bold text-[2rem] ml-4">Création d'un nouveau tireur</h3>
+	</div>
+
+	<div
+		class="mx-auto mt-[30px] w-1/2 min-w-[750px] bg-white dark:bg-secondary-dark-bg p-[30px] shadow-lg rounded-[20px] opacity-0 animate-appear animation-delay-100 duration-500"
+	>
+		<div class="flex flex-wrap mb-[15px]">
+			<div class="w-1/2 px-[15px] mb-[15px]">
+				<label class="block uppercase text-xs font-bold mb-[5px] text-gray-800 dark:text-gray-300">Nom</label>
+				<input type="text" pInputText [(ngModel)]="shooterLastName" placeholder="Nom du tireur" />
+			</div>
+			<div class="w-1/2 px-[15px] mb-[15px]">
+				<label class="block uppercase text-xs font-bold mb-[5px] text-gray-800 dark:text-gray-300">Prénom</label>
+				<input type="text" pInputText [(ngModel)]="shooterFirstName" placeholder="Prénom du tireur" />
+			</div>
+		</div>
+
+		<div class="flex flex-wrap mb-[15px]">
+			<div class="w-1/2 px-[15px] mb-[15px]">
+				<label class="block uppercase text-xs font-bold mb-[5px] text-gray-800 dark:text-gray-300">Club</label>
+				<p-autoComplete
+					[(ngModel)]="shooterClubName"
+					[forceSelection]="true"
+					[suggestions]="filteredClubs"
+					(completeMethod)="filterClub($event)"
+					field="name"
+					[dropdown]="true"
+					placeholder="Sélectionnez un club"
+				></p-autoComplete>
+			</div>
+			<div class="w-1/2 px-[15px] mb-[15px]">
+				<label class="block uppercase text-xs font-bold mb-[5px] text-gray-800 dark:text-gray-300">Compétition</label>
+				<p-autoComplete
+					[(ngModel)]="shooterCompetitionName"
+					[forceSelection]="true"
+					[suggestions]="filteredCompetitions"
+					(completeMethod)="filterCompetition($event)"
+					field="name"
+					[dropdown]="true"
+					placeholder="Sélectionnez une compétition"
+				></p-autoComplete>
+			</div>
+		</div>
+
+		<div class="flex flex-wrap mb-[15px]">
+			<div class="w-1/2 px-[15px] mb-[15px]">
+				<label class="block uppercase text-xs font-bold mb-[5px] text-gray-800 dark:text-gray-300">Catégorie</label>
+				<p-cascadeSelect
+					[(ngModel)]="selectedCategory"
+					(ngModelChange)="setIsSeniorOrDameCategory()"
+					[options]="categories"
+					optionLabel="code"
+					optionGroupLabel="name"
+					[optionGroupChildren]="['categories', 'divisions', 'ages']"
+					placeholder="Sélectionnez une catégorie"
+				>
+					<ng-template let-option pTemplate="option">
+						{{ option.cname }}
+					</ng-template>
+				</p-cascadeSelect>
+			</div>
+		</div>
+
+		<div class="flex flex-wrap mb-[15px]">
+			<div class="w-1/2 px-[15px] mb-[15px]">
+				<label class="block uppercase text-xs font-bold mb-[5px] text-gray-800 dark:text-gray-300">Série 1</label>
+				<p-inputNumber
+					[(ngModel)]="scoreSerie1"
+					mode="decimal"
+					[minFractionDigits]="2"
+					[min]="0"
+					[max]="100.1"
+					[showButtons]="true"
+					[maxFractionDigits]="2"
+					placeholder="Score série 1"
+				></p-inputNumber>
+			</div>
+			<div class="w-1/2 px-[15px] mb-[15px]">
+				<label class="block uppercase text-xs font-bold mb-[5px] text-gray-800 dark:text-gray-300">Série 2</label>
+				<p-inputNumber
+					[(ngModel)]="scoreSerie2"
+					mode="decimal"
+					[minFractionDigits]="2"
+					[min]="0"
+					[max]="100.1"
+					[showButtons]="true"
+					[maxFractionDigits]="2"
+					placeholder="Score série 2"
+				></p-inputNumber>
+			</div>
+			<div class="w-1/2 px-[15px] mb-[15px]">
+				<label class="block uppercase text-xs font-bold mb-[5px] text-gray-800 dark:text-gray-300">Série 3</label>
+				<p-inputNumber
+					[(ngModel)]="scoreSerie3"
+					mode="decimal"
+					[minFractionDigits]="2"
+					[min]="0"
+					[max]="100.1"
+					[showButtons]="true"
+					[maxFractionDigits]="2"
+					placeholder="Score série 3"
+				></p-inputNumber>
+			</div>
+			<div class="w-1/2 px-[15px] mb-[15px]">
+				<label class="block uppercase text-xs font-bold mb-[5px] text-gray-800 dark:text-gray-300">Série 4</label>
+				<p-inputNumber
+					[(ngModel)]="scoreSerie4"
+					mode="decimal"
+					[minFractionDigits]="2"
+					[min]="0"
+					[max]="100.1"
+					[showButtons]="true"
+					[maxFractionDigits]="2"
+					placeholder="Score série 4"
+				></p-inputNumber>
+			</div>
+			<div *ngIf="this.isSeniorOrDameCategory" class="w-1/2 px-[15px] mb-[15px]">
+				<label class="block uppercase text-xs font-bold mb-[5px] text-gray-800 dark:text-gray-300">Série 5</label>
+				<p-inputNumber
+					[(ngModel)]="scoreSerie5"
+					mode="decimal"
+					[minFractionDigits]="2"
+					[min]="0"
+					[max]="100.1"
+					[showButtons]="true"
+					[maxFractionDigits]="2"
+					placeholder="Score série 5"
+				></p-inputNumber>
+			</div>
+			<div *ngIf="this.isSeniorOrDameCategory" class="w-1/2 px-[15px] mb-[15px]">
+				<label class="block uppercase text-xs font-bold mb-[5px] text-gray-800 dark:text-gray-300">Série 6</label>
+				<p-inputNumber
+					[(ngModel)]="scoreSerie6"
+					mode="decimal"
+					[minFractionDigits]="2"
+					[min]="0"
+					[max]="100.1"
+					[showButtons]="true"
+					[maxFractionDigits]="2"
+					placeholder="Score série 6"
+				></p-inputNumber>
+			</div>
+		</div>
+		<div class="flex justify-center items-center">
+			<div
+				class="inline-flex h-12 items-center justify-center rounded-md bg-prime-blue text-white dark:text-gray-300 hover:bg-hover-prime-blue dark:bg-gray-700 dark:hover:bg-gray-600 px-5 text-base font-medium shadow transition-colors duration-250 cursor-pointer"
 			>
-				<ng-template let-option pTemplate="option">
-					{{ option.cname }}
-				</ng-template>
-			</p-cascadeSelect>
-		</div>
-	</div>
-
-	<div class="flex flex-wrap mb-[15px]">
-		<div class="w-1/2 px-[15px] mb-[15px]">
-			<label class="block uppercase text-xs font-bold mb-[5px] text-gray-800 dark:text-gray-300">Série 1</label>
-			<p-inputNumber
-				[(ngModel)]="scoreSerie1"
-				mode="decimal"
-				[minFractionDigits]="2"
-				[min]="0"
-				[max]="100.1"
-				[showButtons]="true"
-				[maxFractionDigits]="2"
-				placeholder="Score série 1"
-			></p-inputNumber>
-		</div>
-		<div class="w-1/2 px-[15px] mb-[15px]">
-			<label class="block uppercase text-xs font-bold mb-[5px] text-gray-800 dark:text-gray-300">Série 2</label>
-			<p-inputNumber
-				[(ngModel)]="scoreSerie2"
-				mode="decimal"
-				[minFractionDigits]="2"
-				[min]="0"
-				[max]="100.1"
-				[showButtons]="true"
-				[maxFractionDigits]="2"
-				placeholder="Score série 2"
-			></p-inputNumber>
-		</div>
-		<div class="w-1/2 px-[15px] mb-[15px]">
-			<label class="block uppercase text-xs font-bold mb-[5px] text-gray-800 dark:text-gray-300">Série 3</label>
-			<p-inputNumber
-				[(ngModel)]="scoreSerie3"
-				mode="decimal"
-				[minFractionDigits]="2"
-				[min]="0"
-				[max]="100.1"
-				[showButtons]="true"
-				[maxFractionDigits]="2"
-				placeholder="Score série 3"
-			></p-inputNumber>
-		</div>
-		<div class="w-1/2 px-[15px] mb-[15px]">
-			<label class="block uppercase text-xs font-bold mb-[5px] text-gray-800 dark:text-gray-300">Série 4</label>
-			<p-inputNumber
-				[(ngModel)]="scoreSerie4"
-				mode="decimal"
-				[minFractionDigits]="2"
-				[min]="0"
-				[max]="100.1"
-				[showButtons]="true"
-				[maxFractionDigits]="2"
-				placeholder="Score série 4"
-			></p-inputNumber>
-		</div>
-		<div *ngIf="this.isSeniorOrDameCategory" class="w-1/2 px-[15px] mb-[15px]">
-			<label class="block uppercase text-xs font-bold mb-[5px] text-gray-800 dark:text-gray-300">Série 5</label>
-			<p-inputNumber
-				[(ngModel)]="scoreSerie5"
-				mode="decimal"
-				[minFractionDigits]="2"
-				[min]="0"
-				[max]="100.1"
-				[showButtons]="true"
-				[maxFractionDigits]="2"
-				placeholder="Score série 5"
-			></p-inputNumber>
-		</div>
-		<div *ngIf="this.isSeniorOrDameCategory" class="w-1/2 px-[15px] mb-[15px]">
-			<label class="block uppercase text-xs font-bold mb-[5px] text-gray-800 dark:text-gray-300">Série 6</label>
-			<p-inputNumber
-				[(ngModel)]="scoreSerie6"
-				mode="decimal"
-				[minFractionDigits]="2"
-				[min]="0"
-				[max]="100.1"
-				[showButtons]="true"
-				[maxFractionDigits]="2"
-				placeholder="Score série 6"
-			></p-inputNumber>
-		</div>
-	</div>
-	<div class="flex justify-center items-center">
-		<div
-			class="inline-flex h-12 items-center justify-center rounded-md bg-prime-blue text-white dark:text-gray-300 hover:bg-hover-prime-blue dark:bg-gray-700 dark:hover:bg-gray-600 px-5 text-base font-medium shadow transition-colors duration-250 cursor-pointer"
-		>
-			<iconify-icon icon="material-symbols-light:save-rounded" class="text-[1.5rem] mr-4"></iconify-icon>
-			Enregistrer
+				<iconify-icon icon="material-symbols-light:save-rounded" class="text-[1.5rem] mr-4"></iconify-icon>
+				Enregistrer
+			</div>
 		</div>
 	</div>
 </div>
 
 <!-- Formulaire de la compétition -->
-<div class="flex items-center mt-[60px] text-prime-blue dark:text-gray-300 opacity-0 animate-appear animation-delay-200 duration-500">
-	<iconify-icon icon="fa6-solid:ranking-star" class="text-[1.5rem]"></iconify-icon>
-	<h3 class="font-bold text-[2rem] ml-4">Création d'une nouvelle compétition</h3>
-</div>
-
-<div class="mx-auto mt-[30px] w-1/2 min-w-[750px] bg-white dark:bg-secondary-dark-bg p-[30px] shadow-lg rounded-[20px] opacity-0 animate-appear animation-delay-200 duration-500">
-	<div class="flex flex-wrap mb-[15px]">
-		<div class="w-1/2 px-[15px] mb-[15px]">
-			<label class="block uppercase text-xs font-bold mb-[5px] text-gray-800 dark:text-gray-300">Nom de la compétition</label>
-			<input type="text" pInputText [(ngModel)]="competitionName" placeholder="Nom de la compétition" />
-		</div>
-		<div class="w-1/2 px-[15px] mb-[15px]">
-			<label class="block uppercase text-xs font-bold mb-[5px] text-gray-800 dark:text-gray-300">Dates de la compétition</label>
-			<p-datepicker
-				[firstDayOfWeek]="1"
-				[(ngModel)]="competitionDate"
-				[showIcon]="true"
-				placeholder="Dates de la compétition"
-				dateFormat="dd/mm/yy"
-				selectionMode="range"
-			></p-datepicker>
-		</div>
+<div *ngIf="selectedForm === 'competition'">
+	<div class="flex items-center mt-[50px] text-prime-blue dark:text-gray-300 opacity-0 animate-appear animation-delay-200 duration-500">
+		<iconify-icon icon="fa6-solid:ranking-star" class="text-[1.5rem]"></iconify-icon>
+		<h3 class="font-bold text-[2rem] ml-4">Création d'une nouvelle compétition</h3>
 	</div>
 
-	<div class="flex flex-wrap mb-[15px]">
-		<div class="w-1/2 px-[15px] mb-[15px]">
-			<label class="block uppercase text-xs font-bold mb-[5px] text-gray-800 dark:text-gray-300">Prix d'inscription</label>
-			<p-inputNumber
-				[(ngModel)]="prixInscription"
-				mode="decimal"
-				[minFractionDigits]="2"
-				[min]="0"
-				[showButtons]="true"
-				[maxFractionDigits]="2"
-				placeholder="Prix d'inscription"
-                mode="currency"
-                currency="EUR"
-			></p-inputNumber>
+	<div
+		class="mx-auto mt-[30px] w-1/2 min-w-[750px] bg-white dark:bg-secondary-dark-bg p-[30px] shadow-lg rounded-[20px] opacity-0 animate-appear animation-delay-200 duration-500"
+	>
+		<div class="flex flex-wrap mb-[15px]">
+			<div class="w-1/2 px-[15px] mb-[15px]">
+				<label class="block uppercase text-xs font-bold mb-[5px] text-gray-800 dark:text-gray-300">Nom de la compétition</label>
+				<input type="text" pInputText [(ngModel)]="competitionName" placeholder="Nom de la compétition" />
+			</div>
+			<div class="w-1/2 px-[15px] mb-[15px]">
+				<label class="block uppercase text-xs font-bold mb-[5px] text-gray-800 dark:text-gray-300">Dates de la compétition</label>
+				<p-datepicker
+					[firstDayOfWeek]="1"
+					[(ngModel)]="competitionDate"
+					[showIcon]="true"
+					placeholder="Dates de la compétition"
+					dateFormat="dd/mm/yy"
+					selectionMode="range"
+				></p-datepicker>
+			</div>
 		</div>
-		<div class="w-1/2 px-[15px] mb-[15px]">
-			<label class="block uppercase text-xs font-bold mb-[5px] text-gray-800 dark:text-gray-300">Prix de catégorie supplémentaire</label>
-			<p-inputNumber
-				[(ngModel)]="prixCategSup"
-				mode="decimal"
-				[minFractionDigits]="2"
-				[min]="0"
-				[showButtons]="true"
-				[maxFractionDigits]="2"
-				placeholder="Prix de catégorie supplémentaire"
-                mode="currency"
-                currency="EUR"
-			></p-inputNumber>
-		</div>
-	</div>
 
-	<div class="flex justify-center items-center">
-		<div
-			class="inline-flex h-12 items-center justify-center rounded-md bg-prime-blue text-white dark:text-gray-300 hover:bg-hover-prime-blue dark:bg-gray-700 dark:hover:bg-gray-600 px-5 text-base font-medium shadow transition-colors duration-250 cursor-pointer"
-		>
-			<iconify-icon icon="material-symbols-light:save-rounded" class="text-[1.5rem] mr-4"></iconify-icon>
-			Enregistrer
+		<div class="flex flex-wrap mb-[15px]">
+			<div class="w-1/2 px-[15px] mb-[15px]">
+				<label class="block uppercase text-xs font-bold mb-[5px] text-gray-800 dark:text-gray-300">Prix d'inscription</label>
+				<p-inputNumber
+					[(ngModel)]="prixInscription"
+					mode="decimal"
+					[minFractionDigits]="2"
+					[min]="0"
+					[showButtons]="true"
+					[maxFractionDigits]="2"
+					placeholder="Prix d'inscription"
+					mode="currency"
+					currency="EUR"
+				></p-inputNumber>
+			</div>
+			<div class="w-1/2 px-[15px] mb-[15px]">
+				<label class="block uppercase text-xs font-bold mb-[5px] text-gray-800 dark:text-gray-300">Prix de catégorie supplémentaire</label>
+				<p-inputNumber
+					[(ngModel)]="prixCategSup"
+					mode="decimal"
+					[minFractionDigits]="2"
+					[min]="0"
+					[showButtons]="true"
+					[maxFractionDigits]="2"
+					placeholder="Prix de catégorie supplémentaire"
+					mode="currency"
+					currency="EUR"
+				></p-inputNumber>
+			</div>
+		</div>
+
+		<div class="flex justify-center items-center">
+			<div
+				class="inline-flex h-12 items-center justify-center rounded-md bg-prime-blue text-white dark:text-gray-300 hover:bg-hover-prime-blue dark:bg-gray-700 dark:hover:bg-gray-600 px-5 text-base font-medium shadow transition-colors duration-250 cursor-pointer"
+			>
+				<iconify-icon icon="material-symbols-light:save-rounded" class="text-[1.5rem] mr-4"></iconify-icon>
+				Enregistrer
+			</div>
 		</div>
 	</div>
 </div>
 
 <!-- Formulaire du club -->
-<div class="flex items-center mt-[60px] text-prime-blue dark:text-gray-300 animate-appear opacity-0 animation-delay-200 duration-500">
-	<iconify-icon icon="fa6-solid:people-roof" class="text-[1.5rem]"></iconify-icon>
-	<h3 class="font-bold text-[2rem] ml-4">Création d'un nouveau club</h3>
-</div>
-
-<div class="mx-auto mt-[30px] w-1/2 min-w-[750px] bg-white dark:bg-secondary-dark-bg p-[30px] shadow-lg rounded-[20px] opacity-0 animate-appear animation-delay-200 duration-500">
-	<div class="flex flex-wrap mb-[15px]">
-		<div class="w-1/2 px-[15px] mb-[15px]">
-			<label class="block uppercase text-xs font-bold mb-[5px] text-gray-800 dark:text-gray-300">Nom du club</label>
-			<input type="text" pInputText [(ngModel)]="clubName" placeholder="Nom du club" />
-		</div>
+<div *ngIf="selectedForm === 'club'">
+	<div class="flex items-center mt-[50px] text-prime-blue dark:text-gray-300 animate-appear opacity-0 animation-delay-200 duration-500">
+		<iconify-icon icon="fa6-solid:people-roof" class="text-[1.5rem]"></iconify-icon>
+		<h3 class="font-bold text-[2rem] ml-4">Création d'un nouveau club</h3>
 	</div>
 
-	<div class="flex justify-center items-center">
-		<div
-			class="inline-flex h-12 items-center justify-center rounded-md bg-prime-blue text-white dark:text-gray-300 hover:bg-hover-prime-blue dark:bg-gray-700 dark:hover:bg-gray-600 px-5 text-base font-medium shadow transition-colors duration-250 cursor-pointer"
-		>
-			<iconify-icon icon="material-symbols-light:save-rounded" class="text-[1.5rem] mr-4"></iconify-icon>
-			Enregistrer
+	<div
+		class="mx-auto mt-[30px] w-1/2 min-w-[750px] bg-white dark:bg-secondary-dark-bg p-[30px] shadow-lg rounded-[20px] opacity-0 animate-appear animation-delay-200 duration-500"
+	>
+		<div class="flex flex-wrap mb-[15px]">
+			<div class="w-1/2 px-[15px] mb-[15px]">
+				<label class="block uppercase text-xs font-bold mb-[5px] text-gray-800 dark:text-gray-300">Nom du club</label>
+				<input type="text" pInputText [(ngModel)]="clubName" placeholder="Nom du club" />
+			</div>
+		</div>
+
+		<div class="flex justify-center items-center">
+			<div
+				class="inline-flex h-12 items-center justify-center rounded-md bg-prime-blue text-white dark:text-gray-300 hover:bg-hover-prime-blue dark:bg-gray-700 dark:hover:bg-gray-600 px-5 text-base font-medium shadow transition-colors duration-250 cursor-pointer"
+			>
+				<iconify-icon icon="material-symbols-light:save-rounded" class="text-[1.5rem] mr-4"></iconify-icon>
+				Enregistrer
+			</div>
 		</div>
 	</div>
 </div>

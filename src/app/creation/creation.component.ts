@@ -17,6 +17,7 @@ import { categories } from '../../assets/data/categories';
 	schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class CreationComponent {
+	selectedForm: 'shooter' | 'competition' | 'club' | null = null;
 	shooterFirstName: string = '';
 	shooterLastName: string = '';
 	shooterCompetitionName: string = '';
