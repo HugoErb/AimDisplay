@@ -10,20 +10,6 @@
 			</div>
 		</li>
 		<li class="transition-all text-gray-800 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600 cursor-pointer w-full">
-			<div (click)="commonService.redirectTo('home')" class="flex items-center justify-start px-3 py-4 text-gray-800 dark:text-gray-300">
-				<iconify-icon icon="famicons:home-sharp" class="text-[1.45rem] ml-4 text-lg transition-all duration-500"></iconify-icon>
-				<span
-					[ngClass]="{
-						'ml-8': commonService.isCollapsed,
-						'ml-6': !commonService.isCollapsed
-					}"
-					class="flex items-center justify-center text-md transition-all duration-500"
-				>
-					Accueil
-				</span>
-			</div>
-		</li>
-		<li class="transition-all text-gray-800 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600 cursor-pointer w-full">
 			<div (click)="commonService.redirectTo('creation')" class="flex items-center justify-start px-3 py-4 text-gray-800 dark:text-gray-300">
 				<iconify-icon icon="icon-park-solid:add" class="text-[1.45rem] ml-4 text-lg transition-all duration-500"></iconify-icon>
 				<span
