@@ -23,14 +23,20 @@
 				</th>
 				<th>
 					<div class="flex items-center">
-						<span class="text-prime-blue dark:text-gray-300 mr-2">Compétition</span>
-						<p-columnFilter type="text" field="competitionName" display="menu"></p-columnFilter>
+						<span class="text-prime-blue dark:text-gray-300 mr-2">Club</span>
+						<p-columnFilter type="text" field="clubName" display="menu"></p-columnFilter>
 					</div>
 				</th>
 				<th>
 					<div class="flex items-center">
-						<span class="text-prime-blue dark:text-gray-300 mr-2">Club</span>
-						<p-columnFilter type="text" field="clubName" display="menu"></p-columnFilter>
+						<span class="text-prime-blue dark:text-gray-300 mr-2">Compétition</span>
+						<p-columnFilter type="text" field="competitionName" display="menu"></p-columnFilter>
+					</div>
+				</th>
+                <th>
+					<div class="flex items-center">
+						<span class="text-prime-blue dark:text-gray-300 mr-2">Distance</span>
+						<p-columnFilter type="text" field="distance" display="menu"></p-columnFilter>
 					</div>
 				</th>
 				<th>
@@ -48,14 +54,15 @@
 			<tr>
 				<td>{{ shooter.lastName }}</td>
 				<td>{{ shooter.firstName }}</td>
+                <td>{{ shooter.clubName }}</td>
 				<td>{{ shooter.competitionName }}</td>
-				<td>{{ shooter.clubName }}</td>
+				<td>{{ shooter.distance }}</td>
 				<td>{{ shooter.categoryName }}</td>
 				<td>
 					<iconify-icon icon="fa6-solid:pen-to-square" class="cursor-pointer text-[1.2rem] mt-1"></iconify-icon>
 				</td>
 				<td>
-					<iconify-icon icon="iconamoon:trash-fill" class="cursor-pointer text-[1.2rem] mt-1"></iconify-icon>
+					<iconify-icon icon="iconamoon:trash-fill" class="cursor-pointer text-[1.2rem] mt-1" (click)="confirmDeletion($event)"></iconify-icon>
 				</td>
 			</tr>
 		</ng-template>
