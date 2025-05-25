@@ -22,16 +22,12 @@
 			</div>
 			<div class="flex items-center justify-between w-full mt-4">
 				<div class="text-left text-gray-800 dark:text-gray-300 text-lg tracking-wider transition-colors duration-500">Thème</div>
-				<p-inputSwitch [(ngModel)]="darkMode" (onChange)="toggleDarkMode()"></p-inputSwitch>
+				<p-inputSwitch [(ngModel)]="darkMode"></p-inputSwitch>
 			</div>
 			<div class="flex items-center justify-between w-full mt-4">
 				<div class="text-left text-gray-800 dark:text-gray-300 text-lg tracking-wider transition-colors duration-500">Langue</div>
-				<p-inputSwitch [(ngModel)]="darkMode" (onChange)="toggleDarkMode()"></p-inputSwitch>
+				<p-inputSwitch [(ngModel)]="darkMode"></p-inputSwitch>
 			</div>
-			<!-- <div class="flex items-center justify-between w-full mt-4">
-				<div class="text-left text-gray-800 dark:text-gray-300 text-lg tracking-wider transition-colors duration-500">Activer les particules</div>
-				<p-inputSwitch [(ngModel)]="showParticules" (onChange)="toggleShowParticules()"></p-inputSwitch>
-			</div> -->
 		</div>
 		<div
 			class="mx-auto mt-10 p-5 rounded-lg shadow-lg bg-white dark:bg-secondary-dark-bg animate-appear opacity-0 animation-delay-150 transition-colors duration-500"
@@ -51,7 +47,7 @@
 						<img [src]="authService.getUserAvatar()" class="w-full h-full object-cover transition-all duration-300" />
 						} @else { -->
 						<img
-							src="https://imgs.search.brave.com/6Abd5TBbHIoBHK1py-tGSUv7eRH_hf3KVb5Px1DBNMs/rs:fit:860:0:0/g:ce/aHR0cHM6Ly90NC5m/dGNkbi5uZXQvanBn/LzA4LzIzLzkxLzU1/LzM2MF9GXzgyMzkx/NTUzM19PalFLUGtD/TTNzaGRxRmdwWjVz/d01LV3U1cHhnMzls/VS5qcGc"
+							src="../../assets/img/logo.png"
 							class="w-full h-full object-cover transition-all duration-300"
 						/>
 						<!-- } -->
@@ -60,7 +56,7 @@
 						<div
 							class="absolute inset-0 flex items-center justify-center bg-black bg-opacity-0 group-hover:bg-opacity-50 transition-all duration-300"
 						>
-							<i class="fas fa-pencil-alt text-white text-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></i>
+                            <iconify-icon icon="mdi:pencil" class="text-white text-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></iconify-icon>
 						</div>
 					</div>
 					<div class="ml-4">
@@ -202,15 +198,15 @@
 					</div>
 					<ul class="plan-features">
 						<li class="feature">
-							<i class="fas fa-check feature-icon-check"></i>
+							<iconify-icon icon="material-symbols:check-rounded" class="text-[1.5rem] mr-1.5"></iconify-icon>
 							Gestion de 2 compétitions par mois
 						</li>
 						<li class="feature">
-							<i class="fas fa-check feature-icon-check"></i>
+							<iconify-icon icon="material-symbols:check-rounded" class="text-[1.5rem] mr-1.5"></iconify-icon>
 							Génération de rapport de compétition
 						</li>
 						<li class="feature">
-							<i class="fas fa-check feature-icon-check"></i>
+							<iconify-icon icon="material-symbols:check-rounded" class="text-[1.5rem] mr-1.5"></iconify-icon>
 							Dashboard des données
 						</li>
 					</ul>
@@ -226,19 +222,19 @@
 					</div>
 					<ul class="plan-features">
 						<li class="feature">
-							<i class="fas fa-check feature-icon-check"></i>
+							<iconify-icon icon="material-symbols:check-rounded" class="text-[1.5rem] mr-1.5"></iconify-icon>
 							Fonctionnalités de l'abonnement Basique
 						</li>
 						<li class="feature">
-							<i class="fas fa-check feature-icon-check"></i>
+							<iconify-icon icon="material-symbols:check-rounded" class="text-[1.5rem] mr-1.5"></iconify-icon>
 							Gestion de 4 compétitions par mois
 						</li>
 						<li class="feature">
-							<i class="fas fa-check feature-icon-check"></i>
+							<iconify-icon icon="material-symbols:check-rounded" class="text-[1.5rem] mr-1.5"></iconify-icon>
 							Génération de rapport personnalisé par tireur
 						</li>
 						<li class="feature">
-							<i class="fas fa-check feature-icon-check"></i>
+							<iconify-icon icon="material-symbols:check-rounded" class="text-[1.5rem] mr-1.5"></iconify-icon>
 							Conseils personnalisés pour les tireurs
 						</li>
 					</ul>
@@ -253,19 +249,19 @@
 					</div>
 					<ul class="plan-features">
 						<li class="feature">
-							<i class="fas fa-check feature-icon-check"></i>
+							<iconify-icon icon="material-symbols:check-rounded" class="text-[1.5rem] mr-1.5"></iconify-icon>
 							Fonctionnalités de l'abonnement Pro
 						</li>
 						<li class="feature">
-							<i class="fas fa-check feature-icon-check"></i>
+							<iconify-icon icon="material-symbols:check-rounded" class="text-[1.5rem] mr-1.5"></iconify-icon>
 							Gestion de compétitions illimitée
 						</li>
 						<li class="feature">
-							<i class="fas fa-check feature-icon-check"></i>
+							<iconify-icon icon="material-symbols:check-rounded" class="text-[1.5rem] mr-1.5"></iconify-icon>
 							Génération de QR Code de consultation du classement
 						</li>
 						<li class="feature">
-							<i class="fas fa-check feature-icon-check"></i>
+							<iconify-icon icon="material-symbols:check-rounded" class="text-[1.5rem] mr-1.5"></iconify-icon>
 							Support dédié
 						</li>
 					</ul>
