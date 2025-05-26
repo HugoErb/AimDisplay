@@ -47,10 +47,16 @@ export class CreationComponent {
 	filteredWeapons: any[] = [];
 	categories: any[] = [
 		{ name: 'Poussin' },
-		{ name: 'Benjamin' },
 		{ name: 'Minime' },
+		{ name: 'Benjamin' },
+		{ name: 'Cadet' },
 		{ name: 'Junior' },
+		{ name: 'Dame 1' },
+		{ name: 'Dame 2' },
+		{ name: 'Dame 3' },
 		{ name: 'Sénior 1' },
+		{ name: 'Sénior 2' },
+		{ name: 'Sénior 3' },
 	];
 	filteredCategories: any[] = [];
 
