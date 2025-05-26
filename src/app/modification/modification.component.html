@@ -39,6 +39,12 @@
 						<p-columnFilter type="text" field="distance" display="menu"></p-columnFilter>
 					</div>
 				</th>
+                <th>
+					<div class="flex items-center">
+						<span class="text-prime-blue dark:text-gray-300 mr-2">Arme</span>
+						<p-columnFilter type="text" field="arme" display="menu"></p-columnFilter>
+					</div>
+				</th>
 				<th>
 					<div class="flex items-center">
 						<span class="text-prime-blue dark:text-gray-300 mr-2">Catégorie</span>
@@ -57,6 +63,7 @@
 				<td>{{ shooter.clubName }}</td>
 				<td>{{ shooter.competitionName }}</td>
 				<td>{{ shooter.distance }}</td>
+				<td>{{ shooter.weapon }}</td>
 				<td>{{ shooter.categoryName }}</td>
 				<td>
 					<iconify-icon
@@ -77,7 +84,7 @@
 
 		<ng-template pTemplate="emptymessage">
 			<tr>
-				<td colspan="7">Aucune donnée trouvée.</td>
+				<td colspan="9">Aucune donnée trouvée.</td>
 			</tr>
 		</ng-template>
 	</p-table>
