@@ -50,7 +50,7 @@ export class CommonService {
 	showSwal(title: string, message: string, icon: 'success' | 'error' | 'warning' | 'info' | 'question' = 'success') {
 		Swal.fire({
 			icon: icon,
-			title: `<div class="text-xl">${title}</div>`,
+			title: `<div class="text-2xl">${title}</div>`,
 			html: `${message}`,
 			showCancelButton: true,
 			showConfirmButton: true,
