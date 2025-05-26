@@ -201,14 +201,25 @@ export class ModificationComponent {
 		this.nbRowsPerPage = this.commonService.getNbRowsPerPage(window.innerHeight);
 	}
 
+	/**
+	 * Événement déclenché lors du redimensionnement de la fenêtre.
+	 * Met à jour dynamiquement le nombre de lignes par page en fonction
+	 * de la hauteur de la fenêtre actuelle.
+	 *
+	 * @param {Event} event - L'événement de redimensionnement (resize) de la fenêtre.
+	 */
 	@HostListener('window:resize', ['$event'])
 	onResize(event: any) {
-		console.log(window.innerHeight);
 		this.nbRowsPerPage = this.commonService.getNbRowsPerPage(event.target.innerHeight);
 	}
 
+	/**
+	 * Affiche une boîte de dialogue de confirmation avant la suppression d'une ligne.
+	 *
+	 * @param {Event} event - L'événement déclencheur (clic sur un bouton de suppression).
+	 */
 	confirmDeletion(event: Event) {
-		this.commonService.showSwalToast('Voulez vous vraiment supprimer cette ligne ? Cette action sera irréversible. ');
+		this.commonService.showSwal('Voulez vous vraiment supprimer cette ligne ?', 'Cette action sera irréversible.', 'warning');
 	}
 }
 

@@ -40,6 +40,30 @@ export class CommonService {
 	}
 
 	/**
+	 * Affiche une boîte de dialogue SweetAlert2 personnalisée.
+     * 
+	 * @param {string} title - Le titre affiché dans la boîte de dialogue.
+	 * @param {string} message - Le message HTML à afficher dans le corps de la boîte.
+	 * @param {'success' | 'error' | 'warning' | 'info' | 'question'} [icon='success'] -
+	 *        L'icône à afficher. Peut être 'success', 'error', 'warning', 'info' ou 'question'.
+	 */
+	showSwal(title: string, message: string, icon: 'success' | 'error' | 'warning' | 'info' | 'question' = 'success') {
+		Swal.fire({
+			icon: icon,
+			title: `<div class="text-xl">${title}</div>`,
+			html: `${message}`,
+			showCancelButton: true,
+			showConfirmButton: true,
+			confirmButtonText: 'Valider',
+			cancelButtonText: 'Annuler',
+			reverseButtons: true,
+			customClass: {
+				confirmButton: 'swal2-confirm custom-prime-button',
+			},
+		});
+	}
+
+	/**
 	 * Renvoie un message d'erreur correspondant au code d'erreur fourni.
 	 *
 	 * @param {string} errorCode - Le code d'erreur retourné par le service d'authentification.
