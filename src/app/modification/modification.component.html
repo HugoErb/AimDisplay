@@ -33,7 +33,7 @@
 						<p-columnFilter type="text" field="competitionName" display="menu"></p-columnFilter>
 					</div>
 				</th>
-                <th>
+				<th>
 					<div class="flex items-center">
 						<span class="text-prime-blue dark:text-gray-300 mr-2">Distance</span>
 						<p-columnFilter type="text" field="distance" display="menu"></p-columnFilter>
@@ -54,15 +54,23 @@
 			<tr>
 				<td>{{ shooter.lastName }}</td>
 				<td>{{ shooter.firstName }}</td>
-                <td>{{ shooter.clubName }}</td>
+				<td>{{ shooter.clubName }}</td>
 				<td>{{ shooter.competitionName }}</td>
 				<td>{{ shooter.distance }}</td>
 				<td>{{ shooter.categoryName }}</td>
 				<td>
-					<iconify-icon icon="fa6-solid:pen-to-square" class="cursor-pointer text-[1.2rem] mt-1"></iconify-icon>
+					<iconify-icon
+						icon="fa6-solid:pen-to-square"
+						class="cursor-pointer text-[1.2rem] mt-1"
+						(click)="displayModifFormModal()"
+					></iconify-icon>
 				</td>
 				<td>
-					<iconify-icon icon="iconamoon:trash-fill" class="cursor-pointer text-[1.2rem] mt-1" (click)="confirmDeletion($event)"></iconify-icon>
+					<iconify-icon
+						icon="iconamoon:trash-fill"
+						class="cursor-pointer text-[1.2rem] mt-1"
+						(click)="confirmDeletion($event)"
+					></iconify-icon>
 				</td>
 			</tr>
 		</ng-template>
@@ -74,3 +82,11 @@
 		</ng-template>
 	</p-table>
 </div>
+
+<!-- Div affichée lors d'un click sur icon de modification, afin d'afficher le nouveau formulaire -->
+<dialog id="displayModifFormModal" class="dui-modal">
+	<div class="dui-modal-box w-fit max-w-5xl text-gray-800 dark:text-gray-300 bg-white dark:bg-secondary-dark-bg"></div>
+	<form method="dialog" class="dui-modal-backdrop">
+		<button class="outline-none border-none bg-transparent"></button>
+	</form>
+</dialog>
