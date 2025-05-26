@@ -52,20 +52,43 @@
 
 	<div class="flex flex-wrap mb-[15px]">
 		<div class="w-1/2 px-[15px] mb-[15px]">
+			<label class="block uppercase text-xs font-bold mb-[5px] text-gray-800 dark:text-gray-300">Distance</label>
+			<p-autoComplete
+				[(ngModel)]="shooterDistance"
+				[forceSelection]="true"
+				[suggestions]="filteredDistances"
+				(completeMethod)="filterDistance($event)"
+				field="name"
+				[dropdown]="true"
+				placeholder="Sélectionnez une distance de tir"
+			></p-autoComplete>
+		</div>
+        <div class="w-1/2 px-[15px] mb-[15px]">
+			<label class="block uppercase text-xs font-bold mb-[5px] text-gray-800 dark:text-gray-300">Arme</label>
+			<p-autoComplete
+				[(ngModel)]="shooterWeapon"
+				[forceSelection]="true"
+				[suggestions]="filteredWeapons"
+				(completeMethod)="filterWeapon($event)"
+				field="name"
+				[dropdown]="true"
+				placeholder="Sélectionnez un type d'arme"
+			></p-autoComplete>
+		</div>
+	</div>
+
+    <div class="flex flex-wrap mb-[15px]">
+		<div class="w-1/2 px-[15px] mb-[15px]">
 			<label class="block uppercase text-xs font-bold mb-[5px] text-gray-800 dark:text-gray-300">Catégorie</label>
-			<p-cascadeSelect
-				[(ngModel)]="selectedCategory"
-				(ngModelChange)="setIsSeniorOrDameCategory()"
-				[options]="categories"
-				optionLabel="code"
-				optionGroupLabel="name"
-				[optionGroupChildren]="['categories', 'divisions', 'ages']"
+			<p-autoComplete
+				[(ngModel)]="shooterCategory"
+				[forceSelection]="true"
+				[suggestions]="filteredCategories"
+				(completeMethod)="filterCategory($event)"
+				field="name"
+				[dropdown]="true"
 				placeholder="Sélectionnez une catégorie"
-			>
-				<ng-template let-option pTemplate="option">
-					{{ option.cname }}
-				</ng-template>
-			</p-cascadeSelect>
+			></p-autoComplete>
 		</div>
 	</div>
 
