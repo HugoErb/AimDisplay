@@ -242,3 +242,10 @@
 		border-radius: 0.375rem;
 	}
 }
+
+/* Couleur du bouton de confiramtion des sweet alert */
+.custom-prime-button {
+	background-color: var(--color-prime-blue) !important;
+	color: white !important;
+	border: none !important;
+}
