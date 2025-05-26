@@ -20,7 +20,8 @@ export class ModificationComponent {
 			firstName: 'Lucas',
 			competitionName: 'Championnat National',
 			clubName: 'Arc Club Paris',
-			distance: '10 M',
+			distance: '10 Mètres',
+			weapon: 'Pistolet Vitesse',
 			categoryName: 'Senior',
 		},
 		{
@@ -29,7 +30,8 @@ export class ModificationComponent {
 			firstName: 'Émilie',
 			competitionName: 'Tir Régional',
 			clubName: 'Les Flèches de Lyon',
-			distance: '10 M',
+			distance: '10 Mètres',
+			weapon: 'Pistolet Vitesse',
 			categoryName: 'Junior',
 		},
 		{
@@ -38,7 +40,8 @@ export class ModificationComponent {
 			firstName: 'Maxime',
 			competitionName: 'Open International',
 			clubName: 'Archers de Marseille',
-			distance: '10 M',
+			distance: '10 Mètres',
+			weapon: 'Pistolet Vitesse',
 			categoryName: 'Senior',
 		},
 		{
@@ -47,7 +50,8 @@ export class ModificationComponent {
 			firstName: 'Sophie',
 			competitionName: 'Championnat Départemental',
 			clubName: 'Tireurs de Lille',
-			distance: '10 M',
+			distance: '10 Mètres',
+			weapon: 'Pistolet Vitesse',
 			categoryName: 'Cadet',
 		},
 		{
@@ -56,7 +60,8 @@ export class ModificationComponent {
 			firstName: 'Clara',
 			competitionName: 'Tir National',
 			clubName: 'Les Archers Nantais',
-			distance: '10 M',
+			distance: '10 Mètres',
+			weapon: 'Pistolet Vitesse',
 			categoryName: 'Junior',
 		},
 		{
@@ -65,7 +70,8 @@ export class ModificationComponent {
 			firstName: 'Théo',
 			competitionName: 'Championnat Régional',
 			clubName: 'Arc Toulouse',
-			distance: '10 M',
+			distance: '10 Mètres',
+			weapon: 'Pistolet Vitesse',
 			categoryName: 'Senior',
 		},
 		{
@@ -74,7 +80,8 @@ export class ModificationComponent {
 			firstName: 'Laura',
 			competitionName: 'Open de France',
 			clubName: 'Les Flèches de Bordeaux',
-			distance: '10 M',
+			distance: '10 Mètres',
+			weapon: 'Pistolet Vitesse',
 			categoryName: 'Senior',
 		},
 		{
@@ -83,7 +90,8 @@ export class ModificationComponent {
 			firstName: 'Gabriel',
 			competitionName: 'Tournoi des Champions',
 			clubName: 'Archers de Nice',
-			distance: '10 M',
+			distance: '10 Mètres',
+			weapon: 'Pistolet Vitesse',
 			categoryName: 'Cadet',
 		},
 		{
@@ -92,7 +100,8 @@ export class ModificationComponent {
 			firstName: 'Julie',
 			competitionName: 'Compétition Nationale',
 			clubName: 'Les Archers Strasbourgeois',
-			distance: '10 M',
+			distance: '10 Mètres',
+			weapon: 'Pistolet Vitesse',
 			categoryName: 'Junior',
 		},
 		{
@@ -101,7 +110,8 @@ export class ModificationComponent {
 			firstName: 'Romain',
 			competitionName: 'Tir de Précision',
 			clubName: 'Tireurs de Rennes',
-			distance: '10 M',
+			distance: '10 Mètres',
+			weapon: 'Pistolet Vitesse',
 			categoryName: 'Senior',
 		},
 		{
@@ -110,7 +120,8 @@ export class ModificationComponent {
 			firstName: 'Emma',
 			competitionName: 'Championnat International',
 			clubName: 'Arc Club Montpellier',
-			distance: '10 M',
+			distance: '10 Mètres',
+			weapon: 'Pistolet Vitesse',
 			categoryName: 'Junior',
 		},
 		{
@@ -119,7 +130,8 @@ export class ModificationComponent {
 			firstName: 'Alexandre',
 			competitionName: 'Open Régional',
 			clubName: 'Les Flèches d Orléans',
-			distance: '10 M',
+			distance: '10 Mètres',
+			weapon: 'Pistolet Vitesse',
 			categoryName: 'Senior',
 		},
 		{
@@ -128,7 +140,8 @@ export class ModificationComponent {
 			firstName: 'Camille',
 			competitionName: 'Championnat Européen',
 			clubName: 'Archers du Havre',
-			distance: '10 M',
+			distance: '10 Mètres',
+			weapon: 'Pistolet Vitesse',
 			categoryName: 'Cadet',
 		},
 		{
@@ -137,7 +150,8 @@ export class ModificationComponent {
 			firstName: 'Antoine',
 			competitionName: 'Tir Olympique',
 			clubName: 'Les Archers de Reims',
-			distance: '10 M',
+			distance: '10 Mètres',
+			weapon: 'Pistolet Vitesse',
 			categoryName: 'Senior',
 		},
 		{
@@ -146,7 +160,8 @@ export class ModificationComponent {
 			firstName: 'Chloé',
 			competitionName: 'Compétition Locale',
 			clubName: 'Arc Club Saint-Étienne',
-			distance: '10 M',
+			distance: '10 Mètres',
+			weapon: 'Pistolet Vitesse',
 			categoryName: 'Junior',
 		},
 		{
@@ -155,7 +170,8 @@ export class ModificationComponent {
 			firstName: 'Hugo',
 			competitionName: 'Tir de Démonstration',
 			clubName: 'Les Flèches de Grenoble',
-			distance: '10 M',
+			distance: '10 Mètres',
+			weapon: 'Pistolet Vitesse',
 			categoryName: 'Senior',
 		},
 		{
@@ -164,7 +180,8 @@ export class ModificationComponent {
 			firstName: 'Louise',
 			competitionName: 'Tir Festif',
 			clubName: 'Les Archers d Angers',
-			distance: '10 M',
+			distance: '10 Mètres',
+			weapon: 'Pistolet Vitesse',
 			categoryName: 'Cadet',
 		},
 		{
@@ -173,7 +190,8 @@ export class ModificationComponent {
 			firstName: 'Mathieu',
 			competitionName: 'Championnat du Monde',
 			clubName: 'Archers de Dijon',
-			distance: '10 M',
+			distance: '10 Mètres',
+			weapon: 'Pistolet Vitesse',
 			categoryName: 'Junior',
 		},
 		{
@@ -182,8 +200,9 @@ export class ModificationComponent {
 			firstName: 'Charlotte',
 			competitionName: 'Tir de Loisir',
 			clubName: 'Arc Club Toulon',
-			distance: '10 M',
-			categoryName: 'Senior',
+			distance: '10 Mètres',
+			weapon: 'Pistolet Vitesse',
+			categoryName: 'Dame 1',
 		},
 		{
 			id: 20,
@@ -191,11 +210,12 @@ export class ModificationComponent {
 			firstName: 'Quentin',
 			competitionName: 'Tournoi Interscolaire',
 			clubName: 'Les Flèches de Rouen',
-			distance: '10 M',
+			distance: '10 Mètres',
+			weapon: 'Pistolet Vitesse',
 			categoryName: 'Cadet',
 		},
 	];
-	nbRowsPerPage = 11;
+	nbRowsPerPage = 10;
 
 	ngOnInit(): void {
 		this.nbRowsPerPage = this.commonService.getNbRowsPerPage(window.innerHeight);
@@ -234,5 +254,6 @@ export interface Shooter {
 	competitionName: string;
 	clubName: string;
 	distance: string;
+	weapon: string;
 	categoryName: string;
 }
