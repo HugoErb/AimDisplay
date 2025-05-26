@@ -7,7 +7,6 @@ import { DatePickerModule } from 'primeng/datepicker';
 import { CommonModule } from '@angular/common';
 import { InputTextModule } from 'primeng/inputtext';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
-import { categories } from '../../assets/data/categories';
 
 @Component({
 	selector: 'app-creation',
@@ -17,10 +16,13 @@ import { categories } from '../../assets/data/categories';
 	schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class CreationComponent {
+	// Variables de création d'un tireur
 	shooterFirstName: string = '';
 	shooterLastName: string = '';
 	shooterCompetitionName: string = '';
-	selectedCategory: any = [];
+	shooterDistance: string = '';
+	shooterWeapon: string = '';
+	shooterCategory: any = [];
 	isSeniorOrDameCategory: boolean = false;
 	shooterClubName: string = '';
 	scoreSerie1: number = 0;
@@ -29,64 +31,51 @@ export class CreationComponent {
 	scoreSerie4: number = 0;
 	scoreSerie5: number = 0;
 	scoreSerie6: number = 0;
+	competitions: any[] = [{ name: 'Tournoi de Marennes' }, { name: 'Tournoi de Rochefort' }, { name: 'Tournoi de Pau' }];
+	filteredCompetitions: any[] = [];
+	clubs: any[] = [{ name: 'Club de Marennes' }, { name: 'Club de Rochefort' }, { name: 'Club de Pau' }];
+	filteredClubs: any[] = [];
+	distances: any[] = [{ name: '10 Mètres' }, { name: '25 Mètres' }, { name: '50 Mètres' }];
+	filteredDistances: any[] = [];
+	weapons: any[] = [
+		{ name: 'Arbalète' },
+		{ name: 'Carabine' },
+		{ name: 'Pistolet' },
+		{ name: 'Pistolet Percussion' },
+		{ name: 'Pistolet Vitesse' },
+	];
+	filteredWeapons: any[] = [];
+	categories: any[] = [
+		{ name: 'Poussin' },
+		{ name: 'Benjamin' },
+		{ name: 'Minime' },
+		{ name: 'Junior' },
+		{ name: 'Sénior 1' },
+	];
+	filteredCategories: any[] = [];
 
+	// Variables de création d'une compétition
 	competitionDate: string = '';
 	competitionName: string = '';
 	prixInscription: number = 0;
 	prixCategSup: number = 0;
 
+	// Variables de création d'un club
 	clubName: string = '';
-	categories: any[] = categories;
-
-	competitions: any[] = [{ name: 'Tournoi de Marennes' }, { name: 'Tournoi de Rochefort' }, { name: 'Tournoi de Pau' }];
-	filteredCompetitions: any[] = [];
-
-	clubs: any[] = [{ name: 'Club de Marennes' }, { name: 'Club de Rochefort' }, { name: 'Club de Pau' }];
-	filteredClubs: any[] = [];
 
 	/**
-	 * Filtre les compétitions en fonction de la recherche de compétition entrée.
-	 * @param event - L'événement contenant la recherche de compétition entrée.
+	 * Filtre un tableau d'éléments par leur nom en fonction d'une requête saisie par l'utilisateur.
+	 *
+	 * @param event - L'événement contenant la requête de recherche (event.query).
+	 * @param sourceList - Le tableau source à filtrer.
+	 * @returns Un tableau contenant les éléments filtrés.
 	 */
-	filterCompetition(event: any): void {
-		const filtered: any[] = [];
-		const query: string = event.query.toLowerCase();
-
-		for (const competition of this.competitions) {
-			if (competition.name.toLowerCase().includes(query)) {
-				filtered.push(competition);
-			}
-		}
-
-		this.filteredCompetitions = filtered;
+	filter(event: any, sourceList: any[], target: string): void {
+		(this as any)[target] = sourceList.filter((item: any) => item.name.toLowerCase().includes(event.query.toLowerCase()));
 	}
-
-	/**
-	 * Filtre les clubs en fonction de la recherche du club entré.
-	 * @param event - L'événement contenant la recherche du club entré.
-	 */
-	filterClub(event: any): void {
-		const filtered: any[] = [];
-		const query: string = event.query.toLowerCase();
-
-		for (const club of this.clubs) {
-			if (club.name.toLowerCase().includes(query)) {
-				filtered.push(club);
-			}
-		}
-
-		this.filteredClubs = filtered;
-	}
-
-	/**
-	 * Vérifie si la catégorie du tireur contient 'SEN' ou 'DAM' suivi d'un chiffre unique.
-	 */
-	setIsSeniorOrDameCategory(): void {
-		if (this.selectedCategory && this.selectedCategory.code) {
-			const categoryCode = this.selectedCategory.code;
-			this.isSeniorOrDameCategory = /SEN\d|DAM\d/.test(categoryCode);
-		} else {
-			this.isSeniorOrDameCategory = false;
-		}
-	}
+	filterCompetition = (e: any) => this.filter(e, this.competitions, 'filteredCompetitions');
+	filterClub = (e: any) => this.filter(e, this.clubs, 'filteredClubs');
+	filterDistance = (e: any) => this.filter(e, this.distances, 'filteredDistances');
+	filterWeapon = (e: any) => this.filter(e, this.weapons, 'filteredWeapons');
+	filterCategory = (e: any) => this.filter(e, this.categories, 'filteredCategories');
 }
