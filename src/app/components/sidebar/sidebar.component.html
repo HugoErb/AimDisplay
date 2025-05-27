@@ -1,139 +1,3 @@
-<!-- <div
-	[ngStyle]="{ width: commonService.isCollapsed ? '80px' : '255px' }"
-	class="fixed h-full whitespace-nowrap overflow-hidden transition-all duration-500 bg-white dark:bg-secondary-dark-bg shadow-xl"
->
-	<ul class="absolute w-full list-none m-0 p-0">
-		<li class="mb-6 ml-3 mt-4 w-fit">
-			<div (click)="commonService.redirectTo('home')" class="flex items-center cursor-pointer pl-3.5 pt-3.5">
-				<img src="../../../assets/img/logo.png" alt="Logo" class="h-7 w-7" />
-				<span class="ml-4 text-2xl font-bold text-prime-blue dark:text-gray-300 transition-all duration-500">Aim Display</span>
-			</div>
-		</li>
-		<li class="transition-all text-gray-800 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600 cursor-pointer w-full">
-			<div (click)="commonService.redirectTo('creation')" class="flex items-center justify-start px-3 py-4 text-gray-800 dark:text-gray-300">
-				<iconify-icon icon="icon-park-solid:add" class="text-[1.45rem] ml-4 text-lg transition-all duration-500"></iconify-icon>
-				<span
-					[ngClass]="{
-						'ml-8': commonService.isCollapsed,
-						'ml-6': !commonService.isCollapsed
-					}"
-					class="flex items-center justify-center text-md transition-all duration-500"
-				>
-					Création
-				</span>
-			</div>
-		</li>
-		<li class="transition-all text-gray-800 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600 cursor-pointer w-full">
-			<div
-				(click)="commonService.redirectTo('modification')"
-				class="flex items-center justify-start px-3 py-4 no-underline text-gray-800 dark:text-gray-300"
-			>
-				<iconify-icon icon="mdi:pencil" class="text-[1.45rem] ml-4 text-lg transition-all duration-500"></iconify-icon>
-				<span
-					[ngClass]="{
-						'ml-8': commonService.isCollapsed,
-						'ml-6': !commonService.isCollapsed
-					}"
-					class="flex items-center justify-center text-md transition-all duration-500"
-				>
-					Modification
-				</span>
-			</div>
-		</li>
-		<li class="transition-all text-gray-800 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600 cursor-pointer w-full">
-			<div (click)="commonService.redirectTo('display')" class="flex items-center justify-start px-3 py-4 text-gray-800 dark:text-gray-300">
-				<iconify-icon icon="streamline:screen-1-solid" class="text-[1.45rem] ml-4 text-lg transition-all duration-500"></iconify-icon>
-				<span
-					[ngClass]="{
-						'ml-8': commonService.isCollapsed,
-						'ml-6': !commonService.isCollapsed
-					}"
-					class="flex items-center justify-center text-md transition-all duration-500"
-				>
-					Affichage
-				</span>
-			</div>
-		</li> -->
-<!-- <li class="transition-all text-gray-800 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600 cursor-pointer w-full">
-			<div (click)="commonService.redirectTo('settings')" class="flex items-center justify-start px-3 py-4 text-gray-800 dark:text-gray-300">
-				<iconify-icon icon="fa6-solid:chart-line" class="text-[1.45rem] ml-4 text-lg transition-all duration-500"></iconify-icon>
-				<span
-					[ngClass]="{
-						'ml-8': commonService.isCollapsed,
-						'ml-6': !commonService.isCollapsed
-					}"
-					class="flex items-center justify-center text-md transition-all duration-500"
-				>
-					????
-				</span>
-			</div>
-		</li> -->
-<!-- <li class="transition-all text-gray-800 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600 cursor-pointer w-full">
-			<div (click)="commonService.redirectTo('settings')" class="flex items-center justify-start px-3 py-4 text-gray-800 dark:text-gray-300">
-				<iconify-icon icon="material-symbols:settings" class="text-[1.45rem] ml-4 text-lg transition-all duration-500"></iconify-icon>
-				<span
-					[ngClass]="{
-						'ml-8': commonService.isCollapsed,
-						'ml-6': !commonService.isCollapsed
-					}"
-					class="flex items-center justify-center text-md transition-all duration-500"
-				>
-					Paramètres
-				</span>
-			</div>
-		</li>
-	</ul>
-	<div class="absolute bottom-0 flex items-center p-4">
-		<div class="dui-avatar">
-			<div class="w-12 rounded-full shadow-lg"> -->
-<!-- @if (authService.getUserAvatar()) {
-                    <img [src]="authService.getUserAvatar()" />
-                } @else {
-                    <img src="https://imgs.search.brave.com/6Abd5TBbHIoBHK1py-tGSUv7eRH_hf3KVb5Px1DBNMs/rs:fit:860:0:0/g:ce/aHR0cHM6Ly90NC5m/dGNkbi5uZXQvanBn/LzA4LzIzLzkxLzU1/LzM2MF9GXzgyMzkx/NTUzM19PalFLUGtD/TTNzaGRxRmdwWjVz/d01LV3U1cHhnMzls/VS5qcGc" />
-                } -->
-<!-- <img
-					src="https://imgs.search.brave.com/6Abd5TBbHIoBHK1py-tGSUv7eRH_hf3KVb5Px1DBNMs/rs:fit:860:0:0/g:ce/aHR0cHM6Ly90NC5m/dGNkbi5uZXQvanBn/LzA4LzIzLzkxLzU1/LzM2MF9GXzgyMzkx/NTUzM19PalFLUGtD/TTNzaGRxRmdwWjVz/d01LV3U1cHhnMzls/VS5qcGc"
-				/>
-			</div>
-		</div>
-		<div
-			[ngClass]="{
-				'whitespace-nowrap overflow-hidden': commonService.isCollapsed
-			}"
-			class="ml-4"
-		>
-			<p class="font-semibold text-gray-800 dark:text-gray-300 transition-all duration-500 m-0 mb-1"> -->
-<!-- @if (authService.getUserDisplayName()) {
-                    {{ authService.getUserDisplayName() }}
-                } @else {
-                    Joueur
-                } -->
-<!-- Joueur
-			</p>
-			<div
-				(click)="commonService.redirectTo('settings')"
-				class="hover:underline text-gray-800 dark:text-gray-300 cursor-pointer transition-all duration-500"
-			>
-				Gérer le compte
-			</div>
-		</div>
-	</div>
-</div>
-<div
-	[ngStyle]="{ left: commonService.isCollapsed ? '80px' : '255px' }"
-	(click)="toggleSidebar()"
-	class="border-solid border border-gray-300 flex justify-center items-center z-10 fixed top-8 transform -translate-x-1/2 rounded-full w-7 h-7 text-xl transition-all duration-500 bg-white dark:bg-secondary-dark-bg text-gray-800 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600 cursor-pointer"
->
-	<iconify-icon
-		icon="tabler:chevron-left"
-		class="text-xl"
-		[ngClass]="{
-			'transform rotate-180': commonService.isCollapsed,
-			'transform rotate-0': !commonService.isCollapsed
-		}"
-	></iconify-icon>
-</div> -->
-
 <div
 	class="w-64 fixed h-full border-r border-gray-200 dark:border-gray-700 flex flex-col bg-white dark:bg-secondary-dark-bg text-gray-700 dark:text-gray-300 transition-all duration-500"
 >
@@ -278,13 +142,23 @@
 	<!-- Footer -->
 	<div class="border-t border-gray-200 dark:border-gray-700 transition-all duration-500 p-4">
 		<div class="flex items-center space-x-3">
+			<!-- @if (authService.getUserAvatar()) {
+                    <img [src]="authService.getUserAvatar()" class="h-10 w-10 rounded-full bg-gray-200 object-cover" alt="Photo de profil"/>
+                } @else { -->
 			<img
 				src="https://imgs.search.brave.com/6Abd5TBbHIoBHK1py-tGSUv7eRH_hf3KVb5Px1DBNMs/rs:fit:860:0:0/g:ce/aHR0cHM6Ly90NC5m/dGNkbi5uZXQvanBn/LzA4LzIzLzkxLzU1/LzM2MF9GXzgyMzkx/NTUzM19PalFLUGtD/TTNzaGRxRmdwWjVz/d01LV3U1cHhnMzls/VS5qcGc"
 				alt="Photo de profil"
 				class="h-10 w-10 rounded-full bg-gray-200 object-cover"
 			/>
+			<!-- } -->
 			<div class="flex-1 min-w-0">
-				<p class="text-sm font-medium text-gray-700 dark:text-gray-300 transition-all duration-500 truncate">Nom prénom</p>
+				<p class="text-sm font-medium text-gray-700 dark:text-gray-300 transition-all duration-500 truncate">
+					<!-- @if (authService.getUserDisplayName()) {
+					{{ authService.getUserDisplayName() }}
+					} @else {  -->
+					Nom Prénom
+					<!-- } -->
+				</p>
 				<p
 					class="text-sm text-gray-500 dark:text-gray-400 transition-all duration-500 truncate cursor-pointer hover:underline"
 					(click)="commonService.redirectTo('settings')"
