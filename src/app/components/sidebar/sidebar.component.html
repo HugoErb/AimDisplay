@@ -1,4 +1,4 @@
-<div
+<!-- <div
 	[ngStyle]="{ width: commonService.isCollapsed ? '80px' : '255px' }"
 	class="fixed h-full whitespace-nowrap overflow-hidden transition-all duration-500 bg-white dark:bg-secondary-dark-bg shadow-xl"
 >
@@ -53,8 +53,8 @@
 					Affichage
 				</span>
 			</div>
-		</li>
-		<!-- <li class="transition-all text-gray-800 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600 cursor-pointer w-full">
+		</li> -->
+<!-- <li class="transition-all text-gray-800 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600 cursor-pointer w-full">
 			<div (click)="commonService.redirectTo('settings')" class="flex items-center justify-start px-3 py-4 text-gray-800 dark:text-gray-300">
 				<iconify-icon icon="fa6-solid:chart-line" class="text-[1.45rem] ml-4 text-lg transition-all duration-500"></iconify-icon>
 				<span
@@ -68,7 +68,7 @@
 				</span>
 			</div>
 		</li> -->
-		<li class="transition-all text-gray-800 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600 cursor-pointer w-full">
+<!-- <li class="transition-all text-gray-800 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600 cursor-pointer w-full">
 			<div (click)="commonService.redirectTo('settings')" class="flex items-center justify-start px-3 py-4 text-gray-800 dark:text-gray-300">
 				<iconify-icon icon="material-symbols:settings" class="text-[1.45rem] ml-4 text-lg transition-all duration-500"></iconify-icon>
 				<span
@@ -85,13 +85,13 @@
 	</ul>
 	<div class="absolute bottom-0 flex items-center p-4">
 		<div class="dui-avatar">
-			<div class="w-12 rounded-full shadow-lg">
-				<!-- @if (authService.getUserAvatar()) {
+			<div class="w-12 rounded-full shadow-lg"> -->
+<!-- @if (authService.getUserAvatar()) {
                     <img [src]="authService.getUserAvatar()" />
                 } @else {
                     <img src="https://imgs.search.brave.com/6Abd5TBbHIoBHK1py-tGSUv7eRH_hf3KVb5Px1DBNMs/rs:fit:860:0:0/g:ce/aHR0cHM6Ly90NC5m/dGNkbi5uZXQvanBn/LzA4LzIzLzkxLzU1/LzM2MF9GXzgyMzkx/NTUzM19PalFLUGtD/TTNzaGRxRmdwWjVz/d01LV3U1cHhnMzls/VS5qcGc" />
                 } -->
-				<img
+<!-- <img
 					src="https://imgs.search.brave.com/6Abd5TBbHIoBHK1py-tGSUv7eRH_hf3KVb5Px1DBNMs/rs:fit:860:0:0/g:ce/aHR0cHM6Ly90NC5m/dGNkbi5uZXQvanBn/LzA4LzIzLzkxLzU1/LzM2MF9GXzgyMzkx/NTUzM19PalFLUGtD/TTNzaGRxRmdwWjVz/d01LV3U1cHhnMzls/VS5qcGc"
 				/>
 			</div>
@@ -102,13 +102,13 @@
 			}"
 			class="ml-4"
 		>
-			<p class="font-semibold text-gray-800 dark:text-gray-300 transition-all duration-500 m-0 mb-1">
-				<!-- @if (authService.getUserDisplayName()) {
+			<p class="font-semibold text-gray-800 dark:text-gray-300 transition-all duration-500 m-0 mb-1"> -->
+<!-- @if (authService.getUserDisplayName()) {
                     {{ authService.getUserDisplayName() }}
                 } @else {
                     Joueur
                 } -->
-				Joueur
+<!-- Joueur
 			</p>
 			<div
 				(click)="commonService.redirectTo('settings')"
@@ -132,4 +132,166 @@
 			'transform rotate-0': !commonService.isCollapsed
 		}"
 	></iconify-icon>
+</div> -->
+
+<div
+	class="w-64 fixed h-full border-r border-gray-200 dark:border-gray-700 flex flex-col bg-white dark:bg-secondary-dark-bg text-gray-700 dark:text-gray-300 transition-all duration-500"
+>
+	<!-- Header -->
+	<div class="border-b border-gray-200 dark:border-gray-700 p-4 transition-all duration-500">
+		<div class="flex items-center space-x-2">
+			<img src="../../../assets/img/logo.png" alt="Logo" class="h-7 w-7 mr-4" />
+			<div>
+				<h2 class="text-lg font-semibold transition-all duration-500">Aim Display</h2>
+				<p class="text-sm text-gray-500 dark:text-gray-400 transition-all duration-500">Gestion de tir sportif</p>
+			</div>
+		</div>
+	</div>
+
+	<!-- Menu -->
+	<div class="flex-1 overflow-y-auto p-4 space-y-6">
+		<!-- Groupe : Création -->
+		<div>
+			<h3 class="font-medium text-[0.9rem] mb-2">Création</h3>
+			<ul class="space-y-1 cursor-pointer">
+				<li>
+					<div
+						(click)="commonService.redirectTo('creation')"
+						class="flex items-center space-x-3 p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-700 text-[0.9rem]"
+					>
+						<iconify-icon icon="lucide:user-round" class="text-[1rem]"></iconify-icon>
+						<span>Nouveau tireur</span>
+					</div>
+				</li>
+				<li>
+					<div
+						(click)="commonService.redirectTo('creation')"
+						class="flex items-center space-x-3 p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-700 text-[0.9rem]"
+					>
+						<iconify-icon icon="octicon:trophy-24" class="text-[1rem]"></iconify-icon>
+						<span>Nouvelle compétition</span>
+					</div>
+				</li>
+				<li>
+					<div
+						(click)="commonService.redirectTo('creation')"
+						class="flex items-center space-x-3 p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-700 text-[0.9rem]"
+					>
+						<iconify-icon icon="uil:house-user" class="text-[1rem]"></iconify-icon>
+						<span>Nouveau club</span>
+					</div>
+				</li>
+			</ul>
+		</div>
+
+		<!-- Groupe : Modification -->
+		<div>
+			<h3 class="font-medium text-[0.9rem] mb-2">Modification</h3>
+			<ul class="space-y-1 cursor-pointer">
+				<li>
+					<div
+						(click)="commonService.redirectTo('modification')"
+						class="flex items-center space-x-3 p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-700 text-[0.9rem]"
+					>
+						<iconify-icon icon="lucide:user-round" class="text-[1rem]"></iconify-icon>
+						<span>Modifier un tireur</span>
+					</div>
+				</li>
+				<li>
+					<div
+						(click)="commonService.redirectTo('modification')"
+						class="flex items-center space-x-3 p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-700 text-[0.9rem]"
+					>
+						<iconify-icon icon="octicon:trophy-24" class="text-[1rem]"></iconify-icon>
+						<span>Modifier une compétition</span>
+					</div>
+				</li>
+				<li>
+					<div
+						(click)="commonService.redirectTo('modification')"
+						class="flex items-center space-x-3 p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-700 text-[0.9rem]"
+					>
+						<iconify-icon icon="uil:house-user" class="text-[1rem]"></iconify-icon>
+						<span>Modifier un club</span>
+					</div>
+				</li>
+			</ul>
+		</div>
+
+		<!-- Groupe : Gestion -->
+		<div>
+			<h3 class="font-medium text-[0.9rem] mb-2">Gestion</h3>
+			<ul class="space-y-1 cursor-pointer">
+				<li>
+					<div
+						(click)="commonService.redirectTo('display')"
+						class="flex items-center space-x-3 p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-700 text-[0.9rem]"
+					>
+						<iconify-icon icon="streamline:screen-1-remix" class="text-[1rem]"></iconify-icon>
+						<span>Affichage</span>
+					</div>
+				</li>
+				<li>
+					<div
+						(click)="commonService.redirectTo('display')"
+						class="flex items-center space-x-3 p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-700 text-[0.9rem]"
+					>
+						<iconify-icon icon="mdi:paper-outline" class="text-[1rem]"></iconify-icon>
+						<span>Rapport PDF</span>
+					</div>
+				</li>
+				<li>
+					<div
+						(click)="commonService.redirectTo('stats')"
+						class="flex items-center space-x-3 p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-700 text-[0.9rem]"
+					>
+						<iconify-icon icon="uil:chart-line" class="text-[1rem]"></iconify-icon>
+						<span>Statistiques</span>
+					</div>
+				</li>
+				<li>
+					<div href="/classement" class="flex items-center space-x-3 p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-700 text-[0.9rem]">
+						<iconify-icon icon="lucide:user-round" class="text-[1rem]"></iconify-icon>
+						<span>Classement</span>
+					</div>
+				</li>
+			</ul>
+		</div>
+
+		<!-- Groupe : Configuration -->
+		<div>
+			<h3 class="font-medium text-[0.9rem] mb-2">Configuration</h3>
+			<ul class="space-y-1 cursor-pointer">
+				<li>
+					<div
+						(click)="commonService.redirectTo('settings')"
+						class="flex items-center space-x-3 p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-700 text-[0.9rem]"
+					>
+						<iconify-icon icon="majesticons:settings-cog-line" class="text-[1rem]"></iconify-icon>
+						<span>Paramètres</span>
+					</div>
+				</li>
+			</ul>
+		</div>
+	</div>
+
+	<!-- Footer -->
+	<div class="border-t border-gray-200 dark:border-gray-700 transition-all duration-500 p-4">
+		<div class="flex items-center space-x-3">
+			<img
+				src="https://imgs.search.brave.com/6Abd5TBbHIoBHK1py-tGSUv7eRH_hf3KVb5Px1DBNMs/rs:fit:860:0:0/g:ce/aHR0cHM6Ly90NC5m/dGNkbi5uZXQvanBn/LzA4LzIzLzkxLzU1/LzM2MF9GXzgyMzkx/NTUzM19PalFLUGtD/TTNzaGRxRmdwWjVz/d01LV3U1cHhnMzls/VS5qcGc"
+				alt="Photo de profil"
+				class="h-10 w-10 rounded-full bg-gray-200 object-cover"
+			/>
+			<div class="flex-1 min-w-0">
+				<p class="text-sm font-medium text-gray-700 dark:text-gray-300 transition-all duration-500 truncate">Nom prénom</p>
+				<p
+					class="text-sm text-gray-500 dark:text-gray-400 transition-all duration-500 truncate cursor-pointer hover:underline"
+					(click)="commonService.redirectTo('settings')"
+				>
+					Gérer le compte
+				</p>
+			</div>
+		</div>
+	</div>
 </div>
