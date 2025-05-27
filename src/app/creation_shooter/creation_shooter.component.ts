@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import { AutoCompleteModule } from 'primeng/autocomplete';
-import { CascadeSelectModule } from 'primeng/cascadeselect';
 import { FormsModule } from '@angular/forms';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { DatePickerModule } from 'primeng/datepicker';
@@ -11,11 +10,12 @@ import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 @Component({
 	selector: 'app-creation',
 	standalone: true,
-	imports: [AutoCompleteModule, CascadeSelectModule, FormsModule, InputNumberModule, DatePickerModule, CommonModule, InputTextModule],
-	templateUrl: './creation.component.html',
+	imports: [AutoCompleteModule, FormsModule, InputNumberModule, DatePickerModule, CommonModule, InputTextModule],
+	templateUrl: './creation_shooter.component.html',
 	schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
-export class CreationComponent {
+export class CreationShooterComponent {
+    
 	// Variables de création d'un tireur
 	shooterFirstName: string = '';
 	shooterLastName: string = '';
@@ -31,6 +31,7 @@ export class CreationComponent {
 	scoreSerie4: number = 0;
 	scoreSerie5: number = 0;
 	scoreSerie6: number = 0;
+
 	competitions: any[] = [{ name: 'Tournoi de Marennes' }, { name: 'Tournoi de Rochefort' }, { name: 'Tournoi de Pau' }];
 	filteredCompetitions: any[] = [];
 	clubs: any[] = [{ name: 'Club de Marennes' }, { name: 'Club de Rochefort' }, { name: 'Club de Pau' }];
@@ -59,15 +60,6 @@ export class CreationComponent {
 		{ name: 'Sénior 3' },
 	];
 	filteredCategories: any[] = [];
-
-	// Variables de création d'une compétition
-	competitionDate: string = '';
-	competitionName: string = '';
-	prixInscription: number = 0;
-	prixCategSup: number = 0;
-
-	// Variables de création d'un club
-	clubName: string = '';
 
 	/**
 	 * Filtre un tableau d'éléments par leur nom en fonction d'une requête saisie par l'utilisateur.

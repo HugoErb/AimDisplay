@@ -41,7 +41,7 @@ export class CommonService {
 
 	/**
 	 * Affiche une boîte de dialogue SweetAlert2 personnalisée.
-     * 
+	 *
 	 * @param {string} title - Le titre affiché dans la boîte de dialogue.
 	 * @param {string} message - Le message HTML à afficher dans le corps de la boîte.
 	 * @param {'success' | 'error' | 'warning' | 'info' | 'question'} [icon='success'] -
