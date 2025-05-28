@@ -1,72 +1,93 @@
-<h3 class="text-4xl font-bold md:text-5xl text-prime-blue dark:text-gray-300 animate-appear opacity-0 transition-colors duration-500 m-0">
-	Création de données
-</h3>
-<p class="text-gray-500 dark:text-gray-400 text-xl mt-2 mb-0 text-left animate-appear opacity-0 transition-colors duration-500">
-	Créez ici vos compétitions, les tireurs ainsi que leur club de tir sportif.
-</p>
-
-<!-- Formulaire de la compétition -->
-<div class="flex items-center mt-[60px] text-prime-blue dark:text-gray-300 opacity-0 animate-appear animation-delay-200 duration-500">
-	<iconify-icon icon="fa6-solid:ranking-star" class="text-[1.5rem]"></iconify-icon>
-	<h3 class="font-bold text-[2rem] ml-4">Création d'une nouvelle compétition</h3>
-</div>
-
-<div class="mx-auto mt-[30px] w-1/2 min-w-[750px] bg-white dark:bg-secondary-dark-bg p-[30px] shadow-lg rounded-[20px] opacity-0 animate-appear animation-delay-200 duration-500">
-	<div class="flex flex-wrap mb-[15px]">
-		<div class="w-1/2 px-[15px] mb-[15px]">
-			<label class="block uppercase text-xs font-bold mb-[5px] text-gray-800 dark:text-gray-300">Nom de la compétition</label>
-			<input type="text" pInputText [(ngModel)]="competitionName" placeholder="Nom de la compétition" />
+<div>
+	<div class="bg-white shadow-lg rounded-lg m-6">
+		<div class="bg-gradient-to-r from-prime-blue to-hover-prime-blue text-white px-8 py-6 rounded-t-lg">
+			<div class="flex items-center space-x-3">
+				<iconify-icon icon="octicon:trophy-24" class="text-[2rem] mr-5"></iconify-icon>
+				<div>
+					<h1 class="text-2xl font-bold">Création d'une nouvelle compétition</h1>
+					<p class="text-blue-100 mt-1">Configurez les détails de la nouvelle compétition</p>
+				</div>
+			</div>
 		</div>
-		<div class="w-1/2 px-[15px] mb-[15px]">
-			<label class="block uppercase text-xs font-bold mb-[5px] text-gray-800 dark:text-gray-300">Dates de la compétition</label>
-			<p-datepicker
-				[firstDayOfWeek]="1"
-				[(ngModel)]="competitionDate"
-				[showIcon]="true"
-				placeholder="Dates de la compétition"
-				dateFormat="dd/mm/yy"
-				selectionMode="range"
-			></p-datepicker>
-		</div>
-	</div>
 
-	<div class="flex flex-wrap mb-[15px]">
-		<div class="w-1/2 px-[15px] mb-[15px]">
-			<label class="block uppercase text-xs font-bold mb-[5px] text-gray-800 dark:text-gray-300">Prix d'inscription</label>
-			<p-inputNumber
-				[(ngModel)]="prixInscription"
-				mode="decimal"
-				[minFractionDigits]="2"
-				[min]="0"
-				[showButtons]="true"
-				[maxFractionDigits]="2"
-				placeholder="Prix d'inscription"
-                mode="currency"
-                currency="EUR"
-			></p-inputNumber>
-		</div>
-		<div class="w-1/2 px-[15px] mb-[15px]">
-			<label class="block uppercase text-xs font-bold mb-[5px] text-gray-800 dark:text-gray-300">Prix de catégorie supplémentaire</label>
-			<p-inputNumber
-				[(ngModel)]="prixCategSup"
-				mode="decimal"
-				[minFractionDigits]="2"
-				[min]="0"
-				[showButtons]="true"
-				[maxFractionDigits]="2"
-				placeholder="Prix de catégorie supplémentaire"
-                mode="currency"
-                currency="EUR"
-			></p-inputNumber>
-		</div>
-	</div>
+		<div class="p-8 space-y-8">
+			<div class="space-y-4">
+				<h2 class="text-lg font-semibold text-gray-900 pb-2 border-b border-gray-200">Informations de la compétition</h2>
+				<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+					<div class="space-y-2">
+						<Label htmlFor="competition-name" class="text-sm font-medium text-gray-700">Nom de la compétition *</Label>
+						<input type="text" pInputText [(ngModel)]="competitionName" placeholder="Nom de la compétition" />
+					</div>
 
-	<div class="flex justify-center items-center">
-		<div
-			class="inline-flex h-12 items-center justify-center rounded-md bg-prime-blue text-white dark:text-gray-300 hover:bg-hover-prime-blue dark:bg-gray-700 dark:hover:bg-gray-600 px-5 text-base font-medium shadow transition-colors duration-250 cursor-pointer"
-		>
-			<iconify-icon icon="material-symbols-light:save-rounded" class="text-[1.5rem] mr-4"></iconify-icon>
-			Enregistrer
+					<div class="space-y-2">
+						<Label htmlFor="competition-dates" class="text-sm font-medium text-gray-700">Dates de la compétition *</Label>
+						<div class="relative">
+							<p-datepicker
+								[firstDayOfWeek]="1"
+								[(ngModel)]="competitionDate"
+								[showIcon]="true"
+								placeholder="Dates de la compétition"
+								dateFormat="dd/mm/yy"
+								selectionMode="range"
+							></p-datepicker>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="space-y-4">
+				<h2 class="text-lg font-semibold text-gray-900 pb-2 border-b border-gray-200">Configuration des prix</h2>
+				<div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+					<div class="space-y-2">
+						<Label class="text-sm font-medium text-gray-700">Prix d'inscription</Label>
+						<div class="flex items-center space-x-2">
+							<p-inputNumber
+								[(ngModel)]="prixCategSup"
+								mode="decimal"
+								[minFractionDigits]="2"
+								[min]="0"
+								[showButtons]="true"
+								[maxFractionDigits]="2"
+								placeholder="Prix d'inscription"
+								mode="currency"
+								currency="EUR"
+							></p-inputNumber>
+						</div>
+					</div>
+
+					<div class="space-y-2">
+						<Label class="text-sm font-medium text-gray-700">Prix de catégorie supplémentaire</Label>
+						<div class="flex items-center space-x-2">
+							<p-inputNumber
+								[(ngModel)]="prixCategSup"
+								mode="decimal"
+								[minFractionDigits]="2"
+								[min]="0"
+								[showButtons]="true"
+								[maxFractionDigits]="2"
+								placeholder="Prix de catégorie supplémentaire"
+								mode="currency"
+								currency="EUR"
+							></p-inputNumber>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="pt-6 border-t border-gray-200">
+				<div class="flex items-center text-sm text-gray-600">
+					<iconify-icon icon="lucide:info" class="text-[1rem] mr-3"></iconify-icon>
+					<p>Les champs marqués d'un astérisque (*) sont obligatoires.</p>
+				</div>
+				<div class="flex justify-end">
+					<div
+						class="inline-flex h-12 items-center justify-center rounded-md bg-prime-blue text-white dark:text-gray-300 hover:bg-hover-prime-blue dark:bg-gray-700 dark:hover:bg-gray-600 px-5 text-base font-medium shadow transition-colors duration-250 cursor-pointer"
+					>
+						<iconify-icon icon="material-symbols-light:save-rounded" class="text-[1.5rem] mr-4"></iconify-icon>
+						Enregistrer la compétition
+					</div>
+				</div>
+			</div>
 		</div>
 	</div>
 </div>
