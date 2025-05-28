@@ -1,12 +1,12 @@
 @import "tailwindcss";
 @plugin "daisyui" {
-    themes: light --default, dark --prefersdark;
-    root: ":root";
-    include: ;
-    exclude: ;
-    prefix: "dui-";
-    logs: true;
-  };
+	themes: light --default, dark --prefersdark;
+	root: ":root";
+	include: ;
+	exclude: ;
+	prefix: "dui-";
+	logs: true;
+}
 
 @custom-variant dark (&:where(.dark, .dark *));
 
@@ -127,72 +127,64 @@
 	}
 
 	/* Harmonisation des styles des inputs PrimeNG */
-	p-inputnumber,
-	:where(.p-inputtext, .p-autocomplete, .p-cascadeselect, .p-inputnumber, .p-datepicker) {
+	.p-inputtext,
+	.p-autocomplete,
+	.p-inputnumber,
+	.p-datepicker {
 		width: 100% !important;
 	}
 
-	/* Réduction de la taille des dropdown cascadeSelect */
-	:where(.p-overlay) {
-		min-width: unset !important;
+	/* Dark mode des inputs PrimeNG */
+	:where(.dark) .p-inputtext,
+	:where(.dark) .p-autocomplete-input,
+	:where(.dark) .p-inputnumber-input,
+	:where(.dark) .p-datepicker-input {
+		background-color: var(--color-main-dark-bg) !important;
+		border: 1px #374151 solid !important; /* gray-700 */
+		color: #d1d5db !important;
+	}
+
+	:where(.dark) .p-autocomplete-dropdown,
+	:where(.dark) .p-datepicker-dropdown,
+	:where(.dark) .p-dropdown-trigger {
+		border: 1px #374151 solid !important; /* gray-700 */
+		border-left: none !important;
+	}
+
+	/* Dark mode des placeholders des inputs PrimeNG */
+	:where(.dark) .p-inputtext::placeholder,
+	:where(.dark) .p-autocomplete::placeholder,
+	:where(.dark) .p-datepicker::placeholder {
+		color: #6b7280 !important;
+	}
+
+	/* Réduction de la taille des dropdown des listes déroulantes */
+	.p-overlay {
+		min-width: 30% !important;
 	}
 
 	/* Harmonisation des styles des boutons des inputs PrimeNG */
-	:where(
-			.p-autocomplete-dropdown,
-			.p-datepicker-dropdown,
-			.p-cascadeselect-trigger,
-			.p-cascadeselect-dropdown,
-			.p-dropdown-trigger,
-			.p-inputnumber-button
-		) {
+	.p-autocomplete-dropdown,
+	.p-datepicker-dropdown,
+	.p-dropdown-trigger,
+	.p-inputnumber-button {
 		background-color: var(--color-prime-blue) !important;
 		color: white !important;
 		width: 45px !important;
 		transition: background-color 0.2s ease;
 	}
 
-	/* Delete bordures boutons primeNG */
-	/* .p-inputnumber-button,
-	.p-autocomplete-dropdown,
-	.p-datepicker-dropdown {
-		border-left: none !important;
-		border-top: 1px solid var(--color-prime-blue) !important;
-		border-bottom: 1px solid var(--color-prime-blue) !important;
-		border-right: 1px solid var(--color-prime-blue) !important;
-	} */
-
-	/* Delete bordures boutons cascadeSelect primeNG */
-	/* .p-cascadeselect{
-        border-top: 1px solid var(--color-prime-blue) !important;
-		border-bottom: 1px solid var(--color-prime-blue) !important;
-		border-right: 1px solid var(--color-prime-blue) !important;
-        background-color: var(--color-prime-blue) !important;
-    } */
-
-	/* Delete bordures boutons cascadeSelect primeNG */
-	/* .p-cascadeselect-label{
-        background-color: white !important;
-        border-top-left-radius: 5px;
-        border-bottom-left-radius: 5px;
-        border-top: 1px solid white !important;
-		border-bottom: 1px solid white !important;
-    } */
-
-	:where(
-			.p-autocomplete-dropdown:hover,
-			.p-datepicker-dropdown:hover,
-			.p-cascadeselect-trigger:hover,
-			.p-cascadeselect-dropdown:hover,
-			.p-dropdown-trigger:hover,
-			.p-inputnumber-button:hover
-		) {
+	.p-autocomplete-dropdown:hover,
+	.p-datepicker-dropdown:hover,
+	.p-dropdown-trigger:hover,
+	.p-inputnumber-button:hover {
 		background-color: var(--color-hover-prime-blue) !important;
 		color: white !important;
 	}
 
 	/* Augmentation de la taille des boutons des dropdown et datepicker car plus petit de base */
-	:where(.p-autocomplete-dropdown, .p-datepicker-dropdown) {
+	.p-autocomplete-dropdown,
+	.p-datepicker-dropdown {
 		width: 53px !important;
 	}
 
@@ -217,7 +209,7 @@
 		background-color: var(--color-secondary-dark-bg) !important;
 	}
 
-	/* Fond du paginator */
+	/* Fond du paginator en dark mode */
 	.dark .p-paginator {
 		border: none;
 		border-top-left-radius: 0;
@@ -228,7 +220,7 @@
 		color: #d1d5db !important;
 	}
 
-	/* Applique le style aux boutons du paginator */
+	/* Style des boutons du paginator en dark mode*/
 	.dark .p-paginator .p-ripple {
 		color: #d1d5db !important;
 		min-width: 2.5rem;
@@ -236,13 +228,14 @@
 		background-color: transparent !important;
 	}
 
-	/* Hover sur n'importe quel bouton du paginator */
+	/* Hover des boutons du paginator en dark mode*/
 	.dark .p-paginator .p-ripple:hover {
 		color: #1f2937 !important;
 		background-color: var(--color-light-gray) !important;
 		transition: background-color 0.3s ease, color 0.3s ease;
 	}
 
+	/* Style de la page sélectionnée du paginator en dark mode */
 	.dark .p-paginator .p-paginator-page-selected,
 	.p-paginator .p-paginator-page-selected {
 		background-color: var(--color-prime-blue) !important;
@@ -251,7 +244,7 @@
 	}
 }
 
-/* Couleur du bouton de confiramtion des sweet alert */
+/* Couleur du bouton de confirmation des sweet alert */
 .custom-prime-button {
 	background-color: var(--color-prime-blue) !important;
 	color: white !important;

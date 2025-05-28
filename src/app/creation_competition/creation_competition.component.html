@@ -1,5 +1,5 @@
 <div class="opacity-0 animate-appear duration-500">
-	<div class="bg-white shadow-lg rounded-lg m-6">
+	<div class="bg-white dark:bg-secondary-dark-bg shadow-lg rounded-lg m-6">
 		<div class="bg-gradient-to-r from-prime-blue to-hover-prime-blue text-white px-8 py-6 rounded-t-lg">
 			<div class="flex items-center space-x-3">
 				<iconify-icon icon="octicon:trophy-24" class="text-[2rem] mr-5"></iconify-icon>
@@ -10,17 +10,19 @@
 			</div>
 		</div>
 
-		<div class="p-8 space-y-8">
+		<div class="p-8 space-y-10">
 			<div class="space-y-4">
-				<h2 class="text-lg font-semibold text-gray-900 pb-2 border-b border-gray-200">Informations de la compétition</h2>
+				<h2 class="text-lg font-semibold text-gray-900 pb-2 border-b border-gray-200 dark:border-gray-700 dark:text-gray-300">
+					Informations de la compétition
+				</h2>
 				<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-					<div class="space-y-2">
-						<Label htmlFor="competition-name" class="text-sm font-medium text-gray-700">Nom de la compétition *</Label>
+					<div class="flex flex-col space-y-1">
+						<Label class="text-sm font-medium text-gray-700 dark:text-gray-300">Nom de la compétition *</Label>
 						<input type="text" pInputText [(ngModel)]="competitionName" placeholder="Nom de la compétition" />
 					</div>
 
-					<div class="space-y-2">
-						<Label htmlFor="competition-dates" class="text-sm font-medium text-gray-700">Dates de la compétition *</Label>
+					<div class="flex flex-col space-y-1">
+						<Label class="text-sm font-medium text-gray-700 dark:text-gray-300">Dates de la compétition *</Label>
 						<div class="relative">
 							<p-datepicker
 								[firstDayOfWeek]="1"
@@ -36,10 +38,12 @@
 			</div>
 
 			<div class="space-y-4">
-				<h2 class="text-lg font-semibold text-gray-900 pb-2 border-b border-gray-200">Configuration des prix</h2>
+				<h2 class="text-lg font-semibold text-gray-900 pb-2 border-b border-gray-200 dark:border-gray-700 dark:text-gray-300">
+					Configuration des prix
+				</h2>
 				<div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-					<div class="space-y-2">
-						<Label class="text-sm font-medium text-gray-700">Prix d'inscription</Label>
+					<div class="flex flex-col space-y-1">
+						<Label class="text-sm font-medium text-gray-700 dark:text-gray-300">Prix d'inscription *</Label>
 						<div class="flex items-center space-x-2">
 							<p-inputNumber
 								[(ngModel)]="prixCategSup"
@@ -55,8 +59,8 @@
 						</div>
 					</div>
 
-					<div class="space-y-2">
-						<Label class="text-sm font-medium text-gray-700">Prix de catégorie supplémentaire</Label>
+					<div class="flex flex-col space-y-1">
+						<Label class="text-sm font-medium text-gray-700 dark:text-gray-300">Prix de catégorie supplémentaire *</Label>
 						<div class="flex items-center space-x-2">
 							<p-inputNumber
 								[(ngModel)]="prixCategSup"
@@ -74,8 +78,9 @@
 				</div>
 			</div>
 
-			<div class="pt-6 border-t border-gray-200">
-				<div class="flex items-center text-sm text-gray-600">
+			<!-- Information Notes -->
+			<div class="pt-6 border-t border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-400">
+				<div class="flex items-center text-sm">
 					<iconify-icon icon="lucide:info" class="text-[1rem] mr-2"></iconify-icon>
 					<p>Les champs marqués d'un astérisque (*) sont obligatoires.</p>
 				</div>
