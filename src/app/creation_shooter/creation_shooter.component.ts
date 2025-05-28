@@ -6,6 +6,7 @@ import { DatePickerModule } from 'primeng/datepicker';
 import { CommonModule } from '@angular/common';
 import { InputTextModule } from 'primeng/inputtext';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { CommonService } from '../services/common.service';
 
 @Component({
 	selector: 'app-creation',
@@ -15,10 +16,12 @@ import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 	schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class CreationShooterComponent {
-    
+	constructor(protected commonService: CommonService) {}
+
 	// Variables de création d'un tireur
 	shooterFirstName: string = '';
 	shooterLastName: string = '';
+	shooterEmail: string = '';
 	shooterCompetitionName: string = '';
 	shooterDistance: string = '';
 	shooterWeapon: string = '';
@@ -76,4 +79,18 @@ export class CreationShooterComponent {
 	filterDistance = (e: any) => this.filter(e, this.distances, 'filteredDistances');
 	filterWeapon = (e: any) => this.filter(e, this.weapons, 'filteredWeapons');
 	filterCategory = (e: any) => this.filter(e, this.categories, 'filteredCategories');
+
+	/**
+	 * Vérifie si une catégorie de tireur correspond à "Dame" ou "Sénior".
+	 * Si c'est le cas, on passe le booléen isSeniorOrDameCategory à true.
+	 *
+	 * @param shooterCategory - La catégorie du tireur (ex: "Sénior 1", "Cadet Dame").
+	 * @returns `true` si la catégorie contient "Dame" ou "Sénior", sinon `false`.
+	 */
+	checkIfSeniorOrDame(shooterCategory: any): void {
+		console.log(shooterCategory.name);
+		const pattern = /\b(Dame|Sénior)\b/i;
+		this.isSeniorOrDameCategory = pattern.test(shooterCategory.name || '');
+		console.log('isSeniorOrDameCategory:', this.isSeniorOrDameCategory);
+	}
 }
