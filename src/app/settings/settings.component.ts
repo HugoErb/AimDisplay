@@ -9,11 +9,12 @@ import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { ThemeService } from '../services/theme.service';
 import { TextareaModule } from 'primeng/textarea';
 import { TableModule } from 'primeng/table';
+import { CommonModule } from '@angular/common';
 
 @Component({
 	selector: 'app-settings',
 	standalone: true,
-	imports: [DropdownModule, InputSwitchModule, FormsModule, InputTextModule, TextareaModule, TableModule],
+	imports: [DropdownModule, InputSwitchModule, FormsModule, InputTextModule, TextareaModule, TableModule, CommonModule],
 	templateUrl: './settings.component.html',
 	styleUrls: ['./settings.component.scss'],
 	schemas: [CUSTOM_ELEMENTS_SCHEMA],
@@ -25,6 +26,49 @@ export class SettingsComponent {
 	email: string = '';
 	darkMode: boolean = false;
 	newUserName: string = '';
+
+	subscriptionPlans = [
+		{
+			name: 'Basique',
+			price: '7',
+			period: '/mois',
+			popular: false,
+			features: ['Gestion de 2 compétitions par mois', 'Génération de rapport de compétition', 'Dashboard des données', 'Support par email'],
+		},
+		{
+			name: 'Pro',
+			price: '14',
+			period: '/mois',
+			popular: true,
+			features: [
+				"Fonctionnalités de l'abonnement Basique",
+				'Gestion de 4 compétitions par mois',
+				'Génération de rapport personnalisé par tireur',
+				'Conseils personnalisés pour les tireurs',
+				'Support prioritaire',
+			],
+		},
+		{
+			name: 'VIP',
+			price: '19',
+			period: '/mois',
+			popular: false,
+			features: [
+				"Fonctionnalités de l'abonnement Pro",
+				'Gestion de compétitions illimitée',
+				'Génération de QR Code de consultation du classement',
+				'Support dédié',
+				'Accès aux fonctionnalités bêta',
+			],
+		},
+	];
+    
+	contactForm = {
+		name: '',
+		email: '',
+		subject: '',
+		message: '',
+	};
 
 	transactions: Transaction[] = [
 		{
@@ -77,6 +121,19 @@ export class SettingsComponent {
 	toggleDarkMode(): void {
 		const theme = this.darkMode ? 'dark' : 'light';
 		this.themeService.setTheme(theme);
+	}
+
+	getBadgeClass(status: string): string {
+		switch (status) {
+			case 'Payé':
+				return 'badge-success';
+			case 'En attente':
+				return 'badge-warning';
+			case 'Annulé':
+				return 'badge-danger';
+			default:
+				return 'badge-default';
+		}
 	}
 }
 
