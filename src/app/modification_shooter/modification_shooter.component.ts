@@ -1,16 +1,16 @@
 import { Component, HostListener } from '@angular/core';
 import { TableModule } from 'primeng/table';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
-import { CommonService } from './../services/common.service';
+import { CommonService } from '../services/common.service';
 
 @Component({
 	selector: 'modification',
 	standalone: true,
 	imports: [TableModule],
-	templateUrl: './modification.component.html',
+	templateUrl: './modification_shooter.component.html',
 	schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
-export class ModificationComponent {
+export class ModificationShooterComponent {
 	constructor(protected commonService: CommonService) {}
 
 	shooters: Shooter[] = [
@@ -23,6 +23,7 @@ export class ModificationComponent {
 			distance: '10 Mètres',
 			weapon: 'Pistolet Vitesse',
 			categoryName: 'Senior',
+			totalScore: '100',
 		},
 		{
 			id: 2,
@@ -33,6 +34,7 @@ export class ModificationComponent {
 			distance: '10 Mètres',
 			weapon: 'Pistolet Vitesse',
 			categoryName: 'Junior',
+			totalScore: '100',
 		},
 		{
 			id: 3,
@@ -43,6 +45,7 @@ export class ModificationComponent {
 			distance: '10 Mètres',
 			weapon: 'Pistolet Vitesse',
 			categoryName: 'Senior',
+			totalScore: '100',
 		},
 		{
 			id: 4,
@@ -53,6 +56,7 @@ export class ModificationComponent {
 			distance: '10 Mètres',
 			weapon: 'Pistolet Vitesse',
 			categoryName: 'Cadet',
+			totalScore: '100',
 		},
 		{
 			id: 5,
@@ -63,6 +67,7 @@ export class ModificationComponent {
 			distance: '10 Mètres',
 			weapon: 'Pistolet Vitesse',
 			categoryName: 'Junior',
+			totalScore: '100',
 		},
 		{
 			id: 6,
@@ -73,6 +78,7 @@ export class ModificationComponent {
 			distance: '10 Mètres',
 			weapon: 'Pistolet Vitesse',
 			categoryName: 'Senior',
+			totalScore: '100',
 		},
 		{
 			id: 7,
@@ -83,6 +89,7 @@ export class ModificationComponent {
 			distance: '10 Mètres',
 			weapon: 'Pistolet Vitesse',
 			categoryName: 'Senior',
+			totalScore: '100',
 		},
 		{
 			id: 8,
@@ -93,6 +100,7 @@ export class ModificationComponent {
 			distance: '10 Mètres',
 			weapon: 'Pistolet Vitesse',
 			categoryName: 'Cadet',
+			totalScore: '100',
 		},
 		{
 			id: 9,
@@ -103,6 +111,7 @@ export class ModificationComponent {
 			distance: '10 Mètres',
 			weapon: 'Pistolet Vitesse',
 			categoryName: 'Junior',
+			totalScore: '100',
 		},
 		{
 			id: 10,
@@ -113,6 +122,7 @@ export class ModificationComponent {
 			distance: '10 Mètres',
 			weapon: 'Pistolet Vitesse',
 			categoryName: 'Senior',
+			totalScore: '100',
 		},
 		{
 			id: 11,
@@ -123,6 +133,7 @@ export class ModificationComponent {
 			distance: '10 Mètres',
 			weapon: 'Pistolet Vitesse',
 			categoryName: 'Junior',
+			totalScore: '100',
 		},
 		{
 			id: 12,
@@ -133,6 +144,7 @@ export class ModificationComponent {
 			distance: '10 Mètres',
 			weapon: 'Pistolet Vitesse',
 			categoryName: 'Senior',
+			totalScore: '100',
 		},
 		{
 			id: 13,
@@ -143,6 +155,7 @@ export class ModificationComponent {
 			distance: '10 Mètres',
 			weapon: 'Pistolet Vitesse',
 			categoryName: 'Cadet',
+			totalScore: '100',
 		},
 		{
 			id: 14,
@@ -153,6 +166,7 @@ export class ModificationComponent {
 			distance: '10 Mètres',
 			weapon: 'Pistolet Vitesse',
 			categoryName: 'Senior',
+			totalScore: '100',
 		},
 		{
 			id: 15,
@@ -163,6 +177,7 @@ export class ModificationComponent {
 			distance: '10 Mètres',
 			weapon: 'Pistolet Vitesse',
 			categoryName: 'Junior',
+			totalScore: '100',
 		},
 		{
 			id: 16,
@@ -173,6 +188,7 @@ export class ModificationComponent {
 			distance: '10 Mètres',
 			weapon: 'Pistolet Vitesse',
 			categoryName: 'Senior',
+			totalScore: '100',
 		},
 		{
 			id: 17,
@@ -183,6 +199,7 @@ export class ModificationComponent {
 			distance: '10 Mètres',
 			weapon: 'Pistolet Vitesse',
 			categoryName: 'Cadet',
+			totalScore: '100',
 		},
 		{
 			id: 18,
@@ -193,6 +210,7 @@ export class ModificationComponent {
 			distance: '10 Mètres',
 			weapon: 'Pistolet Vitesse',
 			categoryName: 'Junior',
+			totalScore: '100',
 		},
 		{
 			id: 19,
@@ -203,6 +221,7 @@ export class ModificationComponent {
 			distance: '10 Mètres',
 			weapon: 'Pistolet Vitesse',
 			categoryName: 'Dame 1',
+			totalScore: '100',
 		},
 		{
 			id: 20,
@@ -213,6 +232,7 @@ export class ModificationComponent {
 			distance: '10 Mètres',
 			weapon: 'Pistolet Vitesse',
 			categoryName: 'Cadet',
+			totalScore: '100',
 		},
 	];
 	nbRowsPerPage = 10;
@@ -256,4 +276,5 @@ export interface Shooter {
 	distance: string;
 	weapon: string;
 	categoryName: string;
+    totalScore: string;
 }
