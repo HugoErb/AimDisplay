@@ -4,6 +4,8 @@ import { CreationShooterComponent } from './creation_shooter/creation_shooter.co
 import { CreationCompetitionComponent } from './creation_competition/creation_competition.component';
 import { CreationClubComponent } from './creation_club/creation_club.component';
 import { ModificationShooterComponent } from './modification_shooter/modification_shooter.component';
+import { ModificationCompetitionComponent } from './modification_competition/modification_competition.component';
+import { ModificationClubComponent } from './modification_club/modification_club.component';
 import { ConsultationComponent } from './consultation/consultation.component';
 import { DisplayComponent } from './display/display.component';
 import { SettingsComponent } from './settings/settings.component';
@@ -38,6 +40,14 @@ export const routes: Routes = [
 			{
 				path: 'modification_shooter',
 				component: ModificationShooterComponent,
+			},
+			{
+				path: 'modification_competition',
+				component: ModificationCompetitionComponent,
+			},
+			{
+				path: 'modification_club',
+				component: ModificationClubComponent,
 			},
 			{
 				path: 'consultation',

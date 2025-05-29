@@ -2,15 +2,15 @@
 	<div class="bg-white dark:bg-secondary-dark-bg shadow-lg rounded-lg m-6">
 		<div class="bg-gradient-to-r from-prime-blue to-hover-prime-blue text-white px-8 py-6 rounded-t-lg">
 			<div class="flex items-center space-x-3">
-				<iconify-icon icon="lucide:user-round" class="text-[2rem] mr-5"></iconify-icon>
+				<iconify-icon icon="octicon:trophy-24" class="text-[2rem] mr-5"></iconify-icon>
 				<div>
-					<h1 class="text-2xl font-bold">Modification d'un tireur</h1>
-					<p class="text-blue-100 mt-1">Modifiez les données des tireurs créés précédemment</p>
+					<h1 class="text-2xl font-bold">Modification d'une compétition</h1>
+					<p class="text-blue-100 mt-1">Modifiez les données des compétitions créées précédemment</p>
 				</div>
 			</div>
 		</div>
 		<div class="min-w-[525px] mx-auto shadow-lg">
-			<p-table [value]="shooters" dataKey="id" [paginator]="true" [rows]="nbRowsPerPage">
+			<p-table [value]="competitions" dataKey="id" [paginator]="true" [rows]="nbRowsPerPage">
 				<ng-template pTemplate="header">
 					<tr>
 						<th class="!bg-gray-100">
@@ -21,61 +21,33 @@
 						</th>
 						<th class="!bg-gray-100">
 							<div class="flex items-center">
-								<span class="text-prime-blue dark:text-gray-300 mr-2">Prénom</span>
+								<span class="text-prime-blue dark:text-gray-300 mr-2">Date(s)</span>
 								<p-columnFilter type="text" field="firstName" display="menu"></p-columnFilter>
 							</div>
 						</th>
 						<th class="!bg-gray-100">
 							<div class="flex items-center">
-								<span class="text-prime-blue dark:text-gray-300 mr-2">Club</span>
+								<span class="text-prime-blue dark:text-gray-300 mr-2">Prix</span>
 								<p-columnFilter type="text" field="clubName" display="menu"></p-columnFilter>
 							</div>
 						</th>
 						<th class="!bg-gray-100">
 							<div class="flex items-center">
-								<span class="text-prime-blue dark:text-gray-300 mr-2">Compétition</span>
+								<span class="text-prime-blue dark:text-gray-300 mr-2">Prix catégorie sup.</span>
 								<p-columnFilter type="text" field="competitionName" display="menu"></p-columnFilter>
 							</div>
 						</th>
-						<th class="!bg-gray-100">
-							<div class="flex items-center">
-								<span class="text-prime-blue dark:text-gray-300 mr-2">Distance</span>
-								<p-columnFilter type="text" field="distance" display="menu"></p-columnFilter>
-							</div>
-						</th>
-						<th class="!bg-gray-100">
-							<div class="flex items-center">
-								<span class="text-prime-blue dark:text-gray-300 mr-2">Arme</span>
-								<p-columnFilter type="text" field="arme" display="menu"></p-columnFilter>
-							</div>
-						</th>
-						<th class="!bg-gray-100">
-							<div class="flex items-center">
-								<span class="text-prime-blue dark:text-gray-300 mr-2">Catégorie</span>
-								<p-columnFilter type="text" field="categoryName" display="menu"></p-columnFilter>
-							</div>
-						</th>
-						<th class="!bg-gray-100">
-							<div class="flex items-center">
-								<span class="text-prime-blue dark:text-gray-300 mr-2">Score total</span>
-								<p-columnFilter type="text" field="categoryName" display="menu"></p-columnFilter>
-							</div>
-						</th>
 						<th class="!bg-gray-100"></th>
-						<th class="!bg-gray-100 min-w-[100px]"></th>
+						<th class="!bg-gray-100 min-w-[55px]"></th>
 					</tr>
 				</ng-template>
 
-				<ng-template pTemplate="body" let-shooter>
+				<ng-template pTemplate="body" let-competition>
 					<tr>
-						<td class="!py-4">{{ shooter.lastName }}</td>
-						<td class="!py-4">{{ shooter.firstName }}</td>
-						<td class="!py-4">{{ shooter.clubName }}</td>
-						<td class="!py-4">{{ shooter.competitionName }}</td>
-						<td class="!py-4">{{ shooter.distance }}</td>
-						<td class="!py-4">{{ shooter.weapon }}</td>
-						<td class="!py-4">{{ shooter.categoryName }}</td>
-						<td class="!py-4">{{ shooter.totalScore }}</td>
+						<td class="!py-4">{{ competition.competitionName }}</td>
+						<td class="!py-4">{{ competition.competitionDate }}</td>
+						<td class="!py-4">{{ competition.competitionPrice }}</td>
+						<td class="!py-4">{{ competition.competitionSupCategoryPrice }}</td>
 						<td class="relative !py-4">
 							<div
 								class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 p-1.5 pb-0 rounded-md hover:bg-gray-200 dark:hover:bg-gray-600 cursor-pointer"

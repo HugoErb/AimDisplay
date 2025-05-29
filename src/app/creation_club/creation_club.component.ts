@@ -15,4 +15,5 @@ export class CreationClubComponent {
 
 	// Variables de création d'un club
 	clubName: string = '';
+	clubCity: string = '';
 }
