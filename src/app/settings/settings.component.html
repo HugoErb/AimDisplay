@@ -1,10 +1,4 @@
-<h3 class="text-4xl font-bold md:text-5xl text-prime-blue dark:text-gray-300 animate-appear opacity-0 transition-colors duration-500 m-0">
-	Paramètres
-</h3>
-<p class="text-gray-500 dark:text-gray-400 text-xl mt-2 mb-0 text-left animate-appear opacity-0 transition-colors duration-500">
-	Ajustez les paramètres selon vos préférences.
-</p>
-<div class="flex">
+<!-- <div class="flex">
 	<div class="w-1/2 min-w-[400px] mr-6">
 		<div
 			class="mx-auto mt-10 p-5 rounded-lg shadow-lg bg-white dark:bg-secondary-dark-bg animate-appear opacity-0 animation-delay-50 transition-colors duration-500"
@@ -41,36 +35,36 @@
 				<div class="flex items-center w-full my-1.5">
 					<div
 						class="relative w-24 h-24 rounded-full hover:cursor-pointer overflow-hidden group transition-all duration-300"
-						(click)="avatarInput.click()"
-					>
-						<!-- @if (authService.getUserAvatar()) {
-						<img [src]="authService.getUserAvatar()" class="w-full h-full object-cover transition-all duration-300" />
+						(click)="divInput.click()"
+					> -->
+<!-- @if (authService.getdivdiv()) {
+						<img [src]="authService.getdivdiv()" class="w-full h-full object-cover transition-all duration-300" />
 						} @else { -->
-						<img
+<!-- <img
 							src="../../assets/img/logo.png"
 							class="w-full h-full object-cover transition-all duration-300"
-						/>
-						<!-- } -->
-						<input type="file" #avatarInput class="hidden" />
-						<!-- <input type="file" #avatarInput (change)="onChangeAvatar($event)" class="hidden" /> -->
-						<div
+						/> -->
+<!-- } -->
+<!-- <input type="file" #divInput class="hidden" /> -->
+<!-- <input type="file" #divInput (change)="onChangediv($event)" class="hidden" /> -->
+<!-- <div
 							class="absolute inset-0 flex items-center justify-center bg-black bg-opacity-0 group-hover:bg-opacity-50 transition-all duration-300"
 						>
                             <iconify-icon icon="mdi:pencil" class="text-white text-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></iconify-icon>
 						</div>
-					</div>
-					<div class="ml-4">
-						<p class="text-lg font-semibold text-gray-800 dark:text-gray-300 transition-colors duration-500">
-							<!-- @if (authService.getUserDisplayName()) {
-							{{ authService.getUserDisplayName() }}
+					</div> -->
+<!-- <div class="ml-4">
+						<p class="text-lg font-semibold text-gray-800 dark:text-gray-300 transition-colors duration-500"> -->
+<!-- @if (authService.getdivDisplayName()) {
+							{{ authService.getdivDisplayName() }}
 							} @else {  -->
-							Nom d'utilisateur
-							<!-- } -->
-						</p>
+<!-- Nom d'utilisateur -->
+<!-- } -->
+<!-- </p>
 					</div>
 				</div>
 				<div
-					(click)="this.commonService.showModal('change-user-name')"
+					(click)="this.commonService.showModal('change-div-name')"
 					class="inline-flex h-12 items-center justify-center rounded-md bg-prime-blue text-white dark:text-gray-300 hover:bg-gray-700 dark:bg-gray-700 dark:hover:bg-gray-600 px-5 text-base font-medium shadow transition-colors duration-500 cursor-pointer"
 				>
 					<iconify-icon icon="mdi:pencil" class="text-[1.5rem] mr-4"></iconify-icon>
@@ -92,10 +86,10 @@
 			<div class="flex items-center justify-between w-full mt-4">
 				<div class="text-left text-gray-800 dark:text-gray-300 text-lg tracking-wider transition-colors duration-500">
 					Se déconnecter de votre compte
-				</div>
-				<!-- <div					(click)="authService.signOut()"
+				</div> -->
+<!-- <div					(click)="authService.signOut()"
 					class="inline-flex h-12 items-center justify-center rounded-md bg-prime-blue text-white dark:text-gray-300 hover:bg-gray-700 dark:bg-gray-700 dark:hover:bg-gray-600 px-5 text-base font-medium shadow transition-colors duration-500 cursor-pointer"> -->
-				<div
+<!-- <div
 					class="inline-flex h-12 items-center justify-center rounded-md bg-prime-blue text-white dark:text-gray-300 hover:bg-gray-700 dark:bg-gray-700 dark:hover:bg-gray-600 px-5 text-base font-medium shadow transition-colors duration-500 cursor-pointer"
 				>
 					<iconify-icon icon="fluent:plug-disconnected-24-filled" class="text-[1.5rem] mr-4"></iconify-icon>
@@ -103,13 +97,13 @@
 				</div>
 			</div>
 		</div>
-	</div>
-	<!-- <div class="w-1/2 min-w-[400px] ml-6">
+	</div> -->
+<!-- <div class="w-1/2 min-w-[400px] ml-6">
 		<div class="mx-auto mt-10 p-5 rounded-lg shadow-lg bg-white dark:bg-secondary-dark-bg animate-appear opacity-0 animation-delay-100 transition-colors duration-500">
 			<h4 class="m-0 mb-4 text-left text-lg font-semibold uppercase text-gray-800 dark:text-gray-300 tracking-wider transition-colors duration-500">Situations</h4>
 			<div class="flex items-center justify-between w-full mt-4">
 				<div class="text-left text-gray-800 dark:text-gray-300 text-lg tracking-wider transition-colors duration-500">Nom de situation multiple auto</div>
-				<p-inputSwitch [(ngModel)]="autoMultipleSolutionName" (onChange)="updateUserParam('autoMultipleSolutionName', autoMultipleSolutionName)"></p-inputSwitch>
+				<p-inputSwitch [(ngModel)]="autoMultipleSolutionName" (onChange)="updatedivParam('autoMultipleSolutionName', autoMultipleSolutionName)"></p-inputSwitch>
 			</div>
 			<div class="flex items-center justify-between w-full mt-4">
 				<div class="text-left text-gray-800 dark:text-gray-300 text-lg tracking-wider transition-colors duration-500">Importer des situations</div>
@@ -137,21 +131,21 @@
 			<h4 class="m-0 mb-4 font-semibold text-left text-lg uppercase text-gray-800 dark:text-gray-300 tracking-wider transition-colors duration-500">Entraînement</h4>
 			<div class="flex items-center justify-between w-full mt-4">
 				<div class="text-left text-gray-800 dark:text-gray-300 text-lg tracking-wider transition-colors duration-500">Affichage de la solution lors d'une erreur</div>
-				<p-inputSwitch [(ngModel)]="displaySolutionOnError" (onChange)="updateUserParam('displaySolution', displaySolutionOnError)"></p-inputSwitch>
+				<p-inputSwitch [(ngModel)]="displaySolutionOnError" (onChange)="updatedivParam('displaySolution', displaySolutionOnError)"></p-inputSwitch>
 			</div>
 			<div class="flex items-center justify-between w-full mt-4">
 				<div class="text-left text-gray-800 dark:text-gray-300 text-lg tracking-wider transition-colors duration-500">Style des cartes</div>
-				<p-dropdown [(ngModel)]="cardsStyle" [options]="availableCardsStyles" optionLabel="name" (onChange)="updateUserParam('cardStyle', $event.value.code)"></p-dropdown>
+				<p-dropdown [(ngModel)]="divsStyle" [options]="availabledivsStyles" optionLabel="name" (onChange)="updatedivParam('divStyle', $event.value.code)"></p-dropdown>
 			</div>
 			<div class="flex items-center justify-between w-full mt-4">
 				<div class="text-left text-gray-800 dark:text-gray-300 text-lg tracking-wider transition-colors duration-500">Couleur du tapis de jeu</div>
-				<p-dropdown [options]="availablePokerTableColors" [(ngModel)]="pokerTableColor" optionLabel="name" (onChange)="updateUserParam('playmatColor', $event.value.code)" />
+				<p-dropdown [options]="availablePokerTableColors" [(ngModel)]="pokerTableColor" optionLabel="name" (onChange)="updatedivParam('playmatColor', $event.value.code)" />
 			</div>
 		</div>
 	</div> -->
-</div>
-
-<dialog id="change-user-name" class="dui-modal dui-modal-bottom sm:dui-modal-middle">
+<!-- </div> -->
+<!-- 
+<dialog id="change-div-name" class="dui-modal dui-modal-bottom sm:dui-modal-middle">
 	<div class="dui-modal-box text-gray-800 dark:text-gray-300 bg-white dark:bg-secondary-dark-bg">
 		<form method="dialog">
 			<button class="dui-btn dui-btn-sm dui-btn-circle dui-btn-ghost absolute right-2 top-2 outline-none">✕</button>
@@ -163,26 +157,26 @@
 			class="my-2 w-full"
 			type="text"
 			placeholder="Entrez votre nouveau nom d'utilisateur"
-			name="newUserName"
-			id="newUserName"
+			name="newdivName"
+			id="newdivName"
 			autocomplete="off"
 			pInputText
-			[(ngModel)]="newUserName"
+			[(ngModel)]="newdivName"
 			[maxlength]="16"
 		/>
 		<div class="flex justify-center items-center mt-5">
 			<div
 				class="inline-flex h-12 items-center justify-center rounded-md bg-prime-blue text-white dark:text-gray-300 hover:bg-hover-prime-blue dark:bg-gray-700 dark:hover:bg-gray-600 px-5 text-base font-medium shadow transition-colors duration-250 cursor-pointer"
-			>
-				<!-- <div (click)="changeUserName()"
+			> -->
+<!-- <div (click)="changedivName()"
 				class="inline-flex h-12 items-center justify-center rounded-md bg-prime-blue text-white dark:text-gray-300 hover:bg-hover-prime-blue dark:bg-gray-700 dark:hover:bg-gray-600 px-5 text-base font-medium shadow transition-colors duration-250 cursor-pointer"
 			> -->
-				<iconify-icon icon="material-symbols-light:save-rounded" class="text-[1.5rem] mr-4"></iconify-icon>
+<!-- <iconify-icon icon="material-symbols-light:save-rounded" class="text-[1.5rem] mr-4"></iconify-icon>
 				Enregistrer
 			</div>
 		</div>
 	</div>
-</dialog>
+</dialog> -->
 
 <!-- <div class="settings-container">
 	<div class="setting-container">
@@ -354,3 +348,312 @@
 		</div>
 	</div>
 </div> -->
+
+<div class="opacity-0 animate-appear duration-500">
+	<div class="bg-white dark:bg-secondary-dark-bg shadow-lg rounded-lg m-6">
+		<div class="bg-gradient-to-r from-prime-blue to-hover-prime-blue text-white px-8 py-6 rounded-t-lg">
+			<div class="flex items-center space-x-3">
+				<iconify-icon icon="uit:house-div" class="text-[2.5rem] mr-5"></iconify-icon>
+				<div>
+					<h1 class="text-2xl font-bold">Création d'un nouveau club de tir</h1>
+					<p class="text-blue-100 mt-1">Configurez les détails de la nouvelle compétition</p>
+				</div>
+			</div>
+		</div>
+
+		<div class="p-8 space-y-10">
+			<!-- Settings Grid -->
+			<div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+				<!-- Profile Section -->
+				<div class="border border-gray-200 dark:border-gray-700 rounded-lg">
+					<div class="p-4 border-b border-gray-200 dark:border-gray-700">
+						<h2 class="text-lg font-semibold text-gray-900 dark:text-gray-300">Gestion du compte</h2>
+						<p class="text-sm text-gray-500">Gérez vos informations personnelles et votre sécurité</p>
+					</div>
+					<div class="p-6 space-y-6">
+						<div class="flex items-center space-x-4">
+							<div class="h-16 w-16 border-2 border-gray-200 dark:border-gray-700 rounded-full overflow-hidden">
+								<img src="assets/images/placeholder-avatar.png" alt="Utilisateur" class="h-full w-full object-cover" />
+							</div>
+							<div class="flex-1">
+								<h3 class="text-lg font-medium text-gray-900">Nom d'utilisateur</h3>
+								<p class="text-gray-600">userexample.com</p>
+							</div>
+						</div>
+
+						<hr class="border-gray-200 dark:border-gray-700" />
+
+						<div class="space-y-3">
+							<button
+								class="w-full flex items-center justify-start px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50"
+							>
+								<i class="fas fa-edit mr-2 text-sm"></i>
+								Modifier le profil
+							</button>
+							<button
+								class="w-full flex items-center justify-start px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50"
+							>
+								<i class="fas fa-lock mr-2 text-sm"></i>
+								Changer le mot de passe
+							</button>
+							<button
+								class="w-full flex items-center justify-start px-4 py-2 border border-red-200 rounded-md text-red-600 hover:bg-red-50"
+							>
+								<i class="fas fa-sign-out-alt mr-2 text-sm"></i>
+								Se déconnecter
+							</button>
+						</div>
+					</div>
+				</div>
+
+				<!-- Global Settings -->
+				<div class="border border-gray-200 dark:border-gray-700 rounded-lg">
+					<div class="p-4 border-b border-gray-200 dark:border-gray-700">
+						<h2 class="text-lg font-semibold text-gray-900 dark:text-gray-300">Préférences générales</h2>
+						<p class="text-sm text-gray-500">Configurez les paramètres globaux de l'application</p>
+					</div>
+					<div class="p-6 space-y-6">
+						<div class="flex items-center justify-between py-2">
+							<div class="flex items-center space-x-3">
+								<i class="fas fa-moon text-gray-500"></i>
+								<div>
+									<p class="font-medium text-gray-900">Mode sombre</p>
+									<p class="text-sm text-gray-500">Activer le thème sombre</p>
+								</div>
+							</div>
+							<label class="switch">
+								<input type="checkbox" [(ngModel)]="darkMode" (change)="toggleDarkMode()" />
+								<span class="slider round"></span>
+							</label>
+						</div>
+
+						<hr class="border-gray-200 dark:border-gray-700" />
+
+						<div class="flex items-center justify-between py-2">
+							<div class="flex items-center space-x-3">
+								<i class="fas fa-bell text-gray-500"></i>
+								<div>
+									<p class="font-medium text-gray-900">Notifications</p>
+									<p class="text-sm text-gray-500">Recevoir des notifications par email</p>
+								</div>
+							</div>
+							<label class="switch">
+								<!-- <input type="checkbox" [(ngModel)]="notifications" (change)="toggleNotifications()"> -->
+								<span class="slider round"></span>
+							</label>
+						</div>
+
+						<hr class="border-gray-200 dark:border-gray-700" />
+
+						<div class="flex items-center justify-between py-2">
+							<div class="flex items-center space-x-3">
+								<i class="fas fa-save text-gray-500"></i>
+								<div>
+									<p class="font-medium text-gray-900">Sauvegarde automatique</p>
+									<p class="text-sm text-gray-500">Sauvegarder automatiquement les données</p>
+								</div>
+							</div>
+							<label class="switch">
+								<!-- <input type="checkbox" [(ngModel)]="autoSave" (change)="toggleAutoSave()"> -->
+								<span class="slider round"></span>
+							</label>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<!-- Subscription Plans -->
+			<div class="border border-gray-200 dark:border-gray-700 rounded-lg">
+				<div class="p-4 border-b border-gray-200 dark:border-gray-700">
+					<h2 class="text-lg font-semibold text-gray-900 dark:text-gray-300">Plans d'abonnement</h2>
+					<p class="text-sm text-gray-500">Choisissez le plan qui correspond le mieux à vos besoins</p>
+				</div>
+				<div class="p-6">
+					<!-- Usage Summary -->
+					<div class="mb-8 p-6 bg-gray-50 rounded-lg border border-gray-200 dark:border-gray-700">
+						<h3 class="text-lg font-semibold text-gray-900 mb-4 flex items-center">
+							<div class="p-2 bg-white rounded-lg mr-3 shadow-sm">
+								<i class="fas fa-credit-card text-gray-600"></i>
+							</div>
+							Utilisation de votre abonnement
+						</h3>
+
+						<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+							<!-- Current Plan Info -->
+							<div class="bg-white p-4 rounded-lg border border-gray-200 dark:border-gray-700">
+								<div class="text-center">
+									<h4 class="font-medium text-gray-900 mb-2">Plan actuel</h4>
+									<div class="text-2xl font-bold text-blue-600 mb-1">VIP</div>
+									<p class="text-sm text-gray-500">Compétitions illimitées</p>
+								</div>
+							</div>
+
+							<!-- Usage Stats -->
+							<div class="bg-white p-4 rounded-lg border border-gray-200 dark:border-gray-700">
+								<div class="text-center">
+									<h4 class="font-medium text-gray-900 mb-2">Ce mois-ci</h4>
+									<div class="text-2xl font-bold text-green-600 mb-1">7</div>
+									<p class="text-sm text-gray-500">Compétitions créées</p>
+								</div>
+							</div>
+
+							<!-- Reset Date -->
+							<div class="bg-white p-4 rounded-lg border border-gray-200 dark:border-gray-700">
+								<div class="text-center">
+									<h4 class="font-medium text-gray-900 mb-2">Remise à zéro</h4>
+									<div class="text-2xl font-bold text-gray-600 mb-1">1er</div>
+									<p class="text-sm text-gray-500">Février 2024</p>
+								</div>
+							</div>
+						</div>
+
+						<!-- Progress Bar for limited plans -->
+						<div class="mt-4 p-4 bg-blue-50 rounded-lg border border-blue-200">
+							<div class="flex items-center justify-between mb-2">
+								<span class="text-sm font-medium text-blue-900">Utilisation mensuelle</span>
+								<span class="text-sm text-blue-700">Illimité</span>
+							</div>
+							<div class="w-full bg-blue-200 rounded-full h-2">
+								<div class="bg-blue-600 h-2 rounded-full w-full"></div>
+							</div>
+							<p class="text-xs text-blue-700 mt-2">✨ Avec votre plan VIP, vous pouvez créer un nombre illimité de compétitions</p>
+						</div>
+					</div>
+
+					<div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+						<div
+							*ngFor="let plan of subscriptionPlans"
+							class="relative rounded-lg border-2 p-6"
+							[ngClass]="{ 'border-blue-500 bg-blue-50': plan.popular, 'border-gray-200 dark:border-gray-700 bg-white': !plan.popular }"
+						>
+							<span
+								*ngIf="plan.popular"
+								class="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-blue-600 text-white text-xs px-2 py-1 rounded-full"
+							>
+								Recommandé
+							</span>
+
+							<div class="text-center mb-6">
+								<h3 class="text-xl font-semibold text-gray-900 mb-2">{{ plan.name }}</h3>
+								<div class="flex items-baseline justify-center">
+									<span class="text-3xl font-bold text-gray-900">€{{ plan.price }}</span>
+									<span class="text-gray-500 ml-1">{{ plan.period }}</span>
+								</div>
+							</div>
+
+							<ul class="space-y-3 mb-6">
+								<li *ngFor="let feature of plan.features" class="flex items-start">
+									<i class="fas fa-check text-gray-400 mr-3 mt-1"></i>
+									<span class="text-sm text-gray-700">{{ feature }}</span>
+								</li>
+							</ul>
+
+							<button
+								[ngClass]="{
+									'bg-blue-600 hover:bg-blue-700 text-white': plan.popular,
+									'border border-gray-300 text-gray-700 hover:bg-gray-50': !plan.popular
+								}"
+								class="w-full py-2 px-4 rounded-md"
+							>
+								{{ plan.popular ? "Plan actuel" : "Choisir ce plan" }}
+							</button>
+						</div>
+					</div>
+
+					<!-- Transaction History -->
+					<div class="mt-8">
+						<h2 class="text-lg font-semibold text-gray-900 dark:text-gray-300">Historique des transactions</h2>
+						<div class="rounded-lg border border-gray-200 dark:border-gray-700 overflow-hidden">
+							<p-table [value]="transactions" dataKey="id" [rows]="10" [paginator]="true">
+								<ng-template pTemplate="header">
+									<tr>
+										<th class="rounded-t-md">
+											<div>
+												<span class="text-prime-blue dark:text-gray-300 mr-2">Date</span>
+												<p-columnFilter type="text" field="date" display="menu"></p-columnFilter>
+											</div>
+										</th>
+										<th>
+											<div class="flex align-items-center">
+												<span class="text-prime-blue dark:text-gray-300 mr-2">Montant</span>
+												<p-columnFilter type="text" field="montant" display="menu"></p-columnFilter>
+											</div>
+										</th>
+										<th>
+											<div class="flex align-items-center">
+												<span class="text-prime-blue dark:text-gray-300 mr-2">Offre</span>
+												<p-columnFilter type="text" field="typeOffre" display="menu"></p-columnFilter>
+											</div>
+										</th>
+										<th class="rounded-t-md">
+											<div class="flex align-items-center">
+												<span class="text-prime-blue dark:text-gray-300 mr-2">Statut</span>
+												<p-columnFilter type="text" field="statutPaiement" display="menu"></p-columnFilter>
+											</div>
+										</th>
+									</tr>
+								</ng-template>
+								<ng-template pTemplate="body" let-transaction>
+									<tr>
+										<td>{{ transaction.date }}</td>
+										<td>{{ transaction.montant }}€</td>
+										<td>{{ transaction.typeOffre }}</td>
+										<td>{{ transaction.statutPaiement }}</td>
+									</tr>
+								</ng-template>
+								<ng-template pTemplate="emptymessage">
+									<tr>
+										<td colspan="7">Aucune transaction effectuée.</td>
+									</tr>
+								</ng-template>
+							</p-table>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<!-- Contact Form -->
+			<div class="border border-gray-200 dark:border-gray-700 rounded-lg">
+				<div class="p-6 pb-0">
+					<h2 class="text-lg font-semibold text-gray-900 dark:text-gray-300">Nous contacter</h2>
+					<p class="text-sm text-gray-500">Une question, un problème ou une suggestion ? Notre équipe est là pour vous aider.</p>
+				</div>
+				<div class="p-6">
+					<div class="space-y-6">
+						<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+							<div class="flex flex-col space-y-1">
+								<Label class="text-sm font-medium text-gray-700 dark:text-gray-300">Nom Prénom *</Label>
+								<input type="text" pInputText [(ngModel)]="email" placeholder="Nom Prénom" />
+							</div>
+
+							<div class="flex flex-col space-y-1">
+								<Label class="text-sm font-medium text-gray-700 dark:text-gray-300">Adresse Email *</Label>
+								<input type="text" pInputText [(ngModel)]="email" placeholder="Adresse Email" />
+							</div>
+						</div>
+
+						<div class="flex flex-col space-y-1">
+							<label class="text-sm font-medium text-gray-700 dark:text-gray-300">Message *</label>
+							<textarea rows="5" pTextarea class="resize-none w-full" placeholder="Votre message..."></textarea>
+						</div>
+
+						<div class="pt-6 border-t border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-400">
+							<div class="flex items-center text-sm">
+								<iconify-icon icon="lucide:info" class="text-[1rem] mr-2"></iconify-icon>
+								<p>Les champs marqués d'un astérisque (*) sont obligatoires.</p>
+							</div>
+							<div class="flex justify-end">
+								<div
+									class="inline-flex h-12 items-center justify-center rounded-md bg-prime-blue text-white dark:text-gray-300 hover:bg-hover-prime-blue px-5 text-base font-medium shadow transition-colors duration-250 cursor-pointer"
+								>
+									<iconify-icon icon="mdi:email-send" class="text-[1.5rem] mr-4"></iconify-icon>
+									Envoyer le message
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
