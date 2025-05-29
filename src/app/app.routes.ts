@@ -3,7 +3,7 @@ import { HomeComponent } from './home/home.component';
 import { CreationShooterComponent } from './creation_shooter/creation_shooter.component';
 import { CreationCompetitionComponent } from './creation_competition/creation_competition.component';
 import { CreationClubComponent } from './creation_club/creation_club.component';
-import { ModificationComponent } from './modification/modification.component';
+import { ModificationShooterComponent } from './modification_shooter/modification_shooter.component';
 import { ConsultationComponent } from './consultation/consultation.component';
 import { DisplayComponent } from './display/display.component';
 import { SettingsComponent } from './settings/settings.component';
@@ -36,8 +36,8 @@ export const routes: Routes = [
 				component: CreationClubComponent,
 			},
 			{
-				path: 'modification',
-				component: ModificationComponent,
+				path: 'modification_shooter',
+				component: ModificationShooterComponent,
 			},
 			{
 				path: 'consultation',
