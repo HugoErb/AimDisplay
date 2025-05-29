@@ -250,3 +250,8 @@
 	color: white !important;
 	border: none !important;
 }
+
+/* Empêche que la scrollbar aparaisse lors de l'ouverture d'un modal dui */
+html {
+    scrollbar-gutter: auto !important;
+}
