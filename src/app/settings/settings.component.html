@@ -4,22 +4,22 @@
 			class="mx-auto mt-10 p-5 rounded-lg shadow-lg bg-white dark:bg-secondary-dark-bg animate-appear opacity-0 animation-delay-50 transition-colors duration-500"
 		>
 			<h4
-				class="m-0 mb-4 text-left text-lg font-semibold uppercase text-gray-800 dark:text-gray-300 tracking-wider transition-colors duration-500"
+				class="m-0 mb-4 text-left text-lg font-semibold uppercase text-gray-800 dark:text-gray-300 transition-all duration-500 tracking-wider transition-colors duration-500"
 			>
 				Global
 			</h4>
 			<div class="flex items-center justify-between w-full mt-4">
-				<div class="text-left text-gray-800 dark:text-gray-300 text-lg tracking-wider transition-colors duration-500">
+				<div class="text-left text-gray-800 dark:text-gray-300 transition-all duration-500 text-lg tracking-wider transition-colors duration-500">
 					Activer le mode sombre
 				</div>
 				<p-inputSwitch [(ngModel)]="darkMode" (onChange)="toggleDarkMode()"></p-inputSwitch>
 			</div>
 			<div class="flex items-center justify-between w-full mt-4">
-				<div class="text-left text-gray-800 dark:text-gray-300 text-lg tracking-wider transition-colors duration-500">Thème</div>
+				<div class="text-left text-gray-800 dark:text-gray-300 transition-all duration-500 text-lg tracking-wider transition-colors duration-500">Thème</div>
 				<p-inputSwitch [(ngModel)]="darkMode"></p-inputSwitch>
 			</div>
 			<div class="flex items-center justify-between w-full mt-4">
-				<div class="text-left text-gray-800 dark:text-gray-300 text-lg tracking-wider transition-colors duration-500">Langue</div>
+				<div class="text-left text-gray-800 dark:text-gray-300 transition-all duration-500 text-lg tracking-wider transition-colors duration-500">Langue</div>
 				<p-inputSwitch [(ngModel)]="darkMode"></p-inputSwitch>
 			</div>
 		</div>
@@ -27,7 +27,7 @@
 			class="mx-auto mt-10 p-5 rounded-lg shadow-lg bg-white dark:bg-secondary-dark-bg animate-appear opacity-0 animation-delay-150 transition-colors duration-500"
 		>
 			<h4
-				class="m-0 mb-4 text-left text-lg font-semibold uppercase text-gray-800 dark:text-gray-300 tracking-wider transition-colors duration-500"
+				class="m-0 mb-4 text-left text-lg font-semibold uppercase text-gray-800 dark:text-gray-300 transition-all duration-500 tracking-wider transition-colors duration-500"
 			>
 				Compte
 			</h4>
@@ -54,7 +54,7 @@
 						</div>
 					</div> -->
 <!-- <div class="ml-4">
-						<p class="text-lg font-semibold text-gray-800 dark:text-gray-300 transition-colors duration-500"> -->
+						<p class="text-lg font-semibold text-gray-800 dark:text-gray-300 transition-all duration-500 transition-colors duration-500"> -->
 <!-- @if (authService.getdivDisplayName()) {
 							{{ authService.getdivDisplayName() }}
 							} @else {  -->
@@ -65,32 +65,32 @@
 				</div>
 				<div
 					(click)="this.commonService.showModal('change-div-name')"
-					class="inline-flex h-12 items-center justify-center rounded-md bg-prime-blue text-white dark:text-gray-300 hover:bg-gray-700 dark:bg-gray-700 dark:hover:bg-gray-600 px-5 text-base font-medium shadow transition-colors duration-500 cursor-pointer"
+					class="inline-flex h-12 items-center justify-center rounded-md bg-prime-blue text-white dark:text-gray-300 transition-all duration-500 hover:bg-gray-700 dark:bg-gray-700 dark:hover:bg-gray-600 px-5 text-base font-medium shadow transition-colors duration-500 cursor-pointer"
 				>
 					<iconify-icon icon="mdi:pencil" class="text-[1.5rem] mr-4"></iconify-icon>
 					Modification
 				</div>
 			</div>
 			<div class="flex items-center justify-between w-full mt-4">
-				<div class="text-left text-gray-800 dark:text-gray-300 text-lg tracking-wider transition-colors duration-500">
+				<div class="text-left text-gray-800 dark:text-gray-300 transition-all duration-500 text-lg tracking-wider transition-colors duration-500">
 					Changer votre mot de passe
 				</div>
 				<div
 					(click)="commonService.redirectTo('change-password')"
-					class="inline-flex h-12 items-center justify-center rounded-md bg-prime-blue text-white dark:text-gray-300 hover:bg-gray-700 dark:bg-gray-700 dark:hover:bg-gray-600 px-5 text-base font-medium shadow transition-colors duration-500 cursor-pointer"
+					class="inline-flex h-12 items-center justify-center rounded-md bg-prime-blue text-white dark:text-gray-300 transition-all duration-500 hover:bg-gray-700 dark:bg-gray-700 dark:hover:bg-gray-600 px-5 text-base font-medium shadow transition-colors duration-500 cursor-pointer"
 				>
 					<iconify-icon icon="mdi:password-reset" class="text-[1.5rem] mr-4"></iconify-icon>
 					Changement
 				</div>
 			</div>
 			<div class="flex items-center justify-between w-full mt-4">
-				<div class="text-left text-gray-800 dark:text-gray-300 text-lg tracking-wider transition-colors duration-500">
+				<div class="text-left text-gray-800 dark:text-gray-300 transition-all duration-500 text-lg tracking-wider transition-colors duration-500">
 					Se déconnecter de votre compte
 				</div> -->
 <!-- <div					(click)="authService.signOut()"
-					class="inline-flex h-12 items-center justify-center rounded-md bg-prime-blue text-white dark:text-gray-300 hover:bg-gray-700 dark:bg-gray-700 dark:hover:bg-gray-600 px-5 text-base font-medium shadow transition-colors duration-500 cursor-pointer"> -->
+					class="inline-flex h-12 items-center justify-center rounded-md bg-prime-blue text-white dark:text-gray-300 transition-all duration-500 hover:bg-gray-700 dark:bg-gray-700 dark:hover:bg-gray-600 px-5 text-base font-medium shadow transition-colors duration-500 cursor-pointer"> -->
 <!-- <div
-					class="inline-flex h-12 items-center justify-center rounded-md bg-prime-blue text-white dark:text-gray-300 hover:bg-gray-700 dark:bg-gray-700 dark:hover:bg-gray-600 px-5 text-base font-medium shadow transition-colors duration-500 cursor-pointer"
+					class="inline-flex h-12 items-center justify-center rounded-md bg-prime-blue text-white dark:text-gray-300 transition-all duration-500 hover:bg-gray-700 dark:bg-gray-700 dark:hover:bg-gray-600 px-5 text-base font-medium shadow transition-colors duration-500 cursor-pointer"
 				>
 					<iconify-icon icon="fluent:plug-disconnected-24-filled" class="text-[1.5rem] mr-4"></iconify-icon>
 					Déconnexion
@@ -100,16 +100,16 @@
 	</div> -->
 <!-- <div class="w-1/2 min-w-[400px] ml-6">
 		<div class="mx-auto mt-10 p-5 rounded-lg shadow-lg bg-white dark:bg-secondary-dark-bg animate-appear opacity-0 animation-delay-100 transition-colors duration-500">
-			<h4 class="m-0 mb-4 text-left text-lg font-semibold uppercase text-gray-800 dark:text-gray-300 tracking-wider transition-colors duration-500">Situations</h4>
+			<h4 class="m-0 mb-4 text-left text-lg font-semibold uppercase text-gray-800 dark:text-gray-300 transition-all duration-500 tracking-wider transition-colors duration-500">Situations</h4>
 			<div class="flex items-center justify-between w-full mt-4">
-				<div class="text-left text-gray-800 dark:text-gray-300 text-lg tracking-wider transition-colors duration-500">Nom de situation multiple auto</div>
+				<div class="text-left text-gray-800 dark:text-gray-300 transition-all duration-500 text-lg tracking-wider transition-colors duration-500">Nom de situation multiple auto</div>
 				<p-inputSwitch [(ngModel)]="autoMultipleSolutionName" (onChange)="updatedivParam('autoMultipleSolutionName', autoMultipleSolutionName)"></p-inputSwitch>
 			</div>
 			<div class="flex items-center justify-between w-full mt-4">
-				<div class="text-left text-gray-800 dark:text-gray-300 text-lg tracking-wider transition-colors duration-500">Importer des situations</div>
+				<div class="text-left text-gray-800 dark:text-gray-300 transition-all duration-500 text-lg tracking-wider transition-colors duration-500">Importer des situations</div>
 				<div
 					(click)="fileImportInput.click()"
-					class="inline-flex h-12 items-center justify-center rounded-md bg-prime-blue text-white dark:text-gray-300 hover:bg-gray-700 dark:bg-gray-700 dark:hover:bg-gray-600 px-5 text-base font-medium shadow transition-colors duration-500 cursor-pointer"
+					class="inline-flex h-12 items-center justify-center rounded-md bg-prime-blue text-white dark:text-gray-300 transition-all duration-500 hover:bg-gray-700 dark:bg-gray-700 dark:hover:bg-gray-600 px-5 text-base font-medium shadow transition-colors duration-500 cursor-pointer"
 				>
 					<i class="fa-solid fa-download mr-4 h-4 w-4"></i>
 					Importer
@@ -117,10 +117,10 @@
 				<input type="file" #fileImportInput style="display: none" (change)="onClickFileImport($event)" multiple />
 			</div>
 			<div class="flex items-center justify-between w-full mt-4">
-				<div class="text-left text-gray-800 dark:text-gray-300 text-lg tracking-wider transition-colors duration-500">Exporter vos situations</div>
+				<div class="text-left text-gray-800 dark:text-gray-300 transition-all duration-500 text-lg tracking-wider transition-colors duration-500">Exporter vos situations</div>
 				<div
 					(click)="onClickFileExport()"
-					class="inline-flex h-12 items-center justify-center rounded-md bg-prime-blue text-white dark:text-gray-300 hover:bg-gray-700 dark:bg-gray-700 dark:hover:bg-gray-600 px-5 text-base font-medium shadow transition-colors duration-500 cursor-pointer"
+					class="inline-flex h-12 items-center justify-center rounded-md bg-prime-blue text-white dark:text-gray-300 transition-all duration-500 hover:bg-gray-700 dark:bg-gray-700 dark:hover:bg-gray-600 px-5 text-base font-medium shadow transition-colors duration-500 cursor-pointer"
 				>
 					<i class="fa-solid fa-upload mr-4 h-4 w-4"></i>
 					Exporter
@@ -128,17 +128,17 @@
 			</div>
 		</div>
 		<div class="mx-auto mt-10 p-5 rounded-lg shadow-lg bg-white dark:bg-secondary-dark-bg animate-appear opacity-0 animation-delay-100 transition-colors duration-500">
-			<h4 class="m-0 mb-4 font-semibold text-left text-lg uppercase text-gray-800 dark:text-gray-300 tracking-wider transition-colors duration-500">Entraînement</h4>
+			<h4 class="m-0 mb-4 font-semibold text-left text-lg uppercase text-gray-800 dark:text-gray-300 transition-all duration-500 tracking-wider transition-colors duration-500">Entraînement</h4>
 			<div class="flex items-center justify-between w-full mt-4">
-				<div class="text-left text-gray-800 dark:text-gray-300 text-lg tracking-wider transition-colors duration-500">Affichage de la solution lors d'une erreur</div>
+				<div class="text-left text-gray-800 dark:text-gray-300 transition-all duration-500 text-lg tracking-wider transition-colors duration-500">Affichage de la solution lors d'une erreur</div>
 				<p-inputSwitch [(ngModel)]="displaySolutionOnError" (onChange)="updatedivParam('displaySolution', displaySolutionOnError)"></p-inputSwitch>
 			</div>
 			<div class="flex items-center justify-between w-full mt-4">
-				<div class="text-left text-gray-800 dark:text-gray-300 text-lg tracking-wider transition-colors duration-500">Style des cartes</div>
+				<div class="text-left text-gray-800 dark:text-gray-300 transition-all duration-500 text-lg tracking-wider transition-colors duration-500">Style des cartes</div>
 				<p-dropdown [(ngModel)]="divsStyle" [options]="availabledivsStyles" optionLabel="name" (onChange)="updatedivParam('divStyle', $event.value.code)"></p-dropdown>
 			</div>
 			<div class="flex items-center justify-between w-full mt-4">
-				<div class="text-left text-gray-800 dark:text-gray-300 text-lg tracking-wider transition-colors duration-500">Couleur du tapis de jeu</div>
+				<div class="text-left text-gray-800 dark:text-gray-300 transition-all duration-500 text-lg tracking-wider transition-colors duration-500">Couleur du tapis de jeu</div>
 				<p-dropdown [options]="availablePokerTableColors" [(ngModel)]="pokerTableColor" optionLabel="name" (onChange)="updatedivParam('playmatColor', $event.value.code)" />
 			</div>
 		</div>
@@ -146,11 +146,11 @@
 <!-- </div> -->
 <!-- 
 <dialog id="change-div-name" class="dui-modal dui-modal-bottom sm:dui-modal-middle">
-	<div class="dui-modal-box text-gray-800 dark:text-gray-300 bg-white dark:bg-secondary-dark-bg">
+	<div class="dui-modal-box text-gray-800 dark:text-gray-300 transition-all duration-500 bg-white dark:bg-secondary-dark-bg">
 		<form method="dialog">
 			<button class="dui-btn dui-btn-sm dui-btn-circle dui-btn-ghost absolute right-2 top-2 outline-none">✕</button>
 		</form>
-		<h4 class="m-0 mb-4 text-left text-lg font-semibold uppercase text-gray-800 dark:text-gray-300 tracking-wider">
+		<h4 class="m-0 mb-4 text-left text-lg font-semibold uppercase text-gray-800 dark:text-gray-300 transition-all duration-500 tracking-wider">
 			Modification du nom d'utilisateur
 		</h4>
 		<input
@@ -166,10 +166,10 @@
 		/>
 		<div class="flex justify-center items-center mt-5">
 			<div
-				class="inline-flex h-12 items-center justify-center rounded-md bg-prime-blue text-white dark:text-gray-300 hover:bg-hover-prime-blue dark:bg-gray-700 dark:hover:bg-gray-600 px-5 text-base font-medium shadow transition-colors duration-250 cursor-pointer"
+				class="inline-flex h-12 items-center justify-center rounded-md bg-prime-blue text-white dark:text-gray-300 transition-all duration-500 hover:bg-hover-prime-blue dark:bg-gray-700 dark:hover:bg-gray-600 px-5 text-base font-medium shadow transition-colors duration-250 cursor-pointer"
 			> -->
 <!-- <div (click)="changedivName()"
-				class="inline-flex h-12 items-center justify-center rounded-md bg-prime-blue text-white dark:text-gray-300 hover:bg-hover-prime-blue dark:bg-gray-700 dark:hover:bg-gray-600 px-5 text-base font-medium shadow transition-colors duration-250 cursor-pointer"
+				class="inline-flex h-12 items-center justify-center rounded-md bg-prime-blue text-white dark:text-gray-300 transition-all duration-500 hover:bg-hover-prime-blue dark:bg-gray-700 dark:hover:bg-gray-600 px-5 text-base font-medium shadow transition-colors duration-250 cursor-pointer"
 			> -->
 <!-- <iconify-icon icon="material-symbols-light:save-rounded" class="text-[1.5rem] mr-4"></iconify-icon>
 				Enregistrer
@@ -271,25 +271,25 @@
 					<tr>
 						<th class="rounded-t-md">
 							<div>
-								<span class="text-prime-blue dark:text-gray-300 mr-2">Date</span>
+								<span class="text-prime-blue dark:text-gray-300 transition-all duration-500 mr-2">Date</span>
 								<p-columnFilter type="text" field="date" display="menu"></p-columnFilter>
 							</div>
 						</th>
 						<th>
 							<div class="flex align-items-center">
-								<span class="text-prime-blue dark:text-gray-300 mr-2">Montant</span>
+								<span class="text-prime-blue dark:text-gray-300 transition-all duration-500 mr-2">Montant</span>
 								<p-columnFilter type="text" field="montant" display="menu"></p-columnFilter>
 							</div>
 						</th>
 						<th>
 							<div class="flex align-items-center">
-								<span class="text-prime-blue dark:text-gray-300 mr-2">Offre</span>
+								<span class="text-prime-blue dark:text-gray-300 transition-all duration-500 mr-2">Offre</span>
 								<p-columnFilter type="text" field="typeOffre" display="menu"></p-columnFilter>
 							</div>
 						</th>
 						<th class="rounded-t-md">
 							<div class="flex align-items-center">
-								<span class="text-prime-blue dark:text-gray-300 mr-2">Statut</span>
+								<span class="text-prime-blue dark:text-gray-300 transition-all duration-500 mr-2">Statut</span>
 								<p-columnFilter type="text" field="statutPaiement" display="menu"></p-columnFilter>
 							</div>
 						</th>
@@ -329,13 +329,13 @@
 			</div>
 			<div class="flex justify-center items-center">
 				<div
-					class="inline-flex h-12 items-center justify-center rounded-md bg-prime-blue text-white dark:text-gray-300 hover:bg-hover-prime-blue dark:bg-gray-700 dark:hover:bg-gray-600 px-5 text-base font-medium shadow transition-colors duration-250 cursor-pointer"
+					class="inline-flex h-12 items-center justify-center rounded-md bg-prime-blue text-white dark:text-gray-300 transition-all duration-500 hover:bg-hover-prime-blue dark:bg-gray-700 dark:hover:bg-gray-600 px-5 text-base font-medium shadow transition-colors duration-250 cursor-pointer"
 				>
 					<iconify-icon icon="mdi:email-send" class="text-[1.5rem] mr-4"></iconify-icon>
 					Envoyer
 				</div>
 			</div>
-			<div class="flex items-center justify-center gap-10 mt-6 cursor-pointer text-prime-blue dark:text-gray-300">
+			<div class="flex items-center justify-center gap-10 mt-6 cursor-pointer text-prime-blue dark:text-gray-300 transition-all duration-500">
 				<div class="flex items-center text-primary transition hover:underline">
 					<iconify-icon icon="ic:baseline-discord" class="text-[1.5rem] mr-1.5"></iconify-icon>
 					<span>Discord</span>
@@ -349,8 +349,8 @@
 	</div>
 </div> -->
 
-<div class="opacity-0 animate-appear duration-500">
-	<div class="bg-white dark:bg-secondary-dark-bg shadow-lg rounded-lg m-6">
+<div class="opacity-0 animate-appear transition-all duration-500">
+	<div class="bg-white dark:bg-secondary-dark-bg transition-all duration-500 shadow-lg rounded-lg m-6">
 		<div class="bg-gradient-to-r from-prime-blue to-hover-prime-blue text-white px-8 py-6 rounded-t-lg">
 			<div class="flex items-center space-x-3">
 				<iconify-icon icon="carbon:settings" class="text-[2.5rem] mr-5"></iconify-icon>
@@ -365,14 +365,14 @@
 			<!-- Settings Grid -->
 			<div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
 				<!-- Profile Section -->
-				<div class="border border-gray-200 dark:border-gray-700 rounded-lg">
-					<div class="p-4 border-b border-gray-200 dark:border-gray-700">
-						<h2 class="text-lg font-semibold text-gray-900 dark:text-gray-300">Gestion du compte</h2>
-						<p class="text-sm text-gray-500">Gérez vos informations personnelles et votre sécurité</p>
+				<div class="border border-gray-200 dark:border-gray-700 transition-all duration-500 rounded-lg">
+					<div class="p-4 border-b border-gray-200 dark:border-gray-700 transition-all duration-500">
+						<h2 class="text-lg font-semibold text-gray-900 dark:text-gray-300 transition-all duration-500">Gestion du compte</h2>
+						<p class="text-sm text-gray-500 dark:text-gray-400 transition-all duration-500">Gérez vos informations personnelles et votre sécurité</p>
 					</div>
 					<div class="p-6 space-y-6">
 						<div class="flex items-center space-x-4">
-							<div class="h-16 w-16 border-2 border-gray-200 dark:border-gray-700 rounded-full overflow-hidden">
+							<div class="h-16 w-16 border-2 border-gray-200 dark:border-gray-700 transition-all duration-500 rounded-full overflow-hidden">
 								<img
 									src="https://imgs.search.brave.com/6Abd5TBbHIoBHK1py-tGSUv7eRH_hf3KVb5Px1DBNMs/rs:fit:860:0:0/g:ce/aHR0cHM6Ly90NC5m/dGNkbi5uZXQvanBn/LzA4LzIzLzkxLzU1/LzM2MF9GXzgyMzkx/NTUzM19PalFLUGtD/TTNzaGRxRmdwWjVz/d01LV3U1cHhnMzls/VS5qcGc"
 									alt="Utilisateur"
@@ -380,28 +380,28 @@
 								/>
 							</div>
 							<div class="flex-1">
-								<h3 class="text-lg font-medium text-gray-700 dark:text-gray-300">Nom d'utilisateur</h3>
-								<p class="text-gray-600">userexample.com</p>
+								<h3 class="text-lg font-medium text-gray-700 dark:text-gray-300 transition-all duration-500">Nom du club</h3>
+								<p class="text-gray-600 dark:text-gray-400 transition-all duration-500">userexample.com</p>
 							</div>
 						</div>
 
-						<hr class="border-gray-200 dark:border-gray-700" />
+						<hr class="border-gray-200 dark:border-gray-700 transition-all duration-500" />
 
 						<div class="space-y-3">
 							<button
-								class="w-full flex items-center justify-start px-4 py-2 border border-gray-200 dark:border-gray-700 rounded-md text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-600 cursor-pointer"
+								class="w-full flex items-center justify-start px-4 py-2 border border-gray-200 dark:border-gray-700 transition-all duration-500 rounded-md text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-600 cursor-pointer"
 							>
 								<iconify-icon icon="lucide:pen-line" class="text-[1.3rem] mr-4"></iconify-icon>
 								Modifier le profil
 							</button>
 							<button
-								class="w-full flex items-center justify-start px-4 py-2 border border-gray-200 dark:border-gray-700 rounded-md text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-600 cursor-pointer"
+								class="w-full flex items-center justify-start px-4 py-2 border border-gray-200 dark:border-gray-700 transition-all duration-500 rounded-md text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-600 cursor-pointer"
 							>
 								<iconify-icon icon="mdi:password-reset" class="text-[1.3rem] mr-4"></iconify-icon>
 								Changer le mot de passe
 							</button>
 							<button
-								class="w-full flex items-center justify-start px-4 py-2 border border-gray-200 dark:border-gray-700 rounded-md text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-600 cursor-pointer"
+								class="w-full flex items-center justify-start px-4 py-2 border border-gray-200 dark:border-gray-700 transition-all duration-500 rounded-md text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-600 cursor-pointer"
 							>
 								<iconify-icon icon="fluent:plug-disconnected-24-filled" class="text-[1.3rem] mr-4"></iconify-icon>
 								Se déconnecter
@@ -411,97 +411,85 @@
 				</div>
 
 				<!-- Global Settings -->
-				<div class="border border-gray-200 dark:border-gray-700 rounded-lg">
-					<div class="p-4 border-b border-gray-200 dark:border-gray-700">
-						<h2 class="text-lg font-semibold text-gray-900 dark:text-gray-300">Préférences générales</h2>
-						<p class="text-sm text-gray-500">Configurez les paramètres globaux de l'application</p>
+				<div class="border border-gray-200 dark:border-gray-700 transition-all duration-500 rounded-lg">
+					<div class="p-4 border-b border-gray-200 dark:border-gray-700 transition-all duration-500">
+						<h2 class="text-lg font-semibold text-gray-900 dark:text-gray-300 transition-all duration-500">Préférences générales</h2>
+						<p class="text-sm text-gray-500 dark:text-gray-400 transition-all duration-500">Configurez les paramètres globaux de l'application</p>
 					</div>
 					<div class="p-6 space-y-6">
 						<div class="flex items-center justify-between py-2">
 							<div class="flex items-center space-x-3">
-								<i class="fas fa-moon text-gray-500"></i>
 								<div>
-									<p class="font-medium text-gray-900">Mode sombre</p>
-									<p class="text-sm text-gray-500">Activer le thème sombre</p>
+									<p class="font-medium text-gray-900 dark:text-gray-300 transition-all duration-500">Mode sombre</p>
+									<p class="text-sm text-gray-500 dark:text-gray-400 transition-all duration-500">Activer le thème sombre de l'application</p>
 								</div>
 							</div>
-							<label class="switch">
-								<input type="checkbox" [(ngModel)]="darkMode" (change)="toggleDarkMode()" />
-								<span class="slider round"></span>
-							</label>
+							<p-inputSwitch [(ngModel)]="darkMode" (onChange)="toggleDarkMode()"></p-inputSwitch>
 						</div>
 
-						<hr class="border-gray-200 dark:border-gray-700" />
+						<hr class="border-gray-200 dark:border-gray-700 transition-all duration-500" />
 
 						<div class="flex items-center justify-between py-2">
 							<div class="flex items-center space-x-3">
-								<i class="fas fa-bell text-gray-500"></i>
 								<div>
-									<p class="font-medium text-gray-900">Notifications</p>
-									<p class="text-sm text-gray-500">Recevoir des notifications par email</p>
+									<p class="font-medium text-gray-900 dark:text-gray-300 transition-all duration-500">Notifications</p>
+									<p class="text-sm text-gray-500 dark:text-gray-400 transition-all duration-500">Recevoir des notifications par email</p>
 								</div>
 							</div>
-							<label class="switch">
-								<!-- <input type="checkbox" [(ngModel)]="notifications" (change)="toggleNotifications()"> -->
-								<span class="slider round"></span>
-							</label>
+							<p-inputSwitch [(ngModel)]="darkMode" (onChange)="toggleDarkMode()"></p-inputSwitch>
 						</div>
 
-						<hr class="border-gray-200 dark:border-gray-700" />
+						<hr class="border-gray-200 dark:border-gray-700 transition-all duration-500" />
 
 						<div class="flex items-center justify-between py-2">
 							<div class="flex items-center space-x-3">
-								<i class="fas fa-save text-gray-500"></i>
 								<div>
-									<p class="font-medium text-gray-900">Sauvegarde automatique</p>
-									<p class="text-sm text-gray-500">Sauvegarder automatiquement les données</p>
+									<p class="font-medium text-gray-900 dark:text-gray-300 transition-all duration-500">Sauvegarde automatique</p>
+									<p class="text-sm text-gray-500 dark:text-gray-400 transition-all duration-500">Sauvegarder automatiquement les données</p>
 								</div>
 							</div>
-							<label class="switch">
-								<!-- <input type="checkbox" [(ngModel)]="autoSave" (change)="toggleAutoSave()"> -->
-								<span class="slider round"></span>
-							</label>
+							<p-inputSwitch [(ngModel)]="darkMode" (onChange)="toggleDarkMode()"></p-inputSwitch>
 						</div>
 					</div>
 				</div>
 			</div>
 
 			<!-- Subscription Plans -->
-			<div class="border border-gray-200 dark:border-gray-700 rounded-lg">
-				<div class="p-4 border-b border-gray-200 dark:border-gray-700">
-					<h2 class="text-lg font-semibold text-gray-900 dark:text-gray-300">Plans d'abonnement</h2>
-					<p class="text-sm text-gray-500">Choisissez le plan qui correspond le mieux à vos besoins</p>
+			<div class="border border-gray-200 dark:border-gray-700 transition-all duration-500 rounded-lg">
+				<div class="p-4 border-b border-gray-200 dark:border-gray-700 transition-all duration-500">
+					<h2 class="text-lg font-semibold text-gray-900 dark:text-gray-300 transition-all duration-500">Plans d'abonnement</h2>
+					<p class="text-sm text-gray-500 dark:text-gray-400 transition-all duration-500">Choisissez le plan qui correspond le mieux à vos besoins</p>
 				</div>
 				<div class="p-6">
 					<!-- Usage Summary -->
-					<div class="mb-8 p-6 bg-gray-50 rounded-lg border border-gray-200 dark:border-gray-700">
-						<h3 class="text-lg font-semibold text-gray-900 mb-4 flex items-center">Utilisation de votre abonnement</h3>
+					<div class="mb-8 p-6 bg-gray-50 rounded-lg border border-gray-200 dark:border-gray-700 transition-all duration-500">
+						<h3 class="text-lg font-semibold text-gray-900 dark:text-gray-300 transition-all duration-500 mb-4 flex items-center">Utilisation de votre abonnement</h3>
 
 						<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
 							<!-- Current Plan Info -->
-							<div class="bg-white p-4 rounded-lg border border-gray-200 dark:border-gray-700">
+							<div class="bg-white p-4 rounded-lg border border-gray-200 dark:border-gray-700 transition-all duration-500">
 								<div class="text-center">
-									<h4 class="font-medium text-gray-900 mb-2">Plan actuel</h4>
+									<h4 class="font-medium text-gray-900 dark:text-gray-300 transition-all duration-500 mb-2">Plan actuel</h4>
 									<div class="text-2xl font-bold text-blue-600 mb-1">VIP</div>
-									<p class="text-sm text-gray-500">Compétitions illimitées</p>
+									<p class="text-sm text-gray-500 dark:text-gray-400 transition-all duration-500">Compétitions illimitées</p>
 								</div>
 							</div>
 
 							<!-- Usage Stats -->
-							<div class="bg-white p-4 rounded-lg border border-gray-200 dark:border-gray-700">
+							<div class="bg-white p-4 rounded-lg border border-gray-200 dark:border-gray-700 transition-all duration-500">
 								<div class="text-center">
-									<h4 class="font-medium text-gray-900 mb-2">Ce mois-ci</h4>
+									<h4 class="font-medium text-gray-900 dark:text-gray-300 transition-all duration-500 mb-2">Ce mois-ci</h4>
 									<div class="text-2xl font-bold text-green-600 mb-1">7</div>
-									<p class="text-sm text-gray-500">Compétitions créées</p>
+									<p class="text-sm text-gray-500 dark:text-gray-400 transition-all duration-500">Compétitions créées</p>
 								</div>
 							</div>
 
 							<!-- Reset Date -->
-							<div class="bg-white p-4 rounded-lg border border-gray-200 dark:border-gray-700">
+							<div class="bg-white p-4 rounded-lg border border-gray-200 dark:border-gray-700 transition-all duration-500">
 								<div class="text-center">
-									<h4 class="font-medium text-gray-900 mb-2">Remise à zéro</h4>
+									<h4 class="font-medium text-gray-900 dark:text-gray-300 transition-all duration-500 mb-2">Remise à zéro</h4>
 									<div class="text-2xl font-bold text-gray-600 mb-1">1er</div>
-									<p class="text-sm text-gray-500">Février 2024</p>
+									<p class="text-sm text-gray-500 dark:text-gray-400 transition-all duration-500">Février 2024</p>
 								</div>
 							</div>
 						</div>
@@ -515,7 +503,7 @@
 							<div class="w-full bg-blue-200 rounded-full h-2">
 								<div class="bg-blue-600 h-2 rounded-full w-full"></div>
 							</div>
-							<p class="text-xs text-blue-700 mt-2">✨ Avec votre plan VIP, vous pouvez créer un nombre illimité de compétitions</p>
+							<p class="text-xs text-blue-700 mt-2">Avec votre plan VIP, vous pouvez créer un nombre illimité de compétitions</p>
 						</div>
 					</div>
 
@@ -523,7 +511,7 @@
 						<div
 							*ngFor="let plan of subscriptionPlans"
 							class="relative rounded-lg border-2 p-6"
-							[ngClass]="{ 'border-blue-500 bg-blue-50': plan.popular, 'border-gray-200 dark:border-gray-700 bg-white': !plan.popular }"
+							[ngClass]="{ 'border-blue-500 bg-blue-50': plan.popular, 'border-gray-200 dark:border-gray-700 transition-all duration-500 bg-white': !plan.popular }"
 						>
 							<span
 								*ngIf="plan.popular"
@@ -533,10 +521,10 @@
 							</span>
 
 							<div class="text-center mb-6">
-								<h3 class="text-xl font-semibold text-gray-900 mb-2">{{ plan.name }}</h3>
+								<h3 class="text-xl font-semibold text-gray-900 dark:text-gray-300 transition-all duration-500 mb-2">{{ plan.name }}</h3>
 								<div class="flex items-baseline justify-center">
-									<span class="text-3xl font-bold text-gray-900">€{{ plan.price }}</span>
-									<span class="text-gray-500 ml-1">{{ plan.period }}</span>
+									<span class="text-3xl font-bold text-gray-900 dark:text-gray-300 transition-all duration-500">€{{ plan.price }}</span>
+									<span class="text-gray-500 dark:text-gray-400 transition-all duration-500 ml-1">{{ plan.period }}</span>
 								</div>
 							</div>
 							<ul class="space-y-3 mb-6">
@@ -564,32 +552,32 @@
 
 					<!-- Transaction History -->
 					<div class="mt-8">
-						<h2 class="text-lg font-semibold text-gray-900 dark:text-gray-300">Historique des transactions</h2>
-						<div class="rounded-lg border border-gray-200 dark:border-gray-700 overflow-hidden">
+						<h2 class="text-lg font-semibold text-gray-900 dark:text-gray-300 transition-all duration-500">Historique des transactions</h2>
+						<div class="rounded-lg border border-gray-200 dark:border-gray-700 transition-all duration-500 overflow-hidden">
 							<p-table [value]="transactions" dataKey="id" [rows]="10" [paginator]="true">
 								<ng-template pTemplate="header">
 									<tr>
 										<th class="rounded-t-md">
 											<div>
-												<span class="text-prime-blue dark:text-gray-300 mr-2">Date</span>
+												<span class="text-prime-blue dark:text-gray-300 transition-all duration-500 mr-2">Date</span>
 												<p-columnFilter type="text" field="date" display="menu"></p-columnFilter>
 											</div>
 										</th>
 										<th>
 											<div class="flex align-items-center">
-												<span class="text-prime-blue dark:text-gray-300 mr-2">Montant</span>
+												<span class="text-prime-blue dark:text-gray-300 transition-all duration-500 mr-2">Montant</span>
 												<p-columnFilter type="text" field="montant" display="menu"></p-columnFilter>
 											</div>
 										</th>
 										<th>
 											<div class="flex align-items-center">
-												<span class="text-prime-blue dark:text-gray-300 mr-2">Offre</span>
+												<span class="text-prime-blue dark:text-gray-300 transition-all duration-500 mr-2">Offre</span>
 												<p-columnFilter type="text" field="typeOffre" display="menu"></p-columnFilter>
 											</div>
 										</th>
 										<th class="rounded-t-md">
 											<div class="flex align-items-center">
-												<span class="text-prime-blue dark:text-gray-300 mr-2">Statut</span>
+												<span class="text-prime-blue dark:text-gray-300 transition-all duration-500 mr-2">Statut</span>
 												<p-columnFilter type="text" field="statutPaiement" display="menu"></p-columnFilter>
 											</div>
 										</th>
@@ -615,31 +603,31 @@
 			</div>
 
 			<!-- Contact Form -->
-			<div class="border border-gray-200 dark:border-gray-700 rounded-lg">
-				<div class="p-4 border-b border-gray-200 dark:border-gray-700">
-					<h2 class="text-lg font-semibold text-gray-900 dark:text-gray-300">Nous contacter</h2>
-					<p class="text-sm text-gray-500">Une question, un problème ou une suggestion ? Notre équipe est là pour vous aider.</p>
+			<div class="border border-gray-200 dark:border-gray-700 transition-all duration-500 rounded-lg">
+				<div class="p-4 border-b border-gray-200 dark:border-gray-700 transition-all duration-500">
+					<h2 class="text-lg font-semibold text-gray-900 dark:text-gray-300 transition-all duration-500">Nous contacter</h2>
+					<p class="text-sm text-gray-500 dark:text-gray-400 transition-all duration-500">Une question, un problème ou une suggestion ? Notre équipe est là pour vous aider.</p>
 				</div>
 				<div class="p-6">
 					<div class="space-y-6">
 						<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
 							<div class="flex flex-col space-y-1">
-								<Label class="text-sm font-medium text-gray-700 dark:text-gray-300">Nom Prénom *</Label>
+								<Label class="text-sm font-medium text-gray-700 dark:text-gray-300 transition-all duration-500">Nom Prénom *</Label>
 								<input type="text" pInputText [(ngModel)]="email" placeholder="Nom Prénom" />
 							</div>
 
 							<div class="flex flex-col space-y-1">
-								<Label class="text-sm font-medium text-gray-700 dark:text-gray-300">Adresse Email *</Label>
+								<Label class="text-sm font-medium text-gray-700 dark:text-gray-300 transition-all duration-500">Adresse Email *</Label>
 								<input type="text" pInputText [(ngModel)]="email" placeholder="Adresse Email" />
 							</div>
 						</div>
 
 						<div class="flex flex-col space-y-1">
-							<label class="text-sm font-medium text-gray-700 dark:text-gray-300">Message *</label>
+							<label class="text-sm font-medium text-gray-700 dark:text-gray-300 transition-all duration-500">Message *</label>
 							<textarea rows="5" pTextarea class="resize-none w-full" placeholder="Votre message..."></textarea>
 						</div>
 
-						<div class="pt-6 border-t border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-400">
+						<div class="pt-6 border-t border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-400 transition-all duration-500">
 							<div class="flex items-center text-sm">
 								<iconify-icon icon="lucide:info" class="text-[1rem] mr-2"></iconify-icon>
 								<p>Les champs marqués d'un astérisque (*) sont obligatoires.</p>
