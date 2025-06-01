@@ -135,11 +135,11 @@
 			</div>
 			<div class="flex items-center justify-between w-full mt-4">
 				<div class="text-left text-gray-800 dark:text-gray-300 transition-all duration-500 text-lg tracking-wider transition-colors duration-500">Style des cartes</div>
-				<p-dropdown [(ngModel)]="divsStyle" [options]="availabledivsStyles" optionLabel="name" (onChange)="updatedivParam('divStyle', $event.value.code)"></p-dropdown>
+				<p-dropdown [(ngModel)]="divsStyle" [options]="availabledivsStyles" optionlabel="name" (onChange)="updatedivParam('divStyle', $event.value.code)"></p-dropdown>
 			</div>
 			<div class="flex items-center justify-between w-full mt-4">
 				<div class="text-left text-gray-800 dark:text-gray-300 transition-all duration-500 text-lg tracking-wider transition-colors duration-500">Couleur du tapis de jeu</div>
-				<p-dropdown [options]="availablePokerTableColors" [(ngModel)]="pokerTableColor" optionLabel="name" (onChange)="updatedivParam('playmatColor', $event.value.code)" />
+				<p-dropdown [options]="availablePokerTableColors" [(ngModel)]="pokerTableColor" optionlabel="name" (onChange)="updatedivParam('playmatColor', $event.value.code)" />
 			</div>
 		</div>
 	</div> -->
@@ -148,7 +148,7 @@
 <dialog id="change-div-name" class="dui-modal dui-modal-bottom sm:dui-modal-middle">
 	<div class="dui-modal-box text-gray-800 dark:text-gray-300 transition-all duration-500 bg-white dark:bg-secondary-dark-bg">
 		<form method="dialog">
-			<button class="dui-btn dui-btn-sm dui-btn-circle dui-btn-ghost absolute right-2 top-2 outline-none">✕</button>
+			<div class="dui-btn dui-btn-sm dui-btn-circle dui-btn-ghost absolute right-2 top-2 outline-none">✕</div>
 		</form>
 		<h4 class="m-0 mb-4 text-left text-lg font-semibold uppercase text-gray-800 dark:text-gray-300 transition-all duration-500 tracking-wider">
 			Modification du nom d'utilisateur
@@ -204,7 +204,7 @@
 							Dashboard des données
 						</li>
 					</ul>
-					<div class="plan-button">Commencer</div>
+					<div class="plan-div">Commencer</div>
 				</div>
 
 				<div class="plan popular-plan">
@@ -232,7 +232,7 @@
 							Conseils personnalisés pour les tireurs
 						</li>
 					</ul>
-					<div class="plan-button popular-button">Commencer</div>
+					<div class="plan-div popular-div">Commencer</div>
 				</div>
 
 				<div class="plan">
@@ -259,7 +259,7 @@
 							Support dédié
 						</li>
 					</ul>
-					<div class="plan-button">Commencer</div>
+					<div class="plan-div">Commencer</div>
 				</div>
 			</div>
 		</div>
@@ -368,11 +368,15 @@
 				<div class="border border-gray-200 dark:border-gray-700 transition-all duration-500 rounded-lg">
 					<div class="p-4 border-b border-gray-200 dark:border-gray-700 transition-all duration-500">
 						<h2 class="text-lg font-semibold text-gray-900 dark:text-gray-300 transition-all duration-500">Gestion du compte</h2>
-						<p class="text-sm text-gray-500 dark:text-gray-400 transition-all duration-500">Gérez vos informations personnelles et votre sécurité</p>
+						<p class="text-sm text-gray-500 dark:text-gray-400 transition-all duration-500">
+							Gérez vos informations personnelles et votre sécurité
+						</p>
 					</div>
 					<div class="p-6 space-y-6">
 						<div class="flex items-center space-x-4">
-							<div class="h-16 w-16 border-2 border-gray-200 dark:border-gray-700 transition-all duration-500 rounded-full overflow-hidden">
+							<div
+								class="h-16 w-16 border-2 border-gray-200 dark:border-gray-700 transition-all duration-500 rounded-full overflow-hidden"
+							>
 								<img
 									src="https://imgs.search.brave.com/6Abd5TBbHIoBHK1py-tGSUv7eRH_hf3KVb5Px1DBNMs/rs:fit:860:0:0/g:ce/aHR0cHM6Ly90NC5m/dGNkbi5uZXQvanBn/LzA4LzIzLzkxLzU1/LzM2MF9GXzgyMzkx/NTUzM19PalFLUGtD/TTNzaGRxRmdwWjVz/d01LV3U1cHhnMzls/VS5qcGc"
 									alt="Utilisateur"
@@ -388,24 +392,24 @@
 						<hr class="border-gray-200 dark:border-gray-700 transition-all duration-500" />
 
 						<div class="space-y-3">
-							<button
+							<div
 								class="w-full flex items-center justify-start px-4 py-2 border border-gray-200 dark:border-gray-700 transition-all duration-500 rounded-md text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-600 cursor-pointer"
 							>
 								<iconify-icon icon="lucide:pen-line" class="text-[1.3rem] mr-4"></iconify-icon>
 								Modifier le nom du club
-							</button>
-							<button
+							</div>
+							<div
 								class="w-full flex items-center justify-start px-4 py-2 border border-gray-200 dark:border-gray-700 transition-all duration-500 rounded-md text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-600 cursor-pointer"
 							>
 								<iconify-icon icon="mdi:password-reset" class="text-[1.3rem] mr-4"></iconify-icon>
 								Changer le mot de passe
-							</button>
-							<button
+							</div>
+							<div
 								class="w-full flex items-center justify-start px-4 py-2 border border-gray-200 dark:border-gray-700 transition-all duration-500 rounded-md text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-600 cursor-pointer"
 							>
 								<iconify-icon icon="fluent:plug-disconnected-24-filled" class="text-[1.3rem] mr-4"></iconify-icon>
 								Se déconnecter
-							</button>
+							</div>
 						</div>
 					</div>
 				</div>
@@ -414,14 +418,18 @@
 				<div class="border border-gray-200 dark:border-gray-700 transition-all duration-500 rounded-lg">
 					<div class="p-4 border-b border-gray-200 dark:border-gray-700 transition-all duration-500">
 						<h2 class="text-lg font-semibold text-gray-900 dark:text-gray-300 transition-all duration-500">Préférences générales</h2>
-						<p class="text-sm text-gray-500 dark:text-gray-400 transition-all duration-500">Configurez les paramètres globaux de l'application</p>
+						<p class="text-sm text-gray-500 dark:text-gray-400 transition-all duration-500">
+							Configurez les paramètres globaux de l'application
+						</p>
 					</div>
 					<div class="p-6 space-y-6">
 						<div class="flex items-center justify-between py-2">
 							<div class="flex items-center space-x-3">
 								<div>
 									<p class="font-medium text-gray-900 dark:text-gray-300 transition-all duration-500">Mode sombre</p>
-									<p class="text-sm text-gray-500 dark:text-gray-400 transition-all duration-500">Activer le thème sombre de l'application</p>
+									<p class="text-sm text-gray-500 dark:text-gray-400 transition-all duration-500">
+										Activer le thème sombre de l'application
+									</p>
 								</div>
 							</div>
 							<p-inputSwitch [(ngModel)]="darkMode" (onChange)="toggleDarkMode()"></p-inputSwitch>
@@ -533,7 +541,7 @@
 								</li>
 							</ul>
 
-							<button
+							<div
 								[ngClass]="{
 									'bg-blue-600 hover:bg-blue-700 text-white': plan.popular,
 									'border border-gray-300 text-gray-700 hover:bg-gray-50': !plan.popular
@@ -541,7 +549,7 @@
 								class="w-full py-2 px-4 rounded-md"
 							>
 								{{ plan.popular ? "Plan actuel" : "Choisir ce plan" }}
-							</button>
+							</div>
 						</div>
 					</div>
 					<div class="mt-8">
@@ -599,24 +607,33 @@
 			<div class="border border-gray-200 dark:border-gray-700 transition-all duration-500 rounded-lg">
 				<div class="p-4 border-b border-gray-200 dark:border-gray-700 transition-all duration-500">
 					<h2 class="text-lg font-semibold text-gray-900 dark:text-gray-300 transition-all duration-500">Nous contacter</h2>
-					<p class="text-sm text-gray-500 dark:text-gray-400 transition-all duration-500">Une question, un problème ou une suggestion ? Notre équipe est là pour vous aider.</p>
+					<p class="text-sm text-gray-500 dark:text-gray-400 transition-all duration-500">
+						Une question, un problème ou une suggestion ? Notre équipe est là pour vous aider.
+					</p>
 				</div>
 				<div class="p-6">
 					<div class="space-y-6">
-						<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+						<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
 							<div class="flex flex-col space-y-1">
-								<Label class="text-sm font-medium text-gray-700 dark:text-gray-300 transition-all duration-500">Nom Prénom *</Label>
-								<input type="text" pInputText [(ngModel)]="email" placeholder="Nom Prénom" />
+								<label class="text-sm font-medium text-gray-700 dark:text-gray-300 transition-all duration-500 ml-1">Nom *</label>
+								<input type="text" pInputText [(ngModel)]="name" placeholder="Nom" />
 							</div>
 
 							<div class="flex flex-col space-y-1">
-								<Label class="text-sm font-medium text-gray-700 dark:text-gray-300 transition-all duration-500">Adresse Email *</Label>
+								<label class="text-sm font-medium text-gray-700 dark:text-gray-300 transition-all duration-500 ml-1">Prénom *</label>
+								<input type="text" pInputText [(ngModel)]="firstName" placeholder="Prénom" />
+							</div>
+
+							<div class="flex flex-col space-y-1">
+								<label class="text-sm font-medium text-gray-700 dark:text-gray-300 transition-all duration-500 ml-1">
+									Adresse Email *
+								</label>
 								<input type="text" pInputText [(ngModel)]="email" placeholder="Adresse Email" />
 							</div>
 						</div>
 
 						<div class="flex flex-col space-y-1">
-							<label class="text-sm font-medium text-gray-700 dark:text-gray-300 transition-all duration-500">Message *</label>
+							<label class="text-sm font-medium text-gray-700 dark:text-gray-300 transition-all duration-500 ml-1">Message *</label>
 							<textarea rows="5" pTextarea class="resize-none w-full" placeholder="Votre message..."></textarea>
 						</div>
 

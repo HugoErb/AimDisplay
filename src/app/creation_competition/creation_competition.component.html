@@ -17,12 +17,12 @@
 				</h2>
 				<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
 					<div class="flex flex-col space-y-1">
-						<Label class="text-sm font-medium text-gray-700 dark:text-gray-300">Nom de la compétition *</Label>
+						<label class="text-sm font-medium text-gray-700 dark:text-gray-300 ml-1">Nom de la compétition *</label>
 						<input type="text" pInputText [(ngModel)]="competitionName" placeholder="Nom de la compétition" />
 					</div>
 
 					<div class="flex flex-col space-y-1">
-						<Label class="text-sm font-medium text-gray-700 dark:text-gray-300">Dates de la compétition *</Label>
+						<label class="text-sm font-medium text-gray-700 dark:text-gray-300 ml-1">Dates de la compétition *</label>
 						<div class="relative">
 							<p-datepicker
 								[firstDayOfWeek]="1"
@@ -43,7 +43,7 @@
 				</h2>
 				<div class="grid grid-cols-1 md:grid-cols-2 gap-8">
 					<div class="flex flex-col space-y-1">
-						<Label class="text-sm font-medium text-gray-700 dark:text-gray-300">Prix d'inscription *</Label>
+						<label class="text-sm font-medium text-gray-700 dark:text-gray-300 ml-1">Prix d'inscription *</label>
 						<div class="flex items-center space-x-2">
 							<p-inputNumber
 								[(ngModel)]="prixCategSup"
@@ -60,7 +60,7 @@
 					</div>
 
 					<div class="flex flex-col space-y-1">
-						<Label class="text-sm font-medium text-gray-700 dark:text-gray-300">Prix de catégorie supplémentaire *</Label>
+						<label class="text-sm font-medium text-gray-700 dark:text-gray-300 ml-1">Prix de catégorie supplémentaire *</label>
 						<div class="flex items-center space-x-2">
 							<p-inputNumber
 								[(ngModel)]="prixCategSup"
