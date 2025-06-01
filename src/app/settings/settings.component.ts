@@ -23,6 +23,8 @@ export class SettingsComponent {
 	constructor(protected commonService: CommonService, private themeService: ThemeService) {}
 
 	userParamsName: string = 'userParamsAimDisplay';
+	name: string = '';
+	firstName: string = '';
 	email: string = '';
 	darkMode: boolean = false;
 	newUserName: string = '';

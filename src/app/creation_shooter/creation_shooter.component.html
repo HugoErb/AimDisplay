@@ -18,17 +18,17 @@
 				</h2>
 				<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
 					<div class="flex flex-col space-y-1">
-						<label class="text-sm font-medium text-gray-700 dark:text-gray-300">Nom *</label>
+						<label class="text-sm font-medium text-gray-700 dark:text-gray-300 ml-1">Nom *</label>
 						<input type="text" pInputText [(ngModel)]="shooterLastName" placeholder="Nom du tireur" />
 					</div>
 
 					<div class="flex flex-col space-y-1">
-						<label class="text-sm font-medium text-gray-700 dark:text-gray-300">Prénom *</label>
+						<label class="text-sm font-medium text-gray-700 dark:text-gray-300 ml-1">Prénom *</label>
 						<input type="text" pInputText [(ngModel)]="shooterFirstName" placeholder="Prénom du tireur" />
 					</div>
 
 					<div class="flex flex-col space-y-1">
-						<label class="text-sm font-medium text-gray-700 dark:text-gray-300">Adresse Email</label>
+						<label class="text-sm font-medium text-gray-700 dark:text-gray-300 ml-1">Adresse Email</label>
 						<input type="text" pInputText [(ngModel)]="shooterEmail" placeholder="Adresse Email" />
 					</div>
 				</div>
@@ -41,7 +41,7 @@
 				</h2>
 				<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
 					<div class="flex flex-col space-y-1">
-						<label class="text-sm font-medium text-gray-700 dark:text-gray-300">Club *</label>
+						<label class="text-sm font-medium text-gray-700 dark:text-gray-300 ml-1">Club *</label>
 						<p-autoComplete
 							[(ngModel)]="shooterClubName"
 							[forceSelection]="true"
@@ -54,7 +54,7 @@
 					</div>
 
 					<div class="flex flex-col space-y-1">
-						<label class="text-sm font-medium text-gray-700 dark:text-gray-300">Compétition *</label>
+						<label class="text-sm font-medium text-gray-700 dark:text-gray-300 ml-1">Compétition *</label>
 						<p-autoComplete
 							[(ngModel)]="shooterCompetitionName"
 							[forceSelection]="true"
@@ -75,7 +75,7 @@
 				</h2>
 				<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
 					<div class="flex flex-col space-y-1" >
-						<label class="text-sm font-medium text-gray-700 dark:text-gray-300">Distance de tir *</label>
+						<label class="text-sm font-medium text-gray-700 dark:text-gray-300 ml-1">Distance de tir *</label>
 						<p-autoComplete
 							[(ngModel)]="shooterDistance"
 							[forceSelection]="true"
@@ -88,7 +88,7 @@
 					</div>
 
 					<div class="flex flex-col space-y-1">
-						<label class="text-sm font-medium text-gray-700 dark:text-gray-300">Type d'arme *</label>
+						<label class="text-sm font-medium text-gray-700 dark:text-gray-300 ml-1">Type d'arme *</label>
 						<p-autoComplete
 							[(ngModel)]="shooterWeapon"
 							[forceSelection]="true"
@@ -101,7 +101,7 @@
 					</div>
 
 					<div class="flex flex-col space-y-1">
-						<label class="text-sm font-medium text-gray-700 dark:text-gray-300">Catégorie *</label>
+						<label class="text-sm font-medium text-gray-700 dark:text-gray-300 ml-1">Catégorie *</label>
 						<p-autoComplete
 							[(ngModel)]="shooterCategory"
 							[forceSelection]="true"
@@ -123,7 +123,7 @@
 				</h2>
 				<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
 					<div>
-						<label class="text-sm font-medium text-gray-700 dark:text-gray-300">Score série 1</label>
+						<label class="text-sm font-medium text-gray-700 dark:text-gray-300 ml-1">Score série 1</label>
 						<div class="flex items-center space-x-2">
 							<p-inputNumber
 								[(ngModel)]="scoreSerie1"
@@ -138,7 +138,7 @@
 						</div>
 					</div>
 					<div>
-						<label class="text-sm font-medium text-gray-700 dark:text-gray-300">Score série 2</label>
+						<label class="text-sm font-medium text-gray-700 dark:text-gray-300 ml-1">Score série 2</label>
 						<div class="flex items-center space-x-2">
 							<p-inputNumber
 								[(ngModel)]="scoreSerie2"
@@ -153,7 +153,7 @@
 						</div>
 					</div>
 					<div>
-						<label class="text-sm font-medium text-gray-700 dark:text-gray-300">Score série 3</label>
+						<label class="text-sm font-medium text-gray-700 dark:text-gray-300 ml-1">Score série 3</label>
 						<div class="flex items-center space-x-2">
 							<p-inputNumber
 								[(ngModel)]="scoreSerie3"
@@ -168,7 +168,7 @@
 						</div>
 					</div>
 					<div>
-						<label class="text-sm font-medium text-gray-700 dark:text-gray-300">Score série 4</label>
+						<label class="text-sm font-medium text-gray-700 dark:text-gray-300 ml-1">Score série 4</label>
 						<div class="flex items-center space-x-2">
 							<p-inputNumber
 								[(ngModel)]="scoreSerie4"
@@ -184,7 +184,7 @@
 					</div>
 					@if (this.isSeniorOrDameCategory){
 					<div class="flex flex-col space-y-1">
-						<label class="text-sm font-medium text-gray-700 dark:text-gray-300">Score série 5</label>
+						<label class="text-sm font-medium text-gray-700 dark:text-gray-300 ml-1">Score série 5</label>
 						<p-inputNumber
 							[(ngModel)]="scoreSerie5"
 							mode="decimal"
@@ -197,7 +197,7 @@
 						></p-inputNumber>
 					</div>
 					<div class="flex flex-col space-y-1">
-						<label class="text-sm font-medium text-gray-700 dark:text-gray-300">Score série 6</label>
+						<label class="text-sm font-medium text-gray-700 dark:text-gray-300 ml-1">Score série 6</label>
 						<p-inputNumber
 							[(ngModel)]="scoreSerie6"
 							mode="decimal"
