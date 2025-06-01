@@ -130,8 +130,11 @@
 	.p-inputtext,
 	.p-autocomplete,
 	.p-inputnumber,
-	.p-datepicker {
+	.p-datepicker,
+	textarea {
 		width: 100% !important;
+		transition-duration: 500ms !important;
+        font-size: 0.925rem !important;
 	}
 
 	/* Dark mode des inputs PrimeNG */
@@ -147,8 +150,7 @@
 
 	:where(.dark) .p-autocomplete-dropdown,
 	:where(.dark) .p-datepicker-dropdown,
-	:where(.dark) .p-dropdown-trigger,
-	:where(.dark) textarea {
+	:where(.dark) .p-dropdown-trigger {
 		border: 1px #374151 solid !important; /* gray-700 */
 		border-left: none !important;
 	}
