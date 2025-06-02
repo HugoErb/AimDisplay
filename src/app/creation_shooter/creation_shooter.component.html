@@ -71,10 +71,10 @@
 			<!-- Equipment Configuration -->
 			<div class="space-y-4">
 				<h2 class="text-lg font-semibold text-gray-900 pb-2 border-b border-gray-200 dark:border-gray-700 dark:text-gray-300">
-					Catégorie du tireur dans la compétition
+					Catégorie et scores du tireur dans la compétition
 				</h2>
 				<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-					<div class="flex flex-col space-y-1" >
+					<div class="flex flex-col space-y-1">
 						<label class="text-sm font-medium text-gray-700 dark:text-gray-300 ml-1">Distance de tir *</label>
 						<p-autoComplete
 							[(ngModel)]="shooterDistance"
@@ -114,13 +114,8 @@
 						></p-autoComplete>
 					</div>
 				</div>
-			</div>
 
-			<!-- Series Scores -->
-			<div class="space-y-4">
-				<h2 class="text-lg font-semibold text-gray-900 pb-2 border-b border-gray-200 dark:border-gray-700 dark:text-gray-300">
-					Résultats des séries
-				</h2>
+				<!-- Series Scores -->
 				<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
 					<div>
 						<label class="text-sm font-medium text-gray-700 dark:text-gray-300 ml-1">Score série 1</label>
@@ -210,6 +205,15 @@
 						></p-inputNumber>
 					</div>
 					}
+				</div>
+			</div>
+
+			<div>
+				<div
+					class="inline-flex h-12 items-center justify-center rounded-md bg-prime-blue text-white dark:text-gray-300 hover:bg-hover-prime-blue px-5 text-base font-medium shadow transition-colors duration-250 cursor-pointer"
+				>
+					<iconify-icon icon="si:add-fill" class="text-[1.6rem] mr-3"></iconify-icon>
+					Ajouter une catégorie supplémentaire
 				</div>
 			</div>
 
