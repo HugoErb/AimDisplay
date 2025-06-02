@@ -13,6 +13,7 @@ import { AutoCompleteModule } from 'primeng/autocomplete';
 export class RankingComponent {
 	currentPage: number = 1;
 	totalPages: number = 5;
+
 	// Données d'exemple pour le classement
 	classementData = [
 		{
@@ -127,15 +128,15 @@ export class RankingComponent {
 
 		switch (position) {
 			case 1:
-				bgClass = 'bg-yellow-500 hover:bg-yellow-600 text-white';
+				bgClass = 'bg-yellow-500 text-white';
 				text = '1er';
 				break;
 			case 2:
-				bgClass = 'bg-gray-400 hover:bg-gray-500 text-white';
+				bgClass = 'bg-gray-400 text-white';
 				text = '2ème';
 				break;
 			case 3:
-				bgClass = 'bg-amber-600 hover:bg-amber-700 text-white';
+				bgClass = 'bg-amber-600 text-white';
 				text = '3ème';
 				break;
 			default:
@@ -143,6 +144,6 @@ export class RankingComponent {
 				text = `${position}ème`;
 		}
 
-		return `<span class="px-2 py-1 rounded text-sm font-medium transition-colors duration-150 ${bgClass}">${text}</span>`;
+		return `<span class="px-2 py-1 rounded-full text-sm font-medium transition-colors duration-150 ${bgClass}">${text}</span>`;
 	}
 }

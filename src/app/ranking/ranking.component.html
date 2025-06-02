@@ -1,21 +1,19 @@
 <div class="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 text-gray-700">
 	<!-- Header -->
-	<div class="bg-white/80 backdrop-blur-md shadow-lg border-b border-gray-200/50 sticky top-0 z-10">
-		<div class="px-6 py-3">
-			<div class="flex items-center justify-between">
-				<div class="flex items-center space-x-2">
-                    <img src="../../../assets/img/logo.png" alt="Logo" class="h-8 w-8 mr-4" />
-                    <div>
-                        <h2 class="text-lg font-semibold transition-all duration-500">Aim Display</h2>
-                        <p class="text-sm text-gray-500 transition-all duration-500">Gestion de tir sportif</p>
-                    </div>
-                </div>
-
-				<div class="text-center">
-					<h1 class="text-2xl font-bold bg-gradient-to-r from-gray-900 to-gray-600 bg-clip-text text-transparent">CLASSEMENT EN DIRECT</h1>
-					<p class="text-sm text-blue-600 font-medium">Championnat Régional 2024</p>
+	<div class="bg-white/80 backdrop-blur-md shadow-lg border-b border-gray-200/50 top-0 z-10 relative">
+		<div class="px-6 py-3 relative h-20">
+			<div class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-center">
+				<h1 class="text-2xl font-bold text-gray-700">CLASSEMENT EN DIRECT</h1>
+				<p class="text-sm text-prime-blue font-medium">Championnat Régional 2024</p>
+			</div>
+			<div class="flex items-center justify-between h-full">
+				<div class="flex items-center">
+					<img src="../../../assets/img/logo.png" alt="Logo" class="h-8 w-8 mr-4" />
+					<div>
+						<h2 class="text-lg font-semibold">Aim Display</h2>
+						<p class="text-sm text-gray-500">Gestion de tir sportif</p>
+					</div>
 				</div>
-
 				<div class="w-24"></div>
 			</div>
 		</div>
@@ -24,66 +22,70 @@
 	<!-- Content -->
 	<div class="p-4">
 		<!-- Catégorie -->
-		<div class="flex justify-start mb-5">
-			<div class="bg-white/80 backdrop-blur-md rounded-xl shadow-lg border border-gray-200/50 px-7 py-4">
-				<h2 class="text-2xl font-bold text-gray-900">Catégorie Senior - Pistolet 25m</h2>
-				<div class="flex items-center space-x-2 mt-2">
-					<div class="w-2.5 h-2.5 bg-green-500 rounded-full"></div>
-					<span class="text-sm text-gray-600">8 participants</span>
+		<div class="mb-5 ml-auto mr-auto w-11/12">
+			<div class="bg-white/80 backdrop-blur-md rounded-xl shadow-lg border border-gray-200/50 px-7 py-4 inline-block">
+				<h2 class="text-2xl font-bold text-gray-900">Pistolet 25m - Catégorie Senior</h2>
+				<div class="flex items-center space-x-4 mt-2">
+					<!-- Participants -->
+					<div class="flex items-center space-x-2">
+						<div class="w-2.5 h-2.5 bg-green-500 rounded-full"></div>
+						<span class="text-sm text-gray-600">8 participants</span>
+					</div>
+
+					<!-- Séparateur -->
+					<div class="h-4 w-px bg-gray-300"></div>
+
+					<!-- Pagination -->
+					<div class="flex items-center space-x-2">
+						<div class="w-2.5 h-2.5 bg-green-500 rounded-full"></div>
+						<span class="text-sm text-gray-600">Page {{ currentPage }} sur {{ totalPages }}</span>
+					</div>
 				</div>
 			</div>
 		</div>
 
 		<!-- Table -->
-		<div class="bg-white/80 backdrop-blur-md rounded-2xl shadow-2xl border border-gray-200/50 overflow-hidden">
-			<table class="min-w-full table-auto">
-				<thead>
-					<tr class="bg-gradient-to-r from-gray-50 to-blue-50 border-b border-gray-200">
-						<th class="text-center font-bold text-gray-800 py-3 text-sm">Classement</th>
-						<th class="font-bold text-gray-800 text-sm">Tireur</th>
-						<th class="font-bold text-gray-800 text-sm">Club</th>
-						<th class="text-center font-bold text-gray-800 text-sm" *ngFor="let i of [1, 2, 3, 4, 5, 6]">S{{ i }}</th>
-						<th class="text-center font-bold text-blue-800 bg-blue-100 text-sm">TOTAL</th>
-					</tr>
-				</thead>
-				<tbody>
-					<tr
-						*ngFor="let tireur of classementData"
-						[ngClass]="{
-							'bg-gradient-to-r from-yellow-50/30 to-orange-50/30': tireur.position <= 3,
-							'hover:bg-blue-50/50 transition-colors duration-200': true
-						}"
-					>
-						<td class="text-center py-3" [innerHTML]="getPositionBadge(tireur.position)"></td>
-						<td class="py-3">
-							<div class="font-bold text-gray-900 text-base">{{ tireur.nom }}</div>
-							<div class="text-sm text-gray-600">{{ tireur.prenom }}</div>
-						</td>
-						<td class="text-gray-600 py-3 text-base">{{ tireur.club }}</td>
-						<td class="text-center font-mono text-base py-3">{{ tireur.serie1.toFixed(1) }}</td>
-						<td class="text-center font-mono text-base py-3">{{ tireur.serie2.toFixed(1) }}</td>
-						<td class="text-center font-mono text-base py-3">{{ tireur.serie3.toFixed(1) }}</td>
-						<td class="text-center font-mono text-base py-3">{{ tireur.serie4.toFixed(1) }}</td>
-						<td class="text-center font-mono text-base py-3">{{ tireur.serie5.toFixed(1) }}</td>
-						<td class="text-center font-mono text-base py-3">{{ tireur.serie6.toFixed(1) }}</td>
-						<td class="text-center font-mono text-xl font-bold text-blue-600 bg-gradient-to-r from-blue-50 to-indigo-50 py-3">
-							{{ tireur.total.toFixed(1) }}
-						</td>
-					</tr>
-				</tbody>
-			</table>
-		</div>
+		<div class="mt-3 flex justify-center">
+			<div class="bg-white/80 backdrop-blur-md rounded-2xl shadow-2xl border border-gray-200/50 overflow-hidden w-11/12">
+				<table class="min-w-full table-auto">
+					<thead>
+						<tr class="bg-gradient-to-r from-gray-50 to-blue-50 border-b border-gray-200">
+							<th class="text-center font-bold text-gray-800 py-3 text-sm">Classement</th>
+							<th class="text-left font-bold text-gray-800 text-sm">Tireur</th>
+							<th class="text-left font-bold text-gray-800 text-sm">Club</th>
 
-		<!-- Pagination -->
-		<div class="mt-4 flex justify-center items-center">
-			<div class="text-base font-medium">Page {{ currentPage }} sur {{ totalPages }}</div>
+							<th class="text-center font-bold text-gray-800 text-sm" *ngFor="let i of [1, 2, 3, 4, 5, 6]">S{{ i }}</th>
+							<th class="text-center font-bold text-blue-800 bg-blue-100 text-sm">TOTAL</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr *ngFor="let tireur of classementData" class="border-b border-gray-200">
+							<td class="text-center py-3" [innerHTML]="getPositionBadge(tireur.position)"></td>
+							<td class="py-3">
+								<div class="font-bold text-gray-900 text-base">{{ tireur.nom }}</div>
+								<div class="text-sm text-gray-600">{{ tireur.prenom }}</div>
+							</td>
+							<td class="text-gray-600 py-3 text-base">{{ tireur.club }}</td>
+							<td class="text-center font-mono text-[1.1rem] py-3 w-30">{{ tireur.serie1.toFixed(1) }}</td>
+							<td class="text-center font-mono text-[1.1rem] py-3 w-30">{{ tireur.serie2.toFixed(1) }}</td>
+							<td class="text-center font-mono text-[1.1rem] py-3 w-30">{{ tireur.serie3.toFixed(1) }}</td>
+							<td class="text-center font-mono text-[1.1rem] py-3 w-30">{{ tireur.serie4.toFixed(1) }}</td>
+							<td class="text-center font-mono text-[1.1rem] py-3 w-30">{{ tireur.serie5.toFixed(1) }}</td>
+							<td class="text-center font-mono text-[1.1rem] py-3 w-30">{{ tireur.serie6.toFixed(1) }}</td>
+							<td class="text-center font-mono text-xl font-bold text-prime-blue bg-gradient-to-r from-blue-50 to-indigo-50 py-3">
+								{{ tireur.total.toFixed(1) }}
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
 		</div>
 
 		<!-- Info -->
 		<div class="mt-3 flex justify-center">
 			<div class="bg-blue-50/80 backdrop-blur-md rounded-lg px-6 py-3 shadow-md border border-blue-200/50 max-w-4xl">
-				<p class="text-sm text-blue-800 text-center">
-					<iconify-icon icon="lucide:info" class="mr-1 text-blue-600"></iconify-icon>
+				<p class="text-sm text-blue-700 text-center">
+					<iconify-icon icon="lucide:info" class="text-[1.1rem] mb-0.5 mr-1 text-blue-600 align-middle"></iconify-icon>
 					Certains tireurs peuvent ne pas être encore présents dans le tableau, ou afficher des séries à 0, car ils n'ont pas encore terminé
 					de tirer ou leurs résultats n'ont pas encore été mis à jour par les organisateurs.
 				</p>
