@@ -1,72 +1,49 @@
-<h3 class="text-4xl font-bold md:text-5xl text-prime-blue dark:text-gray-300 animate-appear opacity-0 transition-colors duration-500 m-0">
-	Affichage des données
-</h3>
-<p class="text-gray-500 dark:text-gray-400 text-xl mt-2 mb-0 text-left animate-appear opacity-0 transition-colors duration-500">
-	Gérez l'affichage des résultats et du classement de votre compétition en cours.
-</p>
-
-<!-- Affichage compétition -->
-<div class="flex items-center mt-[60px] text-prime-blue dark:text-gray-300 opacity-0 animate-appear animation-delay-100 duration-500">
-	<iconify-icon icon="fa6-solid:person-rifle" class="text-[1.5rem]"></iconify-icon>
-	<h3 class="font-bold text-[2rem] ml-4">Affichage d'une compétition</h3>
-</div>
-
-<div
-	class="mx-auto mt-[30px] w-1/2 min-w-[750px] bg-white dark:bg-secondary-dark-bg p-[30px] shadow-lg rounded-[20px] opacity-0 animate-appear animation-delay-100 duration-500"
->
-	<div class="flex flex-wrap mb-[15px]">
-		<div class="w-1/2 px-[15px] mb-[15px]">
-			<label class="block uppercase text-xs font-bold mb-[5px] text-gray-800 dark:text-gray-300">Compétition</label>
-			<p-autoComplete
-				[(ngModel)]="shooterCompetitionName"
-				[forceSelection]="true"
-				[suggestions]="filteredCompetitions"
-				(completeMethod)="filterCompetition($event)"
-				field="name"
-				[dropdown]="true"
-				placeholder="Sélectionnez une compétition"
-			></p-autoComplete>
+<div class="opacity-0 animate-appear duration-500">
+	<div class="bg-white dark:bg-secondary-dark-bg shadow-lg rounded-lg m-6">
+		<div class="bg-gradient-to-r from-prime-blue to-hover-prime-blue text-white px-8 py-6 rounded-t-lg">
+			<div class="flex items-center space-x-3">
+				<iconify-icon icon="streamline:screen-1-remix" class="text-[1.8rem] mr-5"></iconify-icon>
+				<div>
+					<h1 class="text-2xl font-bold">Affichage du classement d'une compétition</h1>
+					<p class="text-blue-100 mt-1">Lancez l'affichage du classement en direct d'une compétition en cours</p>
+				</div>
+			</div>
 		</div>
-	</div>
-	<div class="flex justify-center items-center">
-		<div
-			class="inline-flex h-12 items-center justify-center rounded-md bg-prime-blue text-white dark:text-gray-300 hover:bg-hover-prime-blue dark:bg-gray-700 dark:hover:bg-gray-600 px-5 text-base font-medium shadow transition-colors duration-250 cursor-pointer"
-		>
-			<iconify-icon icon="streamline:screen-1-solid" class="text-[1.1rem] mr-4"></iconify-icon>
-			Lancer l'affichage
-		</div>
-	</div>
-</div>
- 
-<!-- Génération de PDF -->
-<div class="flex items-center mt-[60px] text-prime-blue dark:text-gray-300 opacity-0 animate-appear animation-delay-200 duration-500">
-	<iconify-icon icon="bxs:file-pdf" class="text-[2rem]"></iconify-icon>
-	<h3 class="font-bold text-[2rem] ml-4">Génération de rapport PDF</h3>
-</div>
 
-<div
-	class="mx-auto mt-[30px] w-1/2 min-w-[750px] bg-white dark:bg-secondary-dark-bg p-[30px] shadow-lg rounded-[20px] opacity-0 animate-appear animation-delay-200 duration-500"
->
-	<div class="flex flex-wrap mb-[15px]">
-		<div class="w-1/2 px-[15px] mb-[15px]">
-			<label class="block uppercase text-xs font-bold mb-[5px] text-gray-800 dark:text-gray-300">Compétition</label>
-			<p-autoComplete
-				[(ngModel)]="shooterCompetitionName"
-				[forceSelection]="true"
-				[suggestions]="filteredCompetitions"
-				(completeMethod)="filterCompetition($event)"
-				field="name"
-				[dropdown]="true"
-				placeholder="Sélectionnez une compétition"
-			></p-autoComplete>
-		</div>
-	</div>
-	<div class="flex justify-center items-center">
-		<div
-			class="inline-flex h-12 items-center justify-center rounded-md bg-prime-blue text-white dark:text-gray-300 hover:bg-hover-prime-blue dark:bg-gray-700 dark:hover:bg-gray-600 px-5 text-base font-medium shadow transition-colors duration-250 cursor-pointer"
-		>
-			<iconify-icon icon="fa-solid:download" class="text-[1rem] mr-4"></iconify-icon>
-			Télécharger le rapport
+		<div class="p-8 space-y-10">
+			<div class="space-y-4">
+				<h2 class="text-lg font-semibold text-gray-900 pb-2 border-b border-gray-200 dark:border-gray-700 dark:text-gray-300">
+					Affichage d'une compétition
+				</h2>
+				<div class="flex flex-col space-y-1">
+					<label class="text-sm font-medium text-gray-700 dark:text-gray-300 ml-1">Compétition</label>
+					<p-autoComplete
+						[(ngModel)]="shooterCompetitionName"
+						[forceSelection]="true"
+						[suggestions]="filteredCompetitions"
+						(completeMethod)="filterCompetition($event)"
+						field="name"
+						[dropdown]="true"
+						placeholder="Compétition à afficher"
+					></p-autoComplete>
+				</div>
+			</div>
+
+			<!-- Information Notes -->
+			<div class="pt-6 border-t border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-400">
+				<div class="flex items-center text-sm">
+					<iconify-icon icon="lucide:info" class="text-[1rem] mr-2"></iconify-icon>
+					<p>L’activation ouvrira une nouvelle page permettant d'afficher en plein écran le classement à vos compétiteurs.</p>
+				</div>
+				<div class="flex justify-end">
+					<div
+						class="inline-flex h-12 items-center justify-center rounded-md bg-prime-blue text-white dark:text-gray-300 hover:bg-hover-prime-blue px-5 text-base font-medium shadow transition-colors duration-250 cursor-pointer"
+					>
+						<iconify-icon icon="heroicons:play" class="text-[1.5rem] mr-4"></iconify-icon>
+						Lancer l'affichage
+					</div>
+				</div>
+			</div>
 		</div>
 	</div>
 </div>
