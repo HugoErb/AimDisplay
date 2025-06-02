@@ -6,6 +6,7 @@ import { CreationClubComponent } from './creation_club/creation_club.component';
 import { ModificationShooterComponent } from './modification_shooter/modification_shooter.component';
 import { ModificationCompetitionComponent } from './modification_competition/modification_competition.component';
 import { ModificationClubComponent } from './modification_club/modification_club.component';
+import { RankingComponent } from './ranking/ranking.component';
 import { ConsultationComponent } from './consultation/consultation.component';
 import { DisplayComponent } from './display/display.component';
 import { SettingsComponent } from './settings/settings.component';
@@ -16,6 +17,10 @@ export const routes: Routes = [
 		path: '',
 		redirectTo: 'home',
 		pathMatch: 'full',
+	},
+	{
+		path: 'ranking',
+		component: RankingComponent,
 	},
 	{
 		path: '',
