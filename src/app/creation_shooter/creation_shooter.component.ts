@@ -7,6 +7,7 @@ import { CommonModule } from '@angular/common';
 import { InputTextModule } from 'primeng/inputtext';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { CommonService } from '../services/common.service';
+import { CategoryGroup } from '../interfaces/category-group';
 
 @Component({
 	selector: 'app-creation',
@@ -23,17 +24,8 @@ export class CreationShooterComponent {
 	shooterLastName: string = '';
 	shooterEmail: string = '';
 	shooterCompetitionName: string = '';
-	shooterDistance: string = '';
-	shooterWeapon: string = '';
-	shooterCategory: any = [];
-	isSeniorOrDameCategory: boolean = false;
 	shooterClubName: string = '';
-	scoreSerie1: number = 0;
-	scoreSerie2: number = 0;
-	scoreSerie3: number = 0;
-	scoreSerie4: number = 0;
-	scoreSerie5: number = 0;
-	scoreSerie6: number = 0;
+	categoryGroups: CategoryGroup[] = [this.createCategoryGroup()];
 
 	competitions: any[] = [{ name: 'Tournoi de Marennes' }, { name: 'Tournoi de Rochefort' }, { name: 'Tournoi de Pau' }];
 	filteredCompetitions: any[] = [];
@@ -65,6 +57,52 @@ export class CreationShooterComponent {
 	filteredCategories: any[] = [];
 
 	/**
+	 * Crée et retourne un objet représentant une nouvelle configuration de catégorie de tireur,
+	 * avec tous les champs initialisés à `null` ou `false`.
+	 *
+	 * @returns {CategoryGroup} Un nouvel objet de type CategoryGroup avec des valeurs par défaut.
+	 */
+	createCategoryGroup(): CategoryGroup {
+		return {
+			shooterDistance: null,
+			shooterWeapon: null,
+			shooterCategory: null,
+			scoreSerie1: null,
+			scoreSerie2: null,
+			scoreSerie3: null,
+			scoreSerie4: null,
+			scoreSerie5: null,
+			scoreSerie6: null,
+			isSeniorOrDame: false,
+		};
+	}
+
+	/**
+	 * Ajoute une nouvelle instance de `CategoryGroup` au tableau `categoryGroups`.
+	 *
+	 * Cette méthode permet à l'utilisateur d'ajouter dynamiquement une catégorie de tir
+	 * supplémentaire à l'interface via le bouton d'ajout.
+	 */
+	addCategoryGroup(): void {
+		this.categoryGroups.push(this.createCategoryGroup());
+	}
+
+	/**
+	 * Détermine si la catégorie sélectionnée correspond à un tireur de type "Dame" ou "Sénior"
+	 * et met à jour dynamiquement le champ `isSeniorOrDame` dans le groupe de catégories.
+	 *
+	 * Cette méthode est appelée lors de la sélection d'une catégorie via l'autocomplétion.
+	 * Elle permet de conditionner l'affichage des séries 5 et 6 uniquement pour ces catégories.
+	 *
+	 * @param selectedShooterCategory - L'événement déclenché par la sélection, contenant la propriété `value.name`
+	 * @param group - Le groupe de saisie auquel appartient la catégorie sélectionnée
+	 */
+	onCategorySelected(selectedShooterCategory: any, group: CategoryGroup): void {
+		const pattern = /\b(Dame|Sénior)\b/i;
+		group.isSeniorOrDame = pattern.test(selectedShooterCategory.value.name || '');
+	}
+
+	/**
 	 * Filtre un tableau d'éléments par leur nom en fonction d'une requête saisie par l'utilisateur.
 	 *
 	 * @param event - L'événement contenant la requête de recherche (event.query).
@@ -79,18 +117,4 @@ export class CreationShooterComponent {
 	filterDistance = (e: any) => this.filter(e, this.distances, 'filteredDistances');
 	filterWeapon = (e: any) => this.filter(e, this.weapons, 'filteredWeapons');
 	filterCategory = (e: any) => this.filter(e, this.categories, 'filteredCategories');
-
-	/**
-	 * Vérifie si une catégorie de tireur correspond à "Dame" ou "Sénior".
-	 * Si c'est le cas, on passe le booléen isSeniorOrDameCategory à true.
-	 *
-	 * @param shooterCategory - La catégorie du tireur (ex: "Sénior 1", "Cadet Dame").
-	 * @returns `true` si la catégorie contient "Dame" ou "Sénior", sinon `false`.
-	 */
-	checkIfSeniorOrDame(shooterCategory: any): void {
-		console.log(shooterCategory.name);
-		const pattern = /\b(Dame|Sénior)\b/i;
-		this.isSeniorOrDameCategory = pattern.test(shooterCategory.name || '');
-		console.log('isSeniorOrDameCategory:', this.isSeniorOrDameCategory);
-	}
 }
