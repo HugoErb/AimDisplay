@@ -1,0 +1,145 @@
+<div class="opacity-0 animate-appear duration-500">
+	<div class="bg-white dark:bg-secondary-dark-bg shadow-lg rounded-lg m-6">
+		<div class="bg-gradient-to-r from-prime-blue to-hover-prime-blue text-white px-8 py-6 rounded-t-lg">
+			<div class="flex items-center space-x-3">
+				<iconify-icon icon="mdi:paper-outline" class="text-[2.2rem] mr-5"></iconify-icon>
+				<div>
+					<h1 class="text-2xl font-bold">Génération de rapport PDF</h1>
+					<p class="text-blue-100 mt-1">Créez et téléchargez des rapports détaillés pour vos tireurs et compétitions</p>
+				</div>
+			</div>
+		</div>
+
+		<div class="p-8 space-y-5">
+			<div class="w-full">
+				<!-- Onglets -->
+				<div class="grid grid-cols-2 w-full mb-8 bg-gray-200 rounded-lg p-1">
+					<div
+						(click)="switchTab('competition')"
+						class="rounded-md flex items-center space-x-2 justify-center py-2 px-4 font-medium cursor-pointer"
+						[ngClass]="{
+							'bg-white text-prime-blue': selectedTab === 'competition',
+							'text-gray-500 hover:text-prime-blue': selectedTab !== 'competition'
+						}"
+					>
+						<iconify-icon icon="octicon:trophy-24" class="text-[1.2rem] mr-3"></iconify-icon>
+						<span>Rapport de compétition</span>
+					</div>
+
+					<div
+						(click)="switchTab('tireur')"
+						class="rounded-md flex items-center space-x-2 justify-center py-2 px-4 font-medium cursor-pointer"
+						[ngClass]="{
+							'bg-white text-prime-blue': selectedTab === 'tireur',
+							'text-gray-500 hover:text-prime-blue': selectedTab !== 'tireur'
+						}"
+					>
+						<iconify-icon icon="lucide:user-round" class="text-[1.2rem] mr-3"></iconify-icon>
+						<span>Rapport de tireur</span>
+					</div>
+				</div>
+
+				<!-- Contenu -->
+				<div *ngIf="selectedTab === 'competition'" class="space-y-4">
+					<h2 class="text-lg font-semibold text-gray-900 pb-2 border-b border-gray-200 dark:border-gray-700 dark:text-gray-300">
+						Générer un rapport de compétition
+					</h2>
+					<div class="flex flex-col space-y-1">
+						<label class="text-sm font-medium text-gray-700 dark:text-gray-300 ml-1">Compétition *</label>
+						<p-autoComplete
+							[(ngModel)]="selectedCompetitionName"
+							[forceSelection]="true"
+							[suggestions]="filteredCompetitions"
+							(completeMethod)="filterCompetition($event)"
+							field="name"
+							[dropdown]="true"
+							placeholder="Compétition à exporter"
+						></p-autoComplete>
+					</div>
+					<div class="bg-blue-50 rounded-lg p-4 border border-blue-200 my-6">
+						<h3 class="font-medium text-blue-900 mb-2">Contenu du rapport de compétition :</h3>
+						<ul class="text-sm text-blue-800 space-y-1">
+							<li>• Classement général par catégorie</li>
+							<li>• Résultats détaillés des participants par série</li>
+							<li>• Statistiques diverses sur la compétition</li>
+							<li>• Informations sur les clubs participants</li>
+						</ul>
+					</div>
+				</div>
+
+				<!-- Onglet Rapport de tireur -->
+				<div *ngIf="selectedTab === 'tireur'" class="space-y-4">
+					<h2 class="text-lg font-semibold text-gray-900 pb-2 border-b border-gray-200 dark:border-gray-700 dark:text-gray-300">
+						Générer un rapport de tireur
+					</h2>
+
+					<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+						<!-- Tireur -->
+						<div class="flex flex-col space-y-1">
+							<label class="text-sm font-medium text-gray-700 dark:text-gray-300 ml-1">Tireur *</label>
+							<p-autoComplete
+								[(ngModel)]="selectedShooterName"
+								[forceSelection]="true"
+								[suggestions]="filteredShooters"
+								(completeMethod)="filterShooter($event)"
+								field="name"
+								[dropdown]="true"
+								placeholder="Nom Prénom du tireur à exporter"
+							></p-autoComplete>
+						</div>
+
+						<!-- Compétition -->
+						<div class="flex flex-col space-y-1">
+							<label class="text-sm font-medium text-gray-700 dark:text-gray-300 ml-1">Compétition</label>
+							<p-autoComplete
+								[(ngModel)]="selectedShooterCompetitionName"
+								[forceSelection]="true"
+								[suggestions]="filteredCompetitions"
+								(completeMethod)="filterCompetition($event)"
+								field="name"
+								[dropdown]="true"
+								placeholder="Compétition du tireur (optionnel)"
+							></p-autoComplete>
+						</div>
+					</div>
+
+					<!-- Contenu dynamique -->
+					<div class="bg-blue-50 rounded-lg p-4 border border-blue-200 my-6 grid grid-cols-1 md:grid-cols-2 gap-6">
+						<div>
+							<h3 class="font-medium text-blue-900 mb-2">Contenu du rapport de tireur :</h3>
+							<ul class="text-sm text-blue-800 space-y-1">
+								<li>• Résultats du tireur sur l'ensemble de ses compétitions enregistrées</li>
+								<li>• Statistiques diverses sur le tireur sur l'ensemble de ses compétitions enregistrées</li>
+								<li>• Conseils personnalisés à l'attention du tireur après analyse de ses résultats</li>
+							</ul>
+						</div>
+						<div>
+							<h3 class="font-medium text-blue-900 mb-2">Contenu du rapport de tireur par compétition :</h3>
+							<ul class="text-sm text-blue-800 space-y-1">
+								<li>• Résultats du tireur par catégorie, sur la compétition sélectionnée</li>
+								<li>• Statistiques diverses sur le tireur sur la compétition sélectionnée</li>
+								<li>• Conseils personnalisés à l'attention du tireur après analyse de la compétition sélectionnée</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<!-- Information Notes -->
+			<div class="pt-6 border-t border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-400">
+				<div class="flex items-center text-sm">
+					<iconify-icon icon="lucide:info" class="text-[1rem] mr-2"></iconify-icon>
+					<p>Les champs marqués d'un astérisque (*) sont obligatoires.</p>
+				</div>
+				<div class="flex justify-end">
+					<div
+						class="inline-flex h-12 items-center justify-center rounded-md bg-prime-blue text-white dark:text-gray-300 hover:bg-hover-prime-blue px-5 text-base font-medium shadow transition-colors duration-250 cursor-pointer"
+					>
+						<iconify-icon icon="material-symbols:download-rounded" class="text-[1.5rem] mr-3"></iconify-icon>
+						Télécharger le rapport PDF
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
