@@ -11,6 +11,7 @@ import { ConsultationComponent } from './consultation/consultation.component';
 import { DisplayComponent } from './display/display.component';
 import { SettingsComponent } from './settings/settings.component';
 import { BaseLayoutComponent } from './components/base-layout/base-layout.component';
+import { GenererPDFComponent } from './generer_pdf/generer_pdf.component';
 
 export const routes: Routes = [
 	{
@@ -61,6 +62,10 @@ export const routes: Routes = [
 			{
 				path: 'display',
 				component: DisplayComponent,
+			},
+			{
+				path: 'generer_pdf',
+				component: GenererPDFComponent,
 			},
 			{
 				path: 'settings',
