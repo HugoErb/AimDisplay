@@ -4,7 +4,7 @@ import { AutoCompleteModule } from 'primeng/autocomplete';
 import { CommonModule } from '@angular/common';
 
 @Component({
-	selector: 'app-display',
+	selector: 'app-generer-pdf',
 	standalone: true,
 	imports: [AutoCompleteModule, CommonModule],
 	templateUrl: './generer_pdf.component.html',

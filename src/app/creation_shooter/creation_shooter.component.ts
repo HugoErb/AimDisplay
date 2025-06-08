@@ -10,7 +10,7 @@ import { CommonService } from '../services/common.service';
 import { CategoryGroup } from '../interfaces/category-group';
 
 @Component({
-	selector: 'app-creation',
+	selector: 'app-creation-shooter',
 	standalone: true,
 	imports: [AutoCompleteModule, FormsModule, InputNumberModule, DatePickerModule, CommonModule, InputTextModule],
 	templateUrl: './creation_shooter.component.html',

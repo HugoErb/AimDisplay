@@ -7,7 +7,7 @@ import { InputTextModule } from 'primeng/inputtext';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 
 @Component({
-	selector: 'app-creation',
+	selector: 'app-creation-competition',
 	standalone: true,
 	imports: [FormsModule, InputNumberModule, DatePickerModule, CommonModule, InputTextModule],
 	templateUrl: './creation_competition.component.html',

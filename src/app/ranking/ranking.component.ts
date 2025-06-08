@@ -4,7 +4,7 @@ import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { AutoCompleteModule } from 'primeng/autocomplete';
 
 @Component({
-	selector: 'app-display',
+	selector: 'app-ranking',
 	standalone: true,
 	imports: [AutoCompleteModule, CommonModule],
 	templateUrl: './ranking.component.html',
