@@ -19,10 +19,10 @@ export const routes: Routes = [
 		redirectTo: 'home',
 		pathMatch: 'full',
 	},
-	{
-		path: 'ranking',
-		component: RankingComponent,
-	},
+	// {
+	// 	path: 'ranking',
+	// 	component: RankingComponent,
+	// },
 	{
 		path: '',
 		component: BaseLayoutComponent,
