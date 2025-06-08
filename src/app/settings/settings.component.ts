@@ -16,7 +16,6 @@ import { CommonModule } from '@angular/common';
 	standalone: true,
 	imports: [DropdownModule, InputSwitchModule, FormsModule, InputTextModule, TextareaModule, TableModule, CommonModule],
 	templateUrl: './settings.component.html',
-	styleUrls: ['./settings.component.scss'],
 	schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class SettingsComponent {

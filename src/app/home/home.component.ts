@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 
 @Component({
-    selector: 'home',
+    selector: 'app-home',
     standalone: true,
     imports: [],
     templateUrl: './home.component.html',

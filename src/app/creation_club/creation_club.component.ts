@@ -5,7 +5,7 @@ import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
 @Component({
-	selector: 'app-creation',
+	selector: 'app-creation-club',
 	standalone: true,
 	imports: [CommonModule, InputTextModule, FormsModule],
 	templateUrl: './creation_club.component.html',
