@@ -1,26 +1,113 @@
-<div class="h-full flex flex-col items-center justify-center relative text-center">
-	<!-- Bloc logo + titre -->
-	<div class="flex items-center gap-6 mb-5">
-		<!-- Logo -->
-		<img src="../../../assets/img/logo.png" alt="Logo" class="h-35 w-35 animate-appear" />
+<div class="min-h-screen flex flex-col md:flex-row">
+	<!-- Formulaire de connexion -->
+	<div class="w-full md:w-1/2 flex flex-col justify-center items-center p-8 md:p-16 bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100">
+		<div class="w-full max-w-md">
+			<!-- Logo et titre -->
+			<div class="flex items-center space-x-3 mb-8">
+				<img src="../../assets/img/logo.png" alt="Logo" class="h-7 w-7" />
+				<div>
+					<span class="text-2xl font-bold text-prime-blue bg-clip-text">Aim Display</span>
+				</div>
+			</div>
 
-		<!-- Titre -->
-		<div class="text-left">
-			<h3 class="text-5xl font-bold md:text-7xl text-prime-blue dark:text-gray-300 animate-appear opacity-0 transition-colors duration-500">
-				Aim
-				<br />
-				Display
-			</h3>
+			<!-- Titre et sous-titre -->
+			<div class="mb-8">
+				<h1 class="text-3xl font-bold text-gray-900 mb-2">Connexion</h1>
+				<p class="text-gray-600">Bienvenue sur votre plateforme de gestion de tir sportif. Connectez-vous pour accéder à votre compte.</p>
+			</div>
+
+			<!-- Formulaire -->
+			<form class="space-y-6">
+				<div class="space-y-2">
+					<label htmlFor="email" class="text-sm font-medium text-gray-700">Adresse email</label>
+					<div class="relative">
+						<input
+							[(ngModel)]="email"
+							type="email"
+							placeholder="Entrez votre adresse email"
+							class="w-full"
+							name="email"
+							id="email"
+							autocomplete="off"
+							pInputText
+						/>
+					</div>
+				</div>
+
+				<div class="space-y-2">
+					<div class="flex items-center justify-between">
+						<label htmlFor="password" class="text-sm font-medium text-gray-700">Mot de passe</label>
+						<a href="#" class="text-sm font-medium text-prime-blue hover:text-hover-prime-blue hover:underline">Mot de passe oublié ?</a>
+					</div>
+					<div class="relative">
+						<input
+							[(ngModel)]="password"
+							[type]="passwordFieldType"
+							placeholder="Entrez votre mot de passe"
+							class="w-full pr-10 pl-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+							name="password"
+							id="password"
+							autocomplete="off"
+							pInputText
+						/>
+
+						<iconify-icon
+							[attr.icon]="passwordFieldType === 'password' ? 'mynaui:eye' : 'mynaui:eye-slash'"
+							class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 cursor-pointer text-2xl"
+							(click)="togglePasswordVisibility()"
+						></iconify-icon>
+					</div>
+				</div>
+
+				<div class="flex items-center space-x-2">
+					<label htmlFor="remember" class="text-sm text-gray-600">Se souvenir de moi</label>
+				</div>
+
+				<div
+					class="w-full inline-flex h-12 items-center justify-center rounded-md bg-prime-blue text-white dark:text-gray-300 hover:bg-hover-prime-blue px-5 text-base font-medium shadow transition-colors duration-250 cursor-pointer"
+				>
+					Se connecter
+					<iconify-icon icon="tabler:arrow-right" class="text-[1.5rem] ml-2"></iconify-icon>
+				</div>
+			</form>
+
+			<!-- Lien d'inscription -->
+			<div class="mt-8 text-center">
+				<p class="text-gray-600">
+					Vous n'avez pas de compte ?
+					<a href="#" class="font-medium text-prime-blue hover:text-hover-prime-blue hover:underline">Créer un compte</a>
+				</p>
+			</div>
 		</div>
 	</div>
 
-	<!-- Sous-titre en dessous -->
-	<p class="text-gray-500 dark:text-gray-400 text-xl max-w-xl animate-appear opacity-0 transition-colors duration-500 animation-delay-100 pb-15">
-		Entrez, stockez et affichez vos données de compétition de tir de manière simple et efficace !
-	</p>
-
-	<!-- Footer -->
-	<footer class="text-gray-800 dark:text-gray-300 absolute bottom-[15px] left-1/2 transform -translate-x-1/2 w-full text-center">
-		© 2025 par Aim Display. Tous droits réservés.
-	</footer>
+	<!-- Image -->
+	<div class="hidden md:block w-1/2 bg-prime-blue relative overflow-hidden">
+		<div class="absolute inset-0 bg-gradient-to-br from-prime-blue to-indigo-800/90 z-10"></div>
+		<img src="/placeholder.svg?height=1080&width=1080" alt="Tir sportif" class="absolute inset-0 w-full h-full object-cover" />
+		<div class="absolute inset-0 z-20 flex flex-col justify-center items-center text-white p-16">
+			<div class="max-w-md text-center">
+				<h2 class="text-4xl font-bold mb-6">Gérez facilement vos compétitions de tir sportif</h2>
+				<p class="text-lg text-blue-100 mb-8">
+					Une plateforme complète pour organiser, suivre, montrer et analyser vos compétitions de tir sportif.
+				</p>
+				<div class="flex items-center justify-center space-x-4">
+					<div class="flex flex-col items-center">
+						<span class="text-3xl font-bold">100+</span>
+						<span class="text-blue-200">Compétitions</span>
+					</div>
+					<div class="h-10 w-px bg-blue-400/30"></div>
+					<div class="flex flex-col items-center">
+						<span class="text-3xl font-bold">1000+</span>
+						<span class="text-blue-200">Tireurs</span>
+					</div>
+					<div class="h-10 w-px bg-blue-400/30"></div>
+					<div class="flex flex-col items-center">
+						<span class="text-3xl font-bold">50+</span>
+						<span class="text-blue-200">Clubs</span>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
 </div>
