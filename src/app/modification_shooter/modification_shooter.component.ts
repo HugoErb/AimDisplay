@@ -4,7 +4,7 @@ import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { CommonService } from '../services/common.service';
 
 @Component({
-	selector: 'modification',
+	selector: 'app-modification-shooter',
 	standalone: true,
 	imports: [TableModule],
 	templateUrl: './modification_shooter.component.html',

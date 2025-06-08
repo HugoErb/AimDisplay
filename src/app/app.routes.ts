@@ -7,7 +7,7 @@ import { ModificationShooterComponent } from './modification_shooter/modificatio
 import { ModificationCompetitionComponent } from './modification_competition/modification_competition.component';
 import { ModificationClubComponent } from './modification_club/modification_club.component';
 import { RankingComponent } from './ranking/ranking.component';
-import { ConsultationComponent } from './consultation/consultation.component';
+import { LoginComponent } from './login/login.component';
 import { DisplayComponent } from './display/display.component';
 import { SettingsComponent } from './settings/settings.component';
 import { BaseLayoutComponent } from './components/base-layout/base-layout.component';
@@ -19,10 +19,13 @@ export const routes: Routes = [
 		redirectTo: 'home',
 		pathMatch: 'full',
 	},
-	// {
-	// 	path: 'ranking',
-	// 	component: RankingComponent,
-	// },
+	{
+		path: 'ranking',
+		component: RankingComponent,
+	},{
+		path: 'login',
+		component: LoginComponent,
+	},
 	{
 		path: '',
 		component: BaseLayoutComponent,
@@ -54,10 +57,6 @@ export const routes: Routes = [
 			{
 				path: 'modification_club',
 				component: ModificationClubComponent,
-			},
-			{
-				path: 'consultation',
-				component: ConsultationComponent,
 			},
 			{
 				path: 'display',
