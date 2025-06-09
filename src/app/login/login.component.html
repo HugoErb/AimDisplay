@@ -1,7 +1,7 @@
 <div class="min-h-screen flex flex-col md:flex-row">
 	<!-- Formulaire de connexion -->
 	<div class="w-full md:w-1/2 flex flex-col justify-center items-center p-8 md:p-16 bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100">
-		<div class="w-full max-w-md">
+		<div class="w-full max-w-md opacity-0 animate-appear duration-500">
 			<!-- Logo et titre -->
 			<div class="flex items-center space-x-3 mb-8">
 				<img src="../../assets/img/logo.png" alt="Logo" class="h-7 w-7" />
@@ -73,10 +73,15 @@
 
 			<!-- Lien d'inscription -->
 			<div class="mt-8 text-center">
-				<p class="text-gray-600">
+				<div class="text-gray-600">
 					Vous n'avez pas de compte ?
-					<a href="#" class="font-medium text-prime-blue hover:text-hover-prime-blue hover:underline">Créer un compte</a>
-				</p>
+					<div
+						(click)="commonService.redirectTo('register')"
+						class="font-medium text-prime-blue hover:text-hover-prime-blue hover:underline cursor-pointer"
+					>
+						Créer un compte
+					</div>
+				</div>
 			</div>
 		</div>
 	</div>
@@ -84,12 +89,12 @@
 	<!-- Image -->
 	<div class="hidden md:block w-1/2 bg-prime-blue relative overflow-hidden">
 		<div class="absolute inset-0 bg-gradient-to-br from-prime-blue to-indigo-800/90 z-10"></div>
-		<img src="/placeholder.svg?height=1080&width=1080" alt="Tir sportif" class="absolute inset-0 w-full h-full object-cover" />
-		<div class="absolute inset-0 z-20 flex flex-col justify-center items-center text-white p-16">
+		<!-- <img src="/placeholder.svg?height=1080&width=1080" alt="Tir sportif" class="absolute inset-0 w-full h-full object-cover" /> -->
+		<div class="absolute inset-0 z-20 flex flex-col justify-center items-center text-white p-16 opacity-0 animate-appear duration-500 animation-delay-200">
 			<div class="max-w-md text-center">
 				<h2 class="text-4xl font-bold mb-6">Gérez facilement vos compétitions de tir sportif</h2>
 				<p class="text-lg text-blue-100 mb-8">
-					Une plateforme complète pour organiser, suivre, montrer et analyser vos compétitions de tir sportif.
+					Une plateforme complète pour organiser, suivre, diffuser et analyser vos compétitions de tir sportif.
 				</p>
 				<div class="flex items-center justify-center space-x-4">
 					<div class="flex flex-col items-center">
