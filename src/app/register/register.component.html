@@ -1,0 +1,119 @@
+<div class="min-h-screen flex flex-col md:flex-row">
+	<!-- Image -->
+	<div class="hidden md:block w-1/2 bg-prime-blue relative overflow-hidden">
+		<div class="absolute inset-0 bg-gradient-to-br from-prime-blue to-indigo-800/90 z-10"></div>
+		<!-- <img src="/placeholder.svg?height=1080&width=1080" alt="Tir sportif" class="absolute inset-0 w-full h-full object-cover" /> -->
+		<div class="absolute inset-0 z-20 flex flex-col justify-center items-center text-white p-16 opacity-0 animate-appear duration-500">
+			<div class="max-w-md text-center">
+				<h2 class="text-4xl font-bold mb-6">Rejoignez la communauté Aim Display</h2>
+				<p class="text-lg text-blue-100 mb-8">Inscrivez-vous pour commencer à organiser, suivre, diffuser et analyser vos compétitions de tir sportif.</p>
+				<div class="flex items-center justify-center space-x-4">
+					<div class="flex flex-col items-center">
+						<span class="text-3xl font-bold">100+</span>
+						<span class="text-blue-200">Compétitions</span>
+					</div>
+					<div class="h-10 w-px bg-blue-400/30"></div>
+					<div class="flex flex-col items-center">
+						<span class="text-3xl font-bold">1000+</span>
+						<span class="text-blue-200">Tireurs</span>
+					</div>
+					<div class="h-10 w-px bg-blue-400/30"></div>
+					<div class="flex flex-col items-center">
+						<span class="text-3xl font-bold">50+</span>
+						<span class="text-blue-200">Clubs</span>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- Formulaire d'inscription -->
+	<div class="w-full md:w-1/2 flex flex-col justify-center items-center p-8 md:p-16 bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100">
+		<div class="w-full max-w-md opacity-0 animate-appear duration-500 animation-delay-200">
+			<!-- Logo et titre -->
+			<div class="flex items-center space-x-3 mb-8">
+				<img src="../../assets/img/logo.png" alt="Logo" class="h-7 w-7" />
+				<div>
+					<span class="text-2xl font-bold text-prime-blue bg-clip-text">Aim Display</span>
+				</div>
+			</div>
+
+			<!-- Titre et sous-titre -->
+			<div class="mb-8">
+				<h1 class="text-3xl font-bold text-gray-900 mb-2">Créer un compte</h1>
+				<p class="text-gray-600">Inscrivez-vous pour commencer à organiser vos compétitions de tir sportif.</p>
+			</div>
+
+			<!-- Formulaire -->
+			<form class="space-y-6">
+				<div class="space-y-2">
+					<label htmlFor="email" class="text-sm font-medium text-gray-700">Adresse email</label>
+					<div class="relative">
+						<input
+							[(ngModel)]="email"
+							type="email"
+							placeholder="Entrez votre adresse email"
+							class="w-full"
+							name="email"
+							id="email"
+							autocomplete="off"
+							pInputText
+						/>
+					</div>
+				</div>
+
+				<div class="space-y-2">
+					<label htmlFor="password" class="text-sm font-medium text-gray-700">Mot de passe</label>
+					<div class="relative">
+						<input
+							[(ngModel)]="password"
+							[type]="passwordFieldType"
+							placeholder="Créez un mot de passe"
+							class="w-full pr-10 pl-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+							name="password"
+							id="password"
+							autocomplete="off"
+							pInputText
+						/>
+						<iconify-icon
+							[attr.icon]="passwordFieldType === 'password' ? 'mynaui:eye' : 'mynaui:eye-slash'"
+							class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 cursor-pointer text-2xl"
+							(click)="togglePasswordVisibility()"
+						></iconify-icon>
+					</div>
+				</div>
+
+				<div class="space-y-2">
+					<label htmlFor="confirmPassword" class="text-sm font-medium text-gray-700">Confirmer le mot de passe</label>
+					<div class="relative">
+						<input
+							[(ngModel)]="confirmPassword"
+							[type]="passwordFieldType"
+							placeholder="Confirmez votre mot de passe"
+							class="w-full pr-10 pl-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+							name="confirmPassword"
+							id="confirmPassword"
+							autocomplete="off"
+							pInputText
+						/>
+					</div>
+				</div>
+
+				<div
+					class="w-full inline-flex h-12 items-center justify-center rounded-md bg-prime-blue text-white dark:text-gray-300 hover:bg-hover-prime-blue px-5 text-base font-medium shadow transition-colors duration-250 cursor-pointer"
+				>
+					Créer un compte
+					<iconify-icon icon="tabler:arrow-right" class="text-[1.5rem] ml-2"></iconify-icon>
+				</div>
+			</form>
+
+			<!-- Lien vers connexion -->
+			<div class="mt-8 text-center">
+				<div class="text-gray-600">
+					Vous avez déjà un compte ?
+					<div class="font-medium text-prime-blue hover:text-hover-prime-blue hover:underline cursor-pointer" (click)="commonService.redirectTo('login')">Se connecter</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

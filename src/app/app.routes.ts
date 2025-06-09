@@ -8,6 +8,7 @@ import { ModificationCompetitionComponent } from './modification_competition/mod
 import { ModificationClubComponent } from './modification_club/modification_club.component';
 import { RankingComponent } from './ranking/ranking.component';
 import { LoginComponent } from './login/login.component';
+import { RegisterComponent } from './register/register.component';
 import { DisplayComponent } from './display/display.component';
 import { SettingsComponent } from './settings/settings.component';
 import { BaseLayoutComponent } from './components/base-layout/base-layout.component';
@@ -25,6 +26,9 @@ export const routes: Routes = [
 	},{
 		path: 'login',
 		component: LoginComponent,
+	},{
+		path: 'register',
+		component: RegisterComponent,
 	},
 	{
 		path: '',

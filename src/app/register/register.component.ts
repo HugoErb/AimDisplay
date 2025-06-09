@@ -5,16 +5,17 @@ import { InputTextModule } from 'primeng/inputtext';
 import { CommonService } from '../services/common.service';
 
 @Component({
-	selector: 'app-login',
+	selector: 'app-register',
 	standalone: true,
 	imports: [FormsModule, InputTextModule],
-	templateUrl: './login.component.html',
+	templateUrl: './register.component.html',
 	schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
-export class LoginComponent {
+export class RegisterComponent {
 	passwordFieldType: string = 'password';
 	email: string = '';
 	password: string = '';
+	confirmPassword: string = '';
 
 	constructor(
 		protected commonService: CommonService // protected authService: AuthService
