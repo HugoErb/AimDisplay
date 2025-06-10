@@ -13,6 +13,7 @@ import { DisplayComponent } from './display/display.component';
 import { SettingsComponent } from './settings/settings.component';
 import { BaseLayoutComponent } from './components/base-layout/base-layout.component';
 import { GenererPDFComponent } from './generer_pdf/generer_pdf.component';
+import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
 
 export const routes: Routes = [
 	{
@@ -23,12 +24,18 @@ export const routes: Routes = [
 	{
 		path: 'ranking',
 		component: RankingComponent,
-	},{
+	},
+	{
 		path: 'login',
 		component: LoginComponent,
-	},{
+	},
+	{
 		path: 'register',
 		component: RegisterComponent,
+	},
+	{
+		path: 'forgot-password',
+		component: ForgotPasswordComponent,
 	},
 	{
 		path: '',
