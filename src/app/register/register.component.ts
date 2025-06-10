@@ -22,14 +22,6 @@ export class RegisterComponent {
 	) {}
 
 	/**
-	 * Cette méthode change le type du champ de mot de passe entre 'password' et 'text',
-	 * permettant de masquer ou afficher le mot de passe.
-	 */
-	togglePasswordVisibility(): void {
-		this.passwordFieldType = this.passwordFieldType === 'password' ? 'text' : 'password';
-	}
-
-	/**
 	 * Cette méthode vérifie si l'email et le mot de passe sont renseignés,
 	 * puis appelle le service d'authentification pour se connecter avec ces informations.
 	 */

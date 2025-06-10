@@ -134,4 +134,13 @@ export class CommonService {
 			return 11;
 		}
 	}
+
+	/**
+	 * Alterne entre 'password' et 'text' pour afficher ou masquer un champ mot de passe.
+	 * @param currentType Le type actuel du champ (ex: 'password' ou 'text')
+	 * @returns Le nouveau type de champ ('text' si c'était 'password', sinon 'password')
+	 */
+	togglePasswordVisibility(currentType: string): string {
+		return currentType === 'password' ? 'text' : 'password';
+	}
 }
