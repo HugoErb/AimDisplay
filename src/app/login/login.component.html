@@ -37,7 +37,12 @@
 				<div class="space-y-2">
 					<div class="flex items-center justify-between">
 						<label htmlFor="password" class="text-sm font-medium text-gray-700">Mot de passe</label>
-						<div (click)="commonService.redirectTo('forgot-password')" class="text-sm font-medium text-prime-blue hover:text-hover-prime-blue hover:underline cursor-pointer">Mot de passe oublié ?</div>
+						<div
+							(click)="commonService.redirectTo('forgot-password')"
+							class="text-sm font-medium text-prime-blue hover:text-hover-prime-blue hover:underline cursor-pointer"
+						>
+							Mot de passe oublié ?
+						</div>
 					</div>
 					<div class="relative">
 						<input
@@ -54,7 +59,7 @@
 						<iconify-icon
 							[attr.icon]="passwordFieldType === 'password' ? 'mynaui:eye' : 'mynaui:eye-slash'"
 							class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 cursor-pointer text-2xl"
-							(click)="togglePasswordVisibility()"
+							(click)="passwordFieldType = commonService.togglePasswordVisibility(passwordFieldType)"
 						></iconify-icon>
 					</div>
 				</div>
@@ -90,7 +95,9 @@
 	<div class="hidden md:block w-1/2 bg-prime-blue relative overflow-hidden">
 		<div class="absolute inset-0 bg-gradient-to-br from-prime-blue to-indigo-800/90 z-10"></div>
 		<!-- <img src="/placeholder.svg?height=1080&width=1080" alt="Tir sportif" class="absolute inset-0 w-full h-full object-cover" /> -->
-		<div class="absolute inset-0 z-20 flex flex-col justify-center items-center text-white p-16 opacity-0 animate-appear duration-500 animation-delay-200">
+		<div
+			class="absolute inset-0 z-20 flex flex-col justify-center items-center text-white p-16 opacity-0 animate-appear duration-500 animation-delay-200"
+		>
 			<div class="max-w-md text-center">
 				<h2 class="text-4xl font-bold mb-6">Gérez facilement vos compétitions de tir sportif</h2>
 				<p class="text-lg text-blue-100 mb-8">
