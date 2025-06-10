@@ -1,6 +1,8 @@
 import { Injectable, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import Swal from 'sweetalert2';
+import axios from 'axios';
+import { EmailValidityResponse } from '../interfaces/email-validity-response';
 
 @Injectable({
 	providedIn: 'root',
@@ -154,5 +156,32 @@ export class CommonService {
 	filterByName(query: string, list: any[], property: string = 'name'): any[] {
 		const lowercaseQuery = query.toLowerCase();
 		return list.filter((item) => item[property]?.toLowerCase().includes(lowercaseQuery));
+	}
+
+	/**
+	 * Vérifie la validité d'une adresse email en utilisant l'API Mailcheck AI.
+	 * Pour cela la méthode évalue si l'email n'est pas jetable et si un enregistrement MX valide est présent.
+	 *
+	 * @param {string} email L'adresse email à vérifier.
+	 * @returns {Promise<boolean>} La promesse renvoie `true` si l'email n'est pas jetable et a un enregistrement MX valide,
+	 *                             sinon `false`. Renvoie également `false` en cas d'erreur lors de la requête à l'API.
+	 */
+	async checkEmailValidity(email: string): Promise<boolean> {
+		const url = `https://api.mailcheck.ai/email/${email}`;
+		try {
+			const response = await axios.get<EmailValidityResponse>(url);
+			// Retourne false si l'email est jetable ou si mx est false
+			if (response.data.disposable || !response.data.mx) {
+				return false;
+			}
+			return true;
+		} catch (error) {
+			if (axios.isAxiosError(error)) {
+				console.error(`Impossible de vérifier l'email : ${error.message}`);
+			} else {
+				console.error('Erreur inattendue lors de la vérification de lemail.');
+			}
+			return false;
+		}
 	}
 }
