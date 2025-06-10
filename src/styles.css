@@ -134,7 +134,7 @@
 	textarea {
 		width: 100% !important;
 		transition-duration: 500ms !important;
-        font-size: 0.925rem !important;
+		font-size: 0.925rem !important;
 	}
 
 	/* Dark mode des inputs PrimeNG */
@@ -148,6 +148,7 @@
 		color: #d1d5db !important;
 	}
 
+	/* Dark mode des boutons sur la droite des inputs PrimeNG */
 	:where(.dark) .p-autocomplete-dropdown,
 	:where(.dark) .p-datepicker-dropdown,
 	:where(.dark) .p-dropdown-trigger {
@@ -165,7 +166,14 @@
 
 	/* Réduction de la taille des dropdown des listes déroulantes */
 	.p-overlay {
-		min-width: 30% !important;
+		width: fit-content !important;
+		min-width: unset !important;
+		max-width: 100%;
+	}
+
+	/* Gestion de la taille du calendrier */
+	.p-datepicker-panel {
+		min-width: 60% !important;
 	}
 
 	/* Harmonisation des styles des boutons des inputs PrimeNG */
@@ -179,6 +187,7 @@
 		transition: background-color 0.2s ease;
 	}
 
+	/* Harmonisation des styles des hover des boutons des inputs PrimeNG */
 	.p-autocomplete-dropdown:hover,
 	.p-datepicker-dropdown:hover,
 	.p-dropdown-trigger:hover,
@@ -193,8 +202,10 @@
 		width: 53px !important;
 	}
 
+	/* Gestion des tableaux */
 	.p-datatable {
 		border-radius: 6px !important;
+		font-size: 0.925rem !important;
 	}
 
 	/* DarkMode du tableau primeNG */
