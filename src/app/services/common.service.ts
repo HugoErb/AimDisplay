@@ -143,4 +143,16 @@ export class CommonService {
 	togglePasswordVisibility(currentType: string): string {
 		return currentType === 'password' ? 'text' : 'password';
 	}
+
+	/**
+	 * Filtre une liste d'objets par une propriété (par défaut 'name') en fonction d'une requête.
+	 * @param query La chaîne à rechercher
+	 * @param list Le tableau source
+	 * @param property La propriété à comparer (par défaut 'name')
+	 * @returns Un tableau filtré
+	 */
+	filterByName(query: string, list: any[], property: string = 'name'): any[] {
+		const lowercaseQuery = query.toLowerCase();
+		return list.filter((item) => item[property]?.toLowerCase().includes(lowercaseQuery));
+	}
 }

@@ -101,20 +101,4 @@ export class CreationShooterComponent {
 		const pattern = /\b(Dame|Sénior)\b/i;
 		group.isSeniorOrDame = pattern.test(selectedShooterCategory.value.name || '');
 	}
-
-	/**
-	 * Filtre un tableau d'éléments par leur nom en fonction d'une requête saisie par l'utilisateur.
-	 *
-	 * @param event - L'événement contenant la requête de recherche (event.query).
-	 * @param sourceList - Le tableau source à filtrer.
-	 * @returns Un tableau contenant les éléments filtrés.
-	 */
-	filter(event: any, sourceList: any[], target: string): void {
-		(this as any)[target] = sourceList.filter((item: any) => item.name.toLowerCase().includes(event.query.toLowerCase()));
-	}
-	filterCompetition = (e: any) => this.filter(e, this.competitions, 'filteredCompetitions');
-	filterClub = (e: any) => this.filter(e, this.clubs, 'filteredClubs');
-	filterDistance = (e: any) => this.filter(e, this.distances, 'filteredDistances');
-	filterWeapon = (e: any) => this.filter(e, this.weapons, 'filteredWeapons');
-	filterCategory = (e: any) => this.filter(e, this.categories, 'filteredCategories');
 }

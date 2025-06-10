@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { AutoCompleteModule } from 'primeng/autocomplete';
 import { CommonModule } from '@angular/common';
+import { CommonService } from '../services/common.service';
 
 @Component({
 	selector: 'app-generer-pdf',
@@ -11,11 +12,9 @@ import { CommonModule } from '@angular/common';
 	schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class GenererPDFComponent {
+	constructor(protected commonService: CommonService) {}
 	// Variables de sélection de tab
 	selectedTab: 'competition' | 'tireur' = 'competition';
-	switchTab(tab: 'competition' | 'tireur') {
-		this.selectedTab = tab;
-	}
 
 	//Variables de selection d'entité à exporter
 	selectedCompetitionName: string = '';
@@ -29,36 +28,12 @@ export class GenererPDFComponent {
 	filteredShooters: any[] = [];
 
 	/**
-	 * Filtre les compétitions en fonction de la recherche de compétition entrée.
-	 * @param event - L'événement contenant la recherche de compétition entrée.
+	 * Change l'onglet actuellement sélectionné dans l'interface utilisateur.
+	 *
+	 * @param tab - Le nom de l'onglet à activer, soit 'competition' soit 'tireur'.
+	 *              Cela met à jour la propriété `selectedTab` utilisée pour afficher le contenu associé.
 	 */
-	filterCompetition(event: any): void {
-		const filtered: any[] = [];
-		const query: string = event.query.toLowerCase();
-
-		for (const competition of this.competitions) {
-			if (competition.name.toLowerCase().includes(query)) {
-				filtered.push(competition);
-			}
-		}
-
-		this.filteredCompetitions = filtered;
-	}
-
-	/**
-	 * Filtre les compétitions en fonction de la recherche de compétition entrée.
-	 * @param event - L'événement contenant la recherche de compétition entrée.
-	 */
-	filterShooter(event: any): void {
-		const filtered: any[] = [];
-		const query: string = event.query.toLowerCase();
-
-		for (const shooter of this.shooters) {
-			if (shooter.name.toLowerCase().includes(query)) {
-				filtered.push(shooter);
-			}
-		}
-
-		this.filteredShooters = filtered;
+	switchTab(tab: 'competition' | 'tireur') {
+		this.selectedTab = tab;
 	}
 }

@@ -21,7 +21,7 @@
 						[(ngModel)]="shooterCompetitionName"
 						[forceSelection]="true"
 						[suggestions]="filteredCompetitions"
-						(completeMethod)="filterCompetition($event)"
+						(completeMethod)="filteredCompetitions = commonService.filterByName($event.query, competitions)"
 						field="name"
 						[dropdown]="true"
 						placeholder="Compétition à afficher"
