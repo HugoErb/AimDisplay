@@ -1,4 +1,4 @@
-import { Injectable, signal } from '@angular/core';
+import { ElementRef, getDebugNode, Injectable, QueryList, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import Swal from 'sweetalert2';
 import axios from 'axios';
@@ -170,7 +170,7 @@ export class CommonService {
 		if (!areInputsValid) {
 			return false;
 		}
-        this.showSwalToast('Message envoyé !');
+		this.showSwalToast('Message envoyé !');
 		return true;
 
 		const mailData = this.createMailData(inputLabelMap);
@@ -187,6 +187,60 @@ export class CommonService {
 		// 		},
 		// 	});
 		// });
+	}
+
+	/**
+	 * Génère dynamiquement une map contenant les paires <label, valeur> des champs d’un formulaire.
+	 *
+	 * Tous les champs doivent utiliser la référence locale #inputField dans le HTML pour que la méthode fonctionne.
+	 *
+	 * @param inputFields - Liste des éléments de formulaire marqués avec #inputField
+	 * @returns Une Map contenant le texte du label en clé, et la valeur saisie en valeur
+	 */
+	getInputLabelMap(inputFields: QueryList<ElementRef>): Map<string, any> {
+		const inputLabelMap = new Map<string, any>();
+
+		inputFields.forEach((inputRef) => {
+			const nativeEl = inputRef.nativeElement as HTMLElement;
+
+			// On retrouve le <label> associé au champ via son parent immédiat
+			const container = nativeEl.parentElement;
+
+			let label = '';
+			if (container) {
+				const labelEl = container.querySelector('label');
+				label = labelEl?.textContent?.trim() ?? '';
+			}
+
+			// Si le label n’est pas trouvé, on remonte d’un niveau
+			if (!label && container?.parentElement) {
+				const upperLabel = container.parentElement.querySelector('label');
+				label = upperLabel?.textContent?.trim() ?? '';
+			}
+
+			// Champ ignoré si aucun label trouvé
+			if (!label) return;
+
+			let value: any = '';
+
+			// Récupération de la valeur
+			// Cas classique : champ HTML avec propriété "value"
+			if ('value' in nativeEl) {
+				value = nativeEl.value;
+			}
+
+			// Cas PrimeNG : chercher un input interne
+			if (!value && nativeEl.querySelector) {
+				const inner = nativeEl.querySelector('input, textarea, select') as HTMLInputElement;
+				value = inner?.value ?? '';
+			}
+
+			// Ajout à la Map finale
+			inputLabelMap.set(label, value);
+		});
+
+		// console.table(Array.from(inputLabelMap.entries()));
+		return inputLabelMap;
 	}
 
 	/**
@@ -210,7 +264,7 @@ export class CommonService {
 			if (axios.isAxiosError(error)) {
 				console.error(`Impossible de vérifier l'email : ${error.message}`);
 			} else {
-				console.error('Erreur inattendue lors de la vérification de lemail.');
+				console.error('Erreur inattendue lors de la vérification de l\'email.');
 			}
 			return false;
 		}
@@ -228,23 +282,26 @@ export class CommonService {
 			const trimmedValue = value.trim();
 			const lowerCaseLabel = label.toLowerCase();
 
+			const isRequired = lowerCaseLabel.includes('*');
+			const isEmailField = lowerCaseLabel.includes('email');
+
 			// Vérification des champs obligatoires
-			if (!trimmedValue) {
+			if (isRequired && !trimmedValue) {
 				this.showSwal('Erreur de saisie', `Le champ "${label}" est obligatoire.`, 'error', false);
 				return false;
 			}
 
-			// Vérification pour l'email
-			if (lowerCaseLabel.includes('email')) {
+			// Vérification du champ email (si présent et non vide)
+			if (isEmailField && trimmedValue) {
 				if (!emailRegex.test(trimmedValue)) {
 					this.showSwal('Erreur de saisie', `Le format de l'adresse email est invalide.`, 'error', false);
 					return false;
-				} else {
-					const isEmailValid = await this.checkEmailValidity(trimmedValue);
-					if (!isEmailValid) {
-						this.showSwal('Erreur de saisie', `Le domaine de l'adresse email n'est pas accepté.`, 'error', false);
-						return false;
-					}
+				}
+
+				const isEmailValid = await this.checkEmailValidity(trimmedValue);
+				if (!isEmailValid) {
+					this.showSwal('Erreur de saisie', `Le domaine de l'adresse email n'est pas accepté.`, 'error', false);
+					return false;
 				}
 			}
 		}
