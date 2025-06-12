@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ElementRef, QueryList, ViewChildren } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { DropdownModule } from 'primeng/dropdown';
 import { InputSwitchModule } from 'primeng/inputswitch';
@@ -22,92 +22,90 @@ export class SettingsComponent {
 	constructor(protected commonService: CommonService, private themeService: ThemeService) {}
 
 	userParamsName: string = 'userParamsAimDisplay';
-	name: string = '';
-	firstName: string = '';
-	email: string = '';
+	newClubName: string = '';
 	darkMode: boolean = false;
-	newUserName: string = '';
 
-	subscriptionPlans = [
-		{
-			name: 'Basique',
-			price: '7',
-			period: '/mois',
-			popular: false,
-			features: ['Gestion de 2 compétitions par mois', 'Génération de rapport de compétition', 'Dashboard des données', 'Support par email'],
-		},
-		{
-			name: 'Pro',
-			price: '14',
-			period: '/mois',
-			popular: true,
-			features: [
-				"Fonctionnalités de l'abonnement Basique",
-				'Gestion de 4 compétitions par mois',
-				'Génération de rapport personnalisé par tireur',
-				'Conseils personnalisés pour les tireurs',
-				'Support prioritaire',
-			],
-		},
-		{
-			name: 'VIP',
-			price: '19',
-			period: '/mois',
-			popular: false,
-			features: [
-				"Fonctionnalités de l'abonnement Pro",
-				'Gestion de compétitions illimitée',
-				'Génération de QR Code de consultation du classement',
-				'Support dédié',
-				'Accès aux fonctionnalités bêta',
-			],
-		},
-	];
-    
-	contactForm = {
-		name: '',
-		email: '',
-		subject: '',
-		message: '',
-	};
+	// Variables pour le mail
+	@ViewChildren('inputField') inputFields!: QueryList<ElementRef>;
+	public inputLabelMap = new Map<string, string>();
+	nameMail: string = '';
+	firstNameMail: string = '';
+	emailMail: string = '';
+	messageMail: string = '';
 
-	transactions: Transaction[] = [
-		{
-			id: 1,
-			date: '2023/06/01',
-			montant: 19.99,
-			typeOffre: 'Abonnement VIP',
-			statutPaiement: 'Payé',
-		},
-		{
-			id: 2,
-			date: '2023/05/01',
-			montant: 14.99,
-			typeOffre: 'Abonnement Pro',
-			statutPaiement: 'Payé',
-		},
-		{
-			id: 3,
-			date: '2023/04/01',
-			montant: 14.99,
-			typeOffre: 'Abonnement Pro',
-			statutPaiement: 'En attente',
-		},
-		{
-			id: 4,
-			date: '2023/03/01',
-			montant: 14.99,
-			typeOffre: 'Abonnement Pro',
-			statutPaiement: 'Payé',
-		},
-		{
-			id: 5,
-			date: '2023/02/01',
-			montant: 7.99,
-			typeOffre: 'Abonnement Basique',
-			statutPaiement: 'Annulé',
-		},
-	];
+	// subscriptionPlans = [
+	// 	{
+	// 		name: 'Basique',
+	// 		price: '7',
+	// 		period: '/mois',
+	// 		popular: false,
+	// 		features: ['Gestion de 2 compétitions par mois', 'Génération de rapport de compétition', 'Dashboard des données', 'Support par email'],
+	// 	},
+	// 	{
+	// 		name: 'Pro',
+	// 		price: '14',
+	// 		period: '/mois',
+	// 		popular: true,
+	// 		features: [
+	// 			"Fonctionnalités de l'abonnement Basique",
+	// 			'Gestion de 4 compétitions par mois',
+	// 			'Génération de rapport personnalisé par tireur',
+	// 			'Conseils personnalisés pour les tireurs',
+	// 			'Support prioritaire',
+	// 		],
+	// 	},
+	// 	{
+	// 		name: 'VIP',
+	// 		price: '19',
+	// 		period: '/mois',
+	// 		popular: false,
+	// 		features: [
+	// 			"Fonctionnalités de l'abonnement Pro",
+	// 			'Gestion de compétitions illimitée',
+	// 			'Génération de QR Code de consultation du classement',
+	// 			'Support dédié',
+	// 			'Accès aux fonctionnalités bêta',
+	// 		],
+	// 	},
+	// ];
+
+	// transactions: Transaction[] = [
+	// 	{
+	// 		id: 1,
+	// 		date: '2023/06/01',
+	// 		montant: 19.99,
+	// 		typeOffre: 'Abonnement VIP',
+	// 		statutPaiement: 'Payé',
+	// 	},
+	// 	{
+	// 		id: 2,
+	// 		date: '2023/05/01',
+	// 		montant: 14.99,
+	// 		typeOffre: 'Abonnement Pro',
+	// 		statutPaiement: 'Payé',
+	// 	},
+	// 	{
+	// 		id: 3,
+	// 		date: '2023/04/01',
+	// 		montant: 14.99,
+	// 		typeOffre: 'Abonnement Pro',
+	// 		statutPaiement: 'En attente',
+	// 	},
+	// 	{
+	// 		id: 4,
+	// 		date: '2023/03/01',
+	// 		montant: 14.99,
+	// 		typeOffre: 'Abonnement Pro',
+	// 		statutPaiement: 'Payé',
+	// 	},
+	// 	{
+	// 		id: 5,
+	// 		date: '2023/02/01',
+	// 		montant: 7.99,
+	// 		typeOffre: 'Abonnement Basique',
+	// 		statutPaiement: 'Annulé',
+	// 	},
+	// ];
 
 	ngOnInit() {
 		const userParams: UserParams = JSON.parse(localStorage.getItem(this.userParamsName)!);
@@ -124,17 +122,59 @@ export class SettingsComponent {
 		this.themeService.setTheme(theme);
 	}
 
-	getBadgeClass(status: string): string {
-		switch (status) {
-			case 'Payé':
-				return 'badge-success';
-			case 'En attente':
-				return 'badge-warning';
-			case 'Annulé':
-				return 'badge-danger';
-			default:
-				return 'badge-default';
+	// getBadgeClass(status: string): string {
+	// 	switch (status) {
+	// 		case 'Payé':
+	// 			return 'badge-success';
+	// 		case 'En attente':
+	// 			return 'badge-warning';
+	// 		case 'Annulé':
+	// 			return 'badge-danger';
+	// 		default:
+	// 			return 'badge-default';
+	// 	}
+	// }
+
+	/**
+	 * Prépare et envoie un email en utilisant le service commun.
+	 * Si l'envoi de l'email réussit, on réinitialise les champs de saisie.
+	 *
+	 * @returns {Promise<void>} Une promesse qui se résout une fois que l'email a été envoyé et que les
+	 * champs de saisie ont été réinitialisés en cas de succès.
+	 */
+	async sendMail(): Promise<void> {
+		this.getDataIntoDictionary();
+		if (await this.commonService.sendMail(this.inputLabelMap)) {
+			this.resetInputFields();
 		}
+	}
+
+	/**
+	 * Parcourt les champs de saisie dans le HTML et mappe leurs valeurs à leurs labels correspondants.
+	 * La méthode utilise `inputFields` pour obtenir une liste des éléments de saisie. Pour chaque champ de saisie, elle récupère
+	 * le label associé en utilisant son attribut 'id'. Si un label est trouvé pour une valeur de champ, la méthode les mappent dans `inputLabelMap`.
+	 */
+	private getDataIntoDictionary() {
+		this.inputFields.forEach((input) => {
+			const label = document.querySelector(`label[for="${input.nativeElement.id}"]`);
+			if (label) {
+				this.inputLabelMap.set(label.textContent!.trim(), input.nativeElement.value);
+			}
+		});
+        console.log(this.inputFields);
+        
+	}
+
+	/**
+	 * Réinitialise les valeurs de tous les champs de saisie marqués avec la directive locale #inputField.
+	 * En l'occurence, la méthode permet de réinitialiser la valeur des champs de l'envoi de mail.
+	 */
+	resetInputFields() {
+		this.inputFields.forEach((field) => {
+			if (field.nativeElement instanceof HTMLInputElement || field.nativeElement instanceof HTMLTextAreaElement) {
+				field.nativeElement.value = '';
+			}
+		});
 	}
 }
 

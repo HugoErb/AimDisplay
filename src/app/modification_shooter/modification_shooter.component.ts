@@ -259,7 +259,7 @@ export class ModificationShooterComponent {
 	 * @param {Event} event - L'événement déclencheur (clic sur un bouton de suppression).
 	 */
 	confirmDeletion(event: Event) {
-		this.commonService.showSwal('Voulez vous vraiment supprimer cette ligne ?', 'Cette action sera irréversible.', 'warning');
+		this.commonService.showSwal('Voulez vous vraiment supprimer cette ligne ?', 'Cette action sera irréversible.', 'warning', true);
 	}
 
 	displayModifFormModal() {
