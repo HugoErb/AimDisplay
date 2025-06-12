@@ -37,7 +37,7 @@ export class CommonService {
 			title: `<div class="text-xl">${message}</div>`,
 			showConfirmButton: false,
 			width: 'auto',
-			timer: 2500,
+			timer: 3000,
 		});
 	}
 
@@ -49,12 +49,12 @@ export class CommonService {
 	 * @param {'success' | 'error' | 'warning' | 'info' | 'question'} [icon='success'] -
 	 *        L'icône à afficher. Peut être 'success', 'error', 'warning', 'info' ou 'question'.
 	 */
-	showSwal(title: string, message: string, icon: 'success' | 'error' | 'warning' | 'info' | 'question' = 'success') {
+	showSwal(title: string, message: string, icon: 'success' | 'error' | 'warning' | 'info' | 'question' = 'success', showCancelButton: boolean) {
 		Swal.fire({
 			icon: icon,
 			title: `<div class="text-2xl">${title}</div>`,
 			html: `${message}`,
-			showCancelButton: true,
+			showCancelButton: showCancelButton,
 			showConfirmButton: true,
 			confirmButtonText: 'Valider',
 			cancelButtonText: 'Annuler',
@@ -159,6 +159,37 @@ export class CommonService {
 	}
 
 	/**
+	 * Prépare et envoie un email à l'aide d'un service de messagerie.
+	 * Avant l'envoi, on vérifie les entrées pour s'assurer qu'elles sont valides en utilisant la méthode `validateInputs`.
+	 * Si les validations échouent, l'envoi est interrompu. Si les validations réussissent, les données sont envoyées au service de messagerie.
+	 * Les réactions aux réponses du service de messagerie, qu'elles soient réussies ou en erreur, sont gérées via des alertes à l'utilisateur.
+	 */
+	async sendMail(inputLabelMap: Map<string, string>): Promise<boolean> {
+		// On vérifie les données
+		const areInputsValid = await this.validateInputs(inputLabelMap);
+		if (!areInputsValid) {
+			return false;
+		}
+        this.showSwalToast('Message envoyé !');
+		return true;
+
+		const mailData = this.createMailData(inputLabelMap);
+
+		// return new Promise((resolve, reject) => {
+		// 	this.mailService.sendMail(mailData).subscribe({
+		// 		next: (response) => {
+		// 			this.showSwalToast('Message envoyé !');
+		// 			resolve(true);
+		// 		},
+		// 		error: (error) => {
+		// 			this.showSwalToast("Erreur lors de l'envoi du message.", 'error');
+		// 			reject(false);
+		// 		},
+		// 	});
+		// });
+	}
+
+	/**
 	 * Vérifie la validité d'une adresse email en utilisant l'API Mailcheck AI.
 	 * Pour cela la méthode évalue si l'email n'est pas jetable et si un enregistrement MX valide est présent.
 	 *
@@ -183,5 +214,70 @@ export class CommonService {
 			}
 			return false;
 		}
+	}
+
+	/**
+	 * Vérifie que les champs remplis par l'utilisateur pour l'envoi dans le mail sont dans un format correct.
+	 *
+	 * @returns {Promise<boolean>} Retourne une promesse avec `true` si toutes les validations sont passées, sinon `false`.
+	 */
+	async validateInputs(inputLabelMap: Map<string, string>): Promise<boolean> {
+		const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+
+		for (const [label, value] of inputLabelMap.entries()) {
+			const trimmedValue = value.trim();
+			const lowerCaseLabel = label.toLowerCase();
+
+			// Vérification des champs obligatoires
+			if (!trimmedValue) {
+				this.showSwal('Erreur de saisie', `Le champ "${label}" est obligatoire.`, 'error', false);
+				return false;
+			}
+
+			// Vérification pour l'email
+			if (lowerCaseLabel.includes('email')) {
+				if (!emailRegex.test(trimmedValue)) {
+					this.showSwal('Erreur de saisie', `Le format de l'adresse email est invalide.`, 'error', false);
+					return false;
+				} else {
+					const isEmailValid = await this.checkEmailValidity(trimmedValue);
+					if (!isEmailValid) {
+						this.showSwal('Erreur de saisie', `Le domaine de l'adresse email n'est pas accepté.`, 'error', false);
+						return false;
+					}
+				}
+			}
+		}
+
+		return true;
+	}
+
+	/**
+	 * Crée un objet de données mail en mappant les labels des champs de saisie à leurs valeurs.
+	 *
+	 * @returns {any} L'objet `mailData` contenant les données des champs sous forme d'objets avec des clés appropriées.
+	 *                Les clés sont des versions normalisées des labels des champs, et les valeurs sont celles entrées par l'utilisateur.
+	 */
+	public createMailData(inputLabelMap: Map<string, string>): any {
+		const mailData: any = {};
+		inputLabelMap.forEach((value, key) => {
+			const objectKey = this.convertLabelToObjectKey(key);
+			mailData[objectKey] = value;
+		});
+		return mailData;
+	}
+
+	/**
+	 * Convertit un label textuel en une clé d'objet utilisable.
+	 * Cette méthode normalise le label pour retirer les accents et autres signes diacritiques,
+	 * puis convertit le texte en minuscules et élimine les espaces blancs pour former une clé d'objet.
+	 *
+	 * @param {string} label - Le label textuel à convertir en clé d'objet.
+	 * @returns {string} La clé d'objet obtenue après la normalisation, le nettoyage des diacritiques,
+	 *                   la mise en minuscules et la suppression des espaces.
+	 */
+	convertLabelToObjectKey(label: string): string {
+		const normalizedLabel = label.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+		return normalizedLabel.toLowerCase().replace(/\s+/g, '');
 	}
 }

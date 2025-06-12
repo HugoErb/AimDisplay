@@ -621,26 +621,26 @@
 					<div class="space-y-6">
 						<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
 							<div class="flex flex-col space-y-1">
-								<label class="text-sm font-medium text-gray-700 dark:text-gray-300 transition-all duration-500 ml-1">Nom *</label>
-								<input type="text" pInputText [(ngModel)]="name" placeholder="Nom" />
+								<label class="text-sm font-medium text-gray-700 dark:text-gray-300 transition-all duration-500 ml-1" for="nom">Nom *</label>
+								<input id="nom" type="text" #inputField pInputText [(ngModel)]="nameMail" placeholder="Nom" />
 							</div>
 
 							<div class="flex flex-col space-y-1">
-								<label class="text-sm font-medium text-gray-700 dark:text-gray-300 transition-all duration-500 ml-1">Prénom *</label>
-								<input type="text" pInputText [(ngModel)]="firstName" placeholder="Prénom" />
+								<label class="text-sm font-medium text-gray-700 dark:text-gray-300 transition-all duration-500 ml-1" for="prénom">Prénom *</label>
+								<input id="prénom" type="text" #inputField pInputText [(ngModel)]="firstNameMail" placeholder="Prénom" />
 							</div>
 
 							<div class="flex flex-col space-y-1">
-								<label class="text-sm font-medium text-gray-700 dark:text-gray-300 transition-all duration-500 ml-1">
+								<label class="text-sm font-medium text-gray-700 dark:text-gray-300 transition-all duration-500 ml-1" for="email">
 									Adresse Email *
 								</label>
-								<input type="text" pInputText [(ngModel)]="email" placeholder="Adresse Email" />
+								<input id="email" type="text" #inputField pInputText [(ngModel)]="emailMail" placeholder="Adresse Email" />
 							</div>
 						</div>
 
 						<div class="flex flex-col space-y-1">
-							<label class="text-sm font-medium text-gray-700 dark:text-gray-300 transition-all duration-500 ml-1">Message *</label>
-							<textarea rows="5" pTextarea class="resize-none w-full" placeholder="Votre message..."></textarea>
+							<label class="text-sm font-medium text-gray-700 dark:text-gray-300 transition-all duration-500 ml-1" for="message">Message *</label>
+							<textarea id="message" rows="5" [(ngModel)]="messageMail" #inputField pTextarea class="resize-none w-full" placeholder="Votre message..."></textarea>
 						</div>
 
 						<div class="pt-6 border-t border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-400 transition-all duration-500">
@@ -651,7 +651,7 @@
 							<div class="flex justify-end">
 								<div
 									class="inline-flex h-12 items-center justify-center rounded-md bg-prime-blue text-white dark:text-gray-300 hover:bg-hover-prime-blue px-5 text-base font-medium shadow transition-colors duration-250 cursor-pointer"
-								>
+                                    (click)="sendMail()">
 									<iconify-icon icon="mdi:email-send" class="text-[1.5rem] mr-3"></iconify-icon>
 									Envoyer le message
 								</div>
