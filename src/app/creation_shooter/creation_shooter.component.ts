@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ElementRef, getDebugNode, QueryList, ViewChildren } from '@angular/core';
 import { AutoCompleteModule } from 'primeng/autocomplete';
 import { FormsModule } from '@angular/forms';
 import { InputNumberModule } from 'primeng/inputnumber';
@@ -20,8 +20,10 @@ export class CreationShooterComponent {
 	constructor(protected commonService: CommonService) {}
 
 	// Variables de création d'un tireur
-	shooterFirstName: string = '';
+	@ViewChildren('inputField', { read: ElementRef }) inputFields!: QueryList<ElementRef>;
+	public inputLabelMap = new Map<string, string>();
 	shooterLastName: string = '';
+	shooterFirstName: string = '';
 	shooterEmail: string = '';
 	shooterCompetitionName: string = '';
 	shooterClubName: string = '';
@@ -100,5 +102,32 @@ export class CreationShooterComponent {
 	onCategorySelected(selectedShooterCategory: any, group: CategoryGroup): void {
 		const pattern = /\b(Dame|Sénior)\b/i;
 		group.isSeniorOrDame = pattern.test(selectedShooterCategory.value.name || '');
+	}
+
+	/**
+	 * Prépare et envoie un email.
+	 * Si l'envoi de l'email réussit, on réinitialise les champs de saisie.
+	 *
+	 * @returns {Promise<void>} Une promesse qui se résout une fois que l'email a été envoyé et que les
+	 * champs de saisie ont été réinitialisés en cas de succès.
+	 */
+	async createShooter(): Promise<void> {
+		this.inputLabelMap = this.commonService.getInputLabelMap(this.inputFields);
+
+		if (await this.commonService.sendMail(this.inputLabelMap)) {
+			this.resetInputFields();
+		}
+	}
+
+	/**
+	 * Réinitialise les valeurs de tous les champs de saisie marqués avec la directive locale #inputField.
+	 * En l'occurence, la méthode permet de réinitialiser la valeur des champs de l'envoi de mail.
+	 */
+	resetInputFields() {
+		this.inputFields.forEach((field) => {
+			if (field.nativeElement instanceof HTMLInputElement || field.nativeElement instanceof HTMLTextAreaElement) {
+				field.nativeElement.value = '';
+			}
+		});
 	}
 }

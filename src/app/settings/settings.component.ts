@@ -136,33 +136,17 @@ export class SettingsComponent {
 	// }
 
 	/**
-	 * Prépare et envoie un email en utilisant le service commun.
+	 * Prépare et envoie un email.
 	 * Si l'envoi de l'email réussit, on réinitialise les champs de saisie.
 	 *
 	 * @returns {Promise<void>} Une promesse qui se résout une fois que l'email a été envoyé et que les
 	 * champs de saisie ont été réinitialisés en cas de succès.
 	 */
 	async sendMail(): Promise<void> {
-		this.getDataIntoDictionary();
+		this.inputLabelMap = this.commonService.getInputLabelMap(this.inputFields);
 		if (await this.commonService.sendMail(this.inputLabelMap)) {
 			this.resetInputFields();
 		}
-	}
-
-	/**
-	 * Parcourt les champs de saisie dans le HTML et mappe leurs valeurs à leurs labels correspondants.
-	 * La méthode utilise `inputFields` pour obtenir une liste des éléments de saisie. Pour chaque champ de saisie, elle récupère
-	 * le label associé en utilisant son attribut 'id'. Si un label est trouvé pour une valeur de champ, la méthode les mappent dans `inputLabelMap`.
-	 */
-	private getDataIntoDictionary() {
-		this.inputFields.forEach((input) => {
-			const label = document.querySelector(`label[for="${input.nativeElement.id}"]`);
-			if (label) {
-				this.inputLabelMap.set(label.textContent!.trim(), input.nativeElement.value);
-			}
-		});
-        console.log(this.inputFields);
-        
 	}
 
 	/**
