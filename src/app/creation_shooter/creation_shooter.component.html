@@ -19,17 +19,17 @@
 				<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
 					<div class="flex flex-col space-y-1">
 						<label class="text-sm font-medium text-gray-700 dark:text-gray-300 ml-1">Nom *</label>
-						<input type="text" pInputText [(ngModel)]="shooterLastName" placeholder="Nom du tireur" />
+						<input type="text" #inputField pInputText [(ngModel)]="shooterLastName" placeholder="Nom du tireur" />
 					</div>
 
 					<div class="flex flex-col space-y-1">
 						<label class="text-sm font-medium text-gray-700 dark:text-gray-300 ml-1">Prénom *</label>
-						<input type="text" pInputText [(ngModel)]="shooterFirstName" placeholder="Prénom du tireur" />
+						<input type="text" #inputField pInputText [(ngModel)]="shooterFirstName" placeholder="Prénom du tireur" />
 					</div>
 
 					<div class="flex flex-col space-y-1">
 						<label class="text-sm font-medium text-gray-700 dark:text-gray-300 ml-1">Adresse Email</label>
-						<input type="text" pInputText [(ngModel)]="shooterEmail" placeholder="Adresse Email" />
+						<input type="text" #inputField pInputText [(ngModel)]="shooterEmail" placeholder="Adresse Email" />
 					</div>
 				</div>
 			</div>
@@ -43,6 +43,7 @@
 					<div class="flex flex-col space-y-1">
 						<label class="text-sm font-medium text-gray-700 dark:text-gray-300 ml-1">Club *</label>
 						<p-autoComplete
+							#inputField
 							[(ngModel)]="shooterClubName"
 							[forceSelection]="true"
 							[suggestions]="filteredClubs"
@@ -56,6 +57,7 @@
 					<div class="flex flex-col space-y-1">
 						<label class="text-sm font-medium text-gray-700 dark:text-gray-300 ml-1">Compétition *</label>
 						<p-autoComplete
+							#inputField
 							[(ngModel)]="shooterCompetitionName"
 							[forceSelection]="true"
 							[suggestions]="filteredCompetitions"
@@ -70,18 +72,21 @@
 
 			<!-- Catégorie et scores du tireur dans la compétition -->
 			<div class="space-y-8" *ngFor="let group of categoryGroups; let i = index">
-				<h2 *ngIf="i === 0" class="text-lg font-semibold text-gray-900 pb-2 border-b border-gray-200 dark:border-gray-700 dark:text-gray-300">
+				<h2 class="text-lg font-semibold text-gray-900 pb-2 border-b border-gray-200 dark:border-gray-700 dark:text-gray-300">
 					Catégorie et scores du tireur dans la compétition
-				</h2>
-				<h2 *ngIf="i > 0" class="text-lg font-semibold text-gray-900 pb-2 border-b border-gray-200 dark:border-gray-700 dark:text-gray-300">
-					Catégorie supplémentaire {{ i }}
+					<ng-container *ngIf="i > 0">{{ i + 1 }}</ng-container>
 				</h2>
 
 				<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
 					<!-- Distance -->
 					<div class="flex flex-col space-y-1">
-						<label class="text-sm font-medium text-gray-700 dark:text-gray-300 ml-1">Distance de tir *</label>
+						<label class="text-sm font-medium text-gray-700 dark:text-gray-300 ml-1">
+							Distance de tir
+							<ng-container *ngIf="i > 0">({{ i + 1 }})</ng-container>
+							*
+						</label>
 						<p-autoComplete
+							#inputField
 							[(ngModel)]="group.shooterDistance"
 							[forceSelection]="true"
 							[suggestions]="filteredDistances"
@@ -94,8 +99,13 @@
 
 					<!-- Arme -->
 					<div class="flex flex-col space-y-1">
-						<label class="text-sm font-medium text-gray-700 dark:text-gray-300 ml-1">Type d'arme *</label>
+						<label class="text-sm font-medium text-gray-700 dark:text-gray-300 ml-1">
+							Type d'arme
+							<ng-container *ngIf="i > 0">({{ i + 1 }})</ng-container>
+							*
+						</label>
 						<p-autoComplete
+							#inputField
 							[(ngModel)]="group.shooterWeapon"
 							[forceSelection]="true"
 							[suggestions]="filteredWeapons"
@@ -108,8 +118,13 @@
 
 					<!-- Catégorie -->
 					<div class="flex flex-col space-y-1">
-						<label class="text-sm font-medium text-gray-700 dark:text-gray-300 ml-1">Catégorie *</label>
+						<label class="text-sm font-medium text-gray-700 dark:text-gray-300 ml-1">
+							Catégorie
+							<ng-container *ngIf="i > 0">({{ i + 1 }})</ng-container>
+							*
+						</label>
 						<p-autoComplete
+							#inputField
 							[(ngModel)]="group.shooterCategory"
 							[forceSelection]="true"
 							[suggestions]="filteredCategories"
@@ -125,8 +140,12 @@
 				<!-- Scores -->
 				<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
 					<div *ngFor="let serie of [1, 2, 3, 4]; let s = index">
-						<label class="text-sm font-medium text-gray-700 dark:text-gray-300 ml-1">Score série {{ serie }}</label>
+						<label class="text-sm font-medium text-gray-700 dark:text-gray-300 ml-1">
+							Score série {{ serie }}
+							<ng-container *ngIf="i > 0">({{ i + 1 }})</ng-container>
+						</label>
 						<p-inputNumber
+							#inputField
 							[(ngModel)]="group['scoreSerie' + serie]"
 							mode="decimal"
 							[minFractionDigits]="2"
@@ -141,8 +160,12 @@
 					<!-- Séries 5 & 6 si senior/dame -->
 					@if (group.isSeniorOrDame){
 					<div class="flex flex-col space-y-1">
-						<label class="text-sm font-medium text-gray-700 dark:text-gray-300 ml-1">Score série 5</label>
+						<label class="text-sm font-medium text-gray-700 dark:text-gray-300 ml-1">
+							Score série 5
+							<ng-container *ngIf="i > 0">({{ i + 1 }})</ng-container>
+						</label>
 						<p-inputNumber
+							#inputField
 							[(ngModel)]="group.scoreSerie5"
 							mode="decimal"
 							[minFractionDigits]="2"
@@ -154,8 +177,12 @@
 						></p-inputNumber>
 					</div>
 					<div class="flex flex-col space-y-1">
-						<label class="text-sm font-medium text-gray-700 dark:text-gray-300 ml-1">Score série 6</label>
+						<label class="text-sm font-medium text-gray-700 dark:text-gray-300 ml-1">
+							Score série 6
+							<ng-container *ngIf="i > 0">({{ i + 1 }})</ng-container>
+						</label>
 						<p-inputNumber
+							#inputField
 							[(ngModel)]="group.scoreSerie6"
 							mode="decimal"
 							[minFractionDigits]="2"
@@ -201,6 +228,7 @@
 				<div class="flex justify-end">
 					<div
 						class="inline-flex h-12 items-center justify-center rounded-md bg-prime-blue text-white dark:text-gray-300 hover:bg-hover-prime-blue px-5 text-base font-medium shadow transition-colors duration-250 cursor-pointer"
+						(click)="createShooter()"
 					>
 						<iconify-icon icon="material-symbols-light:save-rounded" class="text-[1.5rem] mr-4"></iconify-icon>
 						Enregistrer le tireur
