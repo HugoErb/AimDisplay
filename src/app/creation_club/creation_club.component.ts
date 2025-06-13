@@ -23,7 +23,7 @@ export class CreationClubComponent {
 
 	/**
 	 * Permet de créer un club à partir des données récoltées dans les champs du formulaire.
-	 * Une phase de validation des inputs est d'abord lancé, puis, si la création réussit,
+	 * Une phase de validation des inputs est d'abord lancée, puis, si la création réussit,
 	 * on réinitialise les champs de saisie.
 	 *
 	 * @returns {Promise<void>} Une promesse qui se résout une fois que la création est effectuée et que les
