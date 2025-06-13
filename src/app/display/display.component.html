@@ -16,8 +16,9 @@
 					Affichage d'une compétition
 				</h2>
 				<div class="flex flex-col space-y-1">
-					<label class="text-sm font-medium text-gray-700 dark:text-gray-300 ml-1">Compétition</label>
+					<label class="text-sm font-medium text-gray-700 dark:text-gray-300 ml-1">Compétition *</label>
 					<p-autoComplete
+						#inputField
 						[(ngModel)]="shooterCompetitionName"
 						[forceSelection]="true"
 						[suggestions]="filteredCompetitions"
@@ -33,11 +34,16 @@
 			<div class="pt-6 border-t border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-400">
 				<div class="flex items-center text-sm">
 					<iconify-icon icon="lucide:info" class="text-[1rem] mr-2"></iconify-icon>
+					<p>Les champs marqués d'un astérisque (*) sont obligatoires.</p>
+				</div>
+				<div class="flex items-center text-sm">
+					<iconify-icon icon="lucide:info" class="text-[1rem] mr-2"></iconify-icon>
 					<p>L’activation ouvrira une nouvelle page permettant d'afficher en plein écran le classement à vos compétiteurs.</p>
 				</div>
 				<div class="flex justify-end">
 					<div
 						class="inline-flex h-12 items-center justify-center rounded-md bg-prime-blue text-white dark:text-gray-300 hover:bg-hover-prime-blue px-5 text-base font-medium shadow transition-colors duration-250 cursor-pointer"
+						(click)="launchDisplay()"
 					>
 						<iconify-icon icon="heroicons:play" class="text-[1.5rem] mr-3"></iconify-icon>
 						Lancer l'affichage
