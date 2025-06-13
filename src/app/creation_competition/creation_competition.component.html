@@ -18,13 +18,14 @@
 				<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
 					<div class="flex flex-col space-y-1">
 						<label class="text-sm font-medium text-gray-700 dark:text-gray-300 ml-1">Nom de la compétition *</label>
-						<input type="text" pInputText [(ngModel)]="competitionName" placeholder="Nom de la compétition" />
+						<input type="text" #inputField pInputText [(ngModel)]="competitionName" placeholder="Nom de la compétition" />
 					</div>
 
 					<div class="flex flex-col space-y-1">
 						<label class="text-sm font-medium text-gray-700 dark:text-gray-300 ml-1">Dates de la compétition *</label>
 						<div class="relative">
 							<p-datepicker
+								#inputField
 								[firstDayOfWeek]="1"
 								[(ngModel)]="competitionDate"
 								[showIcon]="true"
@@ -46,6 +47,7 @@
 						<label class="text-sm font-medium text-gray-700 dark:text-gray-300 ml-1">Prix d'inscription *</label>
 						<div class="flex items-center space-x-2">
 							<p-inputNumber
+								#inputField
 								[(ngModel)]="prixCategSup"
 								mode="decimal"
 								[minFractionDigits]="2"
@@ -63,6 +65,7 @@
 						<label class="text-sm font-medium text-gray-700 dark:text-gray-300 ml-1">Prix de catégorie supplémentaire *</label>
 						<div class="flex items-center space-x-2">
 							<p-inputNumber
+								#inputField
 								[(ngModel)]="prixCategSup"
 								mode="decimal"
 								[minFractionDigits]="2"
@@ -87,6 +90,7 @@
 				<div class="flex justify-end">
 					<div
 						class="inline-flex h-12 items-center justify-center rounded-md bg-prime-blue text-white dark:text-gray-300 hover:bg-hover-prime-blue px-5 text-base font-medium shadow transition-colors duration-250 cursor-pointer"
+						(click)="createCompetition()"
 					>
 						<iconify-icon icon="material-symbols-light:save-rounded" class="text-[1.5rem] mr-3"></iconify-icon>
 						Enregistrer la compétition

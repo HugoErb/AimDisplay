@@ -1,4 +1,4 @@
-import { Component, ElementRef, getDebugNode, QueryList, ViewChildren } from '@angular/core';
+import { Component, ElementRef, QueryList, ViewChildren } from '@angular/core';
 import { AutoCompleteModule } from 'primeng/autocomplete';
 import { FormsModule } from '@angular/forms';
 import { InputNumberModule } from 'primeng/inputnumber';
@@ -105,10 +105,11 @@ export class CreationShooterComponent {
 	}
 
 	/**
-	 * Prépare et envoie un email.
-	 * Si l'envoi de l'email réussit, on réinitialise les champs de saisie.
+	 * Permet de créer un tireur à partir des données récoltées dans les champs du formulaire.
+     * Une phase de validation des inputs est d'abord lancé, puis, si la création réussit, 
+     * on réinitialise les champs de saisie.
 	 *
-	 * @returns {Promise<void>} Une promesse qui se résout une fois que l'email a été envoyé et que les
+	 * @returns {Promise<void>} Une promesse qui se résout une fois que la création est effectuée et que les
 	 * champs de saisie ont été réinitialisés en cas de succès.
 	 */
 	async createShooter(): Promise<void> {
