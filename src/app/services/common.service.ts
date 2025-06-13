@@ -1,4 +1,4 @@
-import { ElementRef, getDebugNode, Injectable, QueryList, signal } from '@angular/core';
+import { ElementRef, Injectable, QueryList, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import Swal from 'sweetalert2';
 import axios from 'axios';
@@ -8,11 +8,22 @@ import { EmailValidityResponse } from '../interfaces/email-validity-response';
 	providedIn: 'root',
 })
 export class CommonService {
-	private darkMode = signal<boolean>(false);
-
 	constructor(private router: Router) {}
 
-	public isCollapsed: boolean = false;
+	private darkMode = signal<boolean>(false);
+
+	// Liste blanche des domaines populaires considérés comme fiables
+	private trustedEmailDomains = new Set([
+		'gmail.com',
+		'hotmail.com',
+		'outlook.com',
+		'yahoo.com',
+		'yahoo.fr',
+		'live.com',
+		'protonmail.com',
+		'icloud.com',
+	]);
+	private emailValidationCache = new Map<string, boolean>();
 
 	/**
 	 * Utilise le routeur pour naviguer vers une page donnée.
@@ -264,7 +275,7 @@ export class CommonService {
 			if (axios.isAxiosError(error)) {
 				console.error(`Impossible de vérifier l'email : ${error.message}`);
 			} else {
-				console.error('Erreur inattendue lors de la vérification de l\'email.');
+				console.error("Erreur inattendue lors de la vérification de l'email.");
 			}
 			return false;
 		}
@@ -285,20 +296,38 @@ export class CommonService {
 			const isRequired = lowerCaseLabel.includes('*');
 			const isEmailField = lowerCaseLabel.includes('email');
 
-			// Vérification des champs obligatoires
 			if (isRequired && !trimmedValue) {
 				this.showSwal('Erreur de saisie', `Le champ "${label}" est obligatoire.`, 'error', false);
 				return false;
 			}
 
-			// Vérification du champ email (si présent et non vide)
 			if (isEmailField && trimmedValue) {
 				if (!emailRegex.test(trimmedValue)) {
 					this.showSwal('Erreur de saisie', `Le format de l'adresse email est invalide.`, 'error', false);
 					return false;
 				}
 
+				const domain = trimmedValue.split('@')[1]?.toLowerCase();
+
+				// Domaine en whitelist → accepté sans appel API
+				if (this.trustedEmailDomains.has(domain)) {
+					continue;
+				}
+
+				// Email déjà vérifié (encore en cache)
+				if (this.emailValidationCache.has(trimmedValue)) {
+					const cachedResult = this.emailValidationCache.get(trimmedValue)!;
+					if (!cachedResult) {
+						this.showSwal('Erreur de saisie', `Le domaine de l'adresse email n'est pas accepté.`, 'error', false);
+						return false;
+					}
+					continue;
+				}
+
+				// Email inconnu → appel API pour vérification
 				const isEmailValid = await this.checkEmailValidity(trimmedValue);
+				this.emailValidationCache.set(trimmedValue, isEmailValid);
+
 				if (!isEmailValid) {
 					this.showSwal('Erreur de saisie', `Le domaine de l'adresse email n'est pas accepté.`, 'error', false);
 					return false;
@@ -336,5 +365,28 @@ export class CommonService {
 	convertLabelToObjectKey(label: string): string {
 		const normalizedLabel = label.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
 		return normalizedLabel.toLowerCase().replace(/\s+/g, '');
+	}
+
+	/**
+	 * Réinitialise les champs de formulaire référencés par #inputField.
+	 * Elle gère les inputs HTML standards ainsi que certains composants PrimeNG.
+	 *
+	 * @param inputFields - La liste des champs ciblés (généralement via @ViewChildren('inputField'))
+	 */
+	resetInputFields(inputFields: QueryList<ElementRef>): void {
+		inputFields.forEach((field) => {
+			const el = field.nativeElement as HTMLElement;
+
+			// 1. Champs HTML standards
+			if (el instanceof HTMLInputElement || el instanceof HTMLTextAreaElement) {
+				el.value = '';
+			}
+
+			// 2. Composants PrimeNG : rechercher un <input> à l'intérieur
+			const inner = el.querySelector?.('input, textarea') as HTMLInputElement | HTMLTextAreaElement;
+			if (inner) {
+				inner.value = '';
+			}
+		});
 	}
 }
