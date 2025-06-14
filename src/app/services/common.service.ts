@@ -213,8 +213,8 @@ export class CommonService {
 		this.showSwalToast('Nouvelle entité créée !');
 		return true;
 	}
-    
-    /**
+
+	/**
 	 * Créé un nouveau compte dans la base de donnée.
 	 * On vérifie les entrées pour s'assurer qu'elles sont valides en utilisant la méthode `validateInputs`.
 	 * Si les validations échouent, la création est interrompue. Si les validations réussissent, les données sont envoyées à la BDD.
@@ -320,6 +320,8 @@ export class CommonService {
 	async validateInputs(inputLabelMap: Map<string, string>, checkMail: boolean): Promise<boolean> {
 		const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
 
+		let passwordValue: string | null = null;
+
 		for (const [label, value] of inputLabelMap.entries()) {
 			const trimmedValue = value.trim();
 			const lowerCaseLabel = label.toLowerCase();
@@ -327,27 +329,31 @@ export class CommonService {
 			const isRequired = lowerCaseLabel.includes('*');
 			const isEmailField = lowerCaseLabel.includes('email');
 
+			// Sauvegarder la valeur du mot de passe pour vérification ultérieure
+			if (label === 'Mot de passe *') {
+				passwordValue = trimmedValue;
+			}
+
+			// Vérification champs requis
 			if (isRequired && !trimmedValue) {
 				this.showSwal('Erreur de saisie', `Le champ "${label}" est obligatoire.`, 'error', false);
 				return false;
 			}
 
-			// Toujours vérifier le format de l'email si le champ est un email et non vide
+			// Vérification du format email
 			if (isEmailField && trimmedValue && !emailRegex.test(trimmedValue)) {
 				this.showSwal('Erreur de saisie', `Le format de l'adresse email est invalide.`, 'error', false);
 				return false;
 			}
 
-			// Si checkMail est true → vérifier le domaine
+			// Vérification du domaine email (si checkMail === true)
 			if (checkMail && isEmailField && trimmedValue) {
 				const domain = trimmedValue.split('@')[1]?.toLowerCase();
 
-				// Domaine en whitelist
 				if (this.trustedEmailDomains.has(domain)) {
 					continue;
 				}
 
-				// Vérification en cache
 				if (this.emailValidationCache.has(trimmedValue)) {
 					const cachedResult = this.emailValidationCache.get(trimmedValue)!;
 					if (!cachedResult) {
@@ -357,7 +363,6 @@ export class CommonService {
 					continue;
 				}
 
-				// Vérification API
 				const isEmailValid = await this.checkEmailValidity(trimmedValue);
 				this.emailValidationCache.set(trimmedValue, isEmailValid);
 
@@ -365,6 +370,15 @@ export class CommonService {
 					this.showSwal('Erreur de saisie', `Le domaine de l'adresse email n'est pas accepté.`, 'error', false);
 					return false;
 				}
+			}
+		}
+
+		// Vérification de confirmation du mot de passe
+		if (inputLabelMap.has('Confirmer le mot de passe *')) {
+			const confirmPwd = inputLabelMap.get('Confirmer le mot de passe *')!.trim();
+			if (passwordValue === null || confirmPwd !== passwordValue) {
+				this.showSwal('Erreur de saisie', `Les mots de passe renseignés ne correspondent pas.`, 'error', false);
+				return false;
 			}
 		}
 
