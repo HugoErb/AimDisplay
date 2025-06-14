@@ -19,9 +19,10 @@
 			<!-- Formulaire -->
 			<form class="space-y-6">
 				<div class="space-y-2">
-					<label htmlFor="email" class="text-sm font-medium text-gray-700">Adresse email</label>
+					<label htmlFor="email" class="text-sm font-medium text-gray-700">Adresse email *</label>
 					<div class="relative">
 						<input
+							#inputField
 							[(ngModel)]="email"
 							type="email"
 							placeholder="Entrez votre adresse email"
@@ -36,7 +37,7 @@
 
 				<div class="space-y-2">
 					<div class="flex items-center justify-between">
-						<label htmlFor="password" class="text-sm font-medium text-gray-700">Mot de passe</label>
+						<label htmlFor="password" class="text-sm font-medium text-gray-700">Mot de passe *</label>
 						<div
 							(click)="commonService.redirectTo('forgot-password')"
 							class="text-sm font-medium text-prime-blue hover:text-hover-prime-blue hover:underline cursor-pointer"
@@ -46,6 +47,7 @@
 					</div>
 					<div class="relative">
 						<input
+							#inputField
 							[(ngModel)]="password"
 							[type]="passwordFieldType"
 							placeholder="Entrez votre mot de passe"
@@ -70,6 +72,7 @@
 
 				<div
 					class="w-full inline-flex h-12 items-center justify-center rounded-md bg-prime-blue text-white dark:text-gray-300 hover:bg-hover-prime-blue px-5 text-base font-medium shadow transition-colors duration-250 cursor-pointer"
+					(click)="login()"
 				>
 					Se connecter
 					<iconify-icon icon="tabler:arrow-right" class="text-[1.5rem] ml-2"></iconify-icon>
