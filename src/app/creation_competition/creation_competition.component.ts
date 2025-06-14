@@ -22,8 +22,8 @@ export class CreationCompetitionComponent {
 	public inputLabelMap = new Map<string, string>();
 	competitionDate: string = '';
 	competitionName: string = '';
-	prixInscription: number = 0;
-	prixCategSup: number = 0;
+	prixInscription: number | null = null;
+	prixCategSup: number | null = null;
 
 	/**
 	 * Permet de créer une compétition à partir des données récoltées dans les champs du formulaire.
