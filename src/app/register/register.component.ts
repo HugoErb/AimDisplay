@@ -21,17 +21,8 @@ export class RegisterComponent {
 		protected commonService: CommonService // protected authService: AuthService
 	) {}
 
-	// Variables de création d'un tireur
 	@ViewChildren('inputField', { read: ElementRef }) inputFields!: QueryList<ElementRef>;
 	public inputLabelMap = new Map<string, string>();
-
-	/**
-	 * Cette méthode vérifie si l'email et le mot de passe sont renseignés,
-	 * puis appelle le service d'authentification pour se connecter avec ces informations.
-	 */
-	// login(): void {
-	// 	if (this.email && this.password) this.authService.signIn(this.email, this.password);
-	// }
 
 	/**
 	 * Permet de créer un nouveau compte à partir des données récoltées dans les champs du formulaire.
@@ -41,11 +32,12 @@ export class RegisterComponent {
 	 * @returns {Promise<void>} Une promesse qui se résout une fois que la création est effectuée et que les
 	 * champs de saisie ont été réinitialisés en cas de succès.
 	 */
-	async createAccount(): Promise<void> {
+	async createAccount() {
 		this.inputLabelMap = this.commonService.getInputLabelMap(this.inputFields);
-
-		if (await this.commonService.createAccount(this.inputLabelMap)) {
-			this.commonService.redirectTo("login");
+		const areInputsValid = await this.commonService.validateInputs(this.inputLabelMap, true);
+		if (areInputsValid) {
+			this.commonService.showSwalToast('Compte créé !');
+			this.commonService.redirectTo('login');
 		}
 	}
 }
