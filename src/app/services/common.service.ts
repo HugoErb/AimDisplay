@@ -173,11 +173,10 @@ export class CommonService {
 	 * Prépare et envoie un email à l'aide d'un service de messagerie.
 	 * Avant l'envoi, on vérifie les entrées pour s'assurer qu'elles sont valides en utilisant la méthode `validateInputs`.
 	 * Si les validations échouent, l'envoi est interrompu. Si les validations réussissent, les données sont envoyées au service de messagerie.
-	 * Les réactions aux réponses du service de messagerie, qu'elles soient réussies ou en erreur, sont gérées via des alertes à l'utilisateur.
 	 */
 	async sendMail(inputLabelMap: Map<string, string>): Promise<boolean> {
 		// On vérifie les données
-		const areInputsValid = await this.validateInputs(inputLabelMap);
+		const areInputsValid = await this.validateInputs(inputLabelMap, false);
 		if (!areInputsValid) {
 			return false;
 		}
@@ -198,6 +197,36 @@ export class CommonService {
 		// 		},
 		// 	});
 		// });
+	}
+
+	/**
+	 * Créé une nouvelle entité dans la base de donnée.
+	 * On vérifie les entrées pour s'assurer qu'elles sont valides en utilisant la méthode `validateInputs`.
+	 * Si les validations échouent, la création est interrompue. Si les validations réussissent, les données sont envoyées à la BDD.
+	 */
+	async createData(inputLabelMap: Map<string, string>): Promise<boolean> {
+		// On vérifie les données
+		const areInputsValid = await this.validateInputs(inputLabelMap, false);
+		if (!areInputsValid) {
+			return false;
+		}
+		this.showSwalToast('Nouvelle entité créée !');
+		return true;
+	}
+    
+    /**
+	 * Créé un nouveau compte dans la base de donnée.
+	 * On vérifie les entrées pour s'assurer qu'elles sont valides en utilisant la méthode `validateInputs`.
+	 * Si les validations échouent, la création est interrompue. Si les validations réussissent, les données sont envoyées à la BDD.
+	 */
+	async createAccount(inputLabelMap: Map<string, string>): Promise<boolean> {
+		// On vérifie les données
+		const areInputsValid = await this.validateInputs(inputLabelMap, true);
+		if (!areInputsValid) {
+			return false;
+		}
+		this.showSwalToast('Compte créé !');
+		return true;
 	}
 
 	/**
@@ -282,11 +311,13 @@ export class CommonService {
 	}
 
 	/**
-	 * Vérifie que les champs remplis par l'utilisateur pour l'envoi dans le mail sont dans un format correct.
+	 * Vérifie que les champs remplis par l'utilisateur sont dans un format correct.
 	 *
-	 * @returns {Promise<boolean>} Retourne une promesse avec `true` si toutes les validations sont passées, sinon `false`.
+	 * @param {Map<string, string>} inputLabelMap - Clé : nom du champ ; valeur : donnée saisie
+	 * @param {boolean} checkMail - Active ou non la vérification du domaine de l'adresse email
+	 * @returns {Promise<boolean>} Retourne `true` si toutes les validations sont passées, sinon `false`.
 	 */
-	async validateInputs(inputLabelMap: Map<string, string>): Promise<boolean> {
+	async validateInputs(inputLabelMap: Map<string, string>, checkMail: boolean): Promise<boolean> {
 		const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
 
 		for (const [label, value] of inputLabelMap.entries()) {
@@ -301,20 +332,22 @@ export class CommonService {
 				return false;
 			}
 
-			if (isEmailField && trimmedValue) {
-				if (!emailRegex.test(trimmedValue)) {
-					this.showSwal('Erreur de saisie', `Le format de l'adresse email est invalide.`, 'error', false);
-					return false;
-				}
+			// Toujours vérifier le format de l'email si le champ est un email et non vide
+			if (isEmailField && trimmedValue && !emailRegex.test(trimmedValue)) {
+				this.showSwal('Erreur de saisie', `Le format de l'adresse email est invalide.`, 'error', false);
+				return false;
+			}
 
+			// Si checkMail est true → vérifier le domaine
+			if (checkMail && isEmailField && trimmedValue) {
 				const domain = trimmedValue.split('@')[1]?.toLowerCase();
 
-				// Domaine en whitelist → accepté sans appel API
+				// Domaine en whitelist
 				if (this.trustedEmailDomains.has(domain)) {
 					continue;
 				}
 
-				// Email déjà vérifié (encore en cache)
+				// Vérification en cache
 				if (this.emailValidationCache.has(trimmedValue)) {
 					const cachedResult = this.emailValidationCache.get(trimmedValue)!;
 					if (!cachedResult) {
@@ -324,7 +357,7 @@ export class CommonService {
 					continue;
 				}
 
-				// Email inconnu → appel API pour vérification
+				// Vérification API
 				const isEmailValid = await this.checkEmailValidity(trimmedValue);
 				this.emailValidationCache.set(trimmedValue, isEmailValid);
 
