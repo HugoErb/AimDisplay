@@ -215,21 +215,6 @@ export class CommonService {
 	}
 
 	/**
-	 * Créé un nouveau compte dans la base de donnée.
-	 * On vérifie les entrées pour s'assurer qu'elles sont valides en utilisant la méthode `validateInputs`.
-	 * Si les validations échouent, la création est interrompue. Si les validations réussissent, les données sont envoyées à la BDD.
-	 */
-	async createAccount(inputLabelMap: Map<string, string>): Promise<boolean> {
-		// On vérifie les données
-		const areInputsValid = await this.validateInputs(inputLabelMap, true);
-		if (!areInputsValid) {
-			return false;
-		}
-		this.showSwalToast('Compte créé !');
-		return true;
-	}
-
-	/**
 	 * Génère dynamiquement une map contenant les paires <label, valeur> des champs d’un formulaire.
 	 *
 	 * Tous les champs doivent utiliser la référence locale #inputField dans le HTML pour que la méthode fonctionne.
