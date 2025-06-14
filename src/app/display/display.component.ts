@@ -30,7 +30,7 @@ export class DisplayComponent {
 	async launchDisplay(): Promise<void> {
 		this.inputLabelMap = this.commonService.getInputLabelMap(this.inputFields);
 
-		if (await this.commonService.sendMail(this.inputLabelMap)) {
+		if (await this.commonService.createData(this.inputLabelMap)) {
 			this.commonService.resetInputFields(this.inputFields);
 		}
 	}
