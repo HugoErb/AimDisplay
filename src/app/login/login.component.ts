@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ElementRef, QueryList, ViewChildren } from '@angular/core';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { InputTextModule } from 'primeng/inputtext';
@@ -12,19 +12,31 @@ import { CommonService } from '../services/common.service';
 	schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class LoginComponent {
-	passwordFieldType: string = 'password';
-	email: string = '';
-	password: string = '';
-
 	constructor(
 		protected commonService: CommonService // protected authService: AuthService
 	) {}
 
+	@ViewChildren('inputField', { read: ElementRef }) inputFields!: QueryList<ElementRef>;
+	public inputLabelMap = new Map<string, string>();
+	passwordFieldType: string = 'password';
+	email: string = '';
+	password: string = '';
+
 	/**
-	 * Cette méthode vérifie si l'email et le mot de passe sont renseignés,
-	 * puis appelle le service d'authentification pour se connecter avec ces informations.
+	 * Permet de créer un nouveau compte à partir des données récoltées dans les champs du formulaire.
+	 * Une phase de validation des inputs est d'abord lancée, puis, si la création réussit,
+	 * on redirige vers la page de login.
+	 *
+	 * @returns {Promise<void>} Une promesse qui se résout une fois que la création est effectuée et que les
+	 * champs de saisie ont été réinitialisés en cas de succès.
 	 */
-	// login(): void {
-	// 	if (this.email && this.password) this.authService.signIn(this.email, this.password);
-	// }
+	async login() {
+		this.inputLabelMap = this.commonService.getInputLabelMap(this.inputFields);
+		const areInputsValid = await this.commonService.validateInputs(this.inputLabelMap, false);
+		if (areInputsValid) {
+			// this.authService.signIn(this.email, this.password);
+			this.commonService.showSwalToast('Connexion réussie !');
+			this.commonService.redirectTo('home');
+		}
+	}
 }
