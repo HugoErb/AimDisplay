@@ -1,4 +1,4 @@
-<section class="flex min-h-screen bg-gray-100 dark:bg-main-dark-bg transition-colors duration-500">
+<section [class.dark]="theme === 'dark'" class="flex min-h-screen bg-gray-100 dark:bg-main-dark-bg transition-colors duration-500">
 	<app-sidebar></app-sidebar>
 	<div class="ml-64 flex-grow min-h-screen transition-all duration-500 overflow-hidden">
 		<router-outlet></router-outlet>
