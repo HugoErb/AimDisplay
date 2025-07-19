@@ -142,7 +142,7 @@ export class CommonService {
 		if (height > 1080) {
 			return 15;
 		} else if (height <= 750) {
-			return 4;
+			return 7;
 		} else {
 			return 11;
 		}
