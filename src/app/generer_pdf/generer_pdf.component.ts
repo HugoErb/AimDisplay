@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ElementRef, QueryList, ViewChildren } from '@angular/core';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { AutoCompleteModule } from 'primeng/autocomplete';
 import { CommonModule } from '@angular/common';
@@ -13,6 +13,11 @@ import { CommonService } from '../services/common.service';
 })
 export class GenererPDFComponent {
 	constructor(protected commonService: CommonService) {}
+
+	// Variables de création d'un club
+	@ViewChildren('inputField', { read: ElementRef }) inputFields!: QueryList<ElementRef>;
+	public inputLabelMap = new Map<string, string>();
+    
 	// Variables de sélection de tab
 	selectedTab: 'competition' | 'tireur' = 'competition';
 
@@ -35,5 +40,21 @@ export class GenererPDFComponent {
 	 */
 	switchTab(tab: 'competition' | 'tireur') {
 		this.selectedTab = tab;
+	}
+
+	/**
+	 * Permet de lancer la génération du PDF à partir des données récoltées dans les champs du formulaire.
+	 * Une phase de validation des inputs est d'abord lancée, puis, si la création réussit,
+	 * on réinitialise les champs de saisie et le PDF et télécharger sur le PC de l'utilisateur.
+	 *
+	 * @returns {Promise<void>} Une promesse qui se résout une fois que la création est effectuée et que les
+	 * champs de saisie ont été réinitialisés en cas de succès.
+	 */
+	async generatePDF(): Promise<void> {
+		this.inputLabelMap = this.commonService.getInputLabelMap(this.inputFields);
+
+		if (await this.commonService.createData(this.inputLabelMap)) {
+			this.commonService.resetInputFields(this.inputFields);
+		}
 	}
 }
