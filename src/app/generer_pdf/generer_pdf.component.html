@@ -54,6 +54,7 @@
 							field="name"
 							[dropdown]="true"
 							placeholder="Compétition à exporter"
+                            #inputField
 						></p-autoComplete>
 					</div>
 					<div class="bg-blue-50 dark:bg-gray-700 rounded-lg p-4 border border-blue-200 dark:border-gray-500 my-6">
@@ -85,12 +86,13 @@
 								field="name"
 								[dropdown]="true"
 								placeholder="Nom Prénom du tireur à exporter"
+                                #inputField
 							></p-autoComplete>
 						</div>
 
 						<!-- Compétition -->
 						<div class="flex flex-col space-y-1">
-							<label class="text-sm font-medium text-gray-700 dark:text-gray-300 ml-1">Compétition</label>
+							<label class="text-sm font-medium text-gray-700 dark:text-gray-300 ml-1">Compétition du tireur</label>
 							<p-autoComplete
 								[(ngModel)]="selectedShooterCompetitionName"
 								[forceSelection]="true"
@@ -99,6 +101,7 @@
 								field="name"
 								[dropdown]="true"
 								placeholder="Compétition du tireur (optionnel)"
+                                #inputField
 							></p-autoComplete>
 						</div>
 					</div>
@@ -136,6 +139,7 @@
 				<div class="flex justify-end">
 					<div
 						class="inline-flex h-12 items-center justify-center rounded-md bg-prime-blue text-white dark:text-gray-300 hover:bg-hover-prime-blue px-5 text-base font-medium shadow transition-colors duration-250 cursor-pointer"
+						(click)="generatePDF()"
 					>
 						<iconify-icon icon="material-symbols:download-rounded" class="text-[1.5rem] mr-3"></iconify-icon>
 						Télécharger le rapport PDF
