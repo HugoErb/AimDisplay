@@ -156,11 +156,13 @@
 	}
 
 	/* Dark mode des inputs PrimeNG */
-	:where(.dark) .p-inputtext,
-	:where(.dark) .p-autocomplete-input,
-	:where(.dark) .p-inputnumber-input,
-	:where(.dark) .p-datepicker-input,
-	:where(.dark) textarea {
+	:is(
+			:where(.dark) .p-inputtext,
+			:where(.dark) .p-autocomplete-input,
+			:where(.dark) .p-inputnumber-input,
+			:where(.dark) .p-datepicker-input,
+			:where(.dark) textarea
+		):not(.ng-trigger *) {
 		background-color: var(--color-main-dark-bg) !important;
 		border: 1px #374151 solid !important; /* gray-700 */
 		color: #d1d5db !important;
