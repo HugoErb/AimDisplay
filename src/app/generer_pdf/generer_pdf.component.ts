@@ -3,6 +3,7 @@ import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { AutoCompleteModule } from 'primeng/autocomplete';
 import { CommonModule } from '@angular/common';
 import { CommonService } from '../services/common.service';
+import { PdfGeneratorService } from '../services/pdf-generator.service';
 
 @Component({
 	selector: 'app-generer-pdf',
@@ -12,12 +13,12 @@ import { CommonService } from '../services/common.service';
 	schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class GenererPDFComponent {
-	constructor(protected commonService: CommonService) {}
+	constructor(protected commonService: CommonService, private pdfGeneratorService: PdfGeneratorService) {}
 
 	// Variables de création d'un club
 	@ViewChildren('inputField', { read: ElementRef }) inputFields!: QueryList<ElementRef>;
 	public inputLabelMap = new Map<string, string>();
-    
+
 	// Variables de sélection de tab
 	selectedTab: 'competition' | 'tireur' = 'competition';
 
@@ -53,7 +54,10 @@ export class GenererPDFComponent {
 	async generatePDF(): Promise<void> {
 		this.inputLabelMap = this.commonService.getInputLabelMap(this.inputFields);
 
-		if (await this.commonService.createData(this.inputLabelMap)) {
+		if (
+			(await this.commonService.validateInputs(this.inputLabelMap, false)) &&
+			(await this.pdfGeneratorService.generateAndDownloadPDF(this.inputLabelMap))
+		) {
 			this.commonService.resetInputFields(this.inputFields);
 		}
 	}
