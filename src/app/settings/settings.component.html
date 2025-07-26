@@ -393,22 +393,22 @@
 
 						<div class="space-y-3">
 							<div
-								class="w-full flex items-center justify-start px-4 py-2 border border-gray-200 dark:border-gray-700 transition-all duration-500 hover:duration-250 rounded-md text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-600 cursor-pointer"
+								class="w-full flex items-center justify-start px-4 py-2 border border-gray-200 dark:border-gray-700 transition-all duration-500 hover:duration-250 rounded-md text-gray-700 dark:text-gray-300 hover:bg-[#ececec] dark:hover:bg-gray-600 cursor-pointer"
 								(click)="openModal('renameClub')"
 							>
 								<iconify-icon icon="lucide:pen-line" class="text-[1.3rem] mr-4"></iconify-icon>
 								Modifier le nom du club
 							</div>
 							<div
-								class="w-full flex items-center justify-start px-4 py-2 border border-gray-200 dark:border-gray-700 transition-all duration-500 hover:duration-250 rounded-md text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-600 cursor-pointer"
+								class="w-full flex items-center justify-start px-4 py-2 border border-gray-200 dark:border-gray-700 transition-all duration-500 hover:duration-250 rounded-md text-gray-700 dark:text-gray-300 hover:bg-[#ececec] dark:hover:bg-gray-600 cursor-pointer"
 								(click)="openModal('changePass')"
 							>
 								<iconify-icon icon="mdi:password-reset" class="text-[1.3rem] mr-4"></iconify-icon>
 								Changer le mot de passe
 							</div>
 							<div
-								class="w-full flex items-center justify-start px-4 py-2 border border-gray-200 dark:border-gray-700 transition-all duration-500 hover:duration-250 rounded-md text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-600 cursor-pointer"
-							>
+								class="w-full flex items-center justify-start px-4 py-2 border border-gray-200 dark:border-gray-700 transition-all duration-500 hover:duration-250 rounded-md text-gray-700 dark:text-gray-300 hover:bg-[#ececec] dark:hover:bg-gray-600 cursor-pointer"
+							(click)="disconnect()">
 								<iconify-icon icon="fluent:plug-disconnected-24-filled" class="text-[1.3rem] mr-4"></iconify-icon>
 								Se déconnecter
 							</div>
