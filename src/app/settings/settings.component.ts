@@ -11,6 +11,9 @@ import { TextareaModule } from 'primeng/textarea';
 import { TableModule } from 'primeng/table';
 import { CommonModule } from '@angular/common';
 
+// Modals
+type ModalKey = 'renameClub' | 'changePass';
+
 @Component({
 	selector: 'app-settings',
 	standalone: true,
@@ -27,7 +30,10 @@ export class SettingsComponent {
 	darkMode: boolean = false;
 
 	// Modals
-	showRenameModal: boolean = false;
+	modals: Record<ModalKey, boolean> = {
+		renameClub: false,
+		changePass: false,
+	};
 
 	// Variables pour le mail
 	@ViewChildren('inputField') inputFields!: QueryList<ElementRef>;
@@ -116,13 +122,27 @@ export class SettingsComponent {
 		this.darkMode = this.themeService.getTheme() === 'dark';
 	}
 
-	openRenameModal() {
-		this.newClubName = this.clubName;
-		this.showRenameModal = true;
+	/**
+	 * Ouvre le modal identifié par sa clé.
+	 * Si nécessaire, effectue les préparations spécifiques avant l’ouverture.
+	 *
+	 * @param key Clé du modal à ouvrir (doit être une valeur de ModalKey).
+	 */
+	openModal(key: ModalKey): void {
+		if (key === 'renameClub') {
+			// Préparation spécifique au modal de renommage
+			this.newClubName = this.clubName;
+		}
+		this.modals[key] = true;
 	}
 
-	closeRenameModal() {
-		this.showRenameModal = false;
+	/**
+	 * Ferme le modal identifié par sa clé.
+	 *
+	 * @param key Clé du modal à fermer (doit être une valeur de ModalKey).
+	 */
+	closeModal(key: ModalKey): void {
+		this.modals[key] = false;
 	}
 
 	saveClubName() {
@@ -131,7 +151,7 @@ export class SettingsComponent {
 		}
 		// TODO CALL BDD
 		this.clubName = this.clubName;
-		this.showRenameModal = false;
+		this.closeModal('renameClub');
 	}
 
 	/**
