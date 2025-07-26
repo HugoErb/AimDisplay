@@ -408,7 +408,8 @@
 							</div>
 							<div
 								class="w-full flex items-center justify-start px-4 py-2 border border-gray-200 dark:border-gray-700 transition-all duration-500 hover:duration-250 rounded-md text-gray-700 dark:text-gray-300 hover:bg-[#ececec] dark:hover:bg-gray-600 cursor-pointer"
-							(click)="disconnect()">
+								(click)="disconnect()"
+							>
 								<iconify-icon icon="fluent:plug-disconnected-24-filled" class="text-[1.3rem] mr-4"></iconify-icon>
 								Se déconnecter
 							</div>
@@ -692,6 +693,7 @@
 				Nom du club *
 			</label>
 			<input
+				#inputField
 				id="newClubName"
 				type="text"
 				pInputText
@@ -747,6 +749,7 @@
 					Ancien mot de passe *
 				</label>
 				<input
+					#inputField
 					id="currentPassword"
 					type="text"
 					pInputText
@@ -760,6 +763,7 @@
 					Nouveau mot de passe *
 				</label>
 				<input
+					#inputField
 					id="newPassword"
 					type="text"
 					pInputText
@@ -769,10 +773,14 @@
 				/>
 			</div>
 			<div>
-				<label for="newPasswordConfirmation" class="block text-sm font-medium text-gray-700 dark:text-gray-300 transition-all duration-500 mb-1">
+				<label
+					for="newPasswordConfirmation"
+					class="block text-sm font-medium text-gray-700 dark:text-gray-300 transition-all duration-500 mb-1"
+				>
 					Confirmer le mot de passe *
 				</label>
 				<input
+					#inputField
 					id="newPasswordConfirmation"
 					type="text"
 					pInputText

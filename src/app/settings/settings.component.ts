@@ -148,12 +148,20 @@ export class SettingsComponent {
 		this.modals[key] = false;
 	}
 
-	saveClubName() {
-		// TODO CALL SERVICE DE VERIF DES CHAMPS
-		// TODO CALL BDD
-		this.currentClubName = this.newClubName;
-        this.commonService.showSwalToast('Modification du nom de club réussie !');
-		this.closeModal('renameClub');
+	async saveClubName() {
+		// On ne veut garder que l’ElementRef dont l’input a pour id 'newClubName'
+		const clubFieldList = new QueryList<ElementRef>();
+		clubFieldList.reset(this.inputFields.toArray().filter((ref) => (ref.nativeElement as HTMLInputElement).id === 'newClubName'));
+
+		// Vérification des champs
+		this.inputLabelMap = this.commonService.getInputLabelMap(clubFieldList);
+		const areInputsValid = await this.commonService.validateInputs(this.inputLabelMap, true);
+		if (areInputsValid) {
+			// TODO CALL BDD
+			this.commonService.showSwalToast('Modification du nom de club réussie !');
+			this.commonService.resetInputFields(clubFieldList);
+			this.closeModal('renameClub');
+		}
 	}
 
 	/**
