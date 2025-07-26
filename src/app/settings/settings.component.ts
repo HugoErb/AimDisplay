@@ -25,8 +25,6 @@ export class SettingsComponent {
 	constructor(protected commonService: CommonService, private themeService: ThemeService) {}
 
 	userParamsName: string = 'userParamsAimDisplay';
-	clubName: string = '';
-	newClubName: string = '';
 	darkMode: boolean = false;
 
 	// Modals
@@ -34,6 +32,11 @@ export class SettingsComponent {
 		renameClub: false,
 		changePass: false,
 	};
+	currentClubName: string = '';
+	newClubName: string = '';
+	currentPassword: string = '';
+	newPassword: string = '';
+	newPasswordConfirmation: string = '';
 
 	// Variables pour le mail
 	@ViewChildren('inputField') inputFields!: QueryList<ElementRef>;
@@ -131,7 +134,7 @@ export class SettingsComponent {
 	openModal(key: ModalKey): void {
 		if (key === 'renameClub') {
 			// Préparation spécifique au modal de renommage
-			this.newClubName = this.clubName;
+			this.newClubName = this.currentClubName;
 		}
 		this.modals[key] = true;
 	}
@@ -148,7 +151,8 @@ export class SettingsComponent {
 	saveClubName() {
 		// TODO CALL SERVICE DE VERIF DES CHAMPS
 		// TODO CALL BDD
-		this.clubName = this.clubName;
+		this.currentClubName = this.newClubName;
+        this.commonService.showSwalToast('Modification du nom de club réussie !');
 		this.closeModal('renameClub');
 	}
 
@@ -158,7 +162,7 @@ export class SettingsComponent {
 	 * @returns {void}
 	 */
 	disconnect(): void {
-        this.commonService.showSwalToast('Déconnexion réussie !')
+		this.commonService.showSwalToast('Déconnexion réussie !');
 		this.commonService.redirectTo('login');
 	}
 
@@ -200,10 +204,10 @@ export class SettingsComponent {
 	}
 }
 
-interface Transaction {
-	id: number;
-	date: string;
-	montant: number;
-	typeOffre: string;
-	statutPaiement: string;
-}
+// interface Transaction {
+// 	id: number;
+// 	date: string;
+// 	montant: number;
+// 	typeOffre: string;
+// 	statutPaiement: string;
+// }
