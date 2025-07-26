@@ -174,8 +174,6 @@ export class SettingsComponent {
 		// On ne veut garder que l’ElementRef dont l’input a pour id un string qui contient 'password'
 		const passwordFieldList = new QueryList<ElementRef>();
 		passwordFieldList.reset(this.inputFields.toArray().filter((ref) => (ref.nativeElement as HTMLInputElement).id.includes('Password')));
-        console.log(passwordFieldList);
-        
 
 		// Vérification des champs
 		this.inputLabelMap = this.commonService.getInputLabelMap(passwordFieldList);
