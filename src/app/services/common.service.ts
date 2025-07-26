@@ -315,7 +315,7 @@ export class CommonService {
 			const isEmailField = lowerCaseLabel.includes('email');
 
 			// Sauvegarder la valeur du mot de passe pour vérification ultérieure
-			if (label === 'Mot de passe *') {
+			if (label === 'Mot de passe *' || label === 'Nouveau mot de passe *') {
 				passwordValue = trimmedValue;
 			}
 
