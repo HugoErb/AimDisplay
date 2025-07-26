@@ -132,10 +132,6 @@ export class SettingsComponent {
 	 * @param key Clé du modal à ouvrir (doit être une valeur de ModalKey).
 	 */
 	openModal(key: ModalKey): void {
-		if (key === 'renameClub') {
-			// Préparation spécifique au modal de renommage
-			this.newClubName = this.currentClubName;
-		}
 		this.modals[key] = true;
 	}
 
@@ -163,8 +159,8 @@ export class SettingsComponent {
 		const areInputsValid = await this.commonService.validateInputs(this.inputLabelMap, true);
 		if (areInputsValid) {
 			// TODO CALL BDD POUR MAJ LE NOM DU CLUB EN BDD
-			this.commonService.showSwalToast('Modification du nom de club réussie !');
-			this.commonService.resetInputFields(clubFieldList);
+			this.newClubName = '';
+            this.commonService.showSwalToast('Modification du nom de club réussie !');
 			this.closeModal('renameClub');
 		}
 	}
@@ -178,14 +174,18 @@ export class SettingsComponent {
 		// On ne veut garder que l’ElementRef dont l’input a pour id un string qui contient 'password'
 		const passwordFieldList = new QueryList<ElementRef>();
 		passwordFieldList.reset(this.inputFields.toArray().filter((ref) => (ref.nativeElement as HTMLInputElement).id.includes('Password')));
+        console.log(passwordFieldList);
+        
 
 		// Vérification des champs
 		this.inputLabelMap = this.commonService.getInputLabelMap(passwordFieldList);
 		const areInputsValid = await this.commonService.validateInputs(this.inputLabelMap, true);
 		if (areInputsValid) {
 			// TODO CALL BDD POUR MAJ LE MDP EN BDD
-			this.commonService.showSwalToast('Modification du mot de passe réussie !');
-			this.commonService.resetInputFields(passwordFieldList);
+			this.currentPassword = '';
+			this.newPassword = '';
+            this.newPasswordConfirmation = '';
+            this.commonService.showSwalToast('Modification du mot de passe réussie !');
 			this.closeModal('changePassword');
 		}
 	}
