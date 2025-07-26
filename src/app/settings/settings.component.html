@@ -394,13 +394,14 @@
 						<div class="space-y-3">
 							<div
 								class="w-full flex items-center justify-start px-4 py-2 border border-gray-200 dark:border-gray-700 transition-all duration-500 hover:duration-250 rounded-md text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-600 cursor-pointer"
-								(click)="openRenameModal()"
+								(click)="openModal('renameClub')"
 							>
 								<iconify-icon icon="lucide:pen-line" class="text-[1.3rem] mr-4"></iconify-icon>
 								Modifier le nom du club
 							</div>
 							<div
 								class="w-full flex items-center justify-start px-4 py-2 border border-gray-200 dark:border-gray-700 transition-all duration-500 hover:duration-250 rounded-md text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-600 cursor-pointer"
+								(click)="openModal('changePass')"
 							>
 								<iconify-icon icon="mdi:password-reset" class="text-[1.3rem] mr-4"></iconify-icon>
 								Changer le mot de passe
@@ -676,7 +677,8 @@
 	</div>
 </div>
 
-<div *ngIf="showRenameModal" class="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+<!-- Modal de changement de nom de club -->
+<div *ngIf="modals.renameClub" class="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
 	<div class="bg-white dark:bg-gray-800 min-w-150 rounded-lg shadow-lg w-full max-w-md overflow-hidden animate-appear">
 		<!-- Bandeau supérieur -->
 		<div class="p-4 bg-gradient-to-r from-prime-blue to-hover-prime-blue transition-all duration-500">
@@ -686,7 +688,6 @@
 
 		<!-- Corps du modal, avec border en haut et en bas -->
 		<div class="p-6 border-t border-b border-gray-200 dark:border-gray-700 space-y-2">
-			<!-- Nouveau label -->
 			<label for="clubName" class="block text-sm font-medium text-gray-700 dark:text-gray-300 transition-all duration-500 mb-1">
 				Nom du club *
 			</label>
@@ -695,7 +696,7 @@
 				type="text"
 				pInputText
 				[(ngModel)]="clubName"
-				placeholder="Nouveau nom du club"
+				placeholder="Entrez le nouveau nom de votre club"
 				class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-prime-blue dark:bg-gray-700 dark:text-gray-100 transition-colors duration-250"
 			/>
 		</div>
@@ -704,11 +705,93 @@
 		<div class="pt-6 border-t border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-400">
 			<div class="flex items-center text-sm px-4 pb-2">
 				<iconify-icon icon="lucide:info" class="text-[1rem] mr-2"></iconify-icon>
+				<p>Les champs marqués d'un astérisque (*) sont obligatoires.</p>
+			</div>
+			<div class="flex items-center text-sm px-4 pb-5">
+				<iconify-icon icon="lucide:info" class="text-[1rem] mr-2"></iconify-icon>
 				<p>Votre nom de club sera mentionné dans les PDF et les e‑mails envoyés par Aim Display.</p>
 			</div>
 			<div class="flex justify-end px-4 pb-4">
 				<div
-					(click)="closeRenameModal()"
+					(click)="closeModal('renameClub')"
+					class="inline-flex h-12 items-center justify-center rounded-md border border-gray-300 dark:border-gray-600 px-5 mr-4 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors duration-250 cursor-pointer"
+				>
+					Annuler
+				</div>
+
+				<div
+					(click)="saveClubName()"
+					class="inline-flex h-12 items-center justify-center rounded-md bg-prime-blue text-white dark:text-gray-300 hover:bg-hover-prime-blue px-5 text-base font-medium shadow transition-colors duration-250 cursor-pointer"
+				>
+					<iconify-icon icon="material-symbols:download-rounded" class="text-[1.5rem] mr-3"></iconify-icon>
+					Enregistrer
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!-- Modal de changement de mot de passe -->
+<div *ngIf="modals.changePass" class="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
+	<div class="bg-white dark:bg-gray-800 min-w-150 rounded-lg shadow-lg w-full max-w-md overflow-hidden animate-appear">
+		<!-- Bandeau supérieur -->
+		<div class="p-4 bg-gradient-to-r from-prime-blue to-hover-prime-blue transition-all duration-500">
+			<h2 class="text-lg font-semibold text-white">Modifier votre mot de passe</h2>
+			<p class="text-sm text-blue-100">Saisissez un nouveau mot de passe pour votre compte Aim Display</p>
+		</div>
+
+		<!-- Corps du modal, avec border en haut et en bas -->
+		<div class="p-6 border-t border-b border-gray-200 dark:border-gray-700 space-y-5">
+			<div>
+				<label for="clubName" class="block text-sm font-medium text-gray-700 dark:text-gray-300 transition-all duration-500 mb-1">
+					Ancien mot de passe *
+				</label>
+				<input
+					id="clubName"
+					type="text"
+					pInputText
+					[(ngModel)]="clubName"
+					placeholder="Entrez votre mot de passe actuel"
+					class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-prime-blue dark:bg-gray-700 dark:text-gray-100 transition-colors duration-250"
+				/>
+			</div>
+			<div>
+				<label for="clubName" class="block text-sm font-medium text-gray-700 dark:text-gray-300 transition-all duration-500 mb-1">
+					Nouveau mot de passe *
+				</label>
+				<input
+					id="clubName"
+					type="text"
+					pInputText
+					[(ngModel)]="clubName"
+					placeholder="Entrez votre nouveau mot de passe"
+					class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-prime-blue dark:bg-gray-700 dark:text-gray-100 transition-colors duration-250"
+				/>
+			</div>
+			<div>
+				<label for="clubName" class="block text-sm font-medium text-gray-700 dark:text-gray-300 transition-all duration-500 mb-1">
+					Confirmer le mot de passe *
+				</label>
+				<input
+					id="clubName"
+					type="text"
+					pInputText
+					[(ngModel)]="clubName"
+					placeholder="Confirmez votre nouveau mot de passe"
+					class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-prime-blue dark:bg-gray-700 dark:text-gray-100 transition-colors duration-250"
+				/>
+			</div>
+		</div>
+
+		<!-- Footer du modal -->
+		<div class="pt-6 border-t border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-400">
+			<div class="flex items-center text-sm px-4 pb-5">
+				<iconify-icon icon="lucide:info" class="text-[1rem] mr-2"></iconify-icon>
+				<p>Les champs marqués d'un astérisque (*) sont obligatoires.</p>
+			</div>
+			<div class="flex justify-end px-4 pb-4">
+				<div
+					(click)="closeModal('changePass')"
 					class="inline-flex h-12 items-center justify-center rounded-md border border-gray-300 dark:border-gray-600 px-5 mr-4 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors duration-250 cursor-pointer"
 				>
 					Annuler
