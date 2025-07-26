@@ -401,7 +401,7 @@
 							</div>
 							<div
 								class="w-full flex items-center justify-start px-4 py-2 border border-gray-200 dark:border-gray-700 transition-all duration-500 hover:duration-250 rounded-md text-gray-700 dark:text-gray-300 hover:bg-[#ececec] dark:hover:bg-gray-600 cursor-pointer"
-								(click)="openModal('changePass')"
+								(click)="openModal('changePassword')"
 							>
 								<iconify-icon icon="mdi:password-reset" class="text-[1.3rem] mr-4"></iconify-icon>
 								Changer le mot de passe
@@ -722,7 +722,7 @@
 				</div>
 
 				<div
-					(click)="saveClubName()"
+					(click)="saveNewClubName()"
 					class="inline-flex h-12 items-center justify-center rounded-md bg-prime-blue text-white dark:text-gray-300 hover:bg-hover-prime-blue px-5 text-base font-medium shadow transition-colors duration-250 cursor-pointer"
 				>
 					<iconify-icon icon="material-symbols:download-rounded" class="text-[1.5rem] mr-3"></iconify-icon>
@@ -734,7 +734,7 @@
 </div>
 
 <!-- Modal de changement de mot de passe -->
-<div *ngIf="modals.changePass" class="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
+<div *ngIf="modals.changePassword" class="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
 	<div class="bg-white dark:bg-gray-800 min-w-150 rounded-lg shadow-lg w-full max-w-md overflow-hidden animate-appear">
 		<!-- Bandeau supérieur -->
 		<div class="p-4 bg-gradient-to-r from-prime-blue to-hover-prime-blue transition-all duration-500">
@@ -799,14 +799,14 @@
 			</div>
 			<div class="flex justify-end px-4 pb-4">
 				<div
-					(click)="closeModal('changePass')"
+					(click)="closeModal('changePassword')"
 					class="inline-flex h-12 items-center justify-center rounded-md border border-gray-300 dark:border-gray-600 px-5 mr-4 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors duration-250 cursor-pointer"
 				>
 					Annuler
 				</div>
 
 				<div
-					(click)="saveClubName()"
+					(click)="saveNewPassword()"
 					class="inline-flex h-12 items-center justify-center rounded-md bg-prime-blue text-white dark:text-gray-300 hover:bg-hover-prime-blue px-5 text-base font-medium shadow transition-colors duration-250 cursor-pointer"
 				>
 					<iconify-icon icon="material-symbols:download-rounded" class="text-[1.5rem] mr-3"></iconify-icon>
