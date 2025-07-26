@@ -264,7 +264,7 @@ export class CommonService {
 			inputLabelMap.set(label, value);
 		});
 
-		//console.table(Array.from(inputLabelMap.entries()));
+		// console.table(Array.from(inputLabelMap.entries()));
 		return inputLabelMap;
 	}
 
