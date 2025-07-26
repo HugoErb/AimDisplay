@@ -12,7 +12,7 @@ import { TableModule } from 'primeng/table';
 import { CommonModule } from '@angular/common';
 
 // Modals
-type ModalKey = 'renameClub' | 'changePass';
+type ModalKey = 'renameClub' | 'changePassword';
 
 @Component({
 	selector: 'app-settings',
@@ -30,7 +30,7 @@ export class SettingsComponent {
 	// Modals
 	modals: Record<ModalKey, boolean> = {
 		renameClub: false,
-		changePass: false,
+		changePassword: false,
 	};
 	currentClubName: string = '';
 	newClubName: string = '';
@@ -148,7 +148,12 @@ export class SettingsComponent {
 		this.modals[key] = false;
 	}
 
-	async saveClubName() {
+	/**
+	 * Filtre et valide le champ de renommage, puis met à jour le nom du club dans la base de données.
+	 *
+	 * @returns {Promise<void>} Une promesse qui se résout lorsque toutes les opérations sont terminées.
+	 */
+	async saveNewClubName(): Promise<void> {
 		// On ne veut garder que l’ElementRef dont l’input a pour id 'newClubName'
 		const clubFieldList = new QueryList<ElementRef>();
 		clubFieldList.reset(this.inputFields.toArray().filter((ref) => (ref.nativeElement as HTMLInputElement).id === 'newClubName'));
@@ -157,10 +162,31 @@ export class SettingsComponent {
 		this.inputLabelMap = this.commonService.getInputLabelMap(clubFieldList);
 		const areInputsValid = await this.commonService.validateInputs(this.inputLabelMap, true);
 		if (areInputsValid) {
-			// TODO CALL BDD
+			// TODO CALL BDD POUR MAJ LE NOM DU CLUB EN BDD
 			this.commonService.showSwalToast('Modification du nom de club réussie !');
 			this.commonService.resetInputFields(clubFieldList);
 			this.closeModal('renameClub');
+		}
+	}
+    
+    /**
+	 * Filtre et valide les champs de changements de mot de passe, puis le met à jour dans la base de données.
+	 *
+	 * @returns {Promise<void>} Une promesse qui se résout lorsque toutes les opérations sont terminées.
+	 */
+	async saveNewPassword(): Promise<void> {
+		// On ne veut garder que l’ElementRef dont l’input a pour id un string qui contient 'password'
+		const passwordFieldList = new QueryList<ElementRef>();
+		passwordFieldList.reset(this.inputFields.toArray().filter((ref) => (ref.nativeElement as HTMLInputElement).id.includes('Password')));
+
+		// Vérification des champs
+		this.inputLabelMap = this.commonService.getInputLabelMap(passwordFieldList);
+		const areInputsValid = await this.commonService.validateInputs(this.inputLabelMap, true);
+		if (areInputsValid) {
+			// TODO CALL BDD POUR MAJ LE MDP EN BDD
+			this.commonService.showSwalToast('Modification du mot de passe réussie !');
+			this.commonService.resetInputFields(passwordFieldList);
+			this.closeModal('changePassword');
 		}
 	}
 
