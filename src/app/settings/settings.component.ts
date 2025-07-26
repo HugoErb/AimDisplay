@@ -22,8 +22,12 @@ export class SettingsComponent {
 	constructor(protected commonService: CommonService, private themeService: ThemeService) {}
 
 	userParamsName: string = 'userParamsAimDisplay';
+	clubName: string = '';
 	newClubName: string = '';
 	darkMode: boolean = false;
+
+	// Modals
+	showRenameModal: boolean = false;
 
 	// Variables pour le mail
 	@ViewChildren('inputField') inputFields!: QueryList<ElementRef>;
@@ -110,6 +114,24 @@ export class SettingsComponent {
 	ngOnInit() {
 		const userParams: UserParams = JSON.parse(localStorage.getItem(this.userParamsName)!);
 		this.darkMode = this.themeService.getTheme() === 'dark';
+	}
+
+	openRenameModal() {
+		this.newClubName = this.clubName;
+		this.showRenameModal = true;
+	}
+
+	closeRenameModal() {
+		this.showRenameModal = false;
+	}
+
+	saveClubName() {
+		if (!this.clubName.trim()) {
+			return; // ou afficher une erreur
+		}
+		// TODO CALL BDD
+		this.clubName = this.clubName;
+		this.showRenameModal = false;
 	}
 
 	/**
