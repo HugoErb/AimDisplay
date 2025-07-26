@@ -146,12 +146,20 @@ export class SettingsComponent {
 	}
 
 	saveClubName() {
-		if (!this.clubName.trim()) {
-			return; // ou afficher une erreur
-		}
+		// TODO CALL SERVICE DE VERIF DES CHAMPS
 		// TODO CALL BDD
 		this.clubName = this.clubName;
 		this.closeModal('renameClub');
+	}
+
+	/**
+	 * Déconnecte le compte de l'utilisateur actuel et renvoie vers la page de connexion.
+	 *
+	 * @returns {void}
+	 */
+	disconnect(): void {
+        this.commonService.showSwalToast('Déconnexion réussie !')
+		this.commonService.redirectTo('login');
 	}
 
 	/**
