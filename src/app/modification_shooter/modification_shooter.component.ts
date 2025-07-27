@@ -235,10 +235,10 @@ export class ModificationShooterComponent {
 			totalScore: '100',
 		},
 	];
-	nbRowsPerPage = 10;
+	nbRowsPerPage: number = 0;
 
-	ngOnInit(): void {
-		this.nbRowsPerPage = this.commonService.getNbRowsPerPage(window.innerHeight);
+	ngAfterViewInit(): void {
+		this.nbRowsPerPage = this.commonService.getNbRowsPerPage();
 	}
 
 	/**
@@ -250,7 +250,7 @@ export class ModificationShooterComponent {
 	 */
 	@HostListener('window:resize', ['$event'])
 	onResize(event: any) {
-		this.nbRowsPerPage = this.commonService.getNbRowsPerPage(event.target.innerHeight);
+		this.nbRowsPerPage = this.commonService.getNbRowsPerPage();
 	}
 
 	/**
@@ -276,5 +276,5 @@ export interface Shooter {
 	distance: string;
 	weapon: string;
 	categoryName: string;
-    totalScore: string;
+	totalScore: string;
 }

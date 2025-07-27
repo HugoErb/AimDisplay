@@ -135,17 +135,37 @@ export class CommonService {
 	}
 
 	/**
-	 * Permet de changer le nombre de lignes affichées dans les tableaux primeNG, en fonction de la taille de l'écran
-	 * @param height Hauteur de la fenêtre en pixel.
+	 * Calcule dynamiquement le nombre de lignes à afficher dans un p‑table PrimeNG paginé.
+	 *
+	 * - On mesure le header, le footer (paginator) et une ligne de <tbody>.
+	 * - Si la ligne mesurée est anormalement petite (< 90 % de 65 px),
+	 *   on retombe sur la hauteur standard de 65 px.
+	 * - On divise l’espace restant par hauteur de ligne, on floor et on renvoie >= 1.
+	 *
+	 * @returns Le nombre de lignes à afficher.
 	 */
-	getNbRowsPerPage(height: number): number {
-		if (height > 1080) {
-			return 15;
-		} else if (height <= 750) {
-			return 7;
-		} else {
-			return 11;
+	getNbRowsPerPage(): number {
+		// Hauteurs connues (ou mesurées)
+		const headerH = document.querySelector<HTMLElement>('.bg-gradient-to-r')?.offsetHeight ?? 108;
+		const footerH = document.querySelector<HTMLElement>('.p-paginator')?.offsetHeight ?? 56;
+		const defaultRowH = 65;
+
+		// Tenter de mesurer la hauteur d’une ligne de données
+		const tr = document.querySelector<HTMLElement>('.p-datatable-tbody > tr');
+		let rowH = tr?.getBoundingClientRect().height ?? defaultRowH;
+
+		// Si on tombe < 90% de 65px, on considère la mesure erronée et on retombe à 65px
+		if (rowH < defaultRowH * 0.9) {
+			rowH = defaultRowH;
 		}
+
+		// Espace restant
+		const available = window.innerHeight - headerH - footerH;
+
+		// Combien de lignes complètes on peut caser
+		const count = Math.floor(available / rowH);
+
+		return Math.max(1, count);
 	}
 
 	/**
