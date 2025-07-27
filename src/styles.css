@@ -171,8 +171,8 @@
 	:where(.dark) .p-inputtext::placeholder,
 	:where(.dark) .p-autocomplete::placeholder,
 	:where(.dark) .p-datepicker::placeholder,
-	:where(.dark) textarea {
-		color: #6b7280 !important;
+	:where(.dark) textarea::placeholder {
+		color: #7e8594 !important;
 	}
 
 	/* Réduction de la taille des dropdown des listes déroulantes */
