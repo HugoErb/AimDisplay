@@ -135,36 +135,56 @@ export class CommonService {
 	}
 
 	/**
-	 * Calcule dynamiquement le nombre de lignes à afficher dans un p‑table PrimeNG paginé.
+	 * Calcule dynamiquement le nombre optimal de lignes à afficher
+	 * dans un <p-table> PrimeNG paginé, en s’assurant d’attendre
+	 * que le tableau soit monté avant de mesurer.
 	 *
-	 * - On mesure le header, le footer (paginator) et une ligne de <tbody>.
-	 * - Si la mesure de la ligne est inférieur à 65px, on considère la mesure erronée et on remet à 65px
-	 * - On divise l’espace restant par hauteur de ligne, on floor et on renvoie >= 1.
+	 * - On patiente frame après frame tant qu’aucune ligne n’est rendue.
+	 * - On mesure ensuite :
+	 *    • la hauteur du bandeau bleu (header de page),
+	 *    • la hauteur du paginator (footer),
+	 *    • la hauteur d’une ligne de <tbody> (avec fallback à 65px si trop petite),
+	 *    • un padding de sûreté (25px par défaut).
+	 * - On calcule floor(available / rowH) et on renvoie au moins 1.
 	 *
-	 * @returns Le nombre de lignes à afficher.
+	 * @returns {Promise<number>} Le nombre de lignes à afficher.
 	 */
-	getNbRowsPerPage(): number {
-		// Hauteurs connues (ou mesurées)
-		const headerH = document.querySelector<HTMLElement>('.bg-gradient-to-r')?.offsetHeight ?? 108;
-		const footerH = document.querySelector<HTMLElement>('.p-paginator')?.offsetHeight ?? 56;
+	async getNbRowsPerPage(): Promise<number> {
+		// Helper pour attendre la frame suivante
+		const nextFrame = () => new Promise<void>((resolve) => requestAnimationFrame(() => resolve()));
+
+		// 1) Attendre qu’au moins une ligne soit rendue
+		let tries = 0;
+		while (!document.querySelector('.p-datatable-tbody > tr') && tries++ < 60) {
+			await nextFrame();
+		}
+
+		// 2) Mesures
+		const headerEl = document.querySelector<HTMLElement>('.bg-gradient-to-r');
+		const headerH = headerEl?.offsetHeight ?? 108;
+
+		const footerEl = document.querySelector<HTMLElement>('.p-paginator');
+		const footerH = footerEl?.offsetHeight ?? 56;
+
 		const defaultRowH = 65;
 		const defaultPadding = 25;
 
-		// Tenter de mesurer la hauteur d’une ligne de données
+		// 3) Hauteur d’une ligne de données
 		const tr = document.querySelector<HTMLElement>('.p-datatable-tbody > tr');
 		let rowH = tr?.getBoundingClientRect().height ?? defaultRowH;
 
-		// Si la mesure de la ligne est inférieur à 65px, on considère la mesure erronée et on remet à 65px
+		// Si la mesure est aberrante (< defaultRowH), on retombe sur la valeur par défaut
 		if (rowH < defaultRowH) {
 			rowH = defaultRowH;
 		}
 
-		// Espace restant
+		// 4) Calcul de l’espace disponible
 		const available = window.innerHeight - headerH - footerH - defaultPadding;
 
-		// Combien de lignes complètes on peut caser
+		// 5) Nombre de lignes complètes
 		const count = Math.floor(available / rowH);
 
+		// 6) On renvoie au moins 1
 		return Math.max(1, count);
 	}
 

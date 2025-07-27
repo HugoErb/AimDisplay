@@ -107,8 +107,8 @@ export class ModificationClubComponent {
 	];
 	nbRowsPerPage: number = 0;
 
-	ngAfterViewInit(): void {
-		this.nbRowsPerPage = this.commonService.getNbRowsPerPage();
+	async ngAfterViewInit() {
+		this.nbRowsPerPage = await this.commonService.getNbRowsPerPage();
 	}
 
 	/**
@@ -119,8 +119,8 @@ export class ModificationClubComponent {
 	 * @param {Event} event - L'événement de redimensionnement (resize) de la fenêtre.
 	 */
 	@HostListener('window:resize', ['$event'])
-	onResize(event: any) {
-		this.nbRowsPerPage = this.commonService.getNbRowsPerPage();
+	async onResize(event: any) {
+		this.nbRowsPerPage = await this.commonService.getNbRowsPerPage();
 	}
 
 	/**
