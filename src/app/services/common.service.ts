@@ -138,8 +138,7 @@ export class CommonService {
 	 * Calcule dynamiquement le nombre de lignes à afficher dans un p‑table PrimeNG paginé.
 	 *
 	 * - On mesure le header, le footer (paginator) et une ligne de <tbody>.
-	 * - Si la ligne mesurée est anormalement petite (< 90 % de 65 px),
-	 *   on retombe sur la hauteur standard de 65 px.
+	 * - Si la mesure de la ligne est inférieur à 65px, on considère la mesure erronée et on remet à 65px
 	 * - On divise l’espace restant par hauteur de ligne, on floor et on renvoie >= 1.
 	 *
 	 * @returns Le nombre de lignes à afficher.
@@ -149,18 +148,19 @@ export class CommonService {
 		const headerH = document.querySelector<HTMLElement>('.bg-gradient-to-r')?.offsetHeight ?? 108;
 		const footerH = document.querySelector<HTMLElement>('.p-paginator')?.offsetHeight ?? 56;
 		const defaultRowH = 65;
+		const defaultPadding = 25;
 
 		// Tenter de mesurer la hauteur d’une ligne de données
 		const tr = document.querySelector<HTMLElement>('.p-datatable-tbody > tr');
 		let rowH = tr?.getBoundingClientRect().height ?? defaultRowH;
 
-		// Si on tombe < 90% de 65px, on considère la mesure erronée et on retombe à 65px
-		if (rowH < defaultRowH * 0.9) {
+		// Si la mesure de la ligne est inférieur à 65px, on considère la mesure erronée et on remet à 65px
+		if (rowH < defaultRowH) {
 			rowH = defaultRowH;
 		}
 
 		// Espace restant
-		const available = window.innerHeight - headerH - footerH;
+		const available = window.innerHeight - headerH - footerH - defaultPadding;
 
 		// Combien de lignes complètes on peut caser
 		const count = Math.floor(available / rowH);
