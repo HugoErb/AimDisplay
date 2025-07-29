@@ -10,19 +10,23 @@
 			</div>
 		</div>
 		<div class="min-w-[525px] mx-auto shadow-lg">
-			<p-table [value]="clubs" dataKey="id" [paginator]="true" [rows]="nbRowsPerPage">
+			<p-table [value]="clubs" dataKey="id" [paginator]="true" [rows]="nbRowsPerPage" resizableColumns="true" reorderableColumns="true">
 				<ng-template pTemplate="header">
 					<tr>
-						<th class="!bg-gray-100">
+						<th pSortableColumn="clubName" class="!bg-gray-100 hover:!bg-gray-700">
 							<div class="flex items-center">
 								<span class="text-prime-blue dark:text-gray-300 mr-2 whitespace-nowrap">Nom</span>
-								<p-columnFilter type="text" field="name" display="menu" class="ml-2"></p-columnFilter>
+                                <p-sortIcon field="clubName" class="ml-1 mt-[5px] dark:text-gray-400"/>
+								<p-columnFilter type="text" field="name" display="menu" class="ml-1"></p-columnFilter>
+                                
 							</div>
 						</th>
-						<th class="!bg-gray-100 w-8/12">
+						<th pSortableColumn="clubCity" class="!bg-gray-100 w-8/12 hover:!bg-gray-700">
 							<div class="flex items-center">
 								<span class="text-prime-blue dark:text-gray-300 mr-2 whitespace-nowrap">Ville</span>
-								<p-columnFilter type="text" field="name" display="menu" class="ml-2"></p-columnFilter>
+                                <p-sortIcon field="clubCity" class="ml-1 mt-[5px] dark:text-gray-400"/>
+								<p-columnFilter type="text" field="name" display="menu" class="ml-1"></p-columnFilter>
+                                
 							</div>
 						</th>
 						<th class="!bg-gray-100"></th>
