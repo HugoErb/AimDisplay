@@ -1,4 +1,4 @@
-import { Component, HostListener } from '@angular/core';
+import { Component, HostListener, ViewChild } from '@angular/core';
 import { TableModule } from 'primeng/table';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { CommonService } from '../services/common.service';
@@ -235,9 +235,9 @@ export class ModificationShooterComponent {
 			totalScore: '100',
 		},
 	];
-	nbRowsPerPage: number = 0;
+	nbRowsPerPage: number = 1;
 
-	async ngAfterViewInit(){
+	async ngAfterViewInit() {
 		this.nbRowsPerPage = await this.commonService.getNbRowsPerPage();
 	}
 

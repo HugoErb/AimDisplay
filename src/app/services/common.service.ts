@@ -150,41 +150,20 @@ export class CommonService {
 	 * @returns {Promise<number>} Le nombre de lignes à afficher.
 	 */
 	async getNbRowsPerPage(): Promise<number> {
-		// Helper pour attendre la frame suivante
-		const nextFrame = () => new Promise<void>((resolve) => requestAnimationFrame(() => resolve()));
 
-		// 1) Attendre qu’au moins une ligne soit rendue
-		let tries = 0;
-		while (!document.querySelector('.p-datatable-tbody > tr') && tries++ < 60) {
-			await nextFrame();
-		}
-
-		// 2) Mesures
-		const headerEl = document.querySelector<HTMLElement>('.bg-gradient-to-r');
-		const headerH = headerEl?.offsetHeight ?? 108;
-
-		const footerEl = document.querySelector<HTMLElement>('.p-paginator');
-		const footerH = footerEl?.offsetHeight ?? 56;
-
+		// Mesures
+		const headerH = 108;
+		const footerH = 56;
 		const defaultRowH = 65;
 		const defaultPadding = 25;
 
-		// 3) Hauteur d’une ligne de données
-		const tr = document.querySelector<HTMLElement>('.p-datatable-tbody > tr');
-		let rowH = tr?.getBoundingClientRect().height ?? defaultRowH;
-
-		// Si la mesure est aberrante (< defaultRowH), on retombe sur la valeur par défaut
-		if (rowH < defaultRowH) {
-			rowH = defaultRowH;
-		}
-
-		// 4) Calcul de l’espace disponible
+		// Calcul de l’espace disponible
 		const available = window.innerHeight - headerH - footerH - defaultPadding;
 
-		// 5) Nombre de lignes complètes
-		const count = Math.floor(available / rowH);
+		// Nombre de lignes complètes
+		const count = Math.floor(available / defaultRowH);
 
-		// 6) On renvoie au moins 1
+		// On renvoie au moins 1
 		return Math.max(1, count);
 	}
 
