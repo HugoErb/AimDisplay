@@ -14,97 +14,28 @@ export class ModificationClubComponent {
 	constructor(protected commonService: CommonService) {}
 
 	clubs: Club[] = [
-		{
-			id: 1,
-			clubName: 'Martin',
-			clubCity: 'Marseille',
-		},
-		{
-			id: 1,
-			clubName: 'Martin',
-			clubCity: 'Marseille',
-		},
-		{
-			id: 1,
-			clubName: 'Martin',
-			clubCity: 'Marseille',
-		},
-		{
-			id: 1,
-			clubName: 'Martin',
-			clubCity: 'Marseille',
-		},
-		{
-			id: 1,
-			clubName: 'Martin',
-			clubCity: 'Marseille',
-		},
-		{
-			id: 1,
-			clubName: 'Martin',
-			clubCity: 'Marseille',
-		},
-		{
-			id: 1,
-			clubName: 'Martin',
-			clubCity: 'Marseille',
-		},
-		{
-			id: 1,
-			clubName: 'Martin',
-			clubCity: 'Marseille',
-		},
-		{
-			id: 1,
-			clubName: 'Martin',
-			clubCity: 'Marseille',
-		},
-		{
-			id: 1,
-			clubName: 'Martin',
-			clubCity: 'Marseille',
-		},
-		{
-			id: 1,
-			clubName: 'Martin',
-			clubCity: 'Marseille',
-		},
-		{
-			id: 1,
-			clubName: 'Martin',
-			clubCity: 'Marseille',
-		},
-		{
-			id: 1,
-			clubName: 'Martin',
-			clubCity: 'Marseille',
-		},
-		{
-			id: 1,
-			clubName: 'Martin',
-			clubCity: 'Marseille',
-		},
-		{
-			id: 1,
-			clubName: 'Martin',
-			clubCity: 'Marseille',
-		},
-		{
-			id: 1,
-			clubName: 'Martin',
-			clubCity: 'Marseille',
-		},
-		{
-			id: 1,
-			clubName: 'Martin',
-			clubCity: 'Marseille',
-		},
-		{
-			id: 1,
-			clubName: 'Martin',
-			clubCity: 'Marseille',
-		},
+		{ id: 1, clubName: 'Les Aiglons de Lyon', clubCity: 'Lyon' },
+		{ id: 2, clubName: 'Tireurs Niçois', clubCity: 'Nice' },
+		{ id: 3, clubName: 'Archers Toulousains', clubCity: 'Toulouse' },
+		{ id: 4, clubName: 'Flèches de Paris', clubCity: 'Paris' },
+		{ id: 5, clubName: 'Voltigeurs Bordelais', clubCity: 'Bordeaux' },
+		{ id: 6, clubName: 'Élan Strasbourgeois', clubCity: 'Strasbourg' },
+		{ id: 7, clubName: 'Sagittaires Marseillais', clubCity: 'Marseille' },
+		{ id: 8, clubName: 'Tireurs Nantais', clubCity: 'Nantes' },
+		{ id: 9, clubName: 'Compagnie de Lille', clubCity: 'Lille' },
+		{ id: 10, clubName: 'Hirondelles Rennaises', clubCity: 'Rennes' },
+		{ id: 11, clubName: 'Étoiles Toulon', clubCity: 'Toulon' },
+		{ id: 12, clubName: 'Les Caravelles Perpignan', clubCity: 'Perpignan' },
+		{ id: 13, clubName: 'Les Hussards Dijon', clubCity: 'Dijon' },
+		{ id: 14, clubName: 'Tir Précision Brest', clubCity: 'Brest' },
+		{ id: 15, clubName: 'Archers Rouennais', clubCity: 'Rouen' },
+		{ id: 16, clubName: 'Sagittaire Clermont', clubCity: 'Clermont-Ferrand' },
+		{ id: 17, clubName: 'Les Flèches du Havre', clubCity: 'Le Havre' },
+		{ id: 18, clubName: 'Compagnie Poitevine', clubCity: 'Poitiers' },
+		{ id: 19, clubName: 'Tireurs Valenciennois', clubCity: 'Valenciennes' },
+		{ id: 20, clubName: 'Archers Montpelliérains', clubCity: 'Montpellier' },
 	];
+
 	nbRowsPerPage: number = 1;
 
 	async ngAfterViewInit() {

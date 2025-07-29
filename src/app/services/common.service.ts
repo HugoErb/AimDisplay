@@ -135,15 +135,13 @@ export class CommonService {
 	}
 
 	/**
-	 * Calcule dynamiquement le nombre optimal de lignes à afficher
-	 * dans un <p-table> PrimeNG paginé, en prenant des tailles
-     * fixes d'éléments du tableau et en les soustrayant à la taille
-     * disponible dans la fenêtre.
+	 * Calcule dynamiquement le nombre optimal de lignes à afficher dans un <p-table> 
+     * PrimeNG paginé, en prenant des tailles fixes d'éléments du tableau et en les 
+     * soustrayant à la taille disponible dans la fenêtre.
 	 *
 	 * @returns {Promise<number>} Le nombre de lignes à afficher.
 	 */
 	async getNbRowsPerPage(): Promise<number> {
-
 		// Mesures
 		const headerH = 108;
 		const footerH = 56;
