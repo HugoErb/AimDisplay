@@ -15,25 +15,25 @@
 					<tr>
 						<th class="!bg-gray-100">
 							<div class="flex items-center">
-								<span class="text-prime-blue dark:text-gray-300 mr-2">Nom</span>
+								<span class="text-prime-blue dark:text-gray-300 mr-2 whitespace-nowrap">Nom</span>
 								<p-columnFilter type="text" field="name" display="menu" class="ml-2"></p-columnFilter>
 							</div>
 						</th>
 						<th class="!bg-gray-100">
 							<div class="flex items-center">
-								<span class="text-prime-blue dark:text-gray-300 mr-2">Date(s)</span>
+								<span class="text-prime-blue dark:text-gray-300 mr-2 whitespace-nowrap">Date(s)</span>
 								<p-columnFilter type="text" field="firstName" display="menu"></p-columnFilter>
 							</div>
 						</th>
 						<th class="!bg-gray-100">
 							<div class="flex items-center">
-								<span class="text-prime-blue dark:text-gray-300 mr-2">Prix</span>
+								<span class="text-prime-blue dark:text-gray-300 mr-2 whitespace-nowrap">Prix</span>
 								<p-columnFilter type="text" field="clubName" display="menu"></p-columnFilter>
 							</div>
 						</th>
 						<th class="!bg-gray-100">
 							<div class="flex items-center">
-								<span class="text-prime-blue dark:text-gray-300 mr-2">Prix catégorie sup.</span>
+								<span class="text-prime-blue dark:text-gray-300 mr-2 whitespace-nowrap">Prix catégorie sup.</span>
 								<p-columnFilter type="text" field="competitionName" display="menu"></p-columnFilter>
 							</div>
 						</th>
@@ -44,10 +44,10 @@
 
 				<ng-template pTemplate="body" let-competition>
 					<tr>
-						<td class="!py-4">{{ competition.competitionName }}</td>
-						<td class="!py-4">{{ competition.competitionDate }}</td>
-						<td class="!py-4">{{ competition.competitionPrice }}</td>
-						<td class="!py-4">{{ competition.competitionSupCategoryPrice }}</td>
+						<td class="!py-4 whitespace-nowrap">{{ competition.competitionName }}</td>
+						<td class="!py-4 whitespace-nowrap">{{ competition.competitionDate }}</td>
+						<td class="!py-4 whitespace-nowrap">{{ competition.competitionPrice }}</td>
+						<td class="!py-4 whitespace-nowrap">{{ competition.competitionSupCategoryPrice }}</td>
 						<td class="relative !py-4">
 							<div
 								class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 p-1.5 pb-0 rounded-md hover:bg-gray-200 dark:hover:bg-gray-600 cursor-pointer"

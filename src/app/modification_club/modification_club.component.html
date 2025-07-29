@@ -15,13 +15,13 @@
 					<tr>
 						<th class="!bg-gray-100">
 							<div class="flex items-center">
-								<span class="text-prime-blue dark:text-gray-300 mr-2">Nom</span>
+								<span class="text-prime-blue dark:text-gray-300 mr-2 whitespace-nowrap">Nom</span>
 								<p-columnFilter type="text" field="name" display="menu" class="ml-2"></p-columnFilter>
 							</div>
 						</th>
 						<th class="!bg-gray-100 w-8/12">
 							<div class="flex items-center">
-								<span class="text-prime-blue dark:text-gray-300 mr-2">Ville</span>
+								<span class="text-prime-blue dark:text-gray-300 mr-2 whitespace-nowrap">Ville</span>
 								<p-columnFilter type="text" field="name" display="menu" class="ml-2"></p-columnFilter>
 							</div>
 						</th>
@@ -32,8 +32,8 @@
 
 				<ng-template pTemplate="body" let-club>
 					<tr>
-						<td class="!py-4">{{ club.clubName }}</td>
-						<td class="!py-4">{{ club.clubCity }}</td>
+						<td class="!py-4 whitespace-nowrap">{{ club.clubName }}</td>
+						<td class="!py-4 whitespace-nowrap">{{ club.clubCity }}</td>
 						<td class="relative !py-4">
 							<div
 								class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 p-1.5 pb-0 rounded-md hover:bg-gray-200 dark:hover:bg-gray-600 cursor-pointer"
