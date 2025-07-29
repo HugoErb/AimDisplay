@@ -136,16 +136,9 @@ export class CommonService {
 
 	/**
 	 * Calcule dynamiquement le nombre optimal de lignes à afficher
-	 * dans un <p-table> PrimeNG paginé, en s’assurant d’attendre
-	 * que le tableau soit monté avant de mesurer.
-	 *
-	 * - On patiente frame après frame tant qu’aucune ligne n’est rendue.
-	 * - On mesure ensuite :
-	 *    • la hauteur du bandeau bleu (header de page),
-	 *    • la hauteur du paginator (footer),
-	 *    • la hauteur d’une ligne de <tbody> (avec fallback à 65px si trop petite),
-	 *    • un padding de sûreté (25px par défaut).
-	 * - On calcule floor(available / rowH) et on renvoie au moins 1.
+	 * dans un <p-table> PrimeNG paginé, en prenant des tailles
+     * fixes d'éléments du tableau et en les soustrayant à la taille
+     * disponible dans la fenêtre.
 	 *
 	 * @returns {Promise<number>} Le nombre de lignes à afficher.
 	 */
@@ -155,7 +148,7 @@ export class CommonService {
 		const headerH = 108;
 		const footerH = 56;
 		const defaultRowH = 65;
-		const defaultPadding = 25;
+		const defaultPadding = 30;
 
 		// Calcul de l’espace disponible
 		const available = window.innerHeight - headerH - footerH - defaultPadding;
