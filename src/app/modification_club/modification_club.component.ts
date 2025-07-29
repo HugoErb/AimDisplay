@@ -105,7 +105,7 @@ export class ModificationClubComponent {
 			clubCity: 'Marseille',
 		},
 	];
-	nbRowsPerPage: number = 0;
+	nbRowsPerPage: number = 1;
 
 	async ngAfterViewInit() {
 		this.nbRowsPerPage = await this.commonService.getNbRowsPerPage();

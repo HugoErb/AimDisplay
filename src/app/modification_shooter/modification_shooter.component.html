@@ -10,7 +10,7 @@
 			</div>
 		</div>
 		<div class="min-w-[525px] mx-auto shadow-lg">
-			<p-table [value]="shooters" dataKey="id" [paginator]="true" [rows]="nbRowsPerPage">
+			<p-table #table [value]="shooters" dataKey="id" [paginator]="true" [rows]="nbRowsPerPage">
 				<ng-template pTemplate="header">
 					<tr>
 						<th class="!bg-gray-100">
@@ -66,16 +66,16 @@
 					</tr>
 				</ng-template>
 
-				<ng-template pTemplate="body" let-shooter>
+				<ng-template #tableBody pTemplate="body" let-shooter>
 					<tr>
-						<td class="!py-4">{{ shooter.lastName }}</td>
-						<td class="!py-4">{{ shooter.firstName }}</td>
-						<td class="!py-4">{{ shooter.clubName }}</td>
-						<td class="!py-4">{{ shooter.competitionName }}</td>
-						<td class="!py-4">{{ shooter.distance }}</td>
-						<td class="!py-4">{{ shooter.weapon }}</td>
-						<td class="!py-4">{{ shooter.categoryName }}</td>
-						<td class="!py-4">{{ shooter.totalScore }}</td>
+						<td class="!py-4 whitespace-nowrap">{{ shooter.lastName }}</td>
+						<td class="!py-4 whitespace-nowrap">{{ shooter.firstName }}</td>
+						<td class="!py-4 whitespace-nowrap">{{ shooter.clubName }}</td>
+						<td class="!py-4 whitespace-nowrap">{{ shooter.competitionName }}</td>
+						<td class="!py-4 whitespace-nowrap">{{ shooter.distance }}</td>
+						<td class="!py-4 whitespace-nowrap">{{ shooter.weapon }}</td>
+						<td class="!py-4 whitespace-nowrap">{{ shooter.categoryName }}</td>
+						<td class="!py-4 whitespace-nowrap">{{ shooter.totalScore }}</td>
 						<td class="relative !py-4">
 							<div
 								class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 p-1.5 pb-0 rounded-md hover:bg-gray-200 dark:hover:bg-gray-600 cursor-pointer"

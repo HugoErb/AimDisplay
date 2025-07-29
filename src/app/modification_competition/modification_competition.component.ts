@@ -155,7 +155,7 @@ export class ModificationCompetitionComponent {
 			competitionSupCategoryPrice: '15',
 		},
 	];
-	nbRowsPerPage: number = 0;
+	nbRowsPerPage: number = 1;
 
 	async ngAfterViewInit() {
 		this.nbRowsPerPage = await this.commonService.getNbRowsPerPage();
