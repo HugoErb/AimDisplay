@@ -34,7 +34,6 @@
 	font-display: swap;
 }
 
-
 .bg-custom {
 	background-image: url("./assets/img/layered-waves.svg");
 	background-repeat: no-repeat;
@@ -268,6 +267,33 @@
 		background-color: var(--color-prime-blue) !important;
 		color: white !important;
 		border-radius: 0.375rem;
+	}
+
+	/* Style des hover boutons de filtres en mode normal et dark */
+	.p-datatable-column-filter-button:hover,
+	.p-datatable-column-filter-button.p-focus {
+		background-color: #ffffff !important;
+	}
+	.dark .p-datatable-column-filter-button:hover {
+		background-color: var(--color-secondary-dark-bg) !important;
+	}
+
+    /* Style de l'icône boutons de filtres en mode normal et dark et hover */
+	.p-datatable-column-filter-button .p-icon {
+		color: #6b7280; /* gray-500 */
+        transition: all;
+	}
+	.dark .p-datatable-column-filter-button .p-icon {
+		color: #9ca3af; /* gray-400 */
+        transition: all;
+	}
+	.p-datatable-column-filter-button:hover .p-icon {
+		color: #4b5563; /* gray-600 */
+        transition: all;
+	}
+	.dark .p-datatable-column-filter-button:hover .p-icon {
+		color: #d1d5db; /* gray-300 */
+        transition: all;
 	}
 }
 
