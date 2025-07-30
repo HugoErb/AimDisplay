@@ -13,33 +13,28 @@
 			<p-table [value]="competitions" dataKey="id" [paginator]="true" [rows]="nbRowsPerPage">
 				<ng-template pTemplate="header">
 					<tr>
-						<th pSortableColumn="competitionName" class="!bg-gray-100 hover:!bg-gray-700">
+						<th pSortableColumn="competitionName" class="!bg-gray-100 hover:dark:!bg-gray-700 hover:!bg-gray-200">
 							<div class="flex items-center">
 								<span class="text-prime-blue dark:text-gray-300 mr-2 whitespace-nowrap">Nom</span>
 								<p-sortIcon field="competitionName" class="ml-1 mt-[5px] dark:text-gray-400" />
-								<p-columnFilter type="text" field="name" display="menu" class="ml-1"></p-columnFilter>
+								<p-columnFilter type="text" field="competitionName" display="menu" class="ml-1"></p-columnFilter>
 							</div>
 						</th>
-						<th pSortableColumn="competitionDate" class="!bg-gray-100 hover:!bg-gray-700">
+						<th pSortableColumn="competitionDate" class="!bg-gray-100 hover:dark:!bg-gray-700 hover:!bg-gray-200">
 							<div class="flex items-center">
 								<span class="text-prime-blue dark:text-gray-300 mr-2 whitespace-nowrap">Date(s)</span>
 								<p-sortIcon field="competitionDate" class="ml-1 mt-[5px] dark:text-gray-400" />
 								<p-columnFilter type="text" field="competitionDate" display="menu" class="ml-1"></p-columnFilter>
 							</div>
 						</th>
-						<th pSortableColumn="competitionPrice" class="!bg-gray-100 hover:!bg-gray-700">
+						<th pSortableColumn="competitionPrice" class="!bg-gray-100 hover:dark:!bg-gray-700 hover:!bg-gray-200">
 							<div class="flex items-center">
 								<span class="text-prime-blue dark:text-gray-300 mr-2 whitespace-nowrap">Prix</span>
 								<p-sortIcon field="competitionPrice" class="ml-1 mt-[5px] dark:text-gray-400" />
-								<p-columnFilter
-									type="text"
-									field="competitionPrice"
-									display="menu"
-									class="ml-1"
-								></p-columnFilter>
+								<p-columnFilter type="text" field="competitionPrice" display="menu" class="ml-1"></p-columnFilter>
 							</div>
 						</th>
-						<th pSortableColumn="competitionSupCategoryPrice" class="!bg-gray-100 hover:!bg-gray-700">
+						<th pSortableColumn="competitionSupCategoryPrice" class="!bg-gray-100 hover:dark:!bg-gray-700 hover:!bg-gray-200">
 							<div class="flex items-center">
 								<span class="text-prime-blue dark:text-gray-300 mr-2 whitespace-nowrap">Prix catégorie sup.</span>
 								<p-sortIcon field="competitionSupCategoryPrice" class="ml-1 mt-[5px] dark:text-gray-400" />
