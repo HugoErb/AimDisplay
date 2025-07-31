@@ -2,6 +2,7 @@ import { Component, HostListener } from '@angular/core';
 import { TableModule } from 'primeng/table';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { CommonService } from '../services/common.service';
+import { Club } from '../interfaces/club';
 
 @Component({
 	selector: 'app-modification-club',
@@ -66,10 +67,4 @@ export class ModificationClubComponent {
 	displayModifFormModal() {
 		this.commonService.showModal('displayModifFormModal');
 	}
-}
-
-export interface Club {
-	id: number;
-	clubName: string;
-	clubCity: string;
 }
