@@ -1,7 +1,8 @@
-import { Component, HostListener, ViewChild } from '@angular/core';
+import { Component, HostListener } from '@angular/core';
 import { TableModule } from 'primeng/table';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { CommonService } from '../services/common.service';
+import { Shooter } from '../interfaces/shooter';
 
 @Component({
 	selector: 'app-modification-shooter',
@@ -265,16 +266,4 @@ export class ModificationShooterComponent {
 	displayModifFormModal() {
 		this.commonService.showModal('displayModifFormModal');
 	}
-}
-
-export interface Shooter {
-	id: number;
-	lastName: string;
-	firstName: string;
-	competitionName: string;
-	clubName: string;
-	distance: string;
-	weapon: string;
-	categoryName: string;
-	totalScore: number;
 }

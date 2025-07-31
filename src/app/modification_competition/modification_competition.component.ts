@@ -2,6 +2,7 @@ import { Component, HostListener } from '@angular/core';
 import { TableModule } from 'primeng/table';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { CommonService } from '../services/common.service';
+import { Competition } from '../interfaces/competition';
 
 @Component({
 	selector: 'app-modification-competition',
@@ -151,12 +152,4 @@ export class ModificationCompetitionComponent {
 	displayModifFormModal() {
 		this.commonService.showModal('displayModifFormModal');
 	}
-}
-
-export interface Competition {
-	id: number;
-	competitionName: string;
-	competitionDate: string;
-	competitionPrice: number;
-	competitionSupCategoryPrice: number;
 }
