@@ -148,8 +148,4 @@ export class ModificationCompetitionComponent {
 	confirmDeletion(event: Event) {
 		this.commonService.showSwal('Voulez vous vraiment supprimer cette ligne ?', 'Cette action sera irréversible.', 'warning', true);
 	}
-
-	displayModifFormModal() {
-		this.commonService.showModal('displayModifFormModal');
-	}
 }
