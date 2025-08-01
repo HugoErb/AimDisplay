@@ -95,30 +95,6 @@ export class CommonService {
 	}
 
 	/**
-	 * Affiche une modal spécifiée par son identifiant.
-	 *
-	 * @param {string} id - L'identifiant de l'élément modal à afficher.
-	 */
-	showModal(id: string) {
-		const modal = document.getElementById(id) as HTMLDialogElement;
-		if (modal) {
-			modal.showModal();
-		}
-	}
-
-	/**
-	 * Ferme une modal spécifiée par son identifiant.
-	 *
-	 * @param {string} id - L'identifiant de l'élément modal à fermer.
-	 */
-	closeModal(id: string) {
-		const modal = document.getElementById(id) as HTMLDialogElement;
-		if (modal) {
-			modal.close();
-		}
-	}
-
-	/**
 	 * Renvoie l'état actuel du dark mode.
 	 * @returns {boolean} L'état actuel du dark mode.
 	 */
