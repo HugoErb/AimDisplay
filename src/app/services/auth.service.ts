@@ -230,20 +230,10 @@ export class AuthService implements OnDestroy {
 			// ignore si inexistant
 		});
 
-		const uploadTask = uploadBytesResumable(storageRef, file);
-		const snapshot: UploadTaskSnapshot = await new Promise<UploadTaskSnapshot>((resolve, reject) => {
-			uploadTask.on(
-				'state_changed',
-				() => {
-					// progression ; on pourrait émettre un événement si nécessaire
-				},
-				(err: unknown) => reject(err),
-				() => resolve(uploadTask.snapshot)
-			);
-		});
-
-		const url = await getDownloadURL(snapshot.ref);
-		await this.setUserAvatar(url);
+		uploadBytesResumable(storageRef, file).then(async (res) => {
+            const url = await getDownloadURL(res.ref);
+            this.setUserAvatar(url);
+        });
 	}
 
 	/**
