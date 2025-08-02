@@ -3,6 +3,7 @@ import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { InputTextModule } from 'primeng/inputtext';
 import { CommonService } from '../services/common.service';
+import { AuthService } from '../services/auth.service';
 
 @Component({
 	selector: 'app-register',
@@ -13,13 +14,13 @@ import { CommonService } from '../services/common.service';
 })
 export class RegisterComponent {
 	passwordFieldType: string = 'password';
+	clubName: string = '';
 	email: string = '';
 	password: string = '';
 	confirmPassword: string = '';
+	isLoading: boolean = false;
 
-	constructor(
-		protected commonService: CommonService // protected authService: AuthService
-	) {}
+	constructor(protected commonService: CommonService, protected authService: AuthService) {}
 
 	@ViewChildren('inputField', { read: ElementRef }) inputFields!: QueryList<ElementRef>;
 	public inputLabelMap = new Map<string, string>();
@@ -32,12 +33,14 @@ export class RegisterComponent {
 	 * @returns {Promise<void>} Une promesse qui se résout une fois que la création est effectuée et que les
 	 * champs de saisie ont été réinitialisés en cas de succès.
 	 */
-	async createAccount() {
+	async register(): Promise<void> {
+		this.isLoading = true;
 		this.inputLabelMap = this.commonService.getInputLabelMap(this.inputFields);
 		const areInputsValid = await this.commonService.validateInputs(this.inputLabelMap, true);
 		if (areInputsValid) {
-			this.commonService.showSwalToast('Compte créé !');
+			await this.authService.signUp(this.email.trim(), this.password, this.clubName.trim());
 			this.commonService.redirectTo('login');
+			this.isLoading = false;
 		}
 	}
 }

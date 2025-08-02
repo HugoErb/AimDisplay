@@ -49,6 +49,23 @@
 			<!-- Formulaire -->
 			<form class="space-y-6">
 				<div class="space-y-2">
+					<label htmlFor="clubName" class="text-sm font-medium text-gray-700">Nom de votre club *</label>
+					<div class="relative">
+						<input
+							#inputField
+							[(ngModel)]="clubName"
+							type="text"
+							placeholder="Entrez le nom de votre club"
+							class="w-full"
+							name="clubName"
+							id="clubName"
+							autocomplete="off"
+							pInputText
+						/>
+					</div>
+				</div>
+				
+                <div class="space-y-2">
 					<label htmlFor="email" class="text-sm font-medium text-gray-700">Adresse email *</label>
 					<div class="relative">
 						<input
@@ -106,7 +123,7 @@
 
 				<div
 					class="w-full inline-flex h-12 items-center justify-center rounded-md bg-prime-blue text-white dark:text-gray-300 hover:bg-hover-prime-blue px-5 text-base font-medium shadow transition-colors duration-250 cursor-pointer"
-					(click)="createAccount()"
+					(click)="register()"
 				>
 					Créer un compte
 					<iconify-icon icon="tabler:arrow-right" class="text-[1.5rem] ml-2"></iconify-icon>

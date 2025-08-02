@@ -10,6 +10,7 @@ import { ThemeService } from '../services/theme.service';
 import { TextareaModule } from 'primeng/textarea';
 import { TableModule } from 'primeng/table';
 import { CommonModule } from '@angular/common';
+import { AuthService } from '../services/auth.service';
 
 // Modals
 type ModalKey = 'renameClub' | 'changePassword';
@@ -22,7 +23,7 @@ type ModalKey = 'renameClub' | 'changePassword';
 	schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class SettingsComponent {
-	constructor(protected commonService: CommonService, private themeService: ThemeService) {}
+	constructor(protected commonService: CommonService, private themeService: ThemeService , protected authService : AuthService) {}
 
 	userParamsName: string = 'userParamsAimDisplay';
 	darkMode: boolean = false;

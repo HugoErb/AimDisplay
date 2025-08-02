@@ -106,9 +106,10 @@ export class AuthService implements OnDestroy {
 			await signInWithEmailAndPassword(auth, email, password);
 			this.commonService.showSwalToast('Connexion réussie !');
 		} catch (error: any) {
+            console.error('[AuthService.signIn] erreur brute :', error);
 			const msg = this.mapSignInError(error);
 			this.commonService.showSwalToast(msg, 'error');
-			throw new Error(msg);
+			throw new Error(`${msg} (${error.code}: ${error.message})`);
 		}
 	}
 
@@ -137,7 +138,7 @@ export class AuthService implements OnDestroy {
 			const cred = await createUserWithEmailAndPassword(auth, email, password);
 			await updateProfile(cred.user, { displayName });
 			this.commonService.showSwalToast('Inscription réussie !');
-			this.router.navigate(['home']);
+            await firebaseSignOut(auth);
 		} catch (error: any) {
 			const msg = this.mapSignUpError(error);
 			this.commonService.showSwalToast(msg, 'error');
