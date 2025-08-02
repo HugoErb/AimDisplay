@@ -145,14 +145,9 @@
 		font-size: 0.925rem !important;
 	}
 
-	/* Dark mode des inputs PrimeNG */
-	:is(
-			:where(.dark) .p-inputtext,
-			:where(.dark) .p-autocomplete-input,
-			:where(.dark) .p-inputnumber-input,
-			:where(.dark) .p-datepicker-input,
-			:where(.dark) textarea
-		):not(.ng-trigger *) {
+	/* Dark mode des inputs PrimeNG sauf sur login/register/mdp oublié */
+	:where(.dark)
+		:is(.p-inputtext, .p-autocomplete-input, .p-inputnumber-input, .p-datepicker-input, textarea):not(.ng-trigger *):not(.no-connect-root *) {
 		background-color: var(--color-main-dark-bg) !important;
 		border: 1px #374151 solid !important; /* gray-700 */
 		color: #d1d5db !important;
@@ -223,14 +218,12 @@
 		background-color: var(--color-secondary-dark-bg) !important;
 		color: #d1d5db !important; /* gray-300 */
 	}
-
 	:where(.dark) .p-datatable th,
 	:where(.dark) .p-datatable td {
 		background-color: var(--color-secondary-dark-bg) !important;
 		color: #d1d5db !important;
 		border-color: #374151 !important; /* gray-700 */
 	}
-
 	:where(.dark) .p-datatable tr {
 		background-color: var(--color-secondary-dark-bg) !important;
 	}
@@ -278,22 +271,22 @@
 		background-color: var(--color-secondary-dark-bg) !important;
 	}
 
-    /* Style de l'icône boutons de filtres en mode normal et dark et hover */
+	/* Style de l'icône boutons de filtres en mode normal et dark et hover */
 	.p-datatable-column-filter-button .p-icon {
 		color: #6b7280; /* gray-500 */
-        transition: all;
+		transition: all;
 	}
 	.dark .p-datatable-column-filter-button .p-icon {
 		color: #9ca3af; /* gray-400 */
-        transition: all;
+		transition: all;
 	}
 	.p-datatable-column-filter-button:hover .p-icon {
 		color: #4b5563; /* gray-600 */
-        transition: all;
+		transition: all;
 	}
 	.dark .p-datatable-column-filter-button:hover .p-icon {
 		color: #d1d5db; /* gray-300 */
-        transition: all;
+		transition: all;
 	}
 }
 
