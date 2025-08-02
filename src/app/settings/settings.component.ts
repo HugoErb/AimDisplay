@@ -23,7 +23,7 @@ type ModalKey = 'renameClub' | 'changePassword';
 	schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class SettingsComponent {
-	constructor(protected commonService: CommonService, private themeService: ThemeService , protected authService : AuthService) {}
+	constructor(protected commonService: CommonService, private themeService: ThemeService, protected authService: AuthService) {}
 
 	userParamsName: string = 'userParamsAimDisplay';
 	darkMode: boolean = false;
@@ -46,6 +46,7 @@ export class SettingsComponent {
 	firstNameMail: string = '';
 	emailMail: string = '';
 	messageMail: string = '';
+	hovering: boolean = false;
 
 	// subscriptionPlans = [
 	// 	{
@@ -126,6 +127,19 @@ export class SettingsComponent {
 		this.darkMode = this.themeService.getTheme() === 'dark';
 	}
 
+	async onAvatarFileSelected(event: Event): Promise<void> {
+		const input = event.target as HTMLInputElement;
+		if (!input.files || input.files.length === 0) return;
+		const file = input.files[0];
+		try {
+			await this.authService.uploadAvatar(file);
+		} catch (e) {
+			console.error('Erreur upload avatar', e);
+		} finally {
+			input.value = ''; // permettre re-sélection du même fichier
+		}
+	}
+
 	/**
 	 * Ouvre le modal identifié par sa clé.
 	 * Si nécessaire, effectue les préparations spécifiques avant l’ouverture.
@@ -161,12 +175,12 @@ export class SettingsComponent {
 		if (areInputsValid) {
 			// TODO CALL BDD POUR MAJ LE NOM DU CLUB EN BDD
 			this.newClubName = '';
-            this.commonService.showSwalToast('Modification du nom de club réussie !');
+			this.commonService.showSwalToast('Modification du nom de club réussie !');
 			this.closeModal('renameClub');
 		}
 	}
-    
-    /**
+
+	/**
 	 * Filtre et valide les champs de changements de mot de passe, puis le met à jour dans la base de données.
 	 *
 	 * @returns {Promise<void>} Une promesse qui se résout lorsque toutes les opérations sont terminées.
@@ -183,20 +197,10 @@ export class SettingsComponent {
 			// TODO CALL BDD POUR MAJ LE MDP EN BDD
 			this.currentPassword = '';
 			this.newPassword = '';
-            this.newPasswordConfirmation = '';
-            this.commonService.showSwalToast('Modification du mot de passe réussie !');
+			this.newPasswordConfirmation = '';
+			this.commonService.showSwalToast('Modification du mot de passe réussie !');
 			this.closeModal('changePassword');
 		}
-	}
-
-	/**
-	 * Déconnecte le compte de l'utilisateur actuel et renvoie vers la page de connexion.
-	 *
-	 * @returns {void}
-	 */
-	disconnect(): void {
-		this.commonService.showSwalToast('Déconnexion réussie !');
-		this.commonService.redirectTo('login');
 	}
 
 	/**

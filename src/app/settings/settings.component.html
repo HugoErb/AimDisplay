@@ -38,8 +38,8 @@
 						(click)="divInput.click()"
 					> -->
 <!-- @if (authService.getdivdiv()) {
-						<img [src]="authService.getdivdiv()" class="w-full h-full object-cover transition-all duration-300" />
-						} @else { -->
+<img [src]="authService.getdivdiv()" class="w-full h-full object-cover transition-all duration-300" />
+} @else { -->
 <!-- <img
 							src="../../assets/img/logo.png"
 							class="w-full h-full object-cover transition-all duration-300"
@@ -375,16 +375,36 @@
 					<div class="p-6 space-y-6">
 						<div class="flex items-center space-x-4">
 							<div
-								class="h-16 w-16 border-2 border-gray-200 dark:border-gray-700 transition-all duration-500 rounded-full overflow-hidden"
+								class="relative h-16 w-16 border-2 border-gray-200 dark:border-gray-700 transition-all duration-500 rounded-full overflow-hidden cursor-pointer"
+								(mouseenter)="hovering = true"
+								(mouseleave)="hovering = false"
 							>
-								<img
-									src="https://imgs.search.brave.com/6Abd5TBbHIoBHK1py-tGSUv7eRH_hf3KVb5Px1DBNMs/rs:fit:860:0:0/g:ce/aHR0cHM6Ly90NC5m/dGNkbi5uZXQvanBn/LzA4LzIzLzkxLzU1/LzM2MF9GXzgyMzkx/NTUzM19PalFLUGtD/TTNzaGRxRmdwWjVz/d01LV3U1cHhnMzls/VS5qcGc"
-									alt="Utilisateur"
-									class="h-full w-full object-cover"
-								/>
+								<ng-container *ngIf="authService.getUserAvatar() as avatar; else fallbackAvatar">
+									<img [src]="avatar" alt="Avatar du club" class="h-full w-full object-cover" />
+								</ng-container>
+								<ng-template #fallbackAvatar>
+									<img src="../../assets/img/logo.png" alt="Logo Aim Display" class="h-full w-full object-cover" />
+								</ng-template>
+
+								<div
+									class="absolute inset-0 flex items-center justify-center transition-colors duration-200"
+									[ngClass]="{ 'bg-black/65': hovering, 'bg-black/0': !hovering }"
+									(click)="fileInput.click()"
+								>
+									<iconify-icon
+										icon="lucide:pen-line"
+										class="text-[1.5rem] text-white transition-opacity duration-200"
+										[ngClass]="{ 'opacity-100': hovering, 'opacity-0': !hovering }"
+									></iconify-icon>
+								</div>
+
+								<input #fileInput type="file" accept="image/*" class="hidden" (change)="onAvatarFileSelected($event)" />
 							</div>
+
 							<div class="flex-1">
-								<h3 class="text-lg font-medium text-gray-700 dark:text-gray-300 transition-all duration-500">{{ authService.getUserDisplayName() || "Nom du club" }}</h3>
+								<h3 class="text-lg font-medium text-gray-700 dark:text-gray-300 transition-all duration-500">
+									{{ authService.getUserDisplayName() || "Nom du club" }}
+								</h3>
 								<p class="text-gray-600 dark:text-gray-400 transition-all duration-500">
 									{{ authService.getUserEmail() || "" }}
 								</p>
