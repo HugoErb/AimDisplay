@@ -104,7 +104,6 @@ export class AuthService implements OnDestroy {
 	async signIn(email: string, password: string): Promise<void> {
 		try {
 			await signInWithEmailAndPassword(auth, email, password);
-			this.commonService.showSwalToast('Connexion réussie !');
 		} catch (error: any) {
             console.error('[AuthService.signIn] erreur brute :', error);
 			const msg = this.mapSignInError(error);
