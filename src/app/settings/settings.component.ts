@@ -173,7 +173,7 @@ export class SettingsComponent {
 		this.inputLabelMap = this.commonService.getInputLabelMap(clubFieldList);
 		const areInputsValid = await this.commonService.validateInputs(this.inputLabelMap, true);
 		if (areInputsValid) {
-			// TODO CALL BDD POUR MAJ LE NOM DU CLUB EN BDD
+			this.authService.setUserDisplayName(this.newClubName);
 			this.newClubName = '';
 			this.commonService.showSwalToast('Modification du nom de club réussie !');
 			this.closeModal('renameClub');
@@ -194,7 +194,7 @@ export class SettingsComponent {
 		this.inputLabelMap = this.commonService.getInputLabelMap(passwordFieldList);
 		const areInputsValid = await this.commonService.validateInputs(this.inputLabelMap, true);
 		if (areInputsValid) {
-			// TODO CALL BDD POUR MAJ LE MDP EN BDD
+			this.authService.changePassword(this.newPassword);
 			this.currentPassword = '';
 			this.newPassword = '';
 			this.newPasswordConfirmation = '';
