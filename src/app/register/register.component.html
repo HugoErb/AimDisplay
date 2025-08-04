@@ -47,9 +47,9 @@
 			</div>
 
 			<!-- Formulaire -->
-			<form class="space-y-6">
+			<form (ngSubmit)="register()" class="space-y-6">
 				<div class="space-y-2">
-					<label htmlFor="clubName" class="text-sm font-medium text-gray-700">Nom de votre club *</label>
+					<label for="clubName" class="text-sm font-medium text-gray-700">Nom de votre club *</label>
 					<div class="relative">
 						<input
 							#inputField
@@ -64,9 +64,9 @@
 						/>
 					</div>
 				</div>
-				
-                <div class="space-y-2">
-					<label htmlFor="email" class="text-sm font-medium text-gray-700">Adresse email *</label>
+
+				<div class="space-y-2">
+					<label for="email" class="text-sm font-medium text-gray-700">Adresse email *</label>
 					<div class="relative">
 						<input
 							#inputField
@@ -83,7 +83,7 @@
 				</div>
 
 				<div class="space-y-2">
-					<label htmlFor="password" class="text-sm font-medium text-gray-700">Mot de passe *</label>
+					<label for="password" class="text-sm font-medium text-gray-700">Mot de passe *</label>
 					<div class="relative">
 						<input
 							#inputField
@@ -105,7 +105,7 @@
 				</div>
 
 				<div class="space-y-2">
-					<label htmlFor="confirmPassword" class="text-sm font-medium text-gray-700">Confirmer le mot de passe *</label>
+					<label for="confirmPassword" class="text-sm font-medium text-gray-700">Confirmer le mot de passe *</label>
 					<div class="relative">
 						<input
 							#inputField
@@ -118,7 +118,7 @@
 							autocomplete="off"
 							pInputText
 						/>
-                        <iconify-icon
+						<iconify-icon
 							[attr.icon]="passwordFieldType === 'password' ? 'mynaui:eye' : 'mynaui:eye-slash'"
 							class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 cursor-pointer text-2xl"
 							(click)="passwordFieldType = commonService.togglePasswordVisibility(passwordFieldType)"
@@ -126,13 +126,14 @@
 					</div>
 				</div>
 
-				<div
+				<button
 					class="w-full inline-flex h-12 items-center justify-center rounded-md bg-prime-blue text-white dark:text-gray-300 hover:bg-hover-prime-blue px-5 text-base font-medium shadow transition-colors duration-250 cursor-pointer"
-					(click)="register()"
+					type="submit"
+					[disabled]="isLoading"
 				>
 					Créer un compte
 					<iconify-icon icon="tabler:arrow-right" class="text-[1.5rem] ml-2"></iconify-icon>
-				</div>
+				</button>
 			</form>
 
 			<!-- Lien vers connexion -->

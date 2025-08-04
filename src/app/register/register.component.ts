@@ -40,7 +40,7 @@ export class RegisterComponent {
 		if (areInputsValid) {
 			await this.authService.signUp(this.email.trim(), this.password, this.clubName.trim());
 			this.commonService.redirectTo('login');
-			this.isLoading = false;
 		}
+        this.isLoading = false;
 	}
 }
