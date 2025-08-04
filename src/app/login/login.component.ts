@@ -38,7 +38,7 @@ export class LoginComponent {
 			await this.authService.signIn(this.email.trim(), this.password);
             this.commonService.showSwalToast('Connexion réussie !');
 			this.commonService.redirectTo('home');
-			this.isLoading = false;
 		}
+        this.isLoading = false;
 	}
 }
