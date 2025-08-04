@@ -36,6 +36,7 @@ export class LoginComponent {
 		const areInputsValid = await this.commonService.validateInputs(this.inputLabelMap, false);
 		if (areInputsValid) {
 			await this.authService.signIn(this.email.trim(), this.password);
+            this.commonService.showSwalToast('Connexion réussie !');
 			this.commonService.redirectTo('home');
 			this.isLoading = false;
 		}
