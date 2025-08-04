@@ -38,6 +38,7 @@ export class SettingsComponent {
 	currentPassword: string = '';
 	newPassword: string = '';
 	newPasswordConfirmation: string = '';
+	passwordFieldType: string = 'password';
 
 	// Variables pour le mail
 	@ViewChildren('inputField') inputFields!: QueryList<ElementRef>;
