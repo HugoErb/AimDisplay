@@ -1,7 +1,7 @@
 export interface Competition {
 	id: number;
-	competitionName: string;
-	competitionDate: string;
-	competitionPrice: number;
-	competitionSupCategoryPrice: number;
+	name: string;
+	date: string;
+	price: number;
+	supCategoryPrice: number;
 }
