@@ -25,9 +25,11 @@ import { Competition } from '../interfaces/competition';
 export class CreationShooterComponent {
 	constructor(protected commonService: CommonService, private supabase: SupabaseService) {}
 
-	// Variables de création d'un tireur
+	// Variables de récupération des champs du formulaire
 	@ViewChildren('inputField', { read: ElementRef }) inputFields!: QueryList<ElementRef>;
 	public inputLabelMap = new Map<string, string>();
+
+	// Variables de création d'un tireur
 	shooterLastName: string = '';
 	shooterFirstName: string = '';
 	shooterEmail: string = '';
@@ -35,12 +37,14 @@ export class CreationShooterComponent {
 	shooterClubName: string = '';
 	categoryGroups: CategoryGroup[] = [this.createCategoryGroup()];
 
+	// Variables de récupération des données depuis la BDD
 	competitions: Competition[] = [];
 	clubs: Club[] = [];
 	weapons: Weapon[] = [];
 	distances: Distance[] = [];
 	shooterCategories: ShooterCategory[] = [];
 
+	// Variables filtrées de récupération des données depuis la BDD
 	filteredCompetitions: Competition[] = [];
 	filteredClubs: Club[] = [];
 	filteredWeapons: Weapon[] = [];
