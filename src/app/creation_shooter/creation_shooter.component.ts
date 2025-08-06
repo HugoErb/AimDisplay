@@ -8,6 +8,8 @@ import { InputTextModule } from 'primeng/inputtext';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { CommonService } from '../services/common.service';
 import { CategoryGroup } from '../interfaces/category-group';
+import { SupabaseService } from '../services/supabase.service';
+import { Club } from '../interfaces/club';
 
 @Component({
 	selector: 'app-creation-shooter',
@@ -17,7 +19,7 @@ import { CategoryGroup } from '../interfaces/category-group';
 	schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class CreationShooterComponent {
-	constructor(protected commonService: CommonService) {}
+	constructor(protected commonService: CommonService, private supabase: SupabaseService) {}
 
 	// Variables de création d'un tireur
 	@ViewChildren('inputField', { read: ElementRef }) inputFields!: QueryList<ElementRef>;
@@ -31,7 +33,7 @@ export class CreationShooterComponent {
 
 	competitions: any[] = [{ name: 'Tournoi de Marennes' }, { name: 'Tournoi de Rochefort' }, { name: 'Tournoi de Pau' }];
 	filteredCompetitions: any[] = [];
-	clubs: any[] = [{ name: 'Club de Marennes' }, { name: 'Club de Rochefort' }, { name: 'Club de Pau' }];
+	clubs: Club[] = [];
 	filteredClubs: any[] = [];
 	distances: any[] = [{ name: '10 Mètres' }, { name: '25 Mètres' }, { name: '50 Mètres' }];
 	filteredDistances: any[] = [];
@@ -57,6 +59,13 @@ export class CreationShooterComponent {
 		{ name: 'Sénior 3' },
 	];
 	filteredCategories: any[] = [];
+
+	async ngOnInit(): Promise<void> {
+		try {
+		} catch (err) {
+			console.error('Impossible de charger les données', err);
+		}
+	}
 
 	/**
 	 * Crée et retourne un objet représentant une nouvelle configuration de catégorie de tireur,
