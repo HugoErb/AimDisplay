@@ -10,6 +10,9 @@ import { CommonService } from '../services/common.service';
 import { CategoryGroup } from '../interfaces/category-group';
 import { SupabaseService } from '../services/supabase.service';
 import { Club } from '../interfaces/club';
+import { ShooterCategory } from '../interfaces/shooter-category';
+import { Weapon } from '../interfaces/weapon';
+import { Distance } from '../interfaces/distance';
 
 @Component({
 	selector: 'app-creation-shooter',
