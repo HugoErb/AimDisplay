@@ -2,6 +2,9 @@ import { Injectable, NgZone } from '@angular/core';
 import { createClient, SupabaseClient } from '@supabase/supabase-js';
 import { environment } from '../../environments/environment';
 import { Club } from '../interfaces/club';
+import { ShooterCategory } from '../interfaces/shooter-category';
+import { Weapon } from '../interfaces/weapon';
+import { Distance } from '../interfaces/distance';
 
 @Injectable({ providedIn: 'root' })
 export class SupabaseService {
@@ -32,10 +35,36 @@ export class SupabaseService {
 		return data ?? [];
 	}
 
-	// créer un club
-	async addClub(clubName: string, clubCity: string) {
-		const { data, error } = await this.supabase.from('clubs').insert({ clubName, clubCity }).single();
+	/** Récupère toutes les distances */
+	async getDistances(): Promise<Distance[]> {
+		const { data, error } = await this.supabase.from('distances').select('*').order('label', { ascending: true });
+
 		if (error) throw error;
-		return data;
+
+		// on mappe label → name
+		return (data ?? []).map((d) => ({
+			id: d.id,
+			name: d.label,
+		}));
+	}
+
+	async getWeapons(): Promise<Weapon[]> {
+		const { data, error } = await this.supabase.from('weapons').select('*').order('label', { ascending: true });
+
+		if (error) throw error;
+		return (data ?? []).map((w) => ({
+			id: w.id,
+			name: w.label,
+		}));
+	}
+
+	async getCategories(): Promise<ShooterCategory[]> {
+		const { data, error } = await this.supabase.from('categories').select('*').order('id', { ascending: true });
+
+		if (error) throw error;
+		return (data ?? []).map((c) => ({
+			id: c.id,
+			name: c.label,
+		}));
 	}
 }

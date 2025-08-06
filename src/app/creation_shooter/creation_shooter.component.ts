@@ -13,6 +13,7 @@ import { Club } from '../interfaces/club';
 import { ShooterCategory } from '../interfaces/shooter-category';
 import { Weapon } from '../interfaces/weapon';
 import { Distance } from '../interfaces/distance';
+import { Competition } from '../interfaces/competition';
 
 @Component({
 	selector: 'app-creation-shooter',
@@ -34,39 +35,31 @@ export class CreationShooterComponent {
 	shooterClubName: string = '';
 	categoryGroups: CategoryGroup[] = [this.createCategoryGroup()];
 
-	competitions: any[] = [{ name: 'Tournoi de Marennes' }, { name: 'Tournoi de Rochefort' }, { name: 'Tournoi de Pau' }];
-	filteredCompetitions: any[] = [];
+	competitions: Competition[] = [];
 	clubs: Club[] = [];
-	filteredClubs: any[] = [];
-	distances: any[] = [{ name: '10 Mètres' }, { name: '25 Mètres' }, { name: '50 Mètres' }];
-	filteredDistances: any[] = [];
-	weapons: any[] = [
-		{ name: 'Arbalète' },
-		{ name: 'Carabine' },
-		{ name: 'Pistolet' },
-		{ name: 'Pistolet Percussion' },
-		{ name: 'Pistolet Vitesse' },
-	];
-	filteredWeapons: any[] = [];
-	categories: any[] = [
-		{ name: 'Poussin' },
-		{ name: 'Minime' },
-		{ name: 'Benjamin' },
-		{ name: 'Cadet' },
-		{ name: 'Junior' },
-		{ name: 'Dame 1' },
-		{ name: 'Dame 2' },
-		{ name: 'Dame 3' },
-		{ name: 'Sénior 1' },
-		{ name: 'Sénior 2' },
-		{ name: 'Sénior 3' },
-	];
-	filteredCategories: any[] = [];
+	weapons: Weapon[] = [];
+	distances: Distance[] = [];
+	shooterCategories: ShooterCategory[] = [];
+
+	filteredCompetitions: Competition[] = [];
+	filteredClubs: Club[] = [];
+	filteredWeapons: Weapon[] = [];
+	filteredDistances: Distance[] = [];
+	filteredShooterCategories: ShooterCategory[] = [];
 
 	async ngOnInit(): Promise<void> {
 		try {
+			const [distances, weapons, categories] = await Promise.all([
+				this.supabase.getDistances(),
+				this.supabase.getWeapons(),
+				this.supabase.getCategories(),
+			]);
+
+			this.distances = distances;
+			this.weapons = weapons;
+			this.shooterCategories = categories;
 		} catch (err) {
-			console.error('Impossible de charger les données', err);
+			console.error('Erreur lors du chargement des données :', err);
 		}
 	}
 
