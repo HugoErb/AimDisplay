@@ -127,8 +127,8 @@
 							#inputField
 							[(ngModel)]="group.shooterCategory"
 							[forceSelection]="true"
-							[suggestions]="filteredCategories"
-							(completeMethod)="filteredCategories = commonService.filterByName($event.query, categories)"
+							[suggestions]="filteredShooterCategories"
+							(completeMethod)="filteredShooterCategories = commonService.filterByName($event.query, shooterCategories)"
 							(onSelect)="onCategorySelected($event, group)"
 							field="name"
 							[dropdown]="true"
