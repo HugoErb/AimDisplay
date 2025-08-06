@@ -1,4 +1,4 @@
-export interface Distances {
+export interface Distance {
 	id: number;
 	name: string;
 }
