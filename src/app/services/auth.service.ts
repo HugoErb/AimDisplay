@@ -105,7 +105,7 @@ export class AuthService implements OnDestroy {
 		try {
 			await signInWithEmailAndPassword(auth, email, password);
 		} catch (error: any) {
-            console.error('[AuthService.signIn] erreur brute :', error);
+			console.error('[AuthService.signIn] erreur brute :', error);
 			const msg = this.mapSignInError(error);
 			this.commonService.showSwalToast(msg, 'error');
 			throw new Error(`${msg} (${error.code}: ${error.message})`);
@@ -137,7 +137,7 @@ export class AuthService implements OnDestroy {
 			const cred = await createUserWithEmailAndPassword(auth, email, password);
 			await updateProfile(cred.user, { displayName });
 			this.commonService.showSwalToast('Inscription réussie !');
-            await firebaseSignOut(auth);
+			await firebaseSignOut(auth);
 		} catch (error: any) {
 			const msg = this.mapSignUpError(error);
 			this.commonService.showSwalToast(msg, 'error');
@@ -191,29 +191,6 @@ export class AuthService implements OnDestroy {
 	}
 
 	/**
-	 * Met à jour l'avatar (photoURL) de l'utilisateur connecté.
-	 * @param newAvatar URL de l'image.
-	 */
-	async setUserAvatar(newAvatar: string): Promise<void> {
-		const user = this.getUser();
-		if (!user) throw new Error('Utilisateur non connecté');
-		await updateProfile(user, { photoURL: newAvatar });
-	}
-
-	/**
-	 * Supprime un avatar dans Firebase Storage.
-	 * @param fileName Chemin complet de l'objet dans le storage.
-	 */
-	async removeAvatar(fileName: string): Promise<void> {
-		const storageRef = ref(storage, fileName);
-		try {
-			await deleteObject(storageRef);
-		} catch (e) {
-			console.warn('Suppression avatar échouée (peut être inexistant) :', e);
-		}
-	}
-
-	/**
 	 * Upload un avatar, supprime l'ancien, puis met à jour le profil avec la nouvelle URL.
 	 * @param file Fichier image.
 	 */
@@ -230,9 +207,32 @@ export class AuthService implements OnDestroy {
 		});
 
 		uploadBytesResumable(storageRef, file).then(async (res) => {
-            const url = await getDownloadURL(res.ref);
-            this.setUserAvatar(url);
-        });
+			const url = await getDownloadURL(res.ref);
+			this.setUserAvatar(url);
+		});
+	}
+
+	/**
+	 * Supprime un avatar dans Firebase Storage.
+	 * @param fileName Chemin complet de l'objet dans le storage.
+	 */
+	async removeAvatar(fileName: string): Promise<void> {
+		const storageRef = ref(storage, fileName);
+		try {
+			await deleteObject(storageRef);
+		} catch (e) {
+			console.warn('Suppression avatar échouée (peut être inexistant) :', e);
+		}
+	}
+
+	/**
+	 * Met à jour l'avatar (photoURL) de l'utilisateur connecté.
+	 * @param newAvatar URL de l'image.
+	 */
+	async setUserAvatar(newAvatar: string): Promise<void> {
+		const user = this.getUser();
+		if (!user) throw new Error('Utilisateur non connecté');
+		await updateProfile(user, { photoURL: newAvatar });
 	}
 
 	/**
