@@ -31,6 +31,8 @@ export class LoginComponent {
 	 * champs de saisie ont été réinitialisés en cas de succès.
 	 */
 	async login(): Promise<void> {
+        console.log(this.isLoading);
+        
 		this.isLoading = true;
 		this.inputLabelMap = this.commonService.getInputLabelMap(this.inputFields);
 		const areInputsValid = await this.commonService.validateInputs(this.inputLabelMap, false);
