@@ -25,16 +25,29 @@ export class ResetPasswordComponent {
 	constructor(private route: ActivatedRoute, protected commonService: CommonService, protected authService: AuthService) {}
 
 	async ngOnInit() {
+		// Query params
 		const qp = this.route.snapshot.queryParamMap;
-		const access = qp.get('access_token');
-		const refresh = qp.get('refresh_token') ?? undefined;
+		let access = qp.get('access_token');
+		let refresh = qp.get('refresh_token') ?? undefined;
+
+		// Hash params
+		if (!access && typeof window !== 'undefined') {
+			const hashParams = new URLSearchParams(window.location.hash.startsWith('#') ? window.location.hash.slice(1) : '');
+			access = hashParams.get('access_token') ?? access;
+			refresh = hashParams.get('refresh_token') ?? refresh;
+		}
 
 		if (access) {
 			this.tokenPresent = true;
-			await this.authService.setRecoverySession(access, refresh);
+			try {
+				await this.authService.setRecoverySession(access, refresh);
+			} catch {
+				// laisse l’utilisateur sur place avec un message d’erreur
+			}
 		} else {
-			// Pas de token → on renvoie l’utilisateur demander un nouveau mail
-			this.commonService.redirectTo('forgot-password');
+			// NE PAS rediriger immédiatement
+			// Montre un message + bouton “Renvoyer un lien”
+			this.tokenPresent = false;
 		}
 	}
 
