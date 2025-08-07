@@ -15,7 +15,6 @@ export class AuthService implements OnDestroy {
 	private authSubscription: { data: { subscription: any } } | null = null;
 
 	constructor(private zone: NgZone, private commonService: CommonService, private themeService: ThemeService, private router: Router) {
-		// Instanciation du client Supabase hors de la zone Angular
 		this.supabase = this.zone.runOutsideAngular(() => createClient(environment.supabase.url, environment.supabase.anonKey, {}));
 
 		// Souscription aux changements d'état d'authentification
@@ -70,7 +69,7 @@ export class AuthService implements OnDestroy {
 			this.commonService.showSwalToast(this.mapSignUpError(error), 'error');
 			throw error;
 		}
-		this.commonService.showSwalToast('Inscription réussie ! Vérifiez votre email.');
+        this.commonService.showSwal('Inscription réussie !', 'Vérifiez votre boîte mail afin de valider votre adresse email. N\'oubliez pas de vérifier vos spam !', 'success', false);
 		// On déconnecte l'utilisateur pour qu'il doive confirmer son email
 		await this.supabase.auth.signOut();
 	}
@@ -84,6 +83,7 @@ export class AuthService implements OnDestroy {
 			this.commonService.showSwalToast(this.mapSignInError(error), 'error');
 			throw error;
 		}
+        this.commonService.showSwalToast('Connexion réussie !');
 	}
 
 	/**
@@ -107,7 +107,12 @@ export class AuthService implements OnDestroy {
 			this.commonService.showSwalToast('Erreur envoi du lien de réinitialisation', 'error');
 			throw error;
 		}
-		this.commonService.showSwalToast('Email de réinitialisation envoyé !');
+		this.commonService.showSwal(
+			'E-mail de réinitialisation envoyé !',
+			"Veuillez suivre les indications de l'email que vous avez reçu afin de réinitialiser votre mot de passe. N'oubliez pas de vérifier vos spam !",
+			'success',
+			false
+		);
 	}
 
 	/**

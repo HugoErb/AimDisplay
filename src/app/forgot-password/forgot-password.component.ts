@@ -33,7 +33,6 @@ export class ForgotPasswordComponent {
 		const areInputsValid = await this.commonService.validateInputs(this.inputLabelMap, false);
 		if (areInputsValid) {
 			await this.authService.sendPasswordResetEmail(this.email.trim());
-            this.commonService.showSwal('E-mail de réinitialisation envoyé !','Veuillez suivre les indications de l\'email que vous avez reçu afin de réinitialiser votre mot de passe. N\'oubliez pas de vérifier vos spam !','success', false);
 			this.commonService.redirectTo('login');
 		}
         this.isLoading = false;
