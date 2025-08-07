@@ -28,7 +28,8 @@
 								(mouseenter)="hovering = true"
 								(mouseleave)="hovering = false"
 							>
-								<ng-container *ngIf="authService.getUserAvatar() as avatar; else fallbackAvatar">
+								<!-- <ng-container *ngIf="authService.getUserAvatar() as avatar; else fallbackAvatar"> -->
+								<ng-container *ngIf="false as avatar; else fallbackAvatar">
 									<img [src]="avatar" alt="Avatar du club" class="h-full w-full object-cover" />
 								</ng-container>
 								<ng-template #fallbackAvatar>

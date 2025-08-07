@@ -133,7 +133,7 @@ export class SettingsComponent {
 		if (!input.files || input.files.length === 0) return;
 		const file = input.files[0];
 		try {
-			await this.authService.uploadAvatar(file);
+			// await this.authService.uploadAvatar(file);
 		} catch (e) {
 			console.error('Erreur upload avatar', e);
 		} finally {
