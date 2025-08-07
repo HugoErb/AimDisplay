@@ -46,12 +46,15 @@ export class ResetPasswordComponent {
 	 */
 	async resetPassword(): Promise<void> {
 		this.isLoading = true;
-		this.inputLabelMap = this.commonService.getInputLabelMap(this.inputFields);
-		const areInputsValid = await this.commonService.validateInputs(this.inputLabelMap, false);
-		if (areInputsValid) {
-			await this.authService.changePassword(this.newPassword);
-			this.commonService.redirectTo('login');
+		try {
+			this.inputLabelMap = this.commonService.getInputLabelMap(this.inputFields);
+			const areInputsValid = await this.commonService.validateInputs(this.inputLabelMap, false);
+			if (areInputsValid) {
+				await this.authService.changePassword(this.newPassword);
+				this.commonService.redirectTo('login');
+			}
+		} finally {
+			this.isLoading = false;
 		}
-		this.isLoading = false;
 	}
 }
