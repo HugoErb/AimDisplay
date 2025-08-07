@@ -35,12 +35,15 @@ export class RegisterComponent {
 	 */
 	async register(): Promise<void> {
 		this.isLoading = true;
-		this.inputLabelMap = this.commonService.getInputLabelMap(this.inputFields);
-		const areInputsValid = await this.commonService.validateInputs(this.inputLabelMap, true);
-		if (areInputsValid) {
-			await this.authService.signUp(this.email.trim(), this.password, this.clubName.trim());
-			this.commonService.redirectTo('login');
+		try {
+			this.inputLabelMap = this.commonService.getInputLabelMap(this.inputFields);
+			const areInputsValid = await this.commonService.validateInputs(this.inputLabelMap, true);
+			if (areInputsValid) {
+				await this.authService.signUp(this.email.trim(), this.password, this.clubName.trim());
+				this.commonService.redirectTo('login');
+			}
+		} finally {
+			this.isLoading = false;
 		}
-		this.isLoading = false;
 	}
 }
