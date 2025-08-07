@@ -27,11 +27,11 @@ export class AuthService implements OnDestroy {
 					this.ensureLocalStorageDefaults();
 					// Redirige du login vers home si déjà connecté
 					if (this.router.url.startsWith('/login')) {
-						this.router.navigate(['home']);
+						this.commonService.redirectTo('home');
 					}
 				} else {
 					// Si pas connecté, aller sur login
-					this.router.navigate(['login']);
+					this.commonService.redirectTo('login');
 				}
 			});
 		});
@@ -69,7 +69,12 @@ export class AuthService implements OnDestroy {
 			this.commonService.showSwalToast(this.mapSignUpError(error), 'error');
 			throw error;
 		}
-        this.commonService.showSwal('Inscription réussie !', 'Vérifiez votre boîte mail afin de valider votre adresse email. N\'oubliez pas de vérifier vos spam !', 'success', false);
+		this.commonService.showSwal(
+			'Inscription réussie !',
+			"Vérifiez votre boîte mail afin de valider votre adresse email. N'oubliez pas de vérifier vos spam !",
+			'success',
+			false
+		);
 		// On déconnecte l'utilisateur pour qu'il doive confirmer son email
 		await this.supabase.auth.signOut();
 	}
@@ -83,7 +88,7 @@ export class AuthService implements OnDestroy {
 			this.commonService.showSwalToast(this.mapSignInError(error), 'error');
 			throw error;
 		}
-        this.commonService.showSwalToast('Connexion réussie !');
+		this.commonService.showSwalToast('Connexion réussie !');
 	}
 
 	/**
@@ -96,6 +101,7 @@ export class AuthService implements OnDestroy {
 			throw error;
 		}
 		this.commonService.showSwalToast('Déconnexion réussie !');
+		this.commonService.redirectTo('login');
 	}
 
 	/**
@@ -113,6 +119,18 @@ export class AuthService implements OnDestroy {
 			'success',
 			false
 		);
+	}
+
+	/** Pose la session Supabase à partir des query params de l’URL de recovery */
+	async setRecoverySession(access_token: string, refresh_token?: string): Promise<void> {
+		const { error } = await this.supabase.auth.setSession({
+			access_token,
+			refresh_token: refresh_token ?? '',
+		});
+		if (error) {
+			this.commonService.showSwalToast("Impossible d'initialiser la session de réinitialisation", 'error');
+			throw error;
+		}
 	}
 
 	/**

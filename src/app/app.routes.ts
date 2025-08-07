@@ -14,6 +14,7 @@ import { SettingsComponent } from './settings/settings.component';
 import { BaseLayoutComponent } from './components/base-layout/base-layout.component';
 import { GenererPDFComponent } from './generer_pdf/generer_pdf.component';
 import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
+import { ResetPasswordComponent } from './reset-password/reset-password.component';
 
 export const routes: Routes = [
 	{
@@ -36,6 +37,10 @@ export const routes: Routes = [
 	{
 		path: 'forgot-password',
 		component: ForgotPasswordComponent,
+	},
+	{
+		path: 'reset-password',
+		component: ResetPasswordComponent,
 	},
 	{
 		path: '',
