@@ -18,20 +18,29 @@ export class AuthService implements OnDestroy {
 		this.supabase = this.zone.runOutsideAngular(() => createClient(environment.supabase.url, environment.supabase.anonKey, {}));
 
 		// Souscription aux changements d'état d'authentification
-		this.authSubscription = this.supabase.auth.onAuthStateChange((event: AuthChangeEvent, session: Session | null) => {
+		this.authSubscription = this.supabase.auth.onAuthStateChange((event, session) => {
 			this.zone.run(() => {
 				this.userSubject.next(session?.user ?? null);
 				this.isLoading.next(false);
 
+				// Flux de recovery : on reste sur /reset-password
+				if (event === 'PASSWORD_RECOVERY') {
+					if (!this.router.url.startsWith('/reset-password')) {
+						this.commonService.redirectTo('reset-password');
+					}
+					return; // ne pas tomber dans le else/login
+				}
+
 				if (session?.user) {
 					this.ensureLocalStorageDefaults();
-					// Redirige du login vers home si déjà connecté
 					if (this.router.url.startsWith('/login')) {
 						this.commonService.redirectTo('home');
 					}
 				} else {
-					// Si pas connecté, aller sur login
-					this.commonService.redirectTo('login');
+					// Laisser passer /reset-password même sans session classique
+					if (!this.router.url.startsWith('/reset-password')) {
+						this.commonService.redirectTo('login');
+					}
 				}
 			});
 		});
