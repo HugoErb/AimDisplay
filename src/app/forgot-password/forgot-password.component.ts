@@ -29,12 +29,15 @@ export class ForgotPasswordComponent {
 	 */
 	async sendPasswordResetEmail(): Promise<void> {
 		this.isLoading = true;
-		this.inputLabelMap = this.commonService.getInputLabelMap(this.inputFields);
-		const areInputsValid = await this.commonService.validateInputs(this.inputLabelMap, false);
-		if (areInputsValid) {
-			await this.authService.sendPasswordResetEmail(this.email.trim());
-			this.commonService.redirectTo('login');
+		try {
+			this.inputLabelMap = this.commonService.getInputLabelMap(this.inputFields);
+			const areInputsValid = await this.commonService.validateInputs(this.inputLabelMap, false);
+			if (areInputsValid) {
+				await this.authService.sendPasswordResetEmail(this.email.trim());
+				this.commonService.redirectTo('login');
+			}
+		} finally {
+			this.isLoading = false;
 		}
-        this.isLoading = false;
 	}
 }
