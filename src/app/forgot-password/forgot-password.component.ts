@@ -33,7 +33,7 @@ export class ForgotPasswordComponent {
 			this.inputLabelMap = this.commonService.getInputLabelMap(this.inputFields);
 			const areInputsValid = await this.commonService.validateInputs(this.inputLabelMap, false);
 			if (areInputsValid) {
-				await this.authService.sendPasswordResetEmail(this.email.trim());
+				await this.authService.sendPasswordResetEmail(this.email.trim(), 'http://localhost:4200/reset-password');
 				this.commonService.redirectTo('login');
 			}
 		} finally {
