@@ -117,17 +117,38 @@ export class AuthService implements OnDestroy {
 	 * Envoie l'email de réinitialisation de mot de passe
 	 */
 	async sendPasswordResetEmail(email: string, redirectTo?: string): Promise<void> {
-		const { error } = await this.supabase.auth.resetPasswordForEmail(email, { redirectTo });
-		if (error) {
-			this.commonService.showSwalToast('Erreur envoi du lien de réinitialisation', 'error');
-			throw error;
-		}
-		this.commonService.showSwal(
-			'E-mail de réinitialisation envoyé !',
-			"Veuillez suivre les indications de l'email que vous avez reçu afin de réinitialiser votre mot de passe. N'oubliez pas de vérifier vos spam !",
-			'success',
-			false
-		);
+        const { error } = await this.supabase.auth.resetPasswordForEmail(email, { redirectTo });
+
+        if (error) {
+            const status = (error as any).status as number | undefined;
+            const msg = (error.message || '').toLowerCase();
+
+            if (status === 429 || msg.includes('rate limit') || msg.includes('too many')) {
+                this.commonService.showSwalToast(
+                'Trop de tentatives. Réessayez dans quelques minutes.',
+                'error'
+                );
+                throw error;
+            }
+
+            if (status && status >= 500 || msg.includes('smtp') || msg.includes('email not sent')) {
+                this.commonService.showSwalToast(
+                "Impossible d'envoyer l'email pour le moment. Réessayez plus tard.",
+                'error'
+                );
+                throw error;
+            }
+
+            // Fallback générique
+            this.commonService.showSwalToast("Erreur lors de l'envoi de l'email de réinitialisation.", 'error');
+            throw error;
+            }
+        this.commonService.showSwal(
+            'E-mail de réinitialisation envoyé !',
+            "Suivez les indications de l'email que vous avez reçu afin de réinitialiser votre mot de passe. N'oubliez pas de vérifier vos spam !",
+            'success',
+            false
+        );
 	}
 
 	/** Pose la session Supabase à partir des query params de l’URL de recovery */
@@ -150,13 +171,12 @@ export class AuthService implements OnDestroy {
         if (error) {
             let message = 'Échec de la mise à jour du mot de passe';
 
-            // Analyse des messages d'erreur connus
             if (error.message?.toLowerCase().includes('should be different')) {
                 message = "Le nouveau mot de passe doit être différent de l'ancien";
             } else if (error.message?.toLowerCase().includes('password should be at least')) {
-                message = 'Le mot de passe est trop court';
+                message = 'Le nouveau mot de passe est trop court';
             } else if (error.message?.toLowerCase().includes('password')) {
-                message = 'Mot de passe invalide. Vérifiez sa complexité.';
+                message = 'Nouveau mot de passe invalide. Vérifiez sa complexité.';
             }
 
             this.commonService.showSwalToast(message, 'error');
