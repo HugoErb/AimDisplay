@@ -195,12 +195,15 @@ export class SettingsComponent {
 		this.inputLabelMap = this.commonService.getInputLabelMap(passwordFieldList);
 		const areInputsValid = await this.commonService.validateInputs(this.inputLabelMap, true);
 		if (areInputsValid) {
-			this.authService.changePassword(this.newPassword);
-			this.currentPassword = '';
-			this.newPassword = '';
-			this.newPasswordConfirmation = '';
-			this.commonService.showSwalToast('Modification du mot de passe réussie !');
-			this.closeModal('changePassword');
+            try{
+                await this.authService.changePasswordWithVerification(this.currentPassword, this.newPassword);
+                this.currentPassword = '';
+                this.newPassword = '';
+                this.newPasswordConfirmation = '';
+                this.closeModal('changePassword');
+            }catch (error){
+                console.error('Erreur lors du changement de mot de passe :', error);
+            }
 		}
 	}
 

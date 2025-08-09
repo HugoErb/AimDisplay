@@ -147,12 +147,53 @@ export class AuthService implements OnDestroy {
 	 */
 	async changePassword(newPassword: string): Promise<void> {
 		const { error } = await this.supabase.auth.updateUser({ password: newPassword });
-		if (error) {
-			this.commonService.showSwalToast('Échec de la mise à jour du mot de passe', 'error');
-			throw error;
+        if (error) {
+            let message = 'Échec de la mise à jour du mot de passe';
+
+            // Analyse des messages d'erreur connus
+            if (error.message?.toLowerCase().includes('should be different')) {
+                message = "Le nouveau mot de passe doit être différent de l'ancien";
+            } else if (error.message?.toLowerCase().includes('password should be at least')) {
+                message = 'Le mot de passe est trop court';
+            } else if (error.message?.toLowerCase().includes('password')) {
+                message = 'Mot de passe invalide. Vérifiez sa complexité.';
+            }
+
+            this.commonService.showSwalToast(message, 'error');
+            throw error;
 		}
 		this.commonService.showSwalToast('Mot de passe mis à jour !');
 	}
+    
+    /**
+     * Change le mot de passe en vérifiant d'abord le mot de passe actuel.
+     *
+     * @param currentPassword Mot de passe actuel de l'utilisateur.
+     * @param newPassword Nouveau mot de passe souhaité.
+     */
+    async changePasswordWithVerification(currentPassword: string, newPassword: string): Promise<void> {
+        const { data: { user }, error: getUserError } = await this.supabase.auth.getUser();
+
+        if (getUserError || !user?.email) {
+            this.commonService.showSwalToast('Impossible de vérifier l’utilisateur', 'error');
+            throw getUserError || new Error('Utilisateur non connecté ou e-mail introuvable.');
+        }
+
+        // Re-authentification
+        const { error: signInError } = await this.supabase.auth.signInWithPassword({
+            email: user.email,
+            password: currentPassword,
+        });
+
+        if (signInError) {
+            this.commonService.showSwalToast('Mot de passe actuel incorrect', 'error');
+            throw signInError;
+        }
+
+        // Mise à jour du mot de passe
+        await this.changePassword(newPassword);
+    }
+
 
 	/**
 	 * Retourne l'email de l'utilisateur connecté, ou null.
