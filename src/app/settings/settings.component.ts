@@ -48,6 +48,7 @@ export class SettingsComponent {
 	emailMail: string = '';
 	messageMail: string = '';
 	hovering: boolean = false;
+    isLoading: boolean = false;
 
 	// subscriptionPlans = [
 	// 	{
@@ -187,23 +188,29 @@ export class SettingsComponent {
 	 * @returns {Promise<void>} Une promesse qui se résout lorsque toutes les opérations sont terminées.
 	 */
 	async saveNewPassword(): Promise<void> {
-		// On ne veut garder que l’ElementRef dont l’input a pour id un string qui contient 'password'
-		const passwordFieldList = new QueryList<ElementRef>();
-		passwordFieldList.reset(this.inputFields.toArray().filter((ref) => (ref.nativeElement as HTMLInputElement).id.includes('Password')));
+        try {
+			this.isLoading = true;
+            
+            // On ne veut garder que l’ElementRef dont l’input a pour id un string qui contient 'password'
+            const passwordFieldList = new QueryList<ElementRef>();
+            passwordFieldList.reset(this.inputFields.toArray().filter((ref) => (ref.nativeElement as HTMLInputElement).id.includes('Password')));
 
-		// Vérification des champs
-		this.inputLabelMap = this.commonService.getInputLabelMap(passwordFieldList);
-		const areInputsValid = await this.commonService.validateInputs(this.inputLabelMap, true);
-		if (areInputsValid) {
-            try{
-                await this.authService.changePasswordWithVerification(this.currentPassword, this.newPassword);
-                this.currentPassword = '';
-                this.newPassword = '';
-                this.newPasswordConfirmation = '';
-                this.closeModal('changePassword');
-            }catch (error){
-                console.error('Erreur lors du changement de mot de passe :', error);
+            // Vérification des champs
+            this.inputLabelMap = this.commonService.getInputLabelMap(passwordFieldList);
+            const areInputsValid = await this.commonService.validateInputs(this.inputLabelMap, true);
+            if (areInputsValid) {
+                try{
+                    await this.authService.changePasswordWithVerification(this.currentPassword, this.newPassword);
+                    this.currentPassword = '';
+                    this.newPassword = '';
+                    this.newPasswordConfirmation = '';
+                    this.closeModal('changePassword');
+                }catch (error){
+                    console.error('Erreur lors du changement de mot de passe :', error);
+                }
             }
+        } finally {
+			this.isLoading = false;
 		}
 	}
 
