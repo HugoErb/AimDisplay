@@ -239,10 +239,10 @@ export class AuthService implements OnDestroy {
 		if (!user) throw new Error('Aucun utilisateur connecté');
 		const { error } = await this.supabase.auth.updateUser({ data: { displayName } });
 		if (error) {
-			this.commonService.showSwalToast('Échec mise à jour nom d’utilisateur', 'error');
+			this.commonService.showSwalToast('Échec mise à jour nom du nom de club', 'error');
 			throw error;
 		}
-		this.commonService.showSwalToast('Nom d’utilisateur mis à jour !');
+		this.commonService.showSwalToast('Nom du club mis à jour !');
 	}
 
 	/**
