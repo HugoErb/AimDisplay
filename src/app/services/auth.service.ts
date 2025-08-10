@@ -4,6 +4,7 @@ import { createClient, SupabaseClient, Session, User, AuthChangeEvent } from '@s
 import { environment } from '../../environments/environment';
 import { CommonService } from '../services/common.service';
 import { ThemeService } from '../services/theme.service';
+import { AuthApiError } from '@supabase/supabase-js';
 import { Router } from '@angular/router';
 
 @Injectable({ providedIn: 'root' })
@@ -75,7 +76,7 @@ export class AuthService implements OnDestroy {
 			},
 		});
 		if (error) {
-			this.commonService.showSwalToast(this.mapSignUpError(error), 'error');
+			this.commonService.showSwalToast(this.mapAuthError(error, 'signup'), 'error');
 			throw error;
 		}
 		this.commonService.showSwal(
@@ -94,7 +95,7 @@ export class AuthService implements OnDestroy {
 	async signIn(email: string, password: string): Promise<void> {
 		const { error } = await this.supabase.auth.signInWithPassword({ email, password });
 		if (error) {
-			this.commonService.showSwalToast(this.mapSignInError(error), 'error');
+			this.commonService.showSwalToast(this.mapAuthError(error, 'signin'), 'error');
 			throw error;
 		}
 		this.commonService.showSwalToast('Connexion réussie !');
@@ -270,27 +271,52 @@ export class AuthService implements OnDestroy {
 		return this.userSubject.value;
 	}
 
-	/**
-	 * Erreurs lisibles pour la connexion
-	 */
-	private mapSignInError(err: any): string {
-		switch (err.message) {
-			case 'Invalid login credentials':
-				return 'Email ou mot de passe invalide';
-			default:
-				return 'Échec de connexion';
-		}
-	}
+    private mapAuthError(err: any, ctx: 'signin' | 'signup'): string {
+        const status = err?.status ?? err?.code ?? null;
+        const msg = (err?.message || '').toLowerCase();
 
-	/**
-	 * Erreurs lisibles pour l'inscription
-	 */
-	private mapSignUpError(err: any): string {
-		switch (err.message) {
-			case 'User already registered':
-				return 'Email déjà utilisé';
-			default:
-				return "Échec de l'inscription";
-		}
-	}
+        // Réseau / offline
+        if (msg.includes('failed to fetch') || msg.includes('network') || status === 0) {
+            return 'Problème de connexion réseau. Réessayez.';
+        }
+
+        // Classes/Status Supabase
+        if (err instanceof AuthApiError) {
+            switch (err.status) {
+            case 401:
+                if (msg.includes('invalid login')) return 'Email ou mot de passe invalide';
+                if (msg.includes('email not confirmed')) return 'Adresse email non vérifiée';
+                return 'Authentification refusée';
+            case 400:
+                if (msg.includes('password sign-in is disabled')) return 'La connexion par mot de passe est désactivée';
+                if (msg.includes('password should be')) return 'Mot de passe trop faible';
+                if (msg.includes('invalid email')) return 'Adresse email invalide';
+                return 'Requête invalide';
+            case 403:
+                if (msg.includes('banned')) return 'Compte bloqué';
+                if (msg.includes('signups not allowed')) return "Les inscriptions sont désactivées";
+                return 'Accès refusé';
+            case 409:
+                if (ctx === 'signup' && msg.includes('already')) return 'Email déjà utilisé';
+                return 'Conflit de données';
+            case 422:
+                if (msg.includes('invalid email')) return 'Adresse email invalide';
+                return 'Données invalides';
+            case 429:
+                return 'Trop de tentatives. Réessayez dans quelques minutes.';
+            default:
+                if (err.status >= 500) return 'Erreur serveur. Réessayez plus tard.';
+            }
+        }
+
+        // Autres mots-clés
+        if (msg.includes('mfa required')) return 'Vérification à deux facteurs requise';
+        if (msg.includes('email not confirmed')) return 'Adresse email non vérifiée';
+        if (ctx === 'signin' && msg.includes('invalid login')) return 'Email ou mot de passe invalide';
+        if (ctx === 'signup' && msg.includes('already')) return 'Email déjà utilisé';
+
+        // Fallback
+        return ctx === 'signin' ? 'Échec de connexion' : "Échec de l'inscription";
+    }
+
 }
