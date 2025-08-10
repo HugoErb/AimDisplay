@@ -167,18 +167,24 @@ export class SettingsComponent {
 	 * @returns {Promise<void>} Une promesse qui se résout lorsque toutes les opérations sont terminées.
 	 */
 	async saveNewClubName(): Promise<void> {
-		// On ne veut garder que l’ElementRef dont l’input a pour id 'newClubName'
-		const clubFieldList = new QueryList<ElementRef>();
-		clubFieldList.reset(this.inputFields.toArray().filter((ref) => (ref.nativeElement as HTMLInputElement).id === 'newClubName'));
+        try {
+			this.isLoading = true;
 
-		// Vérification des champs
-		this.inputLabelMap = this.commonService.getInputLabelMap(clubFieldList);
-		const areInputsValid = await this.commonService.validateInputs(this.inputLabelMap, true);
-		if (areInputsValid) {
-			this.authService.setUserDisplayName(this.newClubName);
-			this.newClubName = '';
-			this.commonService.showSwalToast('Modification du nom de club réussie !');
-			this.closeModal('renameClub');
+            // On ne veut garder que l’ElementRef dont l’input a pour id 'newClubName'
+            const clubFieldList = new QueryList<ElementRef>();
+            clubFieldList.reset(this.inputFields.toArray().filter((ref) => (ref.nativeElement as HTMLInputElement).id === 'newClubName'));
+
+            // Vérification des champs
+            this.inputLabelMap = this.commonService.getInputLabelMap(clubFieldList);
+            const areInputsValid = await this.commonService.validateInputs(this.inputLabelMap, true);
+            if (areInputsValid) {
+                this.authService.setUserDisplayName(this.newClubName);
+                this.newClubName = '';
+                this.commonService.showSwalToast('Modification du nom de club réussie !');
+                this.closeModal('renameClub');
+            }
+        } finally {
+			this.isLoading = false;
 		}
 	}
 
@@ -190,7 +196,7 @@ export class SettingsComponent {
 	async saveNewPassword(): Promise<void> {
         try {
 			this.isLoading = true;
-            
+
             // On ne veut garder que l’ElementRef dont l’input a pour id un string qui contient 'password'
             const passwordFieldList = new QueryList<ElementRef>();
             passwordFieldList.reset(this.inputFields.toArray().filter((ref) => (ref.nativeElement as HTMLInputElement).id.includes('Password')));
