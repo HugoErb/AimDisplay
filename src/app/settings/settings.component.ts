@@ -180,7 +180,6 @@ export class SettingsComponent {
             if (areInputsValid) {
                 this.authService.setUserDisplayName(this.newClubName);
                 this.newClubName = '';
-                this.commonService.showSwalToast('Modification du nom de club réussie !');
                 this.closeModal('renameClub');
             }
         } finally {
