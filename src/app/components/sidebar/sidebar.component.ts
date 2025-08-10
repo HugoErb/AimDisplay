@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
-// import { AuthService } from '../../services/auth.service';
+import { AuthService } from '../../services/auth.service';
 import { CommonService } from '../../services/common.service';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 
@@ -13,6 +13,6 @@ import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 })
 export class SidebarComponent {
 	constructor(
-		protected commonService: CommonService // protected authService: AuthService
+		protected commonService: CommonService, protected authService: AuthService
 	) {}
 }
