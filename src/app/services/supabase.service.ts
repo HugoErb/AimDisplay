@@ -24,6 +24,8 @@ export class SupabaseService {
         );
     }
 
+    // CREATE FUNCTIONS /////////////////////////////////////////////////////////////////////
+
     /**
      * Crée une compétition et l’associe à l’utilisateur courant via son UUID.
      * 
@@ -114,19 +116,64 @@ export class SupabaseService {
             this.zone.run(() => this.commonService.showSwalToast(msg, 'error'));
             throw e;
         }
-  }
+    }
+
+    // GET FUNCTIONS /////////////////////////////////////////////////////////////////////
+
+    /**
+     * Récupère la liste des compétitions de l’utilisateur courant.
+     * @param none
+     * @return La liste des compétitions appartenant à l’utilisateur connecté.
+     */
+    async getCompetitions(): Promise<Competition[]> {
+        const { data: userData, error: userError } = await this.supabase.auth.getUser();
+        if (userError) throw new Error(`Impossible de récupérer l'utilisateur: ${userError.message}`);
+        const user = userData?.user;
+        if (!user) throw new Error('Aucun utilisateur connecté.');
+
+        const { data, error } = await this.supabase
+            .from('competitions')
+            .select('*')
+            .eq('user_id', user.id)
+            .order('id', { ascending: true });
+
+        if (error) throw new Error(`Erreur lors de la récupération des compétitions: ${error.message}`);
+        return (data ?? []) as Competition[];
+    }
+
+
+    /**
+     * Récupère la liste des clubs de l’utilisateur courant.
+     * 
+     * @return La liste des clubs appartenant à l’utilisateur connecté.
+     */
+    async getClubs(): Promise<Club[]> {
+        const { data: userData, error: userError } = await this.supabase.auth.getUser();
+        if (userError) throw new Error(`Impossible de récupérer l'utilisateur: ${userError.message}`);
+        const user = userData?.user;
+        if (!user) throw new Error('Aucun utilisateur connecté.');
+
+        const { data, error } = await this.supabase
+            .from('clubs')
+            .select('*')
+            .eq('user_id', user.id)
+            .order('id', { ascending: true });
+
+        if (error) throw new Error(`Erreur lors de la récupération des clubs: ${error.message}`);
+        return (data ?? []) as Club[];
+    }
 
     /**
      * Récupère la liste des armes ordonnées par identifiant.
      * @return La liste des armes.
      */
     async getWeapons(): Promise<Weapon[]> {
-    const { data, error } = await this.supabase.from('weapons').select('*').order('id', { ascending: true });
-    if (error) throw error;
-    return (data ?? []).map((w: any) => ({
-        id: w.id,
-        name: w.label,
-    })) as Weapon[];
+        const { data, error } = await this.supabase.from('weapons').select('*').order('id', { ascending: true });
+        if (error) throw error;
+        return (data ?? []).map((w: any) => ({
+            id: w.id,
+            name: w.label,
+        })) as Weapon[];
     }
 
     /**
@@ -134,12 +181,12 @@ export class SupabaseService {
      * @return La liste des distances.
      */
     async getDistances(): Promise<Distance[]> {
-    const { data, error } = await this.supabase.from('distances').select('*').order('id', { ascending: true });
-    if (error) throw error;
-    return (data ?? []).map((d: any) => ({
-        id: d.id,
-        name: d.label,
-    })) as Distance[];
+        const { data, error } = await this.supabase.from('distances').select('*').order('id', { ascending: true });
+        if (error) throw error;
+        return (data ?? []).map((d: any) => ({
+            id: d.id,
+            name: d.label,
+        })) as Distance[];
     }
 
     /**
@@ -147,11 +194,11 @@ export class SupabaseService {
      * @return La liste des catégories.
      */
     async getCategories(): Promise<ShooterCategory[]> {
-    const { data, error } = await this.supabase.from('categories').select('*').order('id', { ascending: true });
-    if (error) throw error;
-    return (data ?? []).map((c: any) => ({
-        id: c.id,
-        name: c.label,
-    })) as ShooterCategory[];
+        const { data, error } = await this.supabase.from('categories').select('*').order('id', { ascending: true });
+        if (error) throw error;
+        return (data ?? []).map((c: any) => ({
+            id: c.id,
+            name: c.label,
+        })) as ShooterCategory[];
     }
 }

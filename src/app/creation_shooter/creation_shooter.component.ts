@@ -53,15 +53,19 @@ export class CreationShooterComponent {
 
 	async ngOnInit(): Promise<void> {
 		try {
-			const [distances, weapons, categories] = await Promise.all([
+			const [distances, weapons, categories, clubs, competitions] = await Promise.all([
 				this.supabase.getDistances(),
 				this.supabase.getWeapons(),
 				this.supabase.getCategories(),
+				this.supabase.getClubs(),
+				this.supabase.getCompetitions(),
 			]);
 
 			this.distances = distances;
 			this.weapons = weapons;
 			this.shooterCategories = categories;
+			this.clubs = clubs;
+			this.competitions = competitions;
 		} catch (err) {
 			console.error('Erreur lors du chargement des données :', err);
 		}
