@@ -28,7 +28,15 @@ export class CreationCompetitionComponent {
 	prixCategSup: number | null = null;
     isSaving: boolean = false;
 
-    async createCompetition() {
+    /**
+	 * Permet de créer une compétition à partir des données récoltées dans les champs du formulaire.
+	 * Une phase de validation des inputs est d'abord lancée, puis, si la création réussit,
+	 * on réinitialise les champs de saisie.
+	 *
+	 * @returns {Promise<void>} Une promesse qui se résout une fois que la création est effectuée et que les
+	 * champs de saisie ont été réinitialisés en cas de succès.
+	 */
+    async createCompetition() : Promise<void> {
         this.isSaving = true;
         try {
             this.inputLabelMap = this.commonService.getInputLabelMap(this.inputFields);
@@ -43,19 +51,19 @@ export class CreationCompetitionComponent {
                     prixCategSup: this.prixCategSup ?? 0,
                 });
                 this.commonService.resetInputFields(this.inputFields);
-                // Reset UI si besoin
-                // this.competitionName = '';
-                // this.competitionDate = '';
-                // this.prixInscription = null;
-                // this.prixCategSup = null;
-                }
+            }
         } finally {
             this.isSaving = false;
         }
     }
 
+    /**
+     * Convertit une entrée de date (string/Date/Date[]) en début et fin au format 'YYYY-MM-DD'.
+     * 
+     * @param input Chaîne "jj/mm/aa[aa]" ou "jj/mm/aa[aa] - jj/mm/aa[aa]" ou Date/Date[] (range).
+     * @return Objet contenant startISO et endISO au format 'YYYY-MM-DD'.
+     */
     private parseDateRange(input: string | Date | (Date | null)[]): { startISO: string; endISO: string } {
-        // 1) Date[] (p-datepicker range)
         if (Array.isArray(input)) {
             const [a, b] = input;
             if (a instanceof Date && b instanceof Date) {
@@ -68,13 +76,13 @@ export class CreationCompetitionComponent {
             throw new Error('Merci de sélectionner au moins une date.');
         }
 
-        // 2) Date simple
+        // Date simple
         if (input instanceof Date) {
             const iso = this.toIsoDate(input);
             return { startISO: iso, endISO: iso };
         }
 
-        // 3) Chaîne "dd/mm/yy[yy]" ou "dd/mm/yy[yy] - dd/mm/yy[yy]"
+        // Chaîne "dd/mm/yy[yy]" ou "dd/mm/yy[yy] - dd/mm/yy[yy]"
         const raw = (input ?? '').toString().trim();
         if (!raw) throw new Error('Merci de renseigner la date de la compétition.');
 
@@ -88,20 +96,32 @@ export class CreationCompetitionComponent {
         return { startISO: this.toIsoDate(start), endISO: this.toIsoDate(end) };
     }
 
-    private parseFrDate(s: string): Date {
-        const m = s.match(/^(\d{1,2})\/(\d{1,2})\/(\d{2}|\d{4})$/);
-        if (!m) throw new Error(`Date invalide: "${s}". Attendu: jj/mm/aa[aa].`);
-        const dd = parseInt(m[1], 10);
-        const mm = parseInt(m[2], 10);
-        let year = parseInt(m[3], 10);
-        if (m[3].length === 2) year = year >= 70 ? 1900 + year : 2000 + year;
+    /**
+     * Convertit une date au format français "jj/mm/aa[aa]" en objet Date.
+     * 
+     * @param stringDate Chaîne au format "jj/mm/aa" ou "jj/mm/aaaa".
+     * @return L’objet Date correspondant.
+     */
+    private parseFrDate(stringDate: string): Date {
+        const match = stringDate.match(/^(\d{1,2})\/(\d{1,2})\/(\d{2}|\d{4})$/);
+        if (!match) throw new Error(`Date invalide: "${stringDate}". Attendu: jj/mm/aa[aa].`);
+        const dd = parseInt(match[1], 10);
+        const mm = parseInt(match[2], 10);
+        let year = parseInt(match[3], 10);
+        if (match[3].length === 2) year = year >= 70 ? 1900 + year : 2000 + year;
         return new Date(year, mm - 1, dd);
     }
 
-    private toIsoDate(d: Date): string {
-        const y = d.getFullYear();
-        const m = String(d.getMonth() + 1).padStart(2, '0');
-        const day = String(d.getDate()).padStart(2, '0');
-        return `${y}-${m}-${day}`;
+    /**
+     * Formate un objet Date en chaîne 'YYYY-MM-DD' (sans heure).
+     * 
+     * @param date Date à formater.
+     * @return Chaîne ISO au format 'YYYY-MM-DD'.
+     */
+    private toIsoDate(date: Date): string {
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const day = String(date.getDate()).padStart(2, '0');
+        return `${year}-${month}-${day}`;
     }
 }
