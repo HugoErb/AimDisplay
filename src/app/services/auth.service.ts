@@ -68,6 +68,8 @@ export class AuthService implements OnDestroy {
 
 	/**
 	 * Inscrit un nouvel utilisateur (email + password + displayName)
+     * 
+     * @returns {Promise<void>}  Ne retourne rien en cas de succès.
 	 */
 	async signUp(email: string, password: string, displayName: string): Promise<void> {
 		const { error } = await this.supabase.auth.signUp({
@@ -93,6 +95,8 @@ export class AuthService implements OnDestroy {
 
 	/**
 	 * Connecte un utilisateur existant
+     * 
+     * @returns {Promise<void>}  Ne retourne rien en cas de succès.
 	 */
 	async signIn(email: string, password: string): Promise<void> {
 		const { error } = await this.supabase.auth.signInWithPassword({ email, password });
@@ -105,6 +109,8 @@ export class AuthService implements OnDestroy {
 
 	/**
 	 * Déconnecte l'utilisateur courant
+     * 
+     * @returns {Promise<void>}  Ne retourne rien en cas de succès.
 	 */
 	async signOut(): Promise<void> {
 		const { error } = await this.supabase.auth.signOut();
@@ -117,7 +123,9 @@ export class AuthService implements OnDestroy {
 	}
 
 	/**
-	 * Envoie l'email de réinitialisation de mot de passe
+	 * Envoie l'email de réinitialisation de mot de passe.
+     * 
+     * @returns {Promise<void>}  Ne retourne rien en cas de succès.
 	 */
 	async sendPasswordResetEmail(email: string, redirectTo?: string): Promise<void> {
         const { error } = await this.supabase.auth.resetPasswordForEmail(email, { redirectTo });
@@ -154,7 +162,11 @@ export class AuthService implements OnDestroy {
         );
 	}
 
-	/** Pose la session Supabase à partir des query params de l’URL de recovery */
+    /**
+	 * Pose la session Supabase à partir des query params de l’URL de recovery 
+     * 
+     * @returns {Promise<void>}  Ne retourne rien en cas de succès.
+	 */
 	async setRecoverySession(access_token: string, refresh_token?: string): Promise<void> {
 		const { error } = await this.supabase.auth.setSession({
 			access_token,
@@ -168,6 +180,8 @@ export class AuthService implements OnDestroy {
 
 	/**
 	 * Met à jour le mot de passe après reset ou reauth
+     * 
+     * @returns {Promise<void>}  Ne retourne rien en cas de succès.
 	 */
 	async changePassword(newPassword: string): Promise<void> {
 		const { error } = await this.supabase.auth.updateUser({ password: newPassword });
@@ -193,6 +207,8 @@ export class AuthService implements OnDestroy {
      *
      * @param currentPassword Mot de passe actuel de l'utilisateur.
      * @param newPassword Nouveau mot de passe souhaité.
+     * 
+     * @returns {Promise<void>}  Ne retourne rien en cas de succès.
      */
     async changePasswordWithVerification(currentPassword: string, newPassword: string): Promise<void> {
         const { data: { user }, error: getUserError } = await this.supabase.auth.getUser();
@@ -220,13 +236,17 @@ export class AuthService implements OnDestroy {
 
 	/**
 	 * Retourne l'email de l'utilisateur connecté, ou null.
+     * 
+     * @returns {string} L'email de l'utilisateur connecté, ou null.
 	 */
 	getUserEmail(): string | null {
 		return this.userSubject.value?.email || null;
 	}
 
 	/**
-	 * Récupère le displayName de l'utilisateur connecté, ou null.
+	 * Récupère et retourne le displayName de l'utilisateur connecté, ou null.
+     * 
+     * @returns {string} Le displayName de l'utilisateur connecté, ou null.
 	 */
 	getUserDisplayName(): string {
 		return (this.userSubject.value?.user_metadata as any)?.['displayName'] || '';
