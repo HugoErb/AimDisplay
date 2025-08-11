@@ -8,4 +8,5 @@ export interface Shooter {
 	weapon: string;
 	categoryName: string;
 	totalScore: number;
+    userId: string;
 }
