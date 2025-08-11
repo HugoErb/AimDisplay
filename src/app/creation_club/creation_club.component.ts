@@ -21,7 +21,7 @@ export class CreationClubComponent {
 	public inputLabelMap = new Map<string, string>();
 	clubName: string = '';
 	clubCity: string = '';
-    isSaving:boolean = false;
+    isSaving: boolean = false;
 
 	/**
 	 * Permet de créer un club à partir des données récoltées dans les champs du formulaire.
