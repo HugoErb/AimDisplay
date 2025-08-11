@@ -121,25 +121,43 @@ export class SupabaseService {
     // GET FUNCTIONS /////////////////////////////////////////////////////////////////////
 
     /**
-     * Récupère la liste des compétitions de l’utilisateur courant.
+     * Récupère les compétitions de l’utilisateur courant (mappées en camelCase avec dates en Date).
      * @param none
      * @return La liste des compétitions appartenant à l’utilisateur connecté.
      */
     async getCompetitions(): Promise<Competition[]> {
-        const { data: userData, error: userError } = await this.supabase.auth.getUser();
-        if (userError) throw new Error(`Impossible de récupérer l'utilisateur: ${userError.message}`);
-        const user = userData?.user;
-        if (!user) throw new Error('Aucun utilisateur connecté.');
+        const { data: authData, error: authError } = await this.supabase.auth.getUser();
+        if (authError) throw new Error(`Impossible de récupérer l'utilisateur: ${authError.message}`);
 
-        const { data, error } = await this.supabase
+        const currentUser = authData?.user;
+        if (!currentUser) throw new Error('Aucun utilisateur connecté.');
+
+        const { data: competitionRows, error: queryError } = await this.supabase
             .from('competitions')
-            .select('*')
-            .eq('user_id', user.id)
+            .select('id,name,start_date,end_date,price,sup_category_price,user_id')
+            .eq('user_id', currentUser.id)
             .order('id', { ascending: true });
 
-        if (error) throw new Error(`Erreur lors de la récupération des compétitions: ${error.message}`);
-        return (data ?? []) as Competition[];
+        if (queryError) {
+            throw new Error(`Erreur lors de la récupération des compétitions: ${queryError.message}`);
+        }
+
+        const parseYmdToDate = (ymd: string): Date => {
+            const [year, month, day] = ymd.split('-').map(Number);
+            return new Date(year, month - 1, day);
+        };
+
+        return (competitionRows ?? []).map((row: any) => ({
+            id: row.id,
+            name: row.name,
+            startDate: parseYmdToDate(row.start_date),
+            endDate: parseYmdToDate(row.end_date),
+            price: row.price,
+            supCategoryPrice: row.sup_category_price,
+            userId: row.user_id,
+        })) as Competition[];
     }
+
 
 
     /**
