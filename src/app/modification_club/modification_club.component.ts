@@ -18,6 +18,14 @@ export class ModificationClubComponent {
 	clubs: Club[] = [];
 	nbRowsPerPage: number = 1;
 
+    async ngOnInit(): Promise<void> {
+		try {
+			this.clubs = await this.supabase.getClubs();
+		} catch (err) {
+			console.error('Erreur lors du chargement des données :', err);
+		}
+	}
+
 	async ngAfterViewInit() {
 		this.nbRowsPerPage = await this.commonService.getNbRowsPerPage();
 	}
