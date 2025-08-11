@@ -3,6 +3,7 @@ import { TableModule } from 'primeng/table';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { CommonService } from '../services/common.service';
 import { Club } from '../interfaces/club';
+import { SupabaseService } from '../services/supabase.service';
 
 @Component({
 	selector: 'app-modification-club',
@@ -12,31 +13,9 @@ import { Club } from '../interfaces/club';
 	schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class ModificationClubComponent {
-	constructor(protected commonService: CommonService) {}
+	constructor(protected commonService: CommonService, private supabase: SupabaseService) {}
 
-	clubs: Club[] = [
-		{ id: 1, name: 'Les Aiglons de Lyon', city: 'Lyon' },
-		{ id: 2, name: 'Tireurs Niçois', city: 'Nice' },
-		{ id: 3, name: 'Archers Toulousains', city: 'Toulouse' },
-		{ id: 4, name: 'Flèches de Paris', city: 'Paris' },
-		{ id: 5, name: 'Voltigeurs Bordelais', city: 'Bordeaux' },
-		{ id: 6, name: 'Élan Strasbourgeois', city: 'Strasbourg' },
-		{ id: 7, name: 'Sagittaires Marseillais', city: 'Marseille' },
-		{ id: 8, name: 'Tireurs Nantais', city: 'Nantes' },
-		{ id: 9, name: 'Compagnie de Lille', city: 'Lille' },
-		{ id: 10, name: 'Hirondelles Rennaises', city: 'Rennes' },
-		{ id: 11, name: 'Étoiles Toulon', city: 'Toulon' },
-		{ id: 12, name: 'Les Caravelles Perpignan', city: 'Perpignan' },
-		{ id: 13, name: 'Les Hussards Dijon', city: 'Dijon' },
-		{ id: 14, name: 'Tir Précision Brest', city: 'Brest' },
-		{ id: 15, name: 'Archers Rouennais', city: 'Rouen' },
-		{ id: 16, name: 'Sagittaire Clermont', city: 'Clermont-Ferrand' },
-		{ id: 17, name: 'Les Flèches du Havre', city: 'Le Havre' },
-		{ id: 18, name: 'Compagnie Poitevine', city: 'Poitiers' },
-		{ id: 19, name: 'Tireurs Valenciennois', city: 'Valenciennes' },
-		{ id: 20, name: 'Archers Montpelliérains', city: 'Montpellier' },
-	];
-
+	clubs: Club[] = [];
 	nbRowsPerPage: number = 1;
 
 	async ngAfterViewInit() {
