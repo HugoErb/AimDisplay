@@ -6,21 +6,79 @@ import { ShooterCategory } from '../interfaces/shooter-category';
 import { Weapon } from '../interfaces/weapon';
 import { Distance } from '../interfaces/distance';
 import { CommonService } from '../services/common.service';
+import { Competition } from '../interfaces/competition';
 
 @Injectable({ providedIn: 'root' })
 export class SupabaseService {
     private supabase: SupabaseClient;
 
     constructor(private zone: NgZone, private commonService: CommonService) {
-    this.supabase = this.zone.runOutsideAngular(() =>
-        createClient(environment.supabase.url, environment.supabase.anonKey, {
-        auth: {
-            autoRefreshToken: true,
-            persistSession: true,
-            detectSessionInUrl: true,
-        },
-        })
-    );
+        this.supabase = this.zone.runOutsideAngular(() =>
+            createClient(environment.supabase.url, environment.supabase.anonKey, {
+                auth: {
+                    autoRefreshToken: true,
+                    persistSession: true,
+                    detectSessionInUrl: true,
+                },
+            })
+        );
+    }
+
+    /**
+     * Crée une compétition et l’associe à l’utilisateur courant via son UUID.
+     * 
+     * @param payload Données: name, startDate, endDate, prixInscription, prixCategSup.
+     * @return La compétition créée telle qu’enregistrée en base.
+     */
+    async createCompetition(payload: { name: string; startDate: string | Date; endDate: string | Date; prixInscription: number; prixCategSup: number;}): Promise<Competition> {
+        try {
+            const { data: userData, error: userError } = await this.supabase.auth.getUser();
+            if (userError) throw new Error(`Impossible de récupérer l'utilisateur: ${userError.message}`);
+            const user = userData?.user;
+            if (!user) throw new Error('Aucun utilisateur connecté.');
+
+            const name = payload.name?.trim();
+            if (!name) throw new Error('Le nom de la compétition est obligatoire.');
+
+            const startISO = typeof payload.startDate === 'string' ? payload.startDate : this.toIsoDate(payload.startDate);
+            const endISO   = typeof payload.endDate   === 'string' ? payload.endDate   : this.toIsoDate(payload.endDate);
+
+            if (!startISO || !endISO) throw new Error('Les dates de début et de fin sont obligatoires.');
+
+            const { data, error } = await this.supabase
+                .from('competitions')
+                .insert({
+                name,
+                start_date: startISO,
+                end_date: endISO,
+                price: payload.prixInscription ?? 0,
+                sup_category_price: payload.prixCategSup ?? 0,
+                user_id: user.id,
+                })
+                .select('*')
+                .single<Competition>();
+
+            if (error) throw new Error(`Erreur lors de la création de la compétition: ${error.message}`);
+
+            this.zone.run(() => this.commonService.showSwalToast('Nouvelle compétition créée !'));
+            return data!;
+        } catch (e: any) {
+            const msg = e?.message ?? 'Une erreur est survenue lors de la création de la compétition.';
+            this.zone.run(() => this.commonService.showSwalToast(msg, 'error'));
+            throw e;
+        }
+    }
+
+    /**
+     * Formate une Date en 'YYYY-MM-DD'.
+     * @param d Date à formater.
+     * @return Chaîne ISO sans l’heure.
+     */
+    private toIsoDate(d: Date): string {
+        const y = d.getFullYear();
+        const m = String(d.getMonth() + 1).padStart(2, '0');
+        const day = String(d.getDate()).padStart(2, '0');
+        return `${y}-${m}-${day}`;
     }
 
     /**
