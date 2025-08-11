@@ -257,6 +257,119 @@ export class AuthService implements OnDestroy {
 		this.commonService.showSwalToast('Profil mis à jour !');
 	}
 
+    /**
+     * Upload un avatar dans le bucket "avatars", met à jour le profil utilisateur
+     * avec le chemin du fichier, puis retourne une URL signée temporaire pour affichage.
+     *
+     * @param file Fichier image à uploader.
+     * @returns Promise<string | undefined> URL signée (1h) ou `undefined` si non disponible.
+     * @throws Relance l’erreur après avoir affiché un toast explicite.
+     */
+    async uploadAvatar(file: File): Promise<string | undefined> {
+        const AVATAR_MAX_BYTES = 2 * 1024 * 1024; // 2 Mo
+        const AVATAR_ACCEPTED = ['image/jpeg', 'image/png', 'image/webp'];
+
+        let didToast = false;
+        const toast = (msg: string, type: 'success' | 'error' = 'error') => {
+            this.commonService.showSwalToast(msg, type);
+            didToast = true;
+        };
+
+        try {
+            // Validations basiques
+            if (!AVATAR_ACCEPTED.includes(file.type)) {
+            toast('Format non supporté. JPG, PNG ou WEBP.', 'error');
+            throw new Error('Unsupported media type');
+            }
+            if (file.size > AVATAR_MAX_BYTES) {
+            toast('Image trop lourde (max 2 Mo).', 'error');
+            throw new Error('Payload too large');
+            }
+
+            // Utilisateur
+            const { data: { user }, error: userErr } = await this.supabase.auth.getUser();
+            if (userErr || !user) {
+            toast('Connectez-vous pour changer la photo de profil.', 'error');
+            throw userErr || new Error('Not authenticated');
+            }
+
+            // Chemin + upload
+            const ext = file.type === 'image/png' ? 'png' : file.type === 'image/webp' ? 'webp' : 'jpg';
+            const path = `${user.id}/avatar.${ext}`;
+
+            const { error: upErr } = await this.supabase.storage
+            .from('avatars')
+            .upload(path, file, {
+                upsert: true,
+                contentType: file.type,
+                cacheControl: '3600',
+            });
+
+            if (upErr) {
+            const msg = (upErr.message || '').toLowerCase();
+            if (msg.includes('payload') || msg.includes('too large') || msg.includes('413')) {
+                toast('Image trop lourde (max 2 Mo).', 'error');
+            } else if (msg.includes('unsupported') || msg.includes('content type')) {
+                toast('Format non supporté. JPG, PNG ou WEBP.', 'error');
+            } else {
+                toast("Échec de l'upload de l'avatar.", 'error');
+            }
+            throw upErr;
+            }
+
+            // Associer le chemin au profil (on stocke le path, pas l’URL signée qui expire)
+            const { error: updMetaErr } = await this.supabase.auth.updateUser({ data: { avatarPath: path } });
+            if (updMetaErr) {
+            toast("Photo uploadée, mais impossible de l'associer au profil.", 'error');
+            throw updMetaErr;
+            }
+
+            // Générer une URL signée pour affichage immédiat
+            const { data: signedData, error: urlErr } = await this.supabase.storage
+            .from('avatars')
+            .createSignedUrl(path, 60 * 60); // 1h
+
+            if (urlErr || !signedData?.signedUrl) {
+            // L’upload est OK, mais pas d’URL affichable maintenant.
+            toast("Photo uploadée, mais impossible de créer le lien d'affichage.", 'error');
+            throw urlErr || new Error('Failed to create signed URL');
+            }
+
+            toast('Photo de profil mise à jour !', 'success');
+            return signedData.signedUrl;
+
+        } catch (err) {
+            // Filet de sécurité si aucune alerte n’a été affichée plus haut
+            if (!didToast) {
+            this.commonService.showSwalToast("Échec de la mise à jour de l'avatar.", 'error');
+            }
+            throw err;
+        }
+    }
+
+    /**
+     * Lit le chemin `avatarPath` dans les métadonnées de l’utilisateur
+     * connecté (`user_metadata`) puis demande à Supabase Storage de créer un lien
+     * temporaire (signé) vers le fichier.
+     *
+     * - La durée de validité de l’URL signée est de 1 heure (3600 s).
+     * - Retourne `undefined` si aucun avatar n’est défini ou si la création d’URL échoue.
+     *
+     * @returns {Promise<string | undefined>}
+     *          L’URL signée (valable 1h) ou `undefined` si indisponible.
+     */
+    async getSignedAvatarUrl(): Promise<string | undefined> {
+        const path = (this.userSubject.value?.user_metadata as any)?.['avatarPath'];
+        if (!path) return;
+
+        const { data, error } = await this.supabase.storage
+            .from('avatars')
+            .createSignedUrl(path, 60 * 60); // 1h
+
+        if (error) return undefined;
+        return data?.signedUrl;
+    }
+
 	/**
 	 * Indique si un utilisateur est connecté
 	 */
