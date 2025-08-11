@@ -1,6 +1,6 @@
 import { Injectable, NgZone, OnDestroy } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { createClient, SupabaseClient, Session, User, AuthChangeEvent } from '@supabase/supabase-js';
+import { createClient, SupabaseClient, User } from '@supabase/supabase-js';
 import { environment } from '../../environments/environment';
 import { CommonService } from '../services/common.service';
 import { ThemeService } from '../services/theme.service';
