@@ -29,12 +29,11 @@
 								(mouseleave)="hovering = false"
 							>
 								<ng-container *ngIf="avatarUrl; else fallbackAvatar">
-									<img [src]="avatarUrl" alt="Avatar du club" class="h-full w-full object-cover" />
+									<img [src]="avatarUrl" alt="Photo du club" class="h-full w-full object-cover" />
 								</ng-container>
 								<ng-template #fallbackAvatar>
 									<img src="../../assets/img/logo.png" alt="Logo Aim Display" class="h-full w-full object-cover" />
 								</ng-template>
-
 								<div
 									class="absolute inset-0 flex items-center justify-center transition-colors duration-200"
 									[ngClass]="{ 'bg-black/65': hovering, 'bg-black/0': !hovering }"

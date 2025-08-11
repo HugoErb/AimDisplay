@@ -14,6 +14,8 @@ export class AuthService implements OnDestroy {
 	readonly user$ = this.userSubject.asObservable();
 	readonly isLoading = new BehaviorSubject<boolean>(true);
 	private authSubscription: { data: { subscription: any } } | null = null;
+    private avatarUrlSubject = new BehaviorSubject<string | undefined>(undefined);
+    public  avatarUrl$ = this.avatarUrlSubject.asObservable();
 
 	constructor(private zone: NgZone, private commonService: CommonService, private themeService: ThemeService, private router: Router) {
 		this.supabase = this.zone.runOutsideAngular(() => createClient(environment.supabase.url, environment.supabase.anonKey, {}));
@@ -246,8 +248,15 @@ export class AuthService implements OnDestroy {
 	}
 
 	/**
-	 * Met à jour le displayName ou l'avatar (dans user_metadata)
-	 */
+     * Met à jour les **métadonnées du profil** utilisateur (champ `user_metadata`)
+     * via `supabase.auth.updateUser({ data })`, puis affiche un toast de résultat.
+     * 
+     * @param data - Paires clé/valeur à écrire dans `user_metadata`.
+     *               - `displayName?`  Nom d’affichage du profil.
+     *               - `avatarUrl?`    URL d’avatar à stocker.
+     *
+     * @returns {Promise<void>}  Ne retourne rien en cas de succès.
+     */
 	async updateProfile(data: { displayName?: string; avatarUrl?: string }): Promise<void> {
 		const { error } = await this.supabase.auth.updateUser({ data });
 		if (error) {
@@ -263,7 +272,6 @@ export class AuthService implements OnDestroy {
      *
      * @param file Fichier image à uploader.
      * @returns Promise<string | undefined> URL signée (1h) ou `undefined` si non disponible.
-     * @throws Relance l’erreur après avoir affiché un toast explicite.
      */
     async uploadAvatar(file: File): Promise<string | undefined> {
         const AVATAR_MAX_BYTES = 2 * 1024 * 1024; // 2 Mo
@@ -335,6 +343,7 @@ export class AuthService implements OnDestroy {
             throw urlErr || new Error('Failed to create signed URL');
             }
 
+            await this.refreshAvatarUrl();  
             toast('Photo de profil mise à jour !', 'success');
             return signedData.signedUrl;
 
@@ -370,6 +379,28 @@ export class AuthService implements OnDestroy {
         return data?.signedUrl;
     }
 
+    /**
+     * Ajoute un paramètre de requête `v=<timestamp>` à une URL pour invalider le cache navigateur.
+     *
+     * @param url - L’URL d’origine (publique ou signée).
+     * @returns L’URL avec un paramètre `v` horodaté pour “cache busting”.
+     */
+    private addCacheBust(url: string): string {
+        try { const u = new URL(url); u.searchParams.set('v', Date.now().toString()); return u.toString(); }
+        catch { return url + (url.includes('?') ? '&' : '?') + 'v=' + Date.now(); }
+    }
+
+    /**
+     * Récupère l’URL signée courante de l’avatar puis émet sa version “cache-bustée”
+     * afin que l’UI (ex. sidebar) se mette à jour automatiquement.
+     *
+     * @returns Promise<void>
+     */
+    async refreshAvatarUrl(): Promise<void> {
+        const url = await this.getSignedAvatarUrl();       // ta méthode actuelle
+        this.avatarUrlSubject.next(url ? this.addCacheBust(url) : undefined);
+    }
+
 	/**
 	 * Indique si un utilisateur est connecté
 	 */
@@ -384,6 +415,13 @@ export class AuthService implements OnDestroy {
 		return this.userSubject.value;
 	}
 
+    /**
+     * Traduit une erreur d’authentification Supabase en **message lisible** pour l’utilisateur.
+     * 
+     * @param err - Erreur brute renvoyée par supabase-js (souvent `AuthApiError`, parfois autre).
+     * @param ctx - Contexte d’utilisation : `'signin'` ou `'signup'`.
+     * @returns Message utilisateur (fr) adapté à l’erreur et au contexte.
+     */
     private mapAuthError(err: any, ctx: 'signin' | 'signup'): string {
         const status = err?.status ?? err?.code ?? null;
         const msg = (err?.message || '').toLowerCase();
@@ -431,5 +469,4 @@ export class AuthService implements OnDestroy {
         // Fallback
         return ctx === 'signin' ? 'Échec de connexion' : "Échec de l'inscription";
     }
-
 }
