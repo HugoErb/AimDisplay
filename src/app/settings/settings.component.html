@@ -28,9 +28,8 @@
 								(mouseenter)="hovering = true"
 								(mouseleave)="hovering = false"
 							>
-								<!-- <ng-container *ngIf="authService.getUserAvatar() as avatar; else fallbackAvatar"> -->
-								<ng-container *ngIf="false as avatar; else fallbackAvatar">
-									<img [src]="avatar" alt="Avatar du club" class="h-full w-full object-cover" />
+								<ng-container *ngIf="avatarUrl; else fallbackAvatar">
+									<img [src]="avatarUrl" alt="Avatar du club" class="h-full w-full object-cover" />
 								</ng-container>
 								<ng-template #fallbackAvatar>
 									<img src="../../assets/img/logo.png" alt="Logo Aim Display" class="h-full w-full object-cover" />
@@ -47,8 +46,7 @@
 										[ngClass]="{ 'opacity-100': hovering, 'opacity-0': !hovering }"
 									></iconify-icon>
 								</div>
-
-								<input #fileInput type="file" accept="image/*" class="hidden" (change)="onAvatarFileSelected($event)" />
+								<input #fileInput type="file" accept="image/png,image/jpeg,image/webp" class="hidden" (change)="onAvatarFileSelected($event)" />
 							</div>
 
 							<div class="flex-1">

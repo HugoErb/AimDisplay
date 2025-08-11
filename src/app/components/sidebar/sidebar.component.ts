@@ -15,4 +15,10 @@ export class SidebarComponent {
 	constructor(
 		protected commonService: CommonService, protected authService: AuthService
 	) {}
+    
+    avatarUrl: string | undefined = ';'
+
+    async ngOnInit() {
+            this.avatarUrl = await this.authService.getSignedAvatarUrl();
+        }
 }

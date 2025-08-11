@@ -142,15 +142,12 @@
 	<!-- Footer -->
 	<div class="border-t border-gray-200 dark:border-gray-700 transition-all duration-500 p-4">
 		<div class="flex items-center space-x-3">
-			<!-- @if (authService.getUserAvatar()) {
-                    <img [src]="authService.getUserAvatar()" class="h-10 w-10 rounded-full bg-gray-200 object-cover" alt="Photo de profil"/>
-                } @else { -->
-			<img
-				src="https://imgs.search.brave.com/6Abd5TBbHIoBHK1py-tGSUv7eRH_hf3KVb5Px1DBNMs/rs:fit:860:0:0/g:ce/aHR0cHM6Ly90NC5m/dGNkbi5uZXQvanBn/LzA4LzIzLzkxLzU1/LzM2MF9GXzgyMzkx/NTUzM19PalFLUGtD/TTNzaGRxRmdwWjVz/d01LV3U1cHhnMzls/VS5qcGc"
-				alt="Photo de profil"
-				class="h-10 w-10 rounded-full bg-gray-200 object-cover"
-			/>
-			<!-- } -->
+			<ng-container *ngIf="avatarUrl; else fallbackAvatar">
+                <img [src]="avatarUrl" alt="Avatar du club" class="h-10 w-10 rounded-full bg-gray-200 object-cover" alt="Photo du club" />
+            </ng-container>
+            <ng-template #fallbackAvatar>
+                <img src="../../assets/img/logo.png" alt="Logo Aim Display" class="h-10 w-10 rounded-full bg-gray-200 object-cover" alt="Photo du club" />
+            </ng-template>
 			<div class="flex-1 min-w-0">
 				<p class="text-sm font-medium text-gray-700 dark:text-gray-300 transition-all duration-500 truncate">
 					{{ authService.getUserDisplayName() || "Nom du club" }}

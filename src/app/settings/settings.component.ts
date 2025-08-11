@@ -49,6 +49,7 @@ export class SettingsComponent {
 	messageMail: string = '';
 	hovering: boolean = false;
     isLoading: boolean = false;
+    avatarUrl: string | undefined = ';'
 
 	// subscriptionPlans = [
 	// 	{
@@ -124,23 +125,27 @@ export class SettingsComponent {
 	// 	},
 	// ];
 
-	ngOnInit() {
+	async ngOnInit() {
+        this.avatarUrl = await this.authService.getSignedAvatarUrl();
 		const userParams: UserParams = JSON.parse(localStorage.getItem(this.userParamsName)!);
 		this.darkMode = this.themeService.getTheme() === 'dark';
 	}
 
 	async onAvatarFileSelected(event: Event): Promise<void> {
-		const input = event.target as HTMLInputElement;
-		if (!input.files || input.files.length === 0) return;
-		const file = input.files[0];
-		try {
-			// await this.authService.uploadAvatar(file);
-		} catch (e) {
-			console.error('Erreur upload avatar', e);
-		} finally {
-			input.value = ''; // permettre re-sélection du même fichier
-		}
-	}
+        this.isLoading = true;
+        const input = event.target as HTMLInputElement;
+        const file = input.files?.[0];
+        if (!file) return;
+        try {
+            const url = await this.authService.uploadAvatar(file);
+            this.avatarUrl = url;
+        } catch (e) {
+            console.error('Erreur upload avatar', e);
+        } finally {
+            this.isLoading = false;
+            input.value = '';
+        }
+    }
 
 	/**
 	 * Ouvre le modal identifié par sa clé.
