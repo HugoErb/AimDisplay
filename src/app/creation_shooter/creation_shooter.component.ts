@@ -114,9 +114,19 @@ export class CreationShooterComponent {
 	 * @param group - Le groupe de saisie auquel appartient la catégorie sélectionnée
 	 */
 	onCategorySelected(selectedShooterCategory: any, group: CategoryGroup): void {
-		const pattern = /\b(Dame|Sénior)\b/i;
-		group.isSeniorOrDame = pattern.test(selectedShooterCategory.value.name || '');
-	}
+        const rawName = selectedShooterCategory?.value?.name || '';
+
+        // On normalise : minuscules, accents retirés
+        const normalizedName = rawName
+            .trim()
+            .toLowerCase()
+            .normalize('NFD')
+            .replace(/[\u0300-\u036f]/g, '');
+
+        const pattern = /\b(dame|senior)\b/;
+        group.isSeniorOrDame = pattern.test(normalizedName);
+    }
+
 
 	/**
 	 * Permet de créer un tireur à partir des données récoltées dans les champs du formulaire.
