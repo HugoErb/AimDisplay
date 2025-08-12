@@ -173,13 +173,13 @@ export class CreationShooterComponent {
             if (!distanceId || !weaponId || !categoryId) continue;
 
             // Séries
-            const seriesScores: number[] = [
+            const seriesScores: (number | null)[] = [
                 categoryGroup.scoreSerie1 ?? 0,
                 categoryGroup.scoreSerie2 ?? 0,
                 categoryGroup.scoreSerie3 ?? 0,
                 categoryGroup.scoreSerie4 ?? 0,
-                (categoryGroup.isSeniorOrDame || categoryGroup.scoreSerie5 != null) ? (categoryGroup.scoreSerie5 ?? 0) : 0,
-                (categoryGroup.isSeniorOrDame || categoryGroup.scoreSerie6 != null) ? (categoryGroup.scoreSerie6 ?? 0) : 0,
+                categoryGroup.isSeniorOrDame ? (categoryGroup.scoreSerie5 != null ? categoryGroup.scoreSerie5 : null) : null,
+                categoryGroup.isSeniorOrDame ? (categoryGroup.scoreSerie6 != null ? categoryGroup.scoreSerie6 : null) : null,
             ];
 
             await this.supabase.createShooter({
