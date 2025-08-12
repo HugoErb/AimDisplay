@@ -52,7 +52,7 @@
 							<div class="flex items-center">
 								<span class="text-prime-blue dark:text-gray-300 mr-2 whitespace-nowrap">Arme</span>
 								<p-sortIcon field="weapon" class="ml-1 mt-[6px] text-gray-500 dark:text-gray-400" />
-								<p-columnFilter type="text" field="arme" display="menu" class="ml-1" class="ml-1"></p-columnFilter>
+								<p-columnFilter type="text" field="weapon" display="menu" class="ml-1" class="ml-1"></p-columnFilter>
 							</div>
 						</th>
 						<th pSortableColumn="categoryName" class="!bg-gray-100 hover:dark:!bg-gray-700 hover:!bg-gray-200">
@@ -66,7 +66,7 @@
 							<div class="flex items-center">
 								<span class="text-prime-blue dark:text-gray-300 mr-2 whitespace-nowrap">Score total</span>
 								<p-sortIcon field="totalScore" class="ml-1 mt-[6px] text-gray-500 dark:text-gray-400" />
-								<p-columnFilter type="numeric" field="categoryName" display="menu" class="ml-1"></p-columnFilter>
+								<p-columnFilter type="numeric" field="totalScore" display="menu" class="ml-1"></p-columnFilter>
 							</div>
 						</th>
 						<th class="!bg-gray-100"></th>
@@ -83,7 +83,7 @@
 						<td class="!py-4 whitespace-nowrap">{{ shooter.distance }}</td>
 						<td class="!py-4 whitespace-nowrap">{{ shooter.weapon }}</td>
 						<td class="!py-4 whitespace-nowrap">{{ shooter.categoryName }}</td>
-						<td class="!py-4 whitespace-nowrap">{{ shooter.totalScore }}</td>
+						<td class="!py-4 whitespace-nowrap">{{ shooter.totalScore | number:'1.2-2' }}</td>
 						<td class="relative !py-4">
 							<div
 								class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 p-1.5 pb-0 rounded-md hover:bg-gray-200 dark:hover:bg-gray-600 cursor-pointer"

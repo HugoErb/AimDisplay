@@ -220,14 +220,92 @@ export class SupabaseService {
     // GET FUNCTIONS /////////////////////////////////////////////////////////////////////
 
     /**
+     * Récupère la liste des tireurs de l’utilisateur courant.
+     * 
+     * @return La liste des tireurs appartenant à l’utilisateur connecté.
+     */
+    async getShooters(): Promise<Shooter[]> {
+        // Récupération de l'utilisateur courant
+        const { data: userData, error: userError } = await this.supabase.auth.getUser();
+        if (userError) throw new Error(`Impossible de récupérer l'utilisateur: ${userError.message}`);
+        const currentUser = userData?.user;
+        if (!currentUser) throw new Error('Aucun utilisateur connecté.');
+
+        // Lecture brute des tireurs
+        const { data: shooterRows, error: shootersError } = await this.supabase
+            .from('shooters')
+            .select(`
+            id, last_name, first_name, user_id,
+            competition_id, club_id, distance_id, weapon_id, category_id,
+            serie1_score, serie2_score, serie3_score, serie4_score, serie5_score, serie6_score
+            `)
+            .eq('user_id', currentUser.id)
+            .order('id', { ascending: true });
+
+        if (shootersError) throw new Error(`Erreur lors de la récupération des tireurs: ${shootersError.message}`);
+        const rows = shooterRows ?? [];
+        if (!rows.length) return [];
+
+        // Récupération des libellés (label pour distances/weapons/categories)
+        const [
+            { data: competitions }, { data: clubs },
+            { data: distances }, { data: weapons },
+            { data: categories }
+        ] = await Promise.all([
+            this.supabase.from('competitions').select('id, name'),
+            this.supabase.from('clubs').select('id, name'),
+            this.supabase.from('distances').select('id, label'),
+            this.supabase.from('weapons').select('id, label'),
+            this.supabase.from('categories').select('id, label'),
+        ]);
+
+        // Création des maps id -> nom/label
+        const mapName = <T extends { id: number; name?: string; label?: string }>(arr?: T[] | null) =>
+            new Map((arr ?? []).map(x => [x.id, (x as any).name ?? (x as any).label ?? '']));
+
+        const competitionById = mapName(competitions as any[]);
+        const clubById        = mapName(clubs as any[]);
+        const distanceById    = mapName(distances as any[]);
+        const weaponById      = mapName(weapons as any[]);
+        const categoryById    = mapName(categories as any[]);
+
+        // Helper pour convertir les valeurs numériques et gérer les nulls
+        const toNum = (v: any) => (v == null ? 0 : Number(v));
+
+        // Mapping final vers l'interface Shooter
+        return rows.map((row: any): Shooter => {
+            const total =
+            toNum(row.serie1_score) +
+            toNum(row.serie2_score) +
+            toNum(row.serie3_score) +
+            toNum(row.serie4_score) +
+            toNum(row.serie5_score) +
+            toNum(row.serie6_score);
+
+            return {
+                id: row.id,
+                lastName: row.last_name,
+                firstName: row.first_name,
+                competitionName: competitionById.get(row.competition_id) ?? '',
+                clubName:        clubById.get(row.club_id) ?? '',
+                distance:        distanceById.get(row.distance_id) ?? '',
+                weapon:          weaponById.get(row.weapon_id) ?? '',
+                categoryName:    categoryById.get(row.category_id) ?? '',
+                totalScore: Number(total.toFixed(2)), // Arrondi à 2 décimales
+                userId: row.user_id,
+            };
+        });
+    }
+
+    /**
      * Récupère les compétitions de l’utilisateur courant (mappées en camelCase avec dates en Date).
      * @param none
      * @return La liste des compétitions appartenant à l’utilisateur connecté.
      */
     async getCompetitions(): Promise<Competition[]> {
+        // Récupération de l'utilisateur courant
         const { data: authData, error: authError } = await this.supabase.auth.getUser();
         if (authError) throw new Error(`Impossible de récupérer l'utilisateur: ${authError.message}`);
-
         const currentUser = authData?.user;
         if (!currentUser) throw new Error('Aucun utilisateur connecté.');
 
@@ -257,14 +335,13 @@ export class SupabaseService {
         })) as Competition[];
     }
 
-
-
     /**
      * Récupère la liste des clubs de l’utilisateur courant.
      * 
      * @return La liste des clubs appartenant à l’utilisateur connecté.
      */
     async getClubs(): Promise<Club[]> {
+        // Récupération de l'utilisateur courant
         const { data: userData, error: userError } = await this.supabase.auth.getUser();
         if (userError) throw new Error(`Impossible de récupérer l'utilisateur: ${userError.message}`);
         const user = userData?.user;
