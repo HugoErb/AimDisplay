@@ -55,7 +55,7 @@ export class SupabaseService {
         const trimmedLastName = payload.shooterLastName?.trim();
         const trimmedFirstName = payload.shooterFirstName?.trim();
         if (!trimmedLastName || !trimmedFirstName) {
-        throw new Error('Nom et prénom obligatoires.');
+            throw new Error('Nom et prénom obligatoires.');
         }
 
         const {
