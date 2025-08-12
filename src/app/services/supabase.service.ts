@@ -7,6 +7,7 @@ import { Weapon } from '../interfaces/weapon';
 import { Distance } from '../interfaces/distance';
 import { CommonService } from '../services/common.service';
 import { Competition } from '../interfaces/competition';
+import { Shooter } from '../interfaces/shooter';
 
 @Injectable({ providedIn: 'root' })
 export class SupabaseService {
@@ -25,6 +26,95 @@ export class SupabaseService {
     }
 
     // CREATE FUNCTIONS /////////////////////////////////////////////////////////////////////
+
+    /**
+   * Crée un tireur (une ligne par combinaison distance/arme/catégorie).
+   *
+   * @param payload Données de base + catégories/séries pour UNE combinaison.
+   * Les scores non renseignés sont traités comme 0.
+   * @return Le tireur créé tel qu’enregistré en base.
+   */
+    async createShooter(payload: {
+    shooterLastName: string;
+    shooterFirstName: string;
+    shooterEmail?: string | null;
+    competitionId: number;
+    clubId: number;
+    distanceId: number;
+    weaponId: number;
+    categoryId: number;
+    seriesScores?: Array<number | null>; // Scores de la série [1..6]
+    }) {
+    try {
+        const { data: authUserData, error: authUserError } = await this.supabase.auth.getUser();
+        if (authUserError) throw new Error(authUserError.message);
+
+        const currentUser = authUserData?.user;
+        if (!currentUser) throw new Error('Aucun utilisateur connecté.');
+
+        const trimmedLastName = payload.shooterLastName?.trim();
+        const trimmedFirstName = payload.shooterFirstName?.trim();
+        if (!trimmedLastName || !trimmedFirstName) {
+        throw new Error('Nom et prénom obligatoires.');
+        }
+
+        const {
+        competitionId,
+        clubId,
+        distanceId,
+        weaponId,
+        categoryId
+        } = payload;
+
+        if (!competitionId) throw new Error('competition_id manquant.');
+        if (!clubId) throw new Error('club_id manquant.');
+        if (!distanceId) throw new Error('distance_id manquant.');
+        if (!weaponId) throw new Error('weapon_id manquant.');
+        if (!categoryId) throw new Error('category_id manquant.');
+
+        const safeSeriesScores = (payload.seriesScores ?? []).map(score =>
+        (typeof score === 'number' && isFinite(score)) ? score : 0
+        );
+
+        const [score1, score2, score3, score4, score5, score6] = [
+        safeSeriesScores[0] ?? 0,
+        safeSeriesScores[1] ?? 0,
+        safeSeriesScores[2] ?? 0,
+        safeSeriesScores[3] ?? 0,
+        safeSeriesScores[4] ?? 0,
+        safeSeriesScores[5] ?? 0
+        ];
+
+        const { data: insertedShooter, error: insertError } = await this.supabase
+        .from('shooters')
+        .insert({
+            last_name: trimmedLastName,
+            first_name: trimmedFirstName,
+            email: payload.shooterEmail ?? null,
+            club_id: clubId,
+            competition_id: competitionId,
+            distance_id: distanceId,
+            weapon_id: weaponId,
+            category_id: categoryId,
+            score1,
+            score2,
+            score3,
+            score4,
+            score5,
+            score6,
+            user_id: currentUser.id
+        })
+        .select('*')
+        .single();
+
+        if (insertError) throw new Error(insertError.message);
+        return insertedShooter;
+    } catch (error: any) {
+        this.zone.run(() => this.commonService.showSwalToast(error?.message ?? 'Erreur lors de la création du tireur', 'error'));
+        throw error;
+    }
+    }
+
 
     /**
      * Crée une compétition et l’associe à l’utilisateur courant via son UUID.
