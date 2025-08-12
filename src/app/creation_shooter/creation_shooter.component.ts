@@ -199,18 +199,20 @@ export class CreationShooterComponent {
             this.commonService.resetInputFields(this.inputFields);
             this.shooterCompetitionName = ''
             this.shooterClubName = ''
-            this.categoryGroups.forEach(group => {
-                group.shooterDistance = '';
-                group.shooterWeapon = '';
-                group.shooterCategory = '';
-                group.scoreSerie1 = null;
-                group.scoreSerie2 = null;
-                group.scoreSerie3 = null;
-                group.scoreSerie4 = null;
-                group.scoreSerie5 = null;
-                group.scoreSerie6 = null;
-                group.isSeniorOrDame = false;
-            });
+            this.categoryGroups = [
+                {
+                    shooterDistance: '',
+                    shooterWeapon: '',
+                    shooterCategory: '',
+                    scoreSerie1: null,
+                    scoreSerie2: null,
+                    scoreSerie3: null,
+                    scoreSerie4: null,
+                    scoreSerie5: null,
+                    scoreSerie6: null,
+                    isSeniorOrDame: false
+                }
+            ];
 
             this.commonService.showSwalToast('Tireur créé avec succès.');
         } finally {
