@@ -26,8 +26,6 @@ export class ModificationCompetitionComponent {
     async ngOnInit(): Promise<void> {
 		try {
 			this.competitions = await this.supabase.getCompetitions();
-            console.log(this.competitions);
-            
 		} catch (err) {
 			console.error('Erreur lors du chargement des données :', err);
 		}
