@@ -13,39 +13,39 @@
 			<p-table [value]="competitions" dataKey="id" [paginator]="true" [rows]="nbRowsPerPage">
 				<ng-template pTemplate="header">
 					<tr>
-						<th pSortableColumn="competitionName" class="!bg-gray-100 hover:dark:!bg-gray-700 hover:!bg-gray-200">
+						<th pSortableColumn="name" class="!bg-gray-100 hover:dark:!bg-gray-700 hover:!bg-gray-200">
 							<div class="flex items-center">
 								<span class="text-prime-blue dark:text-gray-300 mr-2 whitespace-nowrap">Nom</span>
-								<p-sortIcon field="competitionName" class="ml-1 mt-[6px] text-gray-500 dark:text-gray-400" />
-								<p-columnFilter type="text" field="competitionName" display="menu" class="ml-1"></p-columnFilter>
+								<p-sortIcon field="name" class="ml-1 mt-[6px] text-gray-500 dark:text-gray-400" />
+								<p-columnFilter type="text" field="name" display="menu" class="ml-1"></p-columnFilter>
 							</div>
 						</th>
 						<th pSortableColumn="startDate" class="!bg-gray-100 hover:dark:!bg-gray-700 hover:!bg-gray-200">
 							<div class="flex items-center">
-								<span class="text-prime-blue dark:text-gray-300 mr-2 whitespace-nowrap">Date(s)</span>
+								<span class="text-prime-blue dark:text-gray-300 mr-2 whitespace-nowrap">Date de début</span>
 								<p-sortIcon field="startDate" class="ml-1 mt-[6px] text-gray-500 dark:text-gray-400" />
 								<p-columnFilter type="date" field="startDate" display="menu" class="ml-1"></p-columnFilter>
 							</div>
 						</th>
                         <th pSortableColumn="endDate" class="!bg-gray-100 hover:dark:!bg-gray-700 hover:!bg-gray-200">
 							<div class="flex items-center">
-								<span class="text-prime-blue dark:text-gray-300 mr-2 whitespace-nowrap">Date(s)</span>
+								<span class="text-prime-blue dark:text-gray-300 mr-2 whitespace-nowrap">Date de fin</span>
 								<p-sortIcon field="endDate" class="ml-1 mt-[6px] text-gray-500 dark:text-gray-400" />
 								<p-columnFilter type="date" field="endDate" display="menu" class="ml-1"></p-columnFilter>
 							</div>
 						</th>
-						<th pSortableColumn="competitionPrice" class="!bg-gray-100 hover:dark:!bg-gray-700 hover:!bg-gray-200">
+						<th pSortableColumn="price" class="!bg-gray-100 hover:dark:!bg-gray-700 hover:!bg-gray-200">
 							<div class="flex items-center">
 								<span class="text-prime-blue dark:text-gray-300 mr-2 whitespace-nowrap">Prix (€)</span>
-								<p-sortIcon field="competitionPrice" class="ml-1 mt-[6px] text-gray-500 dark:text-gray-400" />
-								<p-columnFilter type="numeric" field="competitionPrice" display="menu" class="ml-1"></p-columnFilter>
+								<p-sortIcon field="price" class="ml-1 mt-[6px] text-gray-500 dark:text-gray-400" />
+								<p-columnFilter type="numeric" field="price" display="menu" class="ml-1"></p-columnFilter>
 							</div>
 						</th>
-						<th pSortableColumn="competitionSupCategoryPrice" class="!bg-gray-100 hover:dark:!bg-gray-700 hover:!bg-gray-200">
+						<th pSortableColumn="supCategoryPrice" class="!bg-gray-100 hover:dark:!bg-gray-700 hover:!bg-gray-200">
 							<div class="flex items-center">
 								<span class="text-prime-blue dark:text-gray-300 mr-2 whitespace-nowrap">Prix catégorie sup. (€)</span>
-								<p-sortIcon field="competitionSupCategoryPrice" class="ml-1 mt-[6px] text-gray-500 dark:text-gray-400" />
-								<p-columnFilter type="numeric" field="competitionSupCategoryPrice" display="menu" class="ml-1"></p-columnFilter>
+								<p-sortIcon field="supCategoryPrice" class="ml-1 mt-[6px] text-gray-500 dark:text-gray-400" />
+								<p-columnFilter type="numeric" field="supCategoryPrice" display="menu" class="ml-1"></p-columnFilter>
 							</div>
 						</th>
 						<th class="!bg-gray-100"></th>
@@ -58,8 +58,8 @@
 						<td class="!py-4 whitespace-nowrap">{{ competition.name }}</td>
 						<td class="!py-4 whitespace-nowrap">{{ competition.startDate | date:'dd/MM/yyyy' }}</td>
 						<td class="!py-4 whitespace-nowrap">{{ competition.endDate | date:'dd/MM/yyyy' }}</td>
-						<td class="!py-4 whitespace-nowrap">{{ competition.price }} €</td>
-						<td class="!py-4 whitespace-nowrap">{{ competition.supCategoryPrice }} €</td>
+						<td class="!py-4 whitespace-nowrap">{{ competition.price | currency:'EUR':'symbol':'1.0-0':'fr-FR'}}</td>
+						<td class="!py-4 whitespace-nowrap">{{ competition.supCategoryPrice | currency:'EUR':'symbol':'1.0-0':'fr-FR'}}</td>
 						<td class="relative !py-4">
 							<div
 								class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 p-1.5 pb-0 rounded-md hover:bg-gray-200 dark:hover:bg-gray-600 cursor-pointer"

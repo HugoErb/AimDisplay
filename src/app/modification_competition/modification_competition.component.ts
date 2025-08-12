@@ -4,12 +4,16 @@ import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { CommonService } from '../services/common.service';
 import { Competition } from '../interfaces/competition';
 import { SupabaseService } from '../services/supabase.service';
-import { CommonModule } from '@angular/common';
+import { CommonModule, CurrencyPipe } from '@angular/common';
+import { registerLocaleData } from '@angular/common';
+import localeFr from '@angular/common/locales/fr';
+
+registerLocaleData(localeFr, 'fr-FR');
 
 @Component({
 	selector: 'app-modification-competition',
 	standalone: true,
-	imports: [TableModule, CommonModule],
+	imports: [TableModule, CommonModule, CurrencyPipe],
 	templateUrl: './modification_competition.component.html',
 	schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
