@@ -3,19 +3,30 @@ import { TableModule } from 'primeng/table';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { CommonService } from '../services/common.service';
 import { Shooter } from '../interfaces/shooter';
+import { SupabaseService } from '../services/supabase.service';
+import { CommonModule } from '@angular/common';
+
 
 @Component({
 	selector: 'app-modification-shooter',
 	standalone: true,
-	imports: [TableModule],
+	imports: [TableModule, CommonModule],
 	templateUrl: './modification_shooter.component.html',
 	schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class ModificationShooterComponent {
-	constructor(protected commonService: CommonService) {}
+	constructor(protected commonService: CommonService, private supabase: SupabaseService) {}
 
 	shooters: Shooter[] = [];
 	nbRowsPerPage: number = 1;
+
+    async ngOnInit(): Promise<void> {
+		try {
+			this.shooters = await this.supabase.getShooters();
+		} catch (err) {
+			console.error('Erreur lors du chargement des données :', err);
+		}
+	}
 
 	async ngAfterViewInit() {
 		this.nbRowsPerPage = await this.commonService.getNbRowsPerPage();
