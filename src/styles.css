@@ -178,7 +178,8 @@
 
 	/* Gestion de la taille du calendrier */
 	.p-datepicker-panel {
-		min-width: 60% !important;
+        min-width: 400px !important;
+        max-width: 400px !important;
 	}
 
 	/* Harmonisation des styles des boutons des inputs PrimeNG */
