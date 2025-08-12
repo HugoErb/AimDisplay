@@ -28,6 +28,7 @@ export class CreationShooterComponent {
 	// Variables de récupération des champs du formulaire
 	@ViewChildren('inputField', { read: ElementRef }) inputFields!: QueryList<ElementRef>;
 	public inputLabelMap = new Map<string, string>();
+    isSaving: boolean = false;
 
 	// Variables de création d'un tireur
 	shooterLastName: string = '';
@@ -125,11 +126,86 @@ export class CreationShooterComponent {
 	 * @returns {Promise<void>} Une promesse qui se résout une fois que la création est effectuée et que les
 	 * champs de saisie ont été réinitialisés en cas de succès.
 	 */
-	async createShooter(): Promise<void> {
-		this.inputLabelMap = this.commonService.getInputLabelMap(this.inputFields);
+    async createShooter(): Promise<void> {
+        this.isSaving = true;
+        try {
+            this.inputLabelMap = this.commonService.getInputLabelMap(this.inputFields);
+            const areInputsValid = await this.commonService.validateInputs(this.inputLabelMap, false);
+            if (!areInputsValid) return;
 
-		if (await this.commonService.createData(this.inputLabelMap)) {
-			this.commonService.resetInputFields(this.inputFields);
-		}
-	}
+            // Retourne l'id des champs select
+            const getIdFromSelection = <T extends { id: number; name: string }>(selection: any, list: T[]): number | undefined => {
+            if (!selection) return undefined;
+            if (typeof selection === 'object' && 'id' in selection) return selection.id as number;
+            if (typeof selection === 'string') return list.find(item => item.name === selection)?.id;
+            return undefined;
+            };
+
+            // Données communes (en-tête du formulaire)
+            const shooterLastName = this.shooterLastName?.trim();
+            const shooterFirstName = this.shooterFirstName?.trim();
+            const shooterEmail = (this.shooterEmail ?? '').trim() || null;
+            const competitionId = getIdFromSelection(this.shooterCompetitionName, this.competitions);
+            const clubId = getIdFromSelection(this.shooterClubName, this.clubs);
+
+            if (!competitionId || !clubId) {
+                this.commonService.showSwalToast('Veuillez sélectionner un club et une compétition valides.', 'error');
+                return;
+            }
+
+            // Pour chaque catégorie remplie => une création en BDD
+            for (const categoryGroup of this.categoryGroups) {
+            const distanceId = getIdFromSelection(categoryGroup.shooterDistance, this.distances);
+            const weaponId   = getIdFromSelection(categoryGroup.shooterWeapon, this.weapons);
+            const categoryId = getIdFromSelection(categoryGroup.shooterCategory, this.shooterCategories);
+
+            // Sauter les groupes incomplets (évite une erreur côté service)
+            if (!distanceId || !weaponId || !categoryId) continue;
+
+            // Séries
+            const seriesScores: number[] = [
+                categoryGroup.scoreSerie1 ?? 0,
+                categoryGroup.scoreSerie2 ?? 0,
+                categoryGroup.scoreSerie3 ?? 0,
+                categoryGroup.scoreSerie4 ?? 0,
+                (categoryGroup.isSeniorOrDame || categoryGroup.scoreSerie5 != null) ? (categoryGroup.scoreSerie5 ?? 0) : 0,
+                (categoryGroup.isSeniorOrDame || categoryGroup.scoreSerie6 != null) ? (categoryGroup.scoreSerie6 ?? 0) : 0,
+            ];
+
+            await this.supabase.createShooter({
+                shooterLastName,
+                shooterFirstName,
+                shooterEmail,
+                competitionId,
+                clubId,
+                distanceId,
+                weaponId,
+                categoryId,
+                seriesScores
+                });
+            }
+
+            // Reset de tous les champs
+            this.commonService.resetInputFields(this.inputFields);
+            this.shooterCompetitionName = ''
+            this.shooterClubName = ''
+            this.categoryGroups.forEach(group => {
+                group.shooterDistance = '';
+                group.shooterWeapon = '';
+                group.shooterCategory = '';
+                group.scoreSerie1 = null;
+                group.scoreSerie2 = null;
+                group.scoreSerie3 = null;
+                group.scoreSerie4 = null;
+                group.scoreSerie5 = null;
+                group.scoreSerie6 = null;
+                group.isSeniorOrDame = false;
+            });
+
+            this.commonService.showSwalToast('Tireur créé avec succès.');
+        } finally {
+            this.isSaving = false;
+        }
+    }
+
 }
