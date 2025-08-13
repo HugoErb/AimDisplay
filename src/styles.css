@@ -289,16 +289,23 @@
 		color: #d1d5db; /* gray-300 */
 		transition: all;
 	}
+
+    /* Style de la barre de défilement horizontale des tableaux */
+    .p-datatable-table-container {
+        scrollbar-width: thin;
+        scrollbar-color: #9ca3af transparent; /* gris + fond transparent */
+    }
+
+    /* Couleur du bouton de confirmation des sweet alert */
+    .custom-prime-button {
+        background-color: var(--color-prime-blue) !important;
+        color: white !important;
+        border: none !important;
+    }
+
+    html{
+        scrollbar-width: thin;
+    }
 }
 
-/* Couleur du bouton de confirmation des sweet alert */
-.custom-prime-button {
-	background-color: var(--color-prime-blue) !important;
-	color: white !important;
-	border: none !important;
-}
 
-/* Empêche que la scrollbar aparaisse lors de l'ouverture d'un modal dui */
-html {
-	scrollbar-gutter: auto !important;
-}
