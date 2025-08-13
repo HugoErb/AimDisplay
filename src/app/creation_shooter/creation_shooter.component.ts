@@ -172,14 +172,18 @@ export class CreationShooterComponent {
             // Sauter les groupes incomplets (évite une erreur côté service)
             if (!distanceId || !weaponId || !categoryId) continue;
 
-            // Séries
+            // Scores des séries
             const seriesScores: (number | null)[] = [
-                categoryGroup.scoreSerie1 ?? 0,
-                categoryGroup.scoreSerie2 ?? 0,
-                categoryGroup.scoreSerie3 ?? 0,
-                categoryGroup.scoreSerie4 ?? 0,
-                categoryGroup.isSeniorOrDame ? (categoryGroup.scoreSerie5 != null ? categoryGroup.scoreSerie5 : null) : null,
-                categoryGroup.isSeniorOrDame ? (categoryGroup.scoreSerie6 != null ? categoryGroup.scoreSerie6 : null) : null,
+            categoryGroup.scoreSerie1 != null ? categoryGroup.scoreSerie1 : null,
+            categoryGroup.scoreSerie2 != null ? categoryGroup.scoreSerie2 : null,
+            categoryGroup.scoreSerie3 != null ? categoryGroup.scoreSerie3 : null,
+            categoryGroup.scoreSerie4 != null ? categoryGroup.scoreSerie4 : null,
+            categoryGroup.isSeniorOrDame
+                ? (categoryGroup.scoreSerie5 != null ? categoryGroup.scoreSerie5 : null)
+                : null,
+            categoryGroup.isSeniorOrDame
+                ? (categoryGroup.scoreSerie6 != null ? categoryGroup.scoreSerie6 : null)
+                : null,
             ];
 
             await this.supabase.createShooter({
