@@ -72,26 +72,17 @@ export class SupabaseService {
             if (!weaponId) throw new Error('weapon_id manquant.');
             if (!categoryId) throw new Error('category_id manquant.');
 
-            // On récupère les valeurs  des séries envoyées par le composant
             const allSeriesScores = payload.seriesScores ?? [];
 
-            // Fonction utilitaire : renvoie un nombre ou 0 si invalide
-            const getNumericOrZero = (value: any): number =>
-            (typeof value === 'number' && isFinite(value)) ? value : 0;
-
-            // Fonction utilitaire : renvoie un nombre ou null si invalide
             const getNumericOrNull = (value: any): number | null =>
             (typeof value === 'number' && isFinite(value)) ? value : null;
 
-            // Séries 1 à 4 → nombre obligatoire (0 par défaut)
-            const serie1Score = getNumericOrZero(allSeriesScores[0]);
-            const serie2Score = getNumericOrZero(allSeriesScores[1]);
-            const serie3Score = getNumericOrZero(allSeriesScores[2]);
-            const serie4Score = getNumericOrZero(allSeriesScores[3]);
-
-            // Séries 5 et 6 → null si non renseignées
-            const serie5Score = getNumericOrNull(allSeriesScores[4]);
-            const serie6Score = getNumericOrNull(allSeriesScores[5]);
+            const serie1ScoreValue = getNumericOrNull(allSeriesScores[0]);
+            const serie2ScoreValue = getNumericOrNull(allSeriesScores[1]);
+            const serie3ScoreValue = getNumericOrNull(allSeriesScores[2]);
+            const serie4ScoreValue = getNumericOrNull(allSeriesScores[3]);
+            const serie5ScoreValue = getNumericOrNull(allSeriesScores[4]);
+            const serie6ScoreValue = getNumericOrNull(allSeriesScores[5]);
 
             const { data: insertedShooter, error: insertError } = await this.supabase
             .from('shooters')
@@ -104,17 +95,16 @@ export class SupabaseService {
                 distance_id: distanceId,
                 weapon_id: weaponId,
                 category_id: categoryId,
-                serie1_score: serie1Score ?? 0,
-                serie2_score: serie2Score ?? 0,
-                serie3_score: serie3Score ?? 0,
-                serie4_score: serie4Score ?? 0,
-                serie5_score: serie5Score != null ? serie5Score : null,
-                serie6_score: serie6Score != null ? serie6Score : null,
+                serie1_score: serie1ScoreValue,
+                serie2_score: serie2ScoreValue,
+                serie3_score: serie3ScoreValue,
+                serie4_score: serie4ScoreValue,
+                serie5_score: serie5ScoreValue,
+                serie6_score: serie6ScoreValue,
                 user_id: currentUser.id
             })
             .select('*')
             .single();
-
 
             if (insertError) throw new Error(insertError.message);
             return insertedShooter;
