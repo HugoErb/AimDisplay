@@ -10,7 +10,7 @@
 			</div>
 		</div>
 
-		<div class="p-8 space-y-10">
+		<form (ngSubmit)="createClub()" class="p-8 space-y-10">
 			<div class="space-y-4">
 				<h2 class="text-lg font-semibold text-gray-900 pb-2 border-b border-gray-200 dark:border-gray-700 dark:text-gray-300">
 					Informations du club
@@ -18,11 +18,11 @@
 				<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
 					<div class="flex flex-col space-y-1">
 						<label class="text-sm font-medium text-gray-700 dark:text-gray-300 ml-1">Nom du club *</label>
-						<input type="text" #inputField pInputText [(ngModel)]="clubName" placeholder="Nom du club" />
+						<input type="text" #inputField pInputText [(ngModel)]="clubName" placeholder="Nom du club" name="clubName" />
 					</div>
 					<div class="flex flex-col space-y-1">
 						<label class="text-sm font-medium text-gray-700 dark:text-gray-300 ml-1">Ville du club *</label>
-						<input type="text" #inputField pInputText [(ngModel)]="clubCity" placeholder="Ville du club" />
+						<input type="text" #inputField pInputText [(ngModel)]="clubCity" placeholder="Ville du club" name="clubCity" />
 					</div>
 				</div>
 			</div>
@@ -34,14 +34,14 @@
 					<p>Les champs marqués d'un astérisque (*) sont obligatoires.</p>
 				</div>
 				<div class="flex justify-end">
-					<div
+					<button
 						class="inline-flex h-12 items-center justify-center rounded-md bg-prime-blue text-white dark:text-gray-300 hover:bg-hover-prime-blue px-5 text-base font-medium shadow transition-colors duration-250 cursor-pointer"
-                        (click)="createClub()">
+                        type="submit" [disabled]="isSaving">
 						<iconify-icon icon="material-symbols-light:save-rounded" class="text-[1.5rem] mr-3"></iconify-icon>
 						Enregistrer le club
-					</div>
+					</button>
 				</div>
 			</div>
-		</div>
+		</form>
 	</div>
 </div>

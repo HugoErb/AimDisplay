@@ -10,7 +10,7 @@
 			</div>
 		</div>
 
-		<div class="p-8 space-y-10">
+		<form (ngSubmit)="createShooter()" class="p-8 space-y-10">
 			<!-- Informations personelles -->
 			<div class="space-y-4">
 				<h2 class="text-lg font-semibold text-gray-900 pb-2 border-b border-gray-200 dark:border-gray-700 dark:text-gray-300">
@@ -19,17 +19,17 @@
 				<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
 					<div class="flex flex-col space-y-1">
 						<label class="text-sm font-medium text-gray-700 dark:text-gray-300 ml-1">Nom *</label>
-						<input type="text" #inputField pInputText [(ngModel)]="shooterLastName" placeholder="Nom du tireur" />
+						<input type="text" #inputField pInputText [(ngModel)]="shooterLastName" name="shooterLastName" placeholder="Nom du tireur" />
 					</div>
 
 					<div class="flex flex-col space-y-1">
 						<label class="text-sm font-medium text-gray-700 dark:text-gray-300 ml-1">Prénom *</label>
-						<input type="text" #inputField pInputText [(ngModel)]="shooterFirstName" placeholder="Prénom du tireur" />
+						<input type="text" #inputField pInputText [(ngModel)]="shooterFirstName" name="shooterFirstName" placeholder="Prénom du tireur" />
 					</div>
 
 					<div class="flex flex-col space-y-1">
 						<label class="text-sm font-medium text-gray-700 dark:text-gray-300 ml-1">Adresse Email</label>
-						<input type="text" #inputField pInputText [(ngModel)]="shooterEmail" placeholder="Adresse Email" />
+						<input type="text" #inputField pInputText [(ngModel)]="shooterEmail" name="shooterEmail" placeholder="Adresse Email" />
 					</div>
 				</div>
 			</div>
@@ -48,7 +48,8 @@
 							[forceSelection]="true"
 							[suggestions]="filteredClubs"
 							(completeMethod)="filteredClubs = commonService.filterByName($event.query, clubs)"
-							field="name"
+                            optionLabel="name"
+                            name="shooterClubName"
 							[dropdown]="true"
 							placeholder="Club du tireur"
 						></p-autoComplete>
@@ -62,7 +63,8 @@
 							[forceSelection]="true"
 							[suggestions]="filteredCompetitions"
 							(completeMethod)="filteredCompetitions = commonService.filterByName($event.query, competitions)"
-							field="name"
+							name="shooterCompetitionName"
+                            optionLabel="name"
 							[dropdown]="true"
 							placeholder="Compétition du tireur"
 						></p-autoComplete>
@@ -91,7 +93,8 @@
 							[forceSelection]="true"
 							[suggestions]="filteredDistances"
 							(completeMethod)="filteredDistances = commonService.filterByName($event.query, distances)"
-							field="name"
+							name="group.shooterDistance"
+                            optionLabel="name"
 							[dropdown]="true"
 							placeholder="Distance de tir du tireur"
 						></p-autoComplete>
@@ -110,7 +113,8 @@
 							[forceSelection]="true"
 							[suggestions]="filteredWeapons"
 							(completeMethod)="filteredWeapons = commonService.filterByName($event.query, weapons)"
-							field="name"
+							name="group.shooterWeapon"
+                            optionLabel="name"
 							[dropdown]="true"
 							placeholder="Type d'arme utilisé"
 						></p-autoComplete>
@@ -130,7 +134,8 @@
 							[suggestions]="filteredShooterCategories"
 							(completeMethod)="filteredShooterCategories = commonService.filterByName($event.query, shooterCategories)"
 							(onSelect)="onCategorySelected($event, group)"
-							field="name"
+							name="group.shooterCategory"
+                            optionLabel="name"
 							[dropdown]="true"
 							placeholder="Catégorie du tireur"
 						></p-autoComplete>
@@ -152,6 +157,7 @@
 							[min]="0"
 							[max]="100.1"
 							[showButtons]="true"
+                            [name]="group['scoreSerie' + serie]"
 							[maxFractionDigits]="2"
 							placeholder="Score série {{ serie }}"
 						></p-inputNumber>
@@ -171,6 +177,7 @@
 							[minFractionDigits]="2"
 							[min]="0"
 							[max]="100.1"
+                            name="group.scoreSerie5"
 							[showButtons]="true"
 							[maxFractionDigits]="2"
 							placeholder="Score série 5"
@@ -188,6 +195,7 @@
 							[minFractionDigits]="2"
 							[min]="0"
 							[max]="100.1"
+                            name="group.scoreSerie6"
 							[showButtons]="true"
 							[maxFractionDigits]="2"
 							placeholder="Score série 6"
@@ -230,15 +238,14 @@
 					</p>
 				</div>
 				<div class="flex justify-end">
-					<div
+					<button
 						class="inline-flex h-12 items-center justify-center rounded-md bg-prime-blue text-white dark:text-gray-300 hover:bg-hover-prime-blue px-5 text-base font-medium shadow transition-colors duration-250 cursor-pointer"
-						(click)="createShooter()"
-					>
+                        type="submit" [disabled]="isSaving">
 						<iconify-icon icon="material-symbols-light:save-rounded" class="text-[1.5rem] mr-4"></iconify-icon>
 						Enregistrer le tireur
-					</div>
-				</div>
-			</div>
-		</div>
+                    </button>
+                </div>
+            </div>
+        </form>
 	</div>
 </div>
