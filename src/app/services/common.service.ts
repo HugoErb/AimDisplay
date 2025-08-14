@@ -1,6 +1,6 @@
 import { ElementRef, Injectable, QueryList, signal } from '@angular/core';
 import { Router } from '@angular/router';
-import Swal from 'sweetalert2';
+import Swal, { SweetAlertResult } from 'sweetalert2';
 import axios from 'axios';
 import { EmailValidityResponse } from '../interfaces/email-validity-response';
 
@@ -52,29 +52,37 @@ export class CommonService {
 		});
 	}
 
-	/**
-	 * Affiche une boîte de dialogue SweetAlert2 personnalisée.
-	 *
-	 * @param {string} title - Le titre affiché dans la boîte de dialogue.
-	 * @param {string} message - Le message HTML à afficher dans le corps de la boîte.
-	 * @param {'success' | 'error' | 'warning' | 'info' | 'question'} [icon='success'] -
-	 *        L'icône à afficher. Peut être 'success', 'error', 'warning', 'info' ou 'question'.
-	 */
-	showSwal(title: string, message: string, icon: 'success' | 'error' | 'warning' | 'info' | 'question' = 'success', showCancelButton: boolean) {
-		Swal.fire({
-			icon: icon,
-			title: `<div class="text-2xl">${title}</div>`,
-			html: `${message}`,
-			showCancelButton: showCancelButton,
-			showConfirmButton: true,
-			confirmButtonText: 'Valider',
-			cancelButtonText: 'Annuler',
-			reverseButtons: true,
-			customClass: {
-				confirmButton: 'swal2-confirm custom-prime-button',
-			},
-		});
-	}
+    /**
+     * Affiche une boîte de dialogue SweetAlert2 personnalisée et renvoie le résultat.
+     *
+     * @param {string} title - Le titre affiché dans la boîte de dialogue.
+     * @param {string} message - Le message HTML à afficher dans le corps de la boîte.
+     * @param {'success' | 'error' | 'warning' | 'info' | 'question'} [icon='success'] -
+     *        L'icône à afficher. Peut être 'success', 'error', 'warning', 'info' ou 'question'.
+     * @param {boolean} showCancelButton - Affiche ou non le bouton Annuler.
+     * @returns {Promise<SweetAlertResult>} - Le résultat de la boîte de dialogue.
+     */
+    showSwal(
+        title: string,
+        message: string,
+        icon: 'success' | 'error' | 'warning' | 'info' | 'question' = 'success',
+        showCancelButton: boolean
+    ): Promise<SweetAlertResult<any>> {
+        return Swal.fire({
+            icon: icon,
+            title: `<div class="text-2xl">${title}</div>`,
+            html: `${message}`,
+            showCancelButton: showCancelButton,
+            showConfirmButton: true,
+            confirmButtonText: 'Valider',
+            cancelButtonText: 'Annuler',
+            reverseButtons: true,
+            customClass: {
+                confirmButton: 'swal2-confirm custom-prime-button',
+            },
+        });
+    }
+
 
 	/**
 	 * Renvoie un message d'erreur correspondant au code d'erreur fourni.

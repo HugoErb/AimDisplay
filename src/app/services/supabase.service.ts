@@ -385,4 +385,42 @@ export class SupabaseService {
             name: c.label,
         })) as ShooterCategory[];
     }
+
+    // GET FUNCTIONS /////////////////////////////////////////////////////////////////////
+
+    /**
+     * Supprime définitivement un club en base de données (table `clubs`) via Supabase.
+     *
+     * @param {number} clubId - Identifiant unique du club à supprimer.
+     * @returns {Promise<void>} Une promesse résolue une fois la suppression effectuée.
+     */
+    async deleteClubById(clubId: number): Promise<void> {
+        try{
+            const { data: authUserData, error: authUserError } = await this.supabase.auth.getUser();
+            if (authUserError) throw new Error(authUserError.message);
+            const currentUser = authUserData?.user;
+            if (!currentUser) throw new Error('Aucun utilisateur connecté.');
+            console.log(clubId);
+            
+
+            const { data, error } = await this.supabase
+            .from('clubs')
+            .delete()
+            .eq('id', clubId)
+            .select('id')
+            .limit(1);
+
+            if (error) throw new Error(error.message);
+
+            const deleted = Array.isArray(data) && data.length > 0;
+
+            this.commonService.showSwalToast(
+            deleted ? 'Club supprimé !' : 'Aucun club supprimé (non trouvé ou déjà supprimé).',
+            deleted ? 'success' : 'info'
+            );
+        } catch (err: any) {
+            this.commonService.showSwalToast(err?.message ?? 'Erreur lors de la suppression du club', 'error');
+        }
+    }
+
 }
