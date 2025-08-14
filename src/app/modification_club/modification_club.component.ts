@@ -47,7 +47,29 @@ export class ModificationClubComponent {
 	 *
 	 * @param {Event} event - L'événement déclencheur (clic sur un bouton de suppression).
 	 */
-	confirmDeletion(event: Event) {
-		this.commonService.showSwal('Voulez vous vraiment supprimer cette ligne ?', 'Cette action sera irréversible.', 'warning', true);
+	async confirmDeletion(club: Club) {
+		const result = await this.commonService.showSwal('Voulez vous vraiment supprimer ce club ?', 'La suppression de ce club entraînera aussi celle de tous les tireurs qui y sont rattachés. La suppression est irréversible.', 'warning', true);
+        if (result?.isConfirmed){
+            this.deleteClub(club)
+        };
 	}
+
+    /**
+     * Supprime un club côté BDD puis met à jour la liste locale `this.clubs`.
+     * 
+     * @param {Club} club - L'objet club à supprimer (doit contenir au minimum `id`).
+     * @returns {Promise<void>} Une promesse résolue après la suppression et la mise à jour de l'état local.
+     */
+    async deleteClub(club: Club): Promise<void> {
+        try {
+            // Suppression en BDD
+            await this.supabase.deleteClubById(club.id);
+
+            // Mise à jour locale du tableau (évite un appel réseau)
+            this.clubs = this.clubs.filter(c => c.id !== club.id);
+
+        } catch (err: any) {
+            this.commonService.showSwalToast(err?.message ?? 'Erreur lors de la suppression du club', 'error');
+        }
+    }
 }
