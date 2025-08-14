@@ -18,18 +18,18 @@
 				</h2>
 				<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
 					<div class="flex flex-col space-y-1">
-						<label class="text-sm font-medium text-gray-700 dark:text-gray-300 ml-1">Nom *</label>
-						<input type="text" #inputField pInputText [(ngModel)]="shooterLastName" name="shooterLastName" placeholder="Nom du tireur" />
+						<label for="shooterLastName" class="text-sm font-medium text-gray-700 dark:text-gray-300 ml-1">Nom *</label>
+						<input type="text" #inputField pInputText [(ngModel)]="shooterLastName" name="shooterLastName" id="shooterLastName" placeholder="Nom du tireur" />
 					</div>
 
 					<div class="flex flex-col space-y-1">
-						<label class="text-sm font-medium text-gray-700 dark:text-gray-300 ml-1">Prénom *</label>
-						<input type="text" #inputField pInputText [(ngModel)]="shooterFirstName" name="shooterFirstName" placeholder="Prénom du tireur" />
+						<label for="shooterFirstName" class="text-sm font-medium text-gray-700 dark:text-gray-300 ml-1">Prénom *</label>
+						<input type="text" #inputField pInputText [(ngModel)]="shooterFirstName" name="shooterFirstName" id="shooterFirstName" placeholder="Prénom du tireur" />
 					</div>
 
 					<div class="flex flex-col space-y-1">
-						<label class="text-sm font-medium text-gray-700 dark:text-gray-300 ml-1">Adresse Email</label>
-						<input type="text" #inputField pInputText [(ngModel)]="shooterEmail" name="shooterEmail" placeholder="Adresse Email" />
+						<label for="shooterEmail" class="text-sm font-medium text-gray-700 dark:text-gray-300 ml-1">Adresse Email</label>
+						<input type="email" #inputField pInputText [(ngModel)]="shooterEmail" name="shooterEmail" id="shooterEmail" placeholder="Adresse Email" />
 					</div>
 				</div>
 			</div>
@@ -41,7 +41,7 @@
 				</h2>
 				<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
 					<div class="flex flex-col space-y-1">
-						<label class="text-sm font-medium text-gray-700 dark:text-gray-300 ml-1">Club *</label>
+						<label for="shooterClubName" class="text-sm font-medium text-gray-700 dark:text-gray-300 ml-1">Club *</label>
 						<p-autoComplete
 							#inputField
 							[(ngModel)]="shooterClubName"
@@ -50,13 +50,14 @@
 							(completeMethod)="filteredClubs = commonService.filterByName($event.query, clubs)"
                             optionLabel="name"
                             name="shooterClubName"
+                            id="shooterClubName"
 							[dropdown]="true"
 							placeholder="Club du tireur"
 						></p-autoComplete>
 					</div>
 
 					<div class="flex flex-col space-y-1">
-						<label class="text-sm font-medium text-gray-700 dark:text-gray-300 ml-1">Compétition *</label>
+						<label for="shooterCompetitionName" class="text-sm font-medium text-gray-700 dark:text-gray-300 ml-1">Compétition *</label>
 						<p-autoComplete
 							#inputField
 							[(ngModel)]="shooterCompetitionName"
@@ -64,6 +65,7 @@
 							[suggestions]="filteredCompetitions"
 							(completeMethod)="filteredCompetitions = commonService.filterByName($event.query, competitions)"
 							name="shooterCompetitionName"
+                            id="shooterCompetitionName"
                             optionLabel="name"
 							[dropdown]="true"
 							placeholder="Compétition du tireur"
@@ -82,70 +84,81 @@
 				<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
 					<!-- Distance -->
 					<div class="flex flex-col space-y-1">
-						<label class="text-sm font-medium text-gray-700 dark:text-gray-300 ml-1">
-							Distance de tir
-							<ng-container *ngIf="i > 0">({{ i + 1 }})</ng-container>
-							*
-						</label>
-						<p-autoComplete
-							#inputField
-							[(ngModel)]="group.shooterDistance"
-							[forceSelection]="true"
-							[suggestions]="filteredDistances"
-							(completeMethod)="filteredDistances = commonService.filterByName($event.query, distances)"
-							name="group.shooterDistance"
+                        <label
+                            [for]="'shooterDistance_' + i"
+                            class="text-sm font-medium text-gray-700 dark:text-gray-300 ml-1"
+                        >
+                            Distance de tir
+                            <ng-container *ngIf="i > 0">({{ i + 1 }})</ng-container>
+                            *
+                        </label>
+                        <p-autoComplete
+                            #inputField
+                            [(ngModel)]="group.shooterDistance"
+                            [forceSelection]="true"
+                            [suggestions]="filteredDistances"
+                            (completeMethod)="filteredDistances = commonService.filterByName($event.query, distances)"
+                            [name]="'shooterDistance_' + i"
+                            [inputId]="'shooterDistance_' + i"
                             optionLabel="name"
-							[dropdown]="true"
-							placeholder="Distance de tir du tireur"
-						></p-autoComplete>
-					</div>
+                            [dropdown]="true"
+                            placeholder="Distance de tir du tireur">
+                        </p-autoComplete>
+                    </div>
 
 					<!-- Arme -->
 					<div class="flex flex-col space-y-1">
-						<label class="text-sm font-medium text-gray-700 dark:text-gray-300 ml-1">
-							Type d'arme
-							<ng-container *ngIf="i > 0">({{ i + 1 }})</ng-container>
-							*
-						</label>
-						<p-autoComplete
-							#inputField
-							[(ngModel)]="group.shooterWeapon"
-							[forceSelection]="true"
-							[suggestions]="filteredWeapons"
-							(completeMethod)="filteredWeapons = commonService.filterByName($event.query, weapons)"
-							name="group.shooterWeapon"
+                        <label
+                            [for]="'shooterWeapon_' + i"
+                            class="text-sm font-medium text-gray-700 dark:text-gray-300 ml-1"
+                        >
+                            Type d'arme
+                            <ng-container *ngIf="i > 0">({{ i + 1 }})</ng-container>
+                            *
+                        </label>
+                        <p-autoComplete
+                            #inputField
+                            [(ngModel)]="group.shooterWeapon"
+                            [forceSelection]="true"
+                            [suggestions]="filteredWeapons"
+                            (completeMethod)="filteredWeapons = commonService.filterByName($event.query, weapons)"
+                            [name]="'shooterWeapon_' + i"
+                            [inputId]="'shooterWeapon_' + i"
                             optionLabel="name"
-							[dropdown]="true"
-							placeholder="Type d'arme utilisé"
-						></p-autoComplete>
-					</div>
+                            [dropdown]="true"
+                            placeholder="Type d'arme utilisé">
+                        </p-autoComplete>
+                    </div>
 
 					<!-- Catégorie -->
 					<div class="flex flex-col space-y-1">
-						<label class="text-sm font-medium text-gray-700 dark:text-gray-300 ml-1">
-							Catégorie
-							<ng-container *ngIf="i > 0">({{ i + 1 }})</ng-container>
-							*
-						</label>
-						<p-autoComplete
-							#inputField
-							[(ngModel)]="group.shooterCategory"
-							[forceSelection]="true"
-							[suggestions]="filteredShooterCategories"
-							(completeMethod)="filteredShooterCategories = commonService.filterByName($event.query, shooterCategories)"
-							(onSelect)="onCategorySelected($event, group)"
-							name="group.shooterCategory"
+                        <label 
+                            [for]="'shooterCategory_' + i" 
+                            class="text-sm font-medium text-gray-700 dark:text-gray-300 ml-1">
+                            Catégorie
+                            <ng-container *ngIf="i > 0">({{ i + 1 }})</ng-container>
+                            *
+                        </label>
+                        <p-autoComplete
+                            #inputField
+                            [(ngModel)]="group.shooterCategory"
+                            [forceSelection]="true"
+                            [suggestions]="filteredShooterCategories"
+                            (completeMethod)="filteredShooterCategories = commonService.filterByName($event.query, shooterCategories)"
+                            (onSelect)="onCategorySelected($event, group)"
+                            [name]="'shooterCategory_' + i"
+                            [inputId]="'shooterCategory_' + i"
                             optionLabel="name"
-							[dropdown]="true"
-							placeholder="Catégorie du tireur"
-						></p-autoComplete>
-					</div>
+                            [dropdown]="true"
+                            placeholder="Catégorie du tireur">
+                        </p-autoComplete>
+                    </div>
 				</div>
 
 				<!-- Scores -->
 				<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
 					<div *ngFor="let serie of [1, 2, 3, 4]; let s = index">
-						<label class="text-sm font-medium text-gray-700 dark:text-gray-300 ml-1">
+						<label [for]="'serie'+serie+'_'+i" class="text-sm font-medium text-gray-700 dark:text-gray-300 ml-1">
 							Score série {{ serie }}
 							<ng-container *ngIf="i > 0">({{ i + 1 }})</ng-container>
 						</label>
@@ -157,7 +170,8 @@
 							[min]="0"
 							[max]="100.1"
 							[showButtons]="true"
-                            [name]="group['scoreSerie' + serie]"
+                            [name]="'serie'+serie+'_'+i"
+                            [inputId]="'serie'+serie+'_'+i"
 							[maxFractionDigits]="2"
 							placeholder="Score série {{ serie }}"
 						></p-inputNumber>
@@ -166,7 +180,7 @@
 					<!-- Séries 5 & 6 si senior/dame -->
 					@if (group.isSeniorOrDame){
 					<div class="flex flex-col space-y-1">
-						<label class="text-sm font-medium text-gray-700 dark:text-gray-300 ml-1">
+						<label [for]="'serie5_'+i" class="text-sm font-medium text-gray-700 dark:text-gray-300 ml-1">
 							Score série 5
 							<ng-container *ngIf="i > 0">({{ i + 1 }})</ng-container>
 						</label>
@@ -177,14 +191,15 @@
 							[minFractionDigits]="2"
 							[min]="0"
 							[max]="100.1"
-                            name="group.scoreSerie5"
+                            [name]="'scoreSerie5_'+i"
+                            [inputId]="'serie5_'+i"
 							[showButtons]="true"
 							[maxFractionDigits]="2"
 							placeholder="Score série 5"
 						></p-inputNumber>
 					</div>
 					<div class="flex flex-col space-y-1">
-						<label class="text-sm font-medium text-gray-700 dark:text-gray-300 ml-1">
+						<label [for]="'serie6_'+i" class="text-sm font-medium text-gray-700 dark:text-gray-300 ml-1">
 							Score série 6
 							<ng-container *ngIf="i > 0">({{ i + 1 }})</ng-container>
 						</label>
@@ -195,7 +210,8 @@
 							[minFractionDigits]="2"
 							[min]="0"
 							[max]="100.1"
-                            name="group.scoreSerie6"
+                            [name]="'scoreSerie6_'+i"
+                            [inputId]="'serie6_'+i"
 							[showButtons]="true"
 							[maxFractionDigits]="2"
 							placeholder="Score série 6"
