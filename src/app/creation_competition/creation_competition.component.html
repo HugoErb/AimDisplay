@@ -17,12 +17,12 @@
 				</h2>
 				<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
 					<div class="flex flex-col space-y-1">
-						<label class="text-sm font-medium text-gray-700 dark:text-gray-300 ml-1">Nom de la compétition *</label>
-						<input type="text" #inputField pInputText [(ngModel)]="competitionName" placeholder="Nom de la compétition" name="competitionName"/>
+						<label for="competitionName" class="text-sm font-medium text-gray-700 dark:text-gray-300 ml-1">Nom de la compétition *</label>
+						<input type="text" #inputField pInputText [(ngModel)]="competitionName" id="competitionName" placeholder="Nom de la compétition" name="competitionName"/>
 					</div>
 
 					<div class="flex flex-col space-y-1">
-						<label class="text-sm font-medium text-gray-700 dark:text-gray-300 ml-1">Dates de la compétition *</label>
+						<label for="competitionDate" class="text-sm font-medium text-gray-700 dark:text-gray-300 ml-1">Dates de la compétition *</label>
 						<div class="relative">
 							<p-datepicker
 								#inputField
@@ -33,6 +33,7 @@
 								dateFormat="dd/mm/yy"
 								selectionMode="range"
                                 name="competitionDate"
+                                id="competitionDate"
 							></p-datepicker>
 						</div>
 					</div>
@@ -45,7 +46,7 @@
 				</h2>
 				<div class="grid grid-cols-1 md:grid-cols-2 gap-8">
 					<div class="flex flex-col space-y-1">
-						<label class="text-sm font-medium text-gray-700 dark:text-gray-300 ml-1">Prix d'inscription *</label>
+						<label for="prixInscription" class="text-sm font-medium text-gray-700 dark:text-gray-300 ml-1">Prix d'inscription *</label>
 						<div class="flex items-center space-x-2">
 							<p-inputNumber
 								#inputField
@@ -59,12 +60,13 @@
 								mode="currency"
 								currency="EUR"
                                 name="prixInscription"
+                                id="prixInscription"
 							></p-inputNumber>
 						</div>
 					</div>
 
 					<div class="flex flex-col space-y-1">
-						<label class="text-sm font-medium text-gray-700 dark:text-gray-300 ml-1">Prix de catégorie supplémentaire *</label>
+						<label for="prixCategSup" class="text-sm font-medium text-gray-700 dark:text-gray-300 ml-1">Prix de catégorie supplémentaire *</label>
 						<div class="flex items-center space-x-2">
 							<p-inputNumber
 								#inputField
@@ -78,6 +80,7 @@
 								mode="currency"
 								currency="EUR"
                                 name="prixCategSup"
+                                id="prixCategSup"
 							></p-inputNumber>
 						</div>
 					</div>
