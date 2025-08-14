@@ -17,12 +17,12 @@
 				</h2>
 				<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
 					<div class="flex flex-col space-y-1">
-						<label class="text-sm font-medium text-gray-700 dark:text-gray-300 ml-1">Nom du club *</label>
-						<input type="text" #inputField pInputText [(ngModel)]="clubName" placeholder="Nom du club" name="clubName" />
+						<label for="clubName" class="text-sm font-medium text-gray-700 dark:text-gray-300 ml-1">Nom du club *</label>
+						<input type="text" #inputField pInputText [(ngModel)]="clubName" id="clubName" placeholder="Nom du club" name="clubName" />
 					</div>
 					<div class="flex flex-col space-y-1">
-						<label class="text-sm font-medium text-gray-700 dark:text-gray-300 ml-1">Ville du club *</label>
-						<input type="text" #inputField pInputText [(ngModel)]="clubCity" placeholder="Ville du club" name="clubCity" />
+						<label for="clubCity" class="text-sm font-medium text-gray-700 dark:text-gray-300 ml-1">Ville du club *</label>
+						<input type="text" #inputField pInputText [(ngModel)]="clubCity" id="clubCity" placeholder="Ville du club" name="clubCity" />
 					</div>
 				</div>
 			</div>
