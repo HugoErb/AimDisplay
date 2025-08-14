@@ -400,8 +400,6 @@ export class SupabaseService {
             if (authUserError) throw new Error(authUserError.message);
             const currentUser = authUserData?.user;
             if (!currentUser) throw new Error('Aucun utilisateur connecté.');
-            console.log(clubId);
-            
 
             const { data, error } = await this.supabase
             .from('clubs')
