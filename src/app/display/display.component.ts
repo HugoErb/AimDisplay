@@ -2,6 +2,7 @@ import { Component, ElementRef, QueryList, ViewChildren } from '@angular/core';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { AutoCompleteModule } from 'primeng/autocomplete';
 import { CommonService } from '../services/common.service';
+import { SupabaseService } from '../services/supabase.service';
 
 @Component({
 	selector: 'app-display',
@@ -11,13 +12,21 @@ import { CommonService } from '../services/common.service';
 	schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class DisplayComponent {
-	constructor(protected commonService: CommonService) {}
+	constructor(protected commonService: CommonService, private supabase: SupabaseService) {}
 
 	@ViewChildren('inputField', { read: ElementRef }) inputFields!: QueryList<ElementRef>;
 	public inputLabelMap = new Map<string, string>();
 	shooterCompetitionName: string = '';
-	competitions: any[] = [{ name: 'Tournoi de Marennes' }, { name: 'Tournoi de Rochefort' }, { name: 'Tournoi de Pau' }];
+	competitions: any[] = [];
 	filteredCompetitions: any[] = [];
+
+	async ngOnInit(): Promise<void> {
+		try {
+			this.competitions = await this.supabase.getCompetitions();
+		} catch (err) {
+			console.error('Erreur lors du chargement des données :', err);
+		}
+	}
 
 	/**
 	 * Permet de lancer l'affichage à partir des données récoltées dans les champs du formulaire.
