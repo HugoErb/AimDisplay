@@ -5,7 +5,7 @@ import { vfs as pdfVfs } from 'pdfmake/build/vfs_fonts';
 import type { TDocumentDefinitions, ContentTable } from 'pdfmake/interfaces';
 
 // Initialise le virtual file system
-(pdfMake as any).vfs = pdfVfs;   
+(pdfMake as any).vfs = pdfVfs;
 
 export type InputLabelMap = Map<string, any>;
 

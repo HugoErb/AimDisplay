@@ -23,7 +23,7 @@ export class ModificationCompetitionComponent {
 	competitions: Competition[] = [];
 	nbRowsPerPage: number = 1;
 
-    async ngOnInit(): Promise<void> {
+	async ngOnInit(): Promise<void> {
 		try {
 			this.competitions = await this.supabase.getCompetitions();
 		} catch (err) {
@@ -50,9 +50,35 @@ export class ModificationCompetitionComponent {
 	/**
 	 * Affiche une boîte de dialogue de confirmation avant la suppression d'une ligne.
 	 *
-	 * @param {Event} event - L'événement déclencheur (clic sur un bouton de suppression).
+	 * @param {Competition} competition - L'objet competition à supprimer (doit contenir au minimum `id`).
 	 */
-	confirmDeletion(event: Event) {
-		this.commonService.showSwal('Voulez vous vraiment supprimer cette ligne ?', 'Cette action sera irréversible.', 'warning', true);
+	async confirmDeletion(competition: Competition) {
+		const result = await this.commonService.showSwal(
+			'Voulez vous vraiment supprimer cette competition ?',
+			'La suppression de cette competition entraînera aussi celle de tous les tireurs qui y sont rattachés. La suppression est irréversible.',
+			'warning',
+			true
+		);
+		if (result?.isConfirmed) {
+			this.deleteCompetition(competition);
+		}
+	}
+
+	/**
+	 * Supprime une competition côté BDD puis met à jour la liste locale `this.competitions`.
+	 *
+	 * @param {Competition} competition - L'objet competition à supprimer (doit contenir au minimum `id`).
+	 * @returns {Promise<void>} Une promesse résolue après la suppression et la mise à jour de l'état local.
+	 */
+	async deleteCompetition(competition: Competition): Promise<void> {
+		try {
+			// Suppression en BDD
+			await this.supabase.deleteCompetitionById(competition.id);
+
+			// Mise à jour locale du tableau (évite un appel réseau)
+			this.competitions = this.competitions.filter((c) => c.id !== competition.id);
+		} catch (err: any) {
+			this.commonService.showSwalToast(err?.message ?? 'Erreur lors de la suppression de la competition.', 'error');
+		}
 	}
 }
