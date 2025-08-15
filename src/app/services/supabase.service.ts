@@ -431,4 +431,32 @@ export class SupabaseService {
 			this.commonService.showSwalToast(err?.message ?? 'Erreur lors de la suppression de la competition', 'error');
 		}
 	}
+
+	/**
+	 * Supprime définitivement un tireur en base de données (table `shooters`) via Supabase.
+	 *
+	 * @param {number} shooterId - Identifiant unique du tireur à supprimer.
+	 * @returns {Promise<void>} Une promesse résolue une fois la suppression effectuée.
+	 */
+	async deleteShooterById(shooterId: number): Promise<void> {
+		try {
+			const { data: authUserData, error: authUserError } = await this.supabase.auth.getUser();
+			if (authUserError) throw new Error(authUserError.message);
+			const currentUser = authUserData?.user;
+			if (!currentUser) throw new Error('Aucun utilisateur connecté.');
+
+			const { data, error } = await this.supabase.from('shooters').delete().eq('id', shooterId).select('id').limit(1);
+
+			if (error) throw new Error(error.message);
+
+			const deleted = Array.isArray(data) && data.length > 0;
+
+			this.commonService.showSwalToast(
+				deleted ? 'Tireur supprimé !' : 'Aucun tireur supprimé (non trouvé ou déjà supprimé).',
+				deleted ? 'success' : 'info'
+			);
+		} catch (err: any) {
+			this.commonService.showSwalToast(err?.message ?? 'Erreur lors de la suppression du tireur', 'error');
+		}
+	}
 }
