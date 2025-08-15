@@ -44,37 +44,37 @@ export class ModificationShooterComponent {
 	}
 
 	/**
-         * Affiche une boîte de dialogue de confirmation avant la suppression d'une ligne.
-         *
-         * @param {Shooter} shooter - L'objet shooter à supprimer (doit contenir au minimum `id`).
-         */
-        async confirmDeletion(shooter: Shooter) {
-            const result = await this.commonService.showSwal(
-                'Voulez vous vraiment supprimer ce tireur ?',
-                'La suppression est irréversible.',
-                'warning',
-                true
-            );
-            if (result?.isConfirmed) {
-                this.deleteShooter(shooter);
-            }
-        }
-    
-        /**
-         * Supprime un shooter côté BDD puis met à jour la liste locale `this.shooters`.
-         *
-         * @param {Shooter} shooter - L'objet shooter à supprimer (doit contenir au minimum `id`).
-         * @returns {Promise<void>} Une promesse résolue après la suppression et la mise à jour de l'état local.
-         */
-        async deleteShooter(shooter: Shooter): Promise<void> {
-            try {
-                // Suppression en BDD
-                await this.supabase.deleteShooterById(shooter.id);
-    
-                // Mise à jour locale du tableau (évite un appel réseau)
-                this.shooters = this.shooters.filter((s) => s.id !== shooter.id);
-            } catch (err: any) {
-                this.commonService.showSwalToast(err?.message ?? 'Erreur lors de la suppression du tireur', 'error');
-            }
-        }
+	 * Affiche une boîte de dialogue de confirmation avant la suppression d'une ligne.
+	 *
+	 * @param {Shooter} shooter - L'objet shooter à supprimer (doit contenir au minimum `id`).
+	 */
+	async confirmDeletion(shooter: Shooter) {
+		const result = await this.commonService.showSwal(
+			'Voulez vous vraiment supprimer ce tireur ?',
+			'La suppression est irréversible.',
+			'warning',
+			true
+		);
+		if (result?.isConfirmed) {
+			this.deleteShooter(shooter);
+		}
+	}
+
+	/**
+	 * Supprime un shooter côté BDD puis met à jour la liste locale `this.shooters`.
+	 *
+	 * @param {Shooter} shooter - L'objet shooter à supprimer (doit contenir au minimum `id`).
+	 * @returns {Promise<void>} Une promesse résolue après la suppression et la mise à jour de l'état local.
+	 */
+	async deleteShooter(shooter: Shooter): Promise<void> {
+		try {
+			// Suppression en BDD
+			await this.supabase.deleteShooterById(shooter.id);
+
+			// Mise à jour locale du tableau (évite un appel réseau)
+			this.shooters = this.shooters.filter((s) => s.id !== shooter.id);
+		} catch (err: any) {
+			this.commonService.showSwalToast(err?.message ?? 'Erreur lors de la suppression du tireur', 'error');
+		}
+	}
 }
