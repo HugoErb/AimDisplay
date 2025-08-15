@@ -6,7 +6,6 @@ import { Shooter } from '../interfaces/shooter';
 import { SupabaseService } from '../services/supabase.service';
 import { CommonModule } from '@angular/common';
 
-
 @Component({
 	selector: 'app-modification-shooter',
 	standalone: true,
@@ -20,7 +19,7 @@ export class ModificationShooterComponent {
 	shooters: Shooter[] = [];
 	nbRowsPerPage: number = 1;
 
-    async ngOnInit(): Promise<void> {
+	async ngOnInit(): Promise<void> {
 		try {
 			this.shooters = await this.supabase.getShooters();
 		} catch (err) {
