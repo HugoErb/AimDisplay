@@ -4,6 +4,9 @@ import { AutoCompleteModule } from 'primeng/autocomplete';
 import { CommonModule } from '@angular/common';
 import { CommonService } from '../services/common.service';
 import { PdfGeneratorService } from '../services/pdf-generator.service';
+import { SupabaseService } from '../services/supabase.service';
+import { Shooter } from '../interfaces/shooter';
+type ShooterWithFullName = Shooter & { fullName: string };
 
 @Component({
 	selector: 'app-generer-pdf',
@@ -13,7 +16,7 @@ import { PdfGeneratorService } from '../services/pdf-generator.service';
 	schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class GenererPDFComponent {
-	constructor(protected commonService: CommonService, private pdfGeneratorService: PdfGeneratorService) {}
+	constructor(protected commonService: CommonService, private pdfGeneratorService: PdfGeneratorService, private supabase: SupabaseService) {}
 
 	// Variables de création d'un club
 	@ViewChildren('inputField', { read: ElementRef }) inputFields!: QueryList<ElementRef>;
@@ -28,10 +31,29 @@ export class GenererPDFComponent {
 	selectedShooterCompetitionName: { name: string } | null = null;
 
 	// Variables de liste
-	competitions: any[] = [{ name: 'Tournoi de Marennes' }, { name: 'Tournoi de Rochefort' }, { name: 'Tournoi de Pau' }];
+	competitions: any[] = [];
 	filteredCompetitions: any[] = [];
-	shooters: any[] = [{ name: 'Pierre' }, { name: 'Paul' }, { name: 'Jacques' }];
+	shooters: any[] = [];
 	filteredShooters: any[] = [];
+
+	async ngOnInit(): Promise<void> {
+		try {
+			const [shooters, competitions] = await Promise.all([this.supabase.getShooters(), this.supabase.getCompetitions()]);
+
+			// Création du tableau avec trim
+			const mappedShooters = (shooters ?? []).map((s) => {
+				const fullName = `${s.lastName} ${s.firstName}`.trim();
+				return { ...s, fullName, name: fullName };
+			});
+
+			// Suppression des doublons par fullName
+			this.shooters = mappedShooters.filter((shooter, index, self) => index === self.findIndex((s) => s.fullName === shooter.fullName));
+
+			this.competitions = competitions;
+		} catch (err) {
+			console.error('Erreur lors du chargement des données :', err);
+		}
+	}
 
 	/**
 	 * Change l'onglet actuellement sélectionné dans l'interface utilisateur.
