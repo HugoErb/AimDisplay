@@ -18,12 +18,16 @@ export class ModificationShooterComponent {
 
 	shooters: Shooter[] = [];
 	nbRowsPerPage: number = 1;
+	isFetchingData: boolean = false;
 
 	async ngOnInit(): Promise<void> {
 		try {
+			this.isFetchingData = true;
 			this.shooters = await this.supabase.getShooters();
 		} catch (err) {
 			console.error('Erreur lors du chargement des données :', err);
+		} finally {
+			this.isFetchingData = false;
 		}
 	}
 

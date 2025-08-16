@@ -55,9 +55,20 @@
 				</ng-template>
 
 				<ng-template pTemplate="emptymessage">
+					@if (isFetchingData) {
 					<tr>
-						<td colspan="9">Aucune donnée trouvée.</td>
+						<td colspan="4">
+							<div class="flex items-center justify-center py-6" aria-live="polite">
+                                <iconify-icon icon="line-md:loading-loop" class="text-[1.2rem] text-gray-500 dark:text-gray-400"></iconify-icon>
+								<span class="ml-3 text-gray-500 dark:text-gray-400">Chargement des données…</span>
+							</div>
+						</td>
 					</tr>
+					} @else {
+					<tr>
+						<td colspan="4" class="py-6 text-center text-gray-500 dark:text-gray-400">Aucune donnée trouvée.</td>
+					</tr>
+					}
 				</ng-template>
 			</p-table>
 		</div>
