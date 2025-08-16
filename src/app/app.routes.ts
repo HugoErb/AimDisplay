@@ -18,35 +18,36 @@ import { ForgotPasswordComponent } from './forgot-password/forgot-password.compo
 import { ResetPasswordComponent } from './reset-password/reset-password.component';
 
 export const routes: Routes = [
-  // On envoie la racine vers la page de login (pas vers home)
-  { path: '', redirectTo: 'login', pathMatch: 'full' },
+	// On envoie la racine vers la page de login (pas vers home)
+	{ path: '', redirectTo: 'login', pathMatch: 'full' },
 
-  // Pages accessibles sans être connecté
-  { path: 'login', component: LoginComponent },
-  { path: 'register', component: RegisterComponent },
-  { path: 'forgot-password', component: ForgotPasswordComponent },
-  { path: 'reset-password', component: ResetPasswordComponent },
+	// Pages accessibles sans être connecté
+	{ path: 'login', component: LoginComponent },
+	{ path: 'register', component: RegisterComponent },
+	{ path: 'forgot-password', component: ForgotPasswordComponent },
+	{ path: 'reset-password', component: ResetPasswordComponent },
 
-  // Tout le reste est protégé
-  {
-    path: '',
-    component: BaseLayoutComponent,
-    canActivateChild: [AuthGuard], // protège tous les enfants ci-dessous
-    children: [
-      { path: 'home', component: HomeComponent },
-      { path: 'ranking', component: RankingComponent },
-      { path: 'creation_shooter', component: CreationShooterComponent },
-      { path: 'creation_competition', component: CreationCompetitionComponent },
-      { path: 'creation_club', component: CreationClubComponent },
-      { path: 'modification_shooter', component: ModificationShooterComponent },
-      { path: 'modification_competition', component: ModificationCompetitionComponent },
-      { path: 'modification_club', component: ModificationClubComponent },
-      { path: 'display', component: DisplayComponent },
-      { path: 'generer_pdf', component: GenererPDFComponent },
-      { path: 'settings', component: SettingsComponent },
-    ],
-  },
+	// Tout le reste est protégé
+	{
+		path: '',
+		component: BaseLayoutComponent,
+		canActivateChild: [AuthGuard], // protège tous les enfants ci-dessous
+		children: [
+			{ path: 'home', component: HomeComponent },
+			{ path: 'ranking', component: RankingComponent },
+			{ path: 'creation_shooter', component: CreationShooterComponent },
+			{ path: 'creation_competition', component: CreationCompetitionComponent },
+			{ path: 'creation_club', component: CreationClubComponent },
+			{ path: 'creation_club/:id', component: CreationClubComponent },
+			{ path: 'modification_shooter', component: ModificationShooterComponent },
+			{ path: 'modification_competition', component: ModificationCompetitionComponent },
+			{ path: 'modification_club', component: ModificationClubComponent },
+			{ path: 'display', component: DisplayComponent },
+			{ path: 'generer_pdf', component: GenererPDFComponent },
+			{ path: 'settings', component: SettingsComponent },
+		],
+	},
 
-  // Catch-all
-  { path: '**', redirectTo: 'login' },
+	// Catch-all
+	{ path: '**', redirectTo: 'login' },
 ];

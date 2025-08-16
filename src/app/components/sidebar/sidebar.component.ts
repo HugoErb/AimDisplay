@@ -14,7 +14,7 @@ import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 export class SidebarComponent implements OnInit {
   avatarUrl$!: ReturnType<AuthService['avatarUrl$']['subscribe']> extends never
     ? any
-    : typeof this.authService.avatarUrl$; // ou simplement: any/Observable<string|undefined>
+    : typeof this.authService.avatarUrl$;
 
   constructor(
     protected commonService: CommonService,
