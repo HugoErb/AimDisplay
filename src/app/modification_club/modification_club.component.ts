@@ -17,12 +17,16 @@ export class ModificationClubComponent {
 
 	clubs: Club[] = [];
 	nbRowsPerPage: number = 1;
+	isFetchingData: boolean = false;
 
 	async ngOnInit(): Promise<void> {
 		try {
+			this.isFetchingData = true;
 			this.clubs = await this.supabase.getClubs();
 		} catch (err) {
 			console.error('Erreur lors du chargement des données :', err);
+		} finally {
+			this.isFetchingData = false;
 		}
 	}
 

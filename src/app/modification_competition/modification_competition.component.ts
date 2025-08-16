@@ -22,12 +22,16 @@ export class ModificationCompetitionComponent {
 
 	competitions: Competition[] = [];
 	nbRowsPerPage: number = 1;
+	isFetchingData: boolean = false;
 
 	async ngOnInit(): Promise<void> {
 		try {
+			this.isFetchingData = true;
 			this.competitions = await this.supabase.getCompetitions();
 		} catch (err) {
 			console.error('Erreur lors du chargement des données :', err);
+		} finally {
+			this.isFetchingData = false;
 		}
 	}
 
