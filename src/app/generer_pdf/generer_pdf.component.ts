@@ -6,6 +6,7 @@ import { CommonService } from '../services/common.service';
 import { PdfGeneratorService } from '../services/pdf-generator.service';
 import { SupabaseService } from '../services/supabase.service';
 import { Shooter } from '../interfaces/shooter';
+import { Competition } from '../interfaces/competition';
 type ShooterWithFullName = Shooter & { fullName: string };
 
 @Component({
@@ -26,7 +27,7 @@ export class GenererPDFComponent {
 	selectedTab: 'competition' | 'tireur' = 'competition';
 
 	//Variables de selection d'entité à exporter
-	selectedCompetitionName: string = '';
+	selectedCompetition: Competition | null = null;
 	selectedShooterName: { name: string } | null = null;
 	selectedShooterCompetitionName: { name: string } | null = null;
 
@@ -74,13 +75,21 @@ export class GenererPDFComponent {
 	 * champs de saisie ont été réinitialisés en cas de succès.
 	 */
 	async generatePDF(): Promise<void> {
-		this.inputLabelMap = this.commonService.getInputLabelMap(this.inputFields);
+		try {
+			this.inputLabelMap = this.commonService.getInputLabelMap(this.inputFields);
 
-		if (
-			(await this.commonService.validateInputs(this.inputLabelMap, false)) &&
-			(await this.pdfGeneratorService.generateAndDownloadPDF(this.inputLabelMap))
-		) {
-			this.commonService.resetInputFields(this.inputFields);
+			if (await this.commonService.validateInputs(this.inputLabelMap, false)) {
+				if (this.selectedTab === 'competition') {
+					if (!this.selectedCompetition?.id) {
+						this.commonService.showSwalToast('Veuillez sélectionner une compétition.', 'error');
+						return;
+					}
+					await this.pdfGeneratorService.generateCompetitionReport(this.selectedCompetition?.id);
+				}
+				this.commonService.resetInputFields(this.inputFields);
+			}
+		} catch (e: any) {
+			this.commonService.showSwalToast(e?.message ?? 'Erreur lors de la génération du PDF', 'error');
 		}
 	}
 }

@@ -374,7 +374,68 @@ export class SupabaseService {
 		})) as ShooterCategory[];
 	}
 
-	// GET FUNCTIONS /////////////////////////////////////////////////////////////////////
+	/**
+	 * Retourne les tireurs d'une compétition donnée, enrichis avec les libellés
+	 * (club, distance, arme, catégorie) et le totalScore arrondi à 2 décimales.
+	 */
+	async getShootersByCompetition(competitionId: number): Promise<Shooter[]> {
+		const { data: userData, error: userError } = await this.supabase.auth.getUser();
+		if (userError) throw new Error(`Impossible de récupérer l'utilisateur: ${userError.message}`);
+		const user = userData?.user;
+		if (!user) throw new Error('Aucun utilisateur connecté.');
+
+		// Récupération brute des shooters de la compétition
+		const { data: rows, error } = await this.supabase
+			.from('shooters')
+			.select('*')
+			.eq('user_id', user.id)
+			.eq('competition_id', competitionId)
+			.order('id', { ascending: true });
+
+		if (error) throw new Error(`Erreur lors de la récupération des tireurs: ${error.message}`);
+
+		// Récupération des référentiels pour mapping des libellés
+		const [clubs, competitions, distances, weapons, categories] = await Promise.all([
+			this.getClubs(),
+			this.getCompetitions(),
+			this.getDistances(),
+			this.getWeapons(),
+			this.getCategories(),
+		]);
+
+		const clubById = new Map(clubs.map((c) => [c.id, c.name]));
+		const competitionById = new Map(competitions.map((c) => [c.id, c.name]));
+		const distanceById = new Map(distances.map((d) => [d.id, d.name]));
+		const weaponById = new Map(weapons.map((w) => [w.id, w.name]));
+		const categoryById = new Map(categories.map((cat) => [cat.id, cat.name]));
+
+		const toNum = (v: any) => (typeof v === 'number' ? v : v == null ? 0 : Number(v) || 0);
+
+		return (rows ?? []).map((row: any) => {
+			const total =
+				toNum(row.serie1_score) +
+				toNum(row.serie2_score) +
+				toNum(row.serie3_score) +
+				toNum(row.serie4_score) +
+				toNum(row.serie5_score) +
+				toNum(row.serie6_score);
+
+			return {
+				id: row.id,
+				lastName: row.last_name,
+				firstName: row.first_name,
+				competitionName: competitionById.get(row.competition_id) ?? '',
+				clubName: clubById.get(row.club_id) ?? '',
+				distance: distanceById.get(row.distance_id) ?? '',
+				weapon: weaponById.get(row.weapon_id) ?? '',
+				categoryName: categoryById.get(row.category_id) ?? '',
+				totalScore: Number(total.toFixed(2)),
+				userId: row.user_id,
+			} as Shooter;
+		});
+	}
+
+	// DELETE FUNCTIONS /////////////////////////////////////////////////////////////////////
 
 	/**
 	 * Supprime définitivement un club en base de données (table `clubs`) via Supabase.
