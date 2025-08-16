@@ -18,11 +18,21 @@
 				<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
 					<div class="flex flex-col space-y-1">
 						<label for="competitionName" class="text-sm font-medium text-gray-700 dark:text-gray-300 ml-1">Nom de la compétition *</label>
-						<input type="text" #inputField pInputText [(ngModel)]="competitionName" id="competitionName" placeholder="Nom de la compétition" name="competitionName"/>
+						<input
+							type="text"
+							#inputField
+							pInputText
+							[(ngModel)]="competitionName"
+							id="competitionName"
+							placeholder="Nom de la compétition"
+							name="competitionName"
+						/>
 					</div>
 
 					<div class="flex flex-col space-y-1">
-						<label for="competitionDate" class="text-sm font-medium text-gray-700 dark:text-gray-300 ml-1">Dates de la compétition *</label>
+						<label for="competitionDate" class="text-sm font-medium text-gray-700 dark:text-gray-300 ml-1">
+							Dates de la compétition *
+						</label>
 						<div class="relative">
 							<p-datepicker
 								#inputField
@@ -32,8 +42,8 @@
 								placeholder="Dates de la compétition"
 								dateFormat="dd/mm/yy"
 								selectionMode="range"
-                                name="competitionDate"
-                                id="competitionDate"
+								name="competitionDate"
+								id="competitionDate"
 							></p-datepicker>
 						</div>
 					</div>
@@ -59,14 +69,16 @@
 								placeholder="Prix d'inscription"
 								mode="currency"
 								currency="EUR"
-                                name="prixInscription"
-                                id="prixInscription"
+								name="prixInscription"
+								id="prixInscription"
 							></p-inputNumber>
 						</div>
 					</div>
 
 					<div class="flex flex-col space-y-1">
-						<label for="prixCategSup" class="text-sm font-medium text-gray-700 dark:text-gray-300 ml-1">Prix de catégorie supplémentaire *</label>
+						<label for="prixCategSup" class="text-sm font-medium text-gray-700 dark:text-gray-300 ml-1">
+							Prix de catégorie supplémentaire *
+						</label>
 						<div class="flex items-center space-x-2">
 							<p-inputNumber
 								#inputField
@@ -79,8 +91,8 @@
 								placeholder="Prix de catégorie supplémentaire"
 								mode="currency"
 								currency="EUR"
-                                name="prixCategSup"
-                                id="prixCategSup"
+								name="prixCategSup"
+								id="prixCategSup"
 							></p-inputNumber>
 						</div>
 					</div>
@@ -93,10 +105,16 @@
 					<iconify-icon icon="lucide:info" class="text-[1rem] mr-2"></iconify-icon>
 					<p>Les champs marqués d'un astérisque (*) sont obligatoires.</p>
 				</div>
+				<div class="flex items-center text-sm">
+					<iconify-icon icon="lucide:info" class="text-[1rem] mr-2"></iconify-icon>
+					<p>Dans le champ "Dates de la compétition", sélectionnez jusqu'à 2 dates pour la date de début et la date de fin de compétition.</p>
+				</div>
 				<div class="flex justify-end">
 					<button
 						class="inline-flex h-12 items-center justify-center rounded-md bg-prime-blue text-white dark:text-gray-300 hover:bg-hover-prime-blue px-5 text-base font-medium shadow transition-colors duration-250 cursor-pointer"
-						type="submit" [disabled]="isSaving">
+						type="submit"
+						[disabled]="isSaving"
+					>
 						<iconify-icon icon="material-symbols-light:save-rounded" class="text-[1.5rem] mr-3"></iconify-icon>
 						Enregistrer la compétition
 					</button>
