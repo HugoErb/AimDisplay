@@ -29,29 +29,23 @@ export class PdfGeneratorService {
 	async generateCompetitionReport(competitionId: number): Promise<void> {
 		try {
 			if (!competitionId) {
-				this.commonService.showSwalToast('Compétition invalide.', 'error');
+				this.commonService.showSwalToast('Veuillez sélectionner une compétition.', 'error');
 				return;
 			}
 
-			// 1) Récupère les tireurs (garde ton implémentation actuelle)
-			const allShooters = await this.supabase.getShooters();
-			const shooters: Shooter[] = (allShooters ?? []).filter(Boolean);
+			// 1) Récupère les tireurs de la compétition sélectionnée
+			const shooters: Shooter[] = await this.supabase.getShootersByCompetition(competitionId);
 
 			if (!shooters.length) {
-				this.commonService.showSwalToast('Aucun tireur trouvé pour cette compétition.', 'info');
+				this.commonService.showSwalToast('Aucun tireur trouvé pour cette compétition.', 'error');
 				return;
 			}
 
 			// Titre dynamique (nom de la compétition)
 			const competitionTitle = (shooters[0]?.competitionName ?? '').toString().trim() || 'Compétition';
 
-			// 2) Regroupe par (arme, distance, catégorie)
-			const groupMap = new Map<string, Shooter[]>();
-			for (const s of shooters) {
-				const key = this.makeGroupKey(s);
-				if (!groupMap.has(key)) groupMap.set(key, []);
-				groupMap.get(key)!.push(s);
-			}
+			// 2) Regroupe par (arme, distance, catégorie) puis ordonne Distance → Catégorie → Arme
+			const groups = this.groupAndSortByDistanceCategoryWeapon(shooters);
 
 			// 3) Contenu PDF
 			const content: Content[] = [];
@@ -64,13 +58,14 @@ export class PdfGeneratorService {
 			});
 
 			// Un tableau par groupe
-			for (const [, list] of groupMap.entries()) {
-				if (!list.length) continue;
+			for (const g of groups) {
+				if (!g.shooters.length) continue;
 
-				const groupTitle = this.makeGroupLabelFromRow(list[0]);
-				const sorted = [...list].sort((a, b) => (b?.totalScore ?? 0) - (a?.totalScore ?? 0));
+				const title = `${g.weapon} • ${g.distance} • ${g.category}`;
+				// tri interne du groupe par score total décroissant
+				const sorted = [...g.shooters].sort((a, b) => (b?.totalScore ?? 0) - (a?.totalScore ?? 0));
 
-				content.push(this.buildGroupBlock(groupTitle, sorted));
+				content.push(this.buildGroupBlock(title, g.category, sorted));
 			}
 
 			const docDefinition: TDocumentDefinitions = {
@@ -101,7 +96,7 @@ export class PdfGeneratorService {
 				.trim();
 			const fileName = `Classement ${safeTitle}.pdf`;
 
-			pdfMake.createPdf(docDefinition).download(fileName); // téléchargement avec nom demandé
+			pdfMake.createPdf(docDefinition).download(fileName);
 			this.commonService.showSwalToast('PDF généré.', 'success');
 		} catch (err: any) {
 			console.error('Erreur PDF:', err);
@@ -112,13 +107,24 @@ export class PdfGeneratorService {
 	// ———————————————————————————————————————————————
 	// Bloc d’un groupe (arme • distance • catégorie)
 	// ———————————————————————————————————————————————
-	private buildGroupBlock(title: string, rows: Shooter[]): Content {
-		// En-tête sans Distance/Arme
+	private buildGroupBlock(title: string, categoryName: string, rows: Shooter[]): Content {
+		const seriesCount = this.isSixSeriesCategory(categoryName) ? 6 : 4;
+
 		const header: Cell[] = [
 			{ text: 'Rang', style: 'th', alignment: 'center' },
 			{ text: 'Nom', style: 'th' },
 			{ text: 'Prénom', style: 'th' },
 			{ text: 'Club', style: 'th' },
+			// Séries dynamiques
+			...Array.from(
+				{ length: seriesCount },
+				(_, i) =>
+					({
+						text: `Série ${i + 1}`,
+						style: 'th',
+						alignment: 'right',
+					} as Cell)
+			),
 			{ text: 'Score total', style: 'th', alignment: 'right' },
 		];
 
@@ -126,25 +132,31 @@ export class PdfGeneratorService {
 
 		rows.forEach((s, idx) => {
 			const rank = idx + 1;
+
+			// Récupère les N séries à afficher
+			const seriesValues = [s.scoreSerie1, s.scoreSerie2, s.scoreSerie3, s.scoreSerie4, s.scoreSerie5, s.scoreSerie6].slice(0, seriesCount);
+
 			body.push([
 				{ text: String(rank), style: 'td', alignment: 'center' },
 				{ text: s.lastName ?? '', style: 'td' },
 				{ text: s.firstName ?? '', style: 'td' },
 				{ text: s.clubName ?? '', style: 'td' },
+				...seriesValues.map((val) => ({ text: this.formatScore(val), style: 'td', alignment: 'right' } as Cell)),
 				{ text: this.formatScore(s.totalScore), style: 'td', alignment: 'right' },
 			]);
 		});
 
+		// Largeurs : base + (seriesCount * ~55) + total
+		const widths: any[] = [35, '*', '*', '*', ...Array(seriesCount).fill(55), 90];
+
 		return {
-			// <-- tient Titre + Tableau ensemble : si ça ne tient pas,
-			// l’ensemble passe à la page suivante (fini le mini-tableau)
 			unbreakable: true,
 			stack: [
 				{ text: title, style: 'h2', margin: [0, 10, 0, 6] },
 				{
 					table: {
 						headerRows: 1,
-						widths: [35, '*', '*', '*', 90],
+						widths,
 						body,
 					},
 					layout: {
@@ -157,7 +169,6 @@ export class PdfGeneratorService {
 					},
 				},
 			],
-			// espace sous le bloc avant la catégorie suivante
 			margin: [0, 0, 0, 24],
 		};
 	}
@@ -165,23 +176,63 @@ export class PdfGeneratorService {
 	// ———————————————————————————————————————————————
 	// Helpers de regroupement/formatage
 	// ———————————————————————————————————————————————
-	private makeGroupKey(s: Shooter): string {
-		const weapon = (s.weapon ?? '').toString().trim().toLowerCase();
-		const distance = (s.distance ?? '').toString().trim().toLowerCase();
-		const category = (s.categoryName ?? '').toString().trim().toLowerCase();
-		return `${weapon}||${distance}||${category}`;
+
+	/** true si la catégorie doit afficher 6 séries (Dame ou Sénior) */
+	private isSixSeriesCategory(category: string): boolean {
+		if (!category) return false;
+		const c = category
+			.normalize('NFD') // retire les accents
+			.replace(/[\u0300-\u036f]/g, '')
+			.toLowerCase()
+			.trim();
+
+		// ex: "dame", "dame 1", "senior", "senior 2", "sénior 3", etc.
+		return c.startsWith('dame') || c.startsWith('senior');
 	}
 
-	private makeGroupLabelFromRow(s: Shooter): string {
-		const weapon = (s.weapon ?? '—').toString().trim();
-		const distance = (s.distance ?? '—').toString().trim();
-		const category = (s.categoryName ?? 'Sans catégorie').toString().trim();
-		return `${weapon} • ${distance} • ${category}`;
-	}
-
-	private formatScore(score: number | null | undefined): string {
-		const n = Number(score);
-		if (!isFinite(n)) return '';
+	/** Formate un score en 2 décimales, vide si null/undefined/NaN */
+	private formatScore(v: any): string {
+		if (v === null || v === undefined) return '';
+		const n = Number(v);
+		if (!Number.isFinite(n)) return '';
 		return n.toFixed(2);
+	}
+
+	/** Regroupe et ordonne Distance → Catégorie → Arme */
+	private groupAndSortByDistanceCategoryWeapon(shooters: Shooter[]): Array<{
+		distance: string;
+		category: string;
+		weapon: string;
+		shooters: Shooter[];
+	}> {
+		const keyOf = (d: string, c: string, w: string) => `${d}||${c}||${w}`;
+
+		const buckets = new Map<string, { distance: string; category: string; weapon: string; shooters: Shooter[] }>();
+		for (const s of shooters) {
+			const distance = s.distance || '—';
+			const category = s.categoryName || '—';
+			const weapon = s.weapon || '—';
+			const k = keyOf(distance, category, weapon);
+			if (!buckets.has(k)) buckets.set(k, { distance, category, weapon, shooters: [] });
+			buckets.get(k)!.shooters.push(s);
+		}
+
+		const groups = Array.from(buckets.values()).sort((a, b) => {
+			const byDistance = a.distance.localeCompare(b.distance, 'fr', { sensitivity: 'base' });
+			if (byDistance !== 0) return byDistance;
+			const byCategory = a.category.localeCompare(b.category, 'fr', { sensitivity: 'base' });
+			if (byCategory !== 0) return byCategory;
+			return a.weapon.localeCompare(b.weapon, 'fr', { sensitivity: 'base' });
+		});
+
+		// Option : trier les lignes du groupe par Nom/Prénom (avant application du rang)
+		groups.forEach((g) => {
+			g.shooters.sort((x, y) => {
+				const ln = (x.lastName || '').localeCompare(y.lastName || '', 'fr', { sensitivity: 'base' });
+				return ln !== 0 ? ln : (x.firstName || '').localeCompare(y.firstName || '', 'fr', { sensitivity: 'base' });
+			});
+		});
+
+		return groups;
 	}
 }
