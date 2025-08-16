@@ -41,15 +41,32 @@ export class GenererPDFComponent {
 		try {
 			const [shooters, competitions] = await Promise.all([this.supabase.getShooters(), this.supabase.getCompetitions()]);
 
-			// Création du tableau avec trim
+			// Normalisation pour comparaison (sans accents / casse)
+			const normalize = (s: string = '') =>
+				s
+					.normalize('NFD')
+					.replace(/[\u0300-\u036f]/g, '')
+					.toLowerCase()
+					.trim();
+
+			// Map + trim
 			const mappedShooters = (shooters ?? []).map((s) => {
-				const fullName = `${s.lastName} ${s.firstName}`.trim();
-				return { ...s, fullName, name: fullName };
+				const last = (s.lastName ?? '').trim();
+				const first = (s.firstName ?? '').trim();
+				const fullName = `${last} ${first}`.replace(/\s+/g, ' ').trim();
+				return { ...s, lastName: last, firstName: first, fullName, name: fullName };
 			});
 
-			// Suppression des doublons par fullName
-			this.shooters = mappedShooters.filter((shooter, index, self) => index === self.findIndex((s) => s.fullName === shooter.fullName));
+			// Dédup par nom complet (sans accents/casse)
+			const dedup = mappedShooters.filter((shooter, idx, arr) => {
+				const key = normalize(shooter.fullName);
+				return idx === arr.findIndex((x) => normalize(x.fullName) === key);
+			});
 
+			// TRI alphabétique FR sur fullName (ignore casse/accents)
+			dedup.sort((a, b) => a.fullName.localeCompare(b.fullName, 'fr', { sensitivity: 'base' }));
+
+			this.shooters = dedup;
 			this.competitions = competitions;
 		} catch (err) {
 			console.error('Erreur lors du chargement des données :', err);
