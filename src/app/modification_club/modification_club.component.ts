@@ -4,6 +4,7 @@ import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { CommonService } from '../services/common.service';
 import { Club } from '../interfaces/club';
 import { SupabaseService } from '../services/supabase.service';
+import { Router } from '@angular/router';
 
 @Component({
 	selector: 'app-modification-club',
@@ -13,7 +14,7 @@ import { SupabaseService } from '../services/supabase.service';
 	schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class ModificationClubComponent {
-	constructor(protected commonService: CommonService, private supabase: SupabaseService) {}
+	constructor(protected commonService: CommonService, private supabase: SupabaseService, private router: Router) {}
 
 	clubs: Club[] = [];
 	nbRowsPerPage: number = 1;
@@ -44,6 +45,18 @@ export class ModificationClubComponent {
 	@HostListener('window:resize', ['$event'])
 	async onResize(event: any) {
 		this.nbRowsPerPage = await this.commonService.getNbRowsPerPage();
+	}
+
+	/**
+	 * Redirige l’utilisateur vers la page d’édition d’un club, en envoyant le club à modifier.
+	 *
+	 * @param {Club} club - Le club à modifier. Son identifiant (`club.id`) est utilisé comme paramètre de route.
+	 * @returns {void}
+	 */
+	goToEditClub(club: Club) {
+		this.router.navigate(['/creation_club', club.id], {
+			state: { club },
+		});
 	}
 
 	/**
