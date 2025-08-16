@@ -7,6 +7,12 @@ export interface Shooter {
 	distance: string;
 	weapon: string;
 	categoryName: string;
+    scoreSerie1:number;
+    scoreSerie2:number;
+    scoreSerie3:number;
+    scoreSerie4:number;
+    scoreSerie5:number;
+    scoreSerie6:number;
 	totalScore: number;
     userId: string;
 }

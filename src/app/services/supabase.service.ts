@@ -204,27 +204,22 @@ export class SupabaseService {
 	// GET FUNCTIONS /////////////////////////////////////////////////////////////////////
 
 	/**
-	 * Récupère la liste des tireurs de l’utilisateur courant.
+	 * Récupère tous les tireurs de l’utilisateur courant depuis la table `shooters`
+	 * puis normalise les données pour l’interface `Shooter`.
 	 *
-	 * @return La liste des tireurs appartenant à l’utilisateur connecté.
+	 * @returns {Promise<Shooter[]>} La liste des tireurs normalisés pour l’UI.
 	 */
 	async getShooters(): Promise<Shooter[]> {
-		// Récupération de l'utilisateur courant
+		// Utilisateur courant
 		const { data: userData, error: userError } = await this.supabase.auth.getUser();
 		if (userError) throw new Error(`Impossible de récupérer l'utilisateur: ${userError.message}`);
 		const currentUser = userData?.user;
 		if (!currentUser) throw new Error('Aucun utilisateur connecté.');
 
-		// Lecture brute des tireurs
+		// Lecture brute des tireurs (toutes colonnes)
 		const { data: shooterRows, error: shootersError } = await this.supabase
 			.from('shooters')
-			.select(
-				`
-            id, last_name, first_name, user_id,
-            competition_id, club_id, distance_id, weapon_id, category_id,
-            serie1_score, serie2_score, serie3_score, serie4_score, serie5_score, serie6_score
-            `
-			)
+			.select('*')
 			.eq('user_id', currentUser.id)
 			.order('id', { ascending: true });
 
@@ -232,7 +227,7 @@ export class SupabaseService {
 		const rows = shooterRows ?? [];
 		if (!rows.length) return [];
 
-		// Récupération des libellés (label pour distances/weapons/categories)
+		// Référentiels
 		const [{ data: competitions }, { data: clubs }, { data: distances }, { data: weapons }, { data: categories }] = await Promise.all([
 			this.supabase.from('competitions').select('id, name'),
 			this.supabase.from('clubs').select('id, name'),
@@ -241,7 +236,6 @@ export class SupabaseService {
 			this.supabase.from('categories').select('id, label'),
 		]);
 
-		// Création des maps id -> nom/label
 		const mapName = <T extends { id: number; name?: string; label?: string }>(arr?: T[] | null) =>
 			new Map((arr ?? []).map((x) => [x.id, (x as any).name ?? (x as any).label ?? '']));
 
@@ -251,18 +245,16 @@ export class SupabaseService {
 		const weaponById = mapName(weapons as any[]);
 		const categoryById = mapName(categories as any[]);
 
-		// Helper pour convertir les valeurs numériques et gérer les nulls
-		const toNum = (v: any) => (v == null ? 0 : Number(v));
+		const toNum = (v: any) => (v == null ? 0 : Number(v) || 0);
 
-		// Mapping final vers l'interface Shooter
 		return rows.map((row: any): Shooter => {
-			const total =
-				toNum(row.serie1_score) +
-				toNum(row.serie2_score) +
-				toNum(row.serie3_score) +
-				toNum(row.serie4_score) +
-				toNum(row.serie5_score) +
-				toNum(row.serie6_score);
+			const s1 = toNum(row.serie1_score);
+			const s2 = toNum(row.serie2_score);
+			const s3 = toNum(row.serie3_score);
+			const s4 = toNum(row.serie4_score);
+			const s5 = toNum(row.serie5_score);
+			const s6 = toNum(row.serie6_score);
+			const total = s1 + s2 + s3 + s4 + s5 + s6;
 
 			return {
 				id: row.id,
@@ -273,7 +265,13 @@ export class SupabaseService {
 				distance: distanceById.get(row.distance_id) ?? '',
 				weapon: weaponById.get(row.weapon_id) ?? '',
 				categoryName: categoryById.get(row.category_id) ?? '',
-				totalScore: Number(total.toFixed(2)), // Arrondi à 2 décimales
+				scoreSerie1: s1,
+				scoreSerie2: s2,
+				scoreSerie3: s3,
+				scoreSerie4: s4,
+				scoreSerie5: s5,
+				scoreSerie6: s6,
+				totalScore: Number(total.toFixed(2)),
 				userId: row.user_id,
 			};
 		});
@@ -376,7 +374,7 @@ export class SupabaseService {
 
 	/**
 	 * Retourne les tireurs d'une compétition donnée, enrichis avec les libellés
-	 * (club, distance, arme, catégorie) et le totalScore arrondi à 2 décimales.
+	 * (club, distance, arme, catégorie) + toutes les séries et le totalScore (2 décimales).
 	 */
 	async getShootersByCompetition(competitionId: number): Promise<Shooter[]> {
 		const { data: userData, error: userError } = await this.supabase.auth.getUser();
@@ -394,7 +392,7 @@ export class SupabaseService {
 
 		if (error) throw new Error(`Erreur lors de la récupération des tireurs: ${error.message}`);
 
-		// Récupération des référentiels pour mapping des libellés
+		// Référentiels pour libellés
 		const [clubs, competitions, distances, weapons, categories] = await Promise.all([
 			this.getClubs(),
 			this.getCompetitions(),
@@ -407,18 +405,19 @@ export class SupabaseService {
 		const competitionById = new Map(competitions.map((c) => [c.id, c.name]));
 		const distanceById = new Map(distances.map((d) => [d.id, d.name]));
 		const weaponById = new Map(weapons.map((w) => [w.id, w.name]));
-		const categoryById = new Map(categories.map((cat) => [cat.id, cat.name]));
+		const categoryById = new Map(categories.map((k) => [k.id, k.name]));
 
 		const toNum = (v: any) => (typeof v === 'number' ? v : v == null ? 0 : Number(v) || 0);
 
-		return (rows ?? []).map((row: any) => {
-			const total =
-				toNum(row.serie1_score) +
-				toNum(row.serie2_score) +
-				toNum(row.serie3_score) +
-				toNum(row.serie4_score) +
-				toNum(row.serie5_score) +
-				toNum(row.serie6_score);
+		return (rows ?? []).map((row: any): Shooter => {
+			const s1 = toNum(row.serie1_score);
+			const s2 = toNum(row.serie2_score);
+			const s3 = toNum(row.serie3_score);
+			const s4 = toNum(row.serie4_score);
+			const s5 = toNum(row.serie5_score);
+			const s6 = toNum(row.serie6_score);
+
+			const total = s1 + s2 + s3 + s4 + s5 + s6;
 
 			return {
 				id: row.id,
@@ -429,9 +428,15 @@ export class SupabaseService {
 				distance: distanceById.get(row.distance_id) ?? '',
 				weapon: weaponById.get(row.weapon_id) ?? '',
 				categoryName: categoryById.get(row.category_id) ?? '',
+				scoreSerie1: s1,
+				scoreSerie2: s2,
+				scoreSerie3: s3,
+				scoreSerie4: s4,
+				scoreSerie5: s5,
+				scoreSerie6: s6,
 				totalScore: Number(total.toFixed(2)),
 				userId: row.user_id,
-			} as Shooter;
+			};
 		});
 	}
 
