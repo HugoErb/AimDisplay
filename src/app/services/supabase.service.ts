@@ -525,4 +525,45 @@ export class SupabaseService {
 			this.commonService.showSwalToast(err?.message ?? 'Erreur lors de la suppression du tireur', 'error');
 		}
 	}
+
+	// UPDATE FUNCTIONS /////////////////////////////////////////////////////////////////////
+
+	/**
+	 * Met à jour un club (restreint à l'utilisateur courant via son UUID).
+	 *
+	 * @param clubId  Identifiant du club à modifier.
+	 * @param payload Données minimales du club (name, city).
+	 * @return Le club mis à jour tel qu’enregistré en base.
+	 */
+	async updateClubById(clubId: number, payload: Pick<Club, 'name' | 'city'>): Promise<Club> {
+		try {
+			const { data: userData, error: userError } = await this.supabase.auth.getUser();
+			if (userError) throw new Error(`Impossible de récupérer l'utilisateur: ${userError.message}`);
+			const user = userData?.user;
+			if (!user) throw new Error('Aucun utilisateur connecté.');
+			if (!clubId) throw new Error('Identifiant de club invalide.');
+
+			const name = payload.name?.trim();
+			const city = payload.city?.trim();
+			if (!name || !city) throw new Error('Les champs "name" et "city" sont obligatoires.');
+
+			const { data, error } = await this.supabase
+				.from('clubs')
+				.update({ name, city })
+				.eq('id', clubId)
+				.eq('user_id', user.id)
+				.select('*')
+				.single<Club>();
+
+			if (error) throw new Error(`Erreur lors de la mise à jour du club: ${error.message}`);
+			if (!data) throw new Error('Club introuvable ou non autorisé.');
+
+			this.zone.run(() => this.commonService.showSwalToast('Club mis à jour !', 'success'));
+			return data!;
+		} catch (e: any) {
+			const msg = e?.message ?? 'Une erreur est survenue lors de la mise à jour du club.';
+			this.zone.run(() => this.commonService.showSwalToast(msg, 'error'));
+			throw e;
+		}
+	}
 }
