@@ -6,26 +6,24 @@ import { SupabaseService } from './supabase.service';
 import { CommonService } from './common.service';
 import { Shooter } from '../interfaces/shooter';
 
+// vfs
 const vfsAny: any = (pdfFonts as any).vfs ?? (pdfFonts as any).default?.vfs ?? (pdfFonts as any);
 (pdfMake as any).vfs = vfsAny;
 
-// Cellule de tableau minimaliste
-type Cell = {
-	text: string;
-	style?: string;
-	alignment?: 'left' | 'right' | 'center' | 'justify';
-};
+type Cell = { text: string; style?: string; alignment?: 'left' | 'right' | 'center' | 'justify' };
 
 @Injectable({ providedIn: 'root' })
 export class PdfGeneratorService {
 	constructor(private supabase: SupabaseService, private commonService: CommonService) {}
 
-	/**
-	 * Génère un PDF "Classement NOM COMPETITION" en orientation paysage.
-	 * - Regroupe par triplet (arme, distance, catégorie)
-	 * - Trie chaque groupe par score total décroissant
-	 * - Construit un PDF avec un tableau par groupe
-	 */
+	// Palette
+	private theme = {
+		primary: '#2563EB',
+		surface: '#FFFFFF',
+		border: '#E5E7EB',
+		textMuted: '#6B7280',
+	};
+
 	async generateCompetitionReport(competitionId: number): Promise<void> {
 		try {
 			if (!competitionId) {
@@ -33,149 +31,77 @@ export class PdfGeneratorService {
 				return;
 			}
 
-			// 1) Récupère les tireurs de la compétition sélectionnée
 			const shooters: Shooter[] = await this.supabase.getShootersByCompetition(competitionId);
-
 			if (!shooters.length) {
 				this.commonService.showSwalToast('Aucun tireur trouvé pour cette compétition.', 'error');
 				return;
 			}
 
-			// Titre dynamique (nom de la compétition)
 			const competitionTitle = (shooters[0]?.competitionName ?? '').toString().trim() || 'Compétition';
 
-			// 2) Regroupe par (arme, distance, catégorie) puis ordonne Distance → Catégorie → Arme
+			// Distance → Catégorie → Arme
 			const groups = this.groupAndSortByDistanceCategoryWeapon(shooters);
 
-			// 3) Contenu PDF
 			const content: Content[] = [];
-
-			// En-tête (sans "Généré le ...")
-			content.push({
-				text: `Classement ${competitionTitle}`,
-				style: 'h1',
-				margin: [0, 0, 0, 12],
-			});
-
-			// Un tableau par groupe
 			for (const g of groups) {
-				if (!g.shooters.length) continue;
-
-				const title = `${g.weapon} • ${g.distance} • ${g.category}`;
-				// tri interne du groupe par score total décroissant
-				const sorted = [...g.shooters].sort((a, b) => (b?.totalScore ?? 0) - (a?.totalScore ?? 0));
-
-				content.push(this.buildGroupBlock(title, g.category, sorted));
+				const ordered = [...g.shooters].sort((a, b) => (b?.totalScore ?? 0) - (a?.totalScore ?? 0));
+				const title = `${g.distance} • ${g.category} • ${g.weapon}`;
+				content.push(this.buildGroupCard(title, ordered));
 			}
 
 			const docDefinition: TDocumentDefinitions = {
 				pageSize: 'A4',
 				pageOrientation: 'landscape',
-				pageMargins: [40, 60, 40, 60],
+				pageMargins: [0, 88, 0, 54],
 				content,
 				styles: {
-					h1: { fontSize: 16, bold: true },
-					subtitle: { fontSize: 9, color: '#666' },
-					h2: { fontSize: 13, bold: true },
-					th: { bold: true, fillColor: '#f3f4f6', margin: [0, 5, 0, 5] },
+					pageTitle: { fontSize: 16, bold: true, color: '#ffffff' },
+					cardTitle: { fontSize: 12, bold: true, color: '#ffffff' },
+					th: { bold: true, fillColor: '#F3F4F6', margin: [0, 6, 0, 6] },
 					td: { margin: [0, 4, 0, 4] },
 				},
 				defaultStyle: { fontSize: 10 },
+
+				// Header bleu
+				header: () => ({
+					margin: [0, 0, 0, 8],
+					table: {
+						widths: ['*'],
+						body: [
+							[
+								{
+									border: [false, false, false, false],
+									fillColor: this.theme.primary,
+									margin: [40, 18, 40, 18],
+									columns: [{ text: `Classement ${competitionTitle}`, style: 'pageTitle' }],
+								},
+							],
+						],
+					},
+					layout: 'noBorders',
+				}),
+
+				// Footer
 				footer: (currentPage: number, pageCount: number) => ({
-					text: `${currentPage} / ${pageCount}`,
-					alignment: 'right',
-					margin: [0, 0, 40, 20],
-					fontSize: 8,
+					margin: [40, 0, 40, 18],
+					columns: [
+						{ text: '', width: '*' },
+						{ text: `${currentPage} / ${pageCount}`, alignment: 'right', fontSize: 8 },
+					],
 				}),
 			};
 
-			// 4) Nom de fichier: "Classement NOM COMPETITION.pdf"
 			const safeTitle = competitionTitle
 				.replace(/[\\/:*?"<>|]/g, ' ')
 				.replace(/\s+/g, ' ')
 				.trim();
-			const fileName = `Classement ${safeTitle}.pdf`;
-
-			pdfMake.createPdf(docDefinition).download(fileName);
+			pdfMake.createPdf(docDefinition).download(`Classement ${safeTitle}.pdf`);
 			this.commonService.showSwalToast('PDF généré.', 'success');
 		} catch (err: any) {
 			console.error('Erreur PDF:', err);
 			this.commonService.showSwalToast(err?.message ?? 'Erreur lors de la génération du PDF', 'error');
 		}
 	}
-
-	// ———————————————————————————————————————————————
-	// Bloc d’un groupe (arme • distance • catégorie)
-	// ———————————————————————————————————————————————
-	private buildGroupBlock(title: string, categoryName: string, rows: Shooter[]): Content {
-		const seriesCount = this.isSixSeriesCategory(categoryName) ? 6 : 4;
-
-		const header: Cell[] = [
-			{ text: 'Rang', style: 'th', alignment: 'center' },
-			{ text: 'Nom', style: 'th' },
-			{ text: 'Prénom', style: 'th' },
-			{ text: 'Club', style: 'th' },
-			// Séries dynamiques
-			...Array.from(
-				{ length: seriesCount },
-				(_, i) =>
-					({
-						text: `Série ${i + 1}`,
-						style: 'th',
-						alignment: 'right',
-					} as Cell)
-			),
-			{ text: 'Score total', style: 'th', alignment: 'right' },
-		];
-
-		const body: Cell[][] = [header];
-
-		rows.forEach((s, idx) => {
-			const rank = idx + 1;
-
-			// Récupère les N séries à afficher
-			const seriesValues = [s.scoreSerie1, s.scoreSerie2, s.scoreSerie3, s.scoreSerie4, s.scoreSerie5, s.scoreSerie6].slice(0, seriesCount);
-
-			body.push([
-				{ text: String(rank), style: 'td', alignment: 'center' },
-				{ text: s.lastName ?? '', style: 'td' },
-				{ text: s.firstName ?? '', style: 'td' },
-				{ text: s.clubName ?? '', style: 'td' },
-				...seriesValues.map((val) => ({ text: this.formatScore(val), style: 'td', alignment: 'right' } as Cell)),
-				{ text: this.formatScore(s.totalScore), style: 'td', alignment: 'right' },
-			]);
-		});
-
-		// Largeurs : base + (seriesCount * ~55) + total
-		const widths: any[] = [35, '*', '*', '*', ...Array(seriesCount).fill(55), 90];
-
-		return {
-			unbreakable: true,
-			stack: [
-				{ text: title, style: 'h2', margin: [0, 10, 0, 6] },
-				{
-					table: {
-						headerRows: 1,
-						widths,
-						body,
-					},
-					layout: {
-						hLineColor: '#e5e7eb',
-						vLineColor: '#e5e7eb',
-						paddingLeft: () => 6,
-						paddingRight: () => 6,
-						paddingTop: () => 4,
-						paddingBottom: () => 4,
-					},
-				},
-			],
-			margin: [0, 0, 0, 24],
-		};
-	}
-
-	// ———————————————————————————————————————————————
-	// Helpers de regroupement/formatage
-	// ———————————————————————————————————————————————
 
 	/** true si la catégorie doit afficher 6 séries (Dame ou Sénior) */
 	private isSixSeriesCategory(category: string): boolean {
@@ -185,17 +111,102 @@ export class PdfGeneratorService {
 			.replace(/[\u0300-\u036f]/g, '')
 			.toLowerCase()
 			.trim();
-
 		// ex: "dame", "dame 1", "senior", "senior 2", "sénior 3", etc.
 		return c.startsWith('dame') || c.startsWith('senior');
 	}
 
-	/** Formate un score en 2 décimales, vide si null/undefined/NaN */
-	private formatScore(v: any): string {
-		if (v === null || v === undefined) return '';
-		const n = Number(v);
-		if (!Number.isFinite(n)) return '';
-		return n.toFixed(2);
+	/** Carte sans espace blanc autour du tableau (affiche S5/S6 seulement pour Dame/Sénior) */
+	private buildGroupCard(title: string, rows: Shooter[]): Content {
+		const showSix = this.isSixSeriesCategory(rows[0]?.categoryName ?? '');
+
+		// En-têtes dynamiques
+		const headerRow: Cell[] = [
+			{ text: 'Rang', style: 'th', alignment: 'center' },
+			{ text: 'Nom', style: 'th' },
+			{ text: 'Prénom', style: 'th' },
+			{ text: 'Club', style: 'th' },
+			{ text: 'S1', style: 'th', alignment: 'right' },
+			{ text: 'S2', style: 'th', alignment: 'right' },
+			{ text: 'S3', style: 'th', alignment: 'right' },
+			{ text: 'S4', style: 'th', alignment: 'right' },
+		];
+
+		if (showSix) {
+			headerRow.push({ text: 'S5', style: 'th', alignment: 'right' }, { text: 'S6', style: 'th', alignment: 'right' });
+		}
+
+		headerRow.push({ text: 'Total', style: 'th', alignment: 'right' });
+
+		// Largeurs adaptées
+		const widths = showSix
+			? [35, '*', '*', '*', 40, 40, 40, 40, 40, 40, 60] // avec S5/S6
+			: [35, '*', '*', '*', 45, 45, 45, 45, 60]; // sans S5/S6
+
+		const body: Cell[][] = [headerRow];
+		const v = (n: any) => (n == null || Number.isNaN(Number(n)) ? '' : Number(n).toFixed(2));
+
+		rows.forEach((s, idx) => {
+			const base: Cell[] = [
+				{ text: String(idx + 1), style: 'td', alignment: 'center' },
+				{ text: s.lastName ?? '', style: 'td' },
+				{ text: s.firstName ?? '', style: 'td' },
+				{ text: s.clubName ?? '', style: 'td' },
+				{ text: v(s.scoreSerie1), style: 'td', alignment: 'right' },
+				{ text: v(s.scoreSerie2), style: 'td', alignment: 'right' },
+				{ text: v(s.scoreSerie3), style: 'td', alignment: 'right' },
+				{ text: v(s.scoreSerie4), style: 'td', alignment: 'right' },
+			];
+			if (showSix) {
+				base.push({ text: v(s.scoreSerie5), style: 'td', alignment: 'right' }, { text: v(s.scoreSerie6), style: 'td', alignment: 'right' });
+			}
+			base.push({ text: v(s.totalScore), style: 'td', alignment: 'right' });
+			body.push(base);
+		});
+
+		return {
+			// Garde bandeau + au moins une ligne ensemble
+			unbreakable: true,
+			margin: [40, 0, 40, 12],
+			stack: [
+				// Bandeau bleu
+				{
+					table: {
+						widths: ['*'],
+						body: [
+							[
+								{
+									text: title,
+									style: 'cardTitle',
+									fillColor: this.theme.primary,
+									color: '#fff',
+									margin: [12, 10, 12, 10],
+								},
+							],
+						],
+					},
+					layout: 'noBorders',
+					margin: [0, 0, 0, 0],
+				},
+				// Tableau : supprime la ligne supérieure
+				{
+					table: {
+						headerRows: 1,
+						widths,
+						body,
+					},
+					layout: {
+						hLineWidth: (i) => (i === 0 ? 0 : 1),
+						hLineColor: this.theme.border,
+						vLineColor: this.theme.border,
+						paddingLeft: () => 6,
+						paddingRight: () => 6,
+						paddingTop: () => 4,
+						paddingBottom: () => 4,
+					},
+					margin: [0, 0, 0, 0],
+				},
+			],
+		};
 	}
 
 	/** Regroupe et ordonne Distance → Catégorie → Arme */
@@ -225,7 +236,6 @@ export class PdfGeneratorService {
 			return a.weapon.localeCompare(b.weapon, 'fr', { sensitivity: 'base' });
 		});
 
-		// Option : trier les lignes du groupe par Nom/Prénom (avant application du rang)
 		groups.forEach((g) => {
 			g.shooters.sort((x, y) => {
 				const ln = (x.lastName || '').localeCompare(y.lastName || '', 'fr', { sensitivity: 'base' });
