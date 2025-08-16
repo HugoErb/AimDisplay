@@ -45,16 +45,19 @@
 						Générer un rapport de compétition
 					</h2>
 					<div class="flex flex-col space-y-1">
-						<label class="text-sm font-medium text-gray-700 dark:text-gray-300 ml-1">Compétition *</label>
+						<label for="selectedCompetition" class="text-sm font-medium text-gray-700 dark:text-gray-300 ml-1">Compétition *</label>
 						<p-autoComplete
-							[(ngModel)]="selectedCompetitionName"
+							#inputField
+							[(ngModel)]="selectedCompetition"
 							[forceSelection]="true"
 							[suggestions]="filteredCompetitions"
 							(completeMethod)="filteredCompetitions = commonService.filterByName($event.query, competitions)"
-							field="name"
+							name="selectedCompetition"
+							inputId="selectedCompetition"
+                            (onSelect)="selectedCompetition = $event.value"
+							optionLabel="name"
 							[dropdown]="true"
 							placeholder="Compétition à exporter"
-							#inputField
 						></p-autoComplete>
 					</div>
 					<div class="bg-blue-50 dark:bg-gray-700 rounded-lg p-4 border border-blue-200 dark:border-gray-500 my-6">
