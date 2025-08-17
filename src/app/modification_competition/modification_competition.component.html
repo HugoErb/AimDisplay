@@ -10,7 +10,14 @@
 			</div>
 		</div>
 		<div class="min-w-[525px] mx-auto shadow-lg">
-			<p-table [value]="competitions" dataKey="id" [paginator]="true" [rows]="nbRowsPerPage">
+			<p-table
+				[value]="competitions"
+				dataKey="id"
+				[paginator]="true"
+				[rows]="nbRowsPerPage"
+				[showCurrentPageReport]="true"
+				currentPageReportTemplate="{first} à {last} sur {totalRecords}"
+			>
 				<ng-template pTemplate="header">
 					<tr>
 						<th pSortableColumn="name" class="!bg-gray-100 hover:dark:!bg-gray-700 hover:!bg-gray-200">
@@ -63,7 +70,8 @@
 						<td class="relative !py-4">
 							<div
 								class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 p-1.5 pb-0 rounded-md hover:bg-gray-200 dark:hover:bg-gray-600 cursor-pointer"
-							(click)="goToEditCompetition(competition)">
+								(click)="goToEditCompetition(competition)"
+							>
 								<iconify-icon icon="lucide:pen-line" class="text-[1.2rem]"></iconify-icon>
 							</div>
 						</td>
@@ -83,7 +91,7 @@
 					<tr>
 						<td colspan="7">
 							<div class="flex items-center justify-center py-3" aria-live="polite">
-                                <iconify-icon icon="line-md:loading-loop" class="text-[1.2rem] text-gray-500 dark:text-gray-400"></iconify-icon>
+								<iconify-icon icon="line-md:loading-loop" class="text-[1.2rem] text-gray-500 dark:text-gray-400"></iconify-icon>
 								<span class="ml-3 text-gray-500 dark:text-gray-400">Chargement des données…</span>
 							</div>
 						</td>
