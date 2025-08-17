@@ -257,38 +257,44 @@ export class CreationShooterComponent {
 		}
 	}
 
-	private fillFormFromShooter(s: Shooter): void {
-		this.shooterLastName = s.lastName ?? '';
-		this.shooterFirstName = s.firstName ?? '';
-		this.shooterEmail = s.email ?? '';
+	/**
+	 * Pré-remplit le formulaire d’édition à partir d’un objet `Shooter`.
+	 *
+	 * @param shooter  Tireur source (provenant de la BDD) dont on souhaite éditer les informations.
+	 */
+	private fillFormFromShooter(shooter: Shooter): void {
+		this.shooterLastName = shooter.lastName ?? '';
+		this.shooterFirstName = shooter.firstName ?? '';
+		this.shooterEmail = shooter.email ?? '';
 
-		// AutoComplete : on tente de retrouver l’objet par son nom (sinon on met la string)
+		// AutoComplete : on tente de retrouver l’objet par son nom (sinon on met le string)
 		const findByName = <T extends { id: number; name: string }>(name: string, list: T[]): T | string =>
 			list?.find((x) => x.name === name) ?? (name || '');
 
-		this.shooterClubName = findByName(s.clubName, this.clubs);
-		this.shooterCompetitionName = findByName(s.competitionName, this.competitions);
+		this.shooterClubName = findByName(shooter.clubName, this.clubs);
+		this.shooterCompetitionName = findByName(shooter.competitionName, this.competitions);
 
-		const distanceObj = findByName(s.distance, this.distances);
-		const weaponObj = findByName(s.weapon, this.weapons);
-		const categoryObj = findByName(s.categoryName, this.shooterCategories);
+		const distanceObj = findByName(shooter.distance, this.distances);
+		const weaponObj = findByName(shooter.weapon, this.weapons);
+		const categoryObj = findByName(shooter.categoryName, this.shooterCategories);
 
-		const isSeniorOrDame = /\b(Dame|Sénior)\b/i.test(s.categoryName || '');
+		const isSeniorOrDame = /\b(Dame|Sénior)\b/i.test(shooter.categoryName || '');
 
 		this.categoryGroups = [
 			{
 				shooterDistance: distanceObj,
 				shooterWeapon: weaponObj,
 				shooterCategory: categoryObj,
-				scoreSerie1: s.scoreSerie1 ?? null,
-				scoreSerie2: s.scoreSerie2 ?? null,
-				scoreSerie3: s.scoreSerie3 ?? null,
-				scoreSerie4: s.scoreSerie4 ?? null,
-				scoreSerie5: s.scoreSerie5 ?? null,
-				scoreSerie6: s.scoreSerie6 ?? null,
+				scoreSerie1: shooter.scoreSerie1 ?? null,
+				scoreSerie2: shooter.scoreSerie2 ?? null,
+				scoreSerie3: shooter.scoreSerie3 ?? null,
+				scoreSerie4: shooter.scoreSerie4 ?? null,
+				scoreSerie5: shooter.scoreSerie5 ?? null,
+				scoreSerie6: shooter.scoreSerie6 ?? null,
 				isSeniorOrDame,
 			},
 		];
+
 		// Affichage série 5/6 si Dame/Senior
 		this.onCategorySelected({ value: this.categoryGroups[0].shooterCategory }, this.categoryGroups[0]);
 	}
@@ -386,6 +392,13 @@ export class CreationShooterComponent {
 		}
 	}
 
+	/**
+	 * Extrait l’`id` d’une sélection issue d’un composant (ex. `p-autoComplete`).
+     * 
+	 * @param selection Valeur renvoyée par le champ (objet sélectionné, libellé string, ou rien).
+	 * @param list      Liste de référence permettant, si besoin, de retrouver l’objet à partir du `name`.
+	 * @returns         L’identifiant numérique si trouvé, sinon `undefined`.
+	 */
 	private getIdFromSelection<T extends { id: number; name: string }>(selection: any, list: T[]): number | undefined {
 		if (!selection) return undefined;
 		if (typeof selection === 'object' && 'id' in selection) return selection.id as number;
