@@ -7,6 +7,7 @@ import { SupabaseService } from '../services/supabase.service';
 import { CommonModule, CurrencyPipe } from '@angular/common';
 import { registerLocaleData } from '@angular/common';
 import localeFr from '@angular/common/locales/fr';
+import { Router } from '@angular/router';
 
 registerLocaleData(localeFr, 'fr-FR');
 
@@ -18,7 +19,7 @@ registerLocaleData(localeFr, 'fr-FR');
 	schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class ModificationCompetitionComponent {
-	constructor(protected commonService: CommonService, private supabase: SupabaseService) {}
+	constructor(protected commonService: CommonService, private supabase: SupabaseService, private router: Router) {}
 
 	competitions: Competition[] = [];
 	nbRowsPerPage: number = 1;
@@ -49,6 +50,18 @@ export class ModificationCompetitionComponent {
 	@HostListener('window:resize', ['$event'])
 	async onResize(event: any) {
 		this.nbRowsPerPage = await this.commonService.getNbRowsPerPage();
+	}
+
+	/**
+	 * Redirige l’utilisateur vers la page d’édition d’une compétition, en envoyant la compétition à modifier.
+	 *
+	 * @param {Competition} competition - La compétition à modifier. Son identifiant (`competition.id`) est utilisé comme paramètre de route.
+	 * @returns {void}
+	 */
+	goToEditCompetition(competition: Competition) {
+		this.router.navigate(['/creation_competition', competition.id], {
+			state: { competition },
+		});
 	}
 
 	/**

@@ -532,7 +532,7 @@ export class SupabaseService {
 	 * Met à jour un club (restreint à l'utilisateur courant via son UUID).
 	 *
 	 * @param clubId  Identifiant du club à modifier.
-	 * @param payload Données minimales du club (name, city).
+	 * @param payload Données du club (name, city).
 	 * @return Le club mis à jour tel qu’enregistré en base.
 	 */
 	async updateClubById(clubId: number, payload: Pick<Club, 'name' | 'city'>): Promise<Club> {
@@ -562,6 +562,82 @@ export class SupabaseService {
 			return data!;
 		} catch (e: any) {
 			const msg = e?.message ?? 'Une erreur est survenue lors de la mise à jour du club.';
+			this.zone.run(() => this.commonService.showSwalToast(msg, 'error'));
+			throw e;
+		}
+	}
+
+	/**
+	 * Met à jour une compétition (restreint à l'utilisateur courant via son UUID).
+	 *
+	 * @param competitionId Identifiant de la compétition à modifier.
+	 * @param payload       Données modifiables de la compétition.
+	 *
+	 * @return La compétition mise à jour telle qu’enregistrée en base.
+	 */
+	async updateCompetitionById(
+		competitionId: number,
+		payload: {
+			name?: string | null;
+			startDate?: string | Date | null;
+			endDate?: string | Date | null;
+			price?: number | null;
+			supCategoryPrice?: number | null;
+			place?: string | null;
+			clubId?: number | null;
+		}
+	): Promise<Competition> {
+		try {
+			const { data: userData, error: userError } = await this.supabase.auth.getUser();
+			if (userError) throw new Error(`Impossible de récupérer l'utilisateur: ${userError.message}`);
+			const user = userData?.user;
+			if (!user) throw new Error('Aucun utilisateur connecté.');
+			if (!competitionId) throw new Error('Identifiant de compétition invalide.');
+
+			// Normalise une date vers 'YYYY-MM-DD' (ou null si demandé)
+			const toYmd = (d: string | Date | null | undefined): string | null | undefined => {
+				if (d === undefined) return undefined; // champ non fourni => pas de mise à jour
+				if (d === null) return null; // demande explicite d'effacement
+				if (typeof d === 'string') return d; // on suppose 'YYYY-MM-DD'
+				if (d instanceof Date) {
+					const y = d.getFullYear();
+					const m = String(d.getMonth() + 1).padStart(2, '0');
+					const day = String(d.getDate()).padStart(2, '0');
+					return `${y}-${m}-${day}`;
+				}
+				throw new Error('Format de date invalide.');
+			};
+
+			// Ne pousser que les champs fournis
+			const updates: any = {};
+			if (payload.name !== undefined) updates.name = payload.name?.trim() ?? null;
+			if (payload.startDate !== undefined) updates.start_date = toYmd(payload.startDate);
+			if (payload.endDate !== undefined) updates.end_date = toYmd(payload.endDate);
+			if (payload.price !== undefined) updates.price = payload.price ?? null;
+			if (payload.supCategoryPrice !== undefined) updates.sup_category_price = payload.supCategoryPrice ?? null;
+			if (payload.place !== undefined) updates.place = payload.place?.trim() ?? null;
+			if (payload.clubId !== undefined) updates.club_id = payload.clubId ?? null;
+
+			// Au moins un champ à modifier ?
+			if (Object.keys(updates).length === 0) {
+				throw new Error('Aucune donnée à mettre à jour.');
+			}
+
+			const { data, error } = await this.supabase
+				.from('competitions')
+				.update(updates)
+				.eq('id', competitionId)
+				.eq('user_id', user.id)
+				.select('*')
+				.single<Competition>();
+
+			if (error) throw new Error(`Erreur lors de la mise à jour de la compétition: ${error.message}`);
+			if (!data) throw new Error('Compétition introuvable ou non autorisée.');
+
+			this.zone.run(() => this.commonService.showSwalToast('Compétition mise à jour !', 'success'));
+			return data!;
+		} catch (e: any) {
+			const msg = e?.message ?? 'Une erreur est survenue lors de la mise à jour de la compétition.';
 			this.zone.run(() => this.commonService.showSwalToast(msg, 'error'));
 			throw e;
 		}

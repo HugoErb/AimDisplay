@@ -24,12 +24,13 @@ export class CreationClubComponent {
 		private location: Location
 	) {}
 
+	isSaving: boolean = false;
+
 	// Variables de création d'un club
 	@ViewChildren('inputField', { read: ElementRef }) inputFields!: QueryList<ElementRef>;
 	public inputLabelMap = new Map<string, string>();
 	clubName: string = '';
 	clubCity: string = '';
-	isSaving: boolean = false;
 
 	// Variables de modification d'un club
 	editingClub: Club | null = null;
