@@ -260,6 +260,7 @@ export class SupabaseService {
 				id: row.id,
 				lastName: row.last_name,
 				firstName: row.first_name,
+				email: row.email,
 				competitionName: competitionById.get(row.competition_id) ?? '',
 				clubName: clubById.get(row.club_id) ?? '',
 				distance: distanceById.get(row.distance_id) ?? '',
@@ -423,6 +424,7 @@ export class SupabaseService {
 				id: row.id,
 				lastName: row.last_name,
 				firstName: row.first_name,
+                email: row.email,
 				competitionName: competitionById.get(row.competition_id) ?? '',
 				clubName: clubById.get(row.club_id) ?? '',
 				distance: distanceById.get(row.distance_id) ?? '',
@@ -529,10 +531,109 @@ export class SupabaseService {
 	// UPDATE FUNCTIONS /////////////////////////////////////////////////////////////////////
 
 	/**
+	 * Met à jour un tireur (restreint à l'utilisateur courant via son UUID).
+	 *
+	 * @param shooterId Identifiant du tireur à modifier.
+	 * @param payload   Données modifiables du tireur.
+	 * @returns La ligne 'shooters' mise à jour telle qu’enregistrée en base.
+	 */
+	async updateShooterById(
+		shooterId: number,
+		payload: {
+			lastName: string;
+			firstName: string;
+			email?: string | null;
+			clubId: number;
+			competitionId: number;
+			distanceId: number;
+			weaponId: number;
+			categoryId: number;
+			serie1Score?: number | null;
+			serie2Score?: number | null;
+			serie3Score?: number | null;
+			serie4Score?: number | null;
+			serie5Score?: number | null;
+			serie6Score?: number | null;
+		}
+	): Promise<{
+		id: number;
+		last_name: string;
+		first_name: string;
+		email: string | null;
+		club_id: number;
+		competition_id: number;
+		distance_id: number;
+		weapon_id: number;
+		category_id: number;
+		serie1_score: number | null;
+		serie2_score: number | null;
+		serie3_score: number | null;
+		serie4_score: number | null;
+		serie5_score: number | null;
+		serie6_score: number | null;
+		user_id: string;
+		created_at?: string;
+		updated_at?: string;
+	}> {
+		try {
+			const { data: userData, error: userError } = await this.supabase.auth.getUser();
+			if (userError) throw new Error(`Impossible de récupérer l'utilisateur: ${userError.message}`);
+			const user = userData?.user;
+			if (!user) throw new Error('Aucun utilisateur connecté.');
+			if (!shooterId) throw new Error('Identifiant de tireur invalide.');
+
+			const trimmedLastName = payload.lastName?.trim();
+			const trimmedFirstName = payload.firstName?.trim();
+			if (!trimmedLastName || !trimmedFirstName) {
+				throw new Error('Les champs "Nom" et "Prénom" sont obligatoires.');
+			}
+
+			// Patch à envoyer en BDD (respect des noms de colonnes)
+			const updatePatch = {
+				last_name: trimmedLastName,
+				first_name: trimmedFirstName,
+				email: payload.email ?? null,
+
+				club_id: payload.clubId,
+				competition_id: payload.competitionId,
+				distance_id: payload.distanceId,
+				weapon_id: payload.weaponId,
+				category_id: payload.categoryId,
+
+				// Les séries peuvent être NULL si non renseignées
+				serie1_score: payload.serie1Score ?? null,
+				serie2_score: payload.serie2Score ?? null,
+				serie3_score: payload.serie3Score ?? null,
+				serie4_score: payload.serie4Score ?? null,
+				serie5_score: payload.serie5Score ?? null,
+				serie6_score: payload.serie6Score ?? null,
+			};
+
+			const { data, error } = await this.supabase
+				.from('shooters')
+				.update(updatePatch)
+				.eq('id', shooterId)
+				.eq('user_id', user.id)
+				.select('*')
+				.single();
+
+			if (error) throw new Error(`Erreur lors de la mise à jour du tireur: ${error.message}`);
+			if (!data) throw new Error('Tireur introuvable ou non autorisé.');
+
+			this.zone.run(() => this.commonService.showSwalToast('Tireur mis à jour !', 'success'));
+			return data!;
+		} catch (e: any) {
+			const msg = e?.message ?? 'Une erreur est survenue lors de la mise à jour du tireur.';
+			this.zone.run(() => this.commonService.showSwalToast(msg, 'error'));
+			throw e;
+		}
+	}
+
+	/**
 	 * Met à jour un club (restreint à l'utilisateur courant via son UUID).
 	 *
 	 * @param clubId  Identifiant du club à modifier.
-	 * @param payload Données du club (name, city).
+	 * @param payload Données modifiables du club.
 	 * @return Le club mis à jour tel qu’enregistré en base.
 	 */
 	async updateClubById(clubId: number, payload: Pick<Club, 'name' | 'city'>): Promise<Club> {
