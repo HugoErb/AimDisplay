@@ -3,6 +3,7 @@ import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { AutoCompleteModule } from 'primeng/autocomplete';
 import { CommonService } from '../services/common.service';
 import { SupabaseService } from '../services/supabase.service';
+import { Competition } from '../interfaces/competition';
 
 @Component({
 	selector: 'app-display',
@@ -16,7 +17,7 @@ export class DisplayComponent {
 
 	@ViewChildren('inputField', { read: ElementRef }) inputFields!: QueryList<ElementRef>;
 	public inputLabelMap = new Map<string, string>();
-	shooterCompetitionName: string = '';
+	selectedCompetition: Competition | null = null;
 	competitions: any[] = [];
 	filteredCompetitions: any[] = [];
 
@@ -39,7 +40,10 @@ export class DisplayComponent {
 	async launchDisplay(): Promise<void> {
 		this.inputLabelMap = this.commonService.getInputLabelMap(this.inputFields);
 
-		if (await this.commonService.createData(this.inputLabelMap)) {
+		if (await this.commonService.validateInputs(this.inputLabelMap, false)) {
+			// Ouvre la fenêtre du ranking avec les params
+			const url = `/ranking?competitionId=${this.selectedCompetition?.id}`;
+			window.open(url, '_blank');
 			this.commonService.resetInputFields(this.inputFields);
 		}
 	}

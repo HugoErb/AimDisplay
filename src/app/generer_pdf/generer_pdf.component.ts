@@ -5,19 +5,20 @@ import { CommonModule } from '@angular/common';
 import { CommonService } from '../services/common.service';
 import { PdfGeneratorService } from '../services/pdf-generator.service';
 import { SupabaseService } from '../services/supabase.service';
-import { Shooter } from '../interfaces/shooter';
+import { FormsModule } from '@angular/forms';
 import { Competition } from '../interfaces/competition';
-type ShooterWithFullName = Shooter & { fullName: string };
 
 @Component({
 	selector: 'app-generer-pdf',
 	standalone: true,
-	imports: [AutoCompleteModule, CommonModule],
+	imports: [AutoCompleteModule, CommonModule, FormsModule],
 	templateUrl: './generer_pdf.component.html',
 	schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class GenererPDFComponent {
 	constructor(protected commonService: CommonService, private pdfGeneratorService: PdfGeneratorService, private supabase: SupabaseService) {}
+
+	isSaving: boolean = false;
 
 	// Variables de création d'un club
 	@ViewChildren('inputField', { read: ElementRef }) inputFields!: QueryList<ElementRef>;
@@ -92,6 +93,7 @@ export class GenererPDFComponent {
 	 * champs de saisie ont été réinitialisés en cas de succès.
 	 */
 	async generatePDF(): Promise<void> {
+		this.isSaving = true;
 		try {
 			this.inputLabelMap = this.commonService.getInputLabelMap(this.inputFields);
 
@@ -107,6 +109,8 @@ export class GenererPDFComponent {
 			}
 		} catch (e: any) {
 			this.commonService.showSwalToast(e?.message ?? 'Erreur lors de la génération du PDF', 'error');
+		} finally {
+			this.isSaving = false;
 		}
 	}
 }
