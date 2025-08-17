@@ -10,7 +10,14 @@
 			</div>
 		</div>
 		<div class="min-w-[525px] mx-auto shadow-lg">
-			<p-table [value]="shooters" dataKey="id" [paginator]="true" [rows]="nbRowsPerPage">
+			<p-table
+				[value]="shooters"
+				dataKey="id"
+				[paginator]="true"
+				[rows]="nbRowsPerPage"
+				[showCurrentPageReport]="true"
+				currentPageReportTemplate="{first} à {last} sur {totalRecords}"
+			>
 				<ng-template pTemplate="header">
 					<tr>
 						<th pSortableColumn="lastName" class="!bg-gray-100 hover:dark:!bg-gray-700 hover:!bg-gray-200">
@@ -87,7 +94,8 @@
 						<td class="relative !py-4">
 							<div
 								class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 p-1.5 pb-0 rounded-md hover:bg-gray-200 dark:hover:bg-gray-600 cursor-pointer"
-							(click)="goToEditShooter(shooter)">
+								(click)="goToEditShooter(shooter)"
+							>
 								<iconify-icon icon="lucide:pen-line" class="text-[1.2rem]"></iconify-icon>
 							</div>
 						</td>
