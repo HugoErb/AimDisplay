@@ -394,7 +394,7 @@ export class CreationShooterComponent {
 
 	/**
 	 * Extrait l’`id` d’une sélection issue d’un composant (ex. `p-autoComplete`).
-     * 
+	 *
 	 * @param selection Valeur renvoyée par le champ (objet sélectionné, libellé string, ou rien).
 	 * @param list      Liste de référence permettant, si besoin, de retrouver l’objet à partir du `name`.
 	 * @returns         L’identifiant numérique si trouvé, sinon `undefined`.
