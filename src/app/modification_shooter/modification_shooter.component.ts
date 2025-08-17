@@ -5,6 +5,7 @@ import { CommonService } from '../services/common.service';
 import { Shooter } from '../interfaces/shooter';
 import { SupabaseService } from '../services/supabase.service';
 import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
 
 @Component({
 	selector: 'app-modification-shooter',
@@ -14,7 +15,7 @@ import { CommonModule } from '@angular/common';
 	schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class ModificationShooterComponent {
-	constructor(protected commonService: CommonService, private supabase: SupabaseService) {}
+	constructor(protected commonService: CommonService, private supabase: SupabaseService, private router: Router) {}
 
 	shooters: Shooter[] = [];
 	nbRowsPerPage: number = 1;
@@ -45,6 +46,18 @@ export class ModificationShooterComponent {
 	@HostListener('window:resize', ['$event'])
 	async onResize(event: any) {
 		this.nbRowsPerPage = await this.commonService.getNbRowsPerPage();
+	}
+
+	/**
+	 * Redirige l’utilisateur vers la page d’édition d’un tireur, en envoyant le tireur à modifier.
+	 *
+	 * @param {Shooter} shooter - Le tireur à modifier. Son identifiant (`shooter.id`) est utilisé comme paramètre de route.
+	 * @returns {void}
+	 */
+	goToEditShooter(shooter: Shooter) {
+		this.router.navigate(['/creation_shooter', shooter.id], {
+			state: { shooter },
+		});
 	}
 
 	/**

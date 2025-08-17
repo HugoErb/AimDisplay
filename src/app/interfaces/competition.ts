@@ -5,5 +5,5 @@ export interface Competition {
 	endDate: Date;
 	price: number;
 	supCategoryPrice: number;
-    userId: string;
+	userId: string;
 }
