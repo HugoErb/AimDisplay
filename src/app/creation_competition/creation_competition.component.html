@@ -4,13 +4,13 @@
 			<div class="flex items-center space-x-3">
 				<iconify-icon icon="octicon:trophy-24" class="text-[2rem] mr-5"></iconify-icon>
 				<div>
-					<h1 class="text-2xl font-bold">Création d'une nouvelle compétition</h1>
-					<p class="text-blue-100 mt-1">Configurez les détails de la nouvelle compétition</p>
+					<h1 class="text-2xl font-bold">{{ isEditMode ? "Modification d'une compétition" : "Création d'une compétition" }}</h1>
+					<p class="text-blue-100 mt-1">{{ isEditMode ? "Mettez à jour les détails de cette compétition" : "Renseignez les détails de la nouvelle compétition" }}</p>
 				</div>
 			</div>
 		</div>
 
-		<form (ngSubmit)="createCompetition()" class="p-8 space-y-10">
+		<form (ngSubmit)="submitCompetition()" class="p-8 space-y-10">
 			<div class="space-y-4">
 				<h2 class="text-lg font-semibold text-gray-900 pb-2 border-b border-gray-200 dark:border-gray-700 dark:text-gray-300">
 					Informations de la compétition
