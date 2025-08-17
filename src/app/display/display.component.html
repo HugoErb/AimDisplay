@@ -15,7 +15,7 @@
 				<h2 class="text-lg font-semibold text-gray-900 pb-2 border-b border-gray-200 dark:border-gray-700 dark:text-gray-300">
 					Affichage d'une compétition
 				</h2>
-				<div class="flex flex-col space-y-1">
+				<div class="flex flex-col space-y-1 w-1/2">
 					<label class="text-sm font-medium text-gray-700 dark:text-gray-300 ml-1">Compétition *</label>
 					<p-autoComplete
 						#inputField
@@ -23,7 +23,7 @@
 						[forceSelection]="true"
 						[suggestions]="filteredCompetitions"
 						(completeMethod)="filteredCompetitions = commonService.filterByName($event.query, competitions)"
-						field="name"
+						optionLabel="name"
 						[dropdown]="true"
 						placeholder="Compétition à afficher"
 					></p-autoComplete>
