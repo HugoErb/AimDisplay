@@ -10,7 +10,7 @@
 			</div>
 		</div>
 
-		<div class="p-8 space-y-10">
+		<form (ngSubmit)="launchDisplay()" class="p-8 space-y-10">
 			<div class="space-y-4">
 				<h2 class="text-lg font-semibold text-gray-900 pb-2 border-b border-gray-200 dark:border-gray-700 dark:text-gray-300">
 					Affichage d'une compétition
@@ -20,11 +20,11 @@
 					<p-autoComplete
 						#inputField
 						[(ngModel)]="selectedCompetition"
-                        name="selectedCompetition"
+						name="selectedCompetition"
 						[forceSelection]="true"
 						[suggestions]="filteredCompetitions"
 						(completeMethod)="filteredCompetitions = commonService.filterByName($event.query, competitions)"
-                        (onSelect)="selectedCompetition = $event.value"
+						(onSelect)="selectedCompetition = $event.value"
 						optionLabel="name"
 						[dropdown]="true"
 						placeholder="Compétition à afficher"
@@ -40,18 +40,21 @@
 				</div>
 				<div class="flex items-center text-sm">
 					<iconify-icon icon="lucide:info" class="text-[1rem] mr-2"></iconify-icon>
-					<p>Le bouton "Lancer l'affichage" ouvrira une nouvelle fenêtre permettant d'afficher en plein écran le classement à vos compétiteurs.</p>
+					<p>
+						Le bouton "Lancer l'affichage" ouvrira une nouvelle fenêtre permettant d'afficher en plein écran le classement à vos
+						compétiteurs.
+					</p>
 				</div>
 				<div class="flex justify-end">
 					<div
 						class="inline-flex h-12 items-center justify-center rounded-md bg-prime-blue text-white dark:text-gray-300 hover:bg-hover-prime-blue px-5 text-base font-medium shadow transition-colors duration-250 cursor-pointer"
-						(click)="launchDisplay()"
+						type="submit"
 					>
 						<iconify-icon icon="heroicons:play" class="text-[1.5rem] mr-3"></iconify-icon>
 						Lancer l'affichage
 					</div>
 				</div>
 			</div>
-		</div>
+		</form>
 	</div>
 </div>

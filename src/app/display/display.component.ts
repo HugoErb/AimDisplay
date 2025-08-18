@@ -4,11 +4,12 @@ import { AutoCompleteModule } from 'primeng/autocomplete';
 import { CommonService } from '../services/common.service';
 import { SupabaseService } from '../services/supabase.service';
 import { Competition } from '../interfaces/competition';
+import { FormsModule } from '@angular/forms';
 
 @Component({
 	selector: 'app-display',
 	standalone: true,
-	imports: [AutoCompleteModule],
+	imports: [AutoCompleteModule, FormsModule],
 	templateUrl: './display.component.html',
 	schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
@@ -42,6 +43,8 @@ export class DisplayComponent {
 
 		if (await this.commonService.validateInputs(this.inputLabelMap, false)) {
 			// Ouvre la fenêtre du ranking avec les params
+            console.log(this.selectedCompetition?.id);
+            
 			const url = `/ranking?competitionId=${this.selectedCompetition?.id}`;
 			window.open(url, '_blank');
 			this.commonService.resetInputFields(this.inputFields);
