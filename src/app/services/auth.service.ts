@@ -18,7 +18,17 @@ export class AuthService implements OnDestroy {
 	public avatarUrl$ = this.avatarUrlSubject.asObservable();
 
 	constructor(private zone: NgZone, private commonService: CommonService, private themeService: ThemeService, private router: Router) {
-		this.supabase = this.zone.runOutsideAngular(() => createClient(environment.supabase.url, environment.supabase.anonKey, {}));
+		this.supabase = this.zone.runOutsideAngular(() =>
+			createClient(environment.supabase.url, environment.supabase.anonKey, {
+				auth: {
+					persistSession: true,
+					autoRefreshToken: true,
+					detectSessionInUrl: true,
+					// Désactive le mécanisme de verrouillage : pas de Web Locks
+					lock: async (_name, _acquireTimeout, fn) => await fn(),
+				},
+			})
+		);
 
 		// Souscription aux changements d'état d'authentification
 		this.authSubscription = this.supabase.auth.onAuthStateChange((event, session) => {
