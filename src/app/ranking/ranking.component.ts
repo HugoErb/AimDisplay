@@ -8,12 +8,15 @@ import { ActivatedRoute } from '@angular/router';
 import { RankedShooter, Shooter } from '../interfaces/shooter';
 import { NgZone } from '@angular/core';
 
-type GroupPage = {
-	distance: string;
+interface Page {
 	weapon: string;
+	distance: string;
 	category: string;
-	rows: RankedShooter[];
-};
+	rows: RankedShooter[]; // tranche affichée
+	groupSize: number; // nb total de tireurs dans la discipline
+	pageNumberInGroup: number; // numéro de page dans la discipline (1..pageCountInGroup)
+	pageCountInGroup: number; // nb de pages pour la discipline
+}
 
 @Component({
 	selector: 'app-ranking',
@@ -35,8 +38,9 @@ export class RankingComponent {
 	participantsCount = 0; // ← number of shooters on current page
 	discipline = '';
 
-	pages: GroupPage[] = [];
+	pages: Page[] = [];
 	classementData: RankedShooter[] = [];
+	private readonly PAGE_SIZE = 8;
 
 	async ngOnInit(): Promise<void> {
 		const idParam = this.route.snapshot.paramMap.get('competitionId');
@@ -49,7 +53,6 @@ export class RankingComponent {
 		}
 
 		this.competitionId = id;
-		// paramMap te donne déjà une valeur décodée
 		this.competitionTitle = nameParam.trim();
 
 		const shooters = await this.supabase.getShootersByCompetitionId(this.competitionId);
@@ -90,41 +93,72 @@ export class RankingComponent {
 		return `<span class="px-2 py-1 rounded-full text-sm font-medium transition-colors duration-150 ${bgClass}">${text}</span>`;
 	}
 
-	private buildPagesFromShooters(shooters: Shooter[]): GroupPage[] {
-		const byKey = new Map<string, { distance: string; weapon: string; category: string; items: Shooter[] }>();
-
+	private buildPagesFromShooters(shooters: Shooter[]): Page[] {
+		// Groupe par triplet discipline
+		const keyOf = (s: Shooter) => `${s.distance}|||${s.weapon}|||${s.categoryName}`;
+		const groups = new Map<string, Shooter[]>();
 		for (const s of shooters) {
-			const distance = s.distance ?? '';
-			const weapon = s.weapon ?? '';
-			const category = s.categoryName ?? '';
-			const key = `${distance}|${weapon}|${category}`;
-			if (!byKey.has(key)) byKey.set(key, { distance, weapon, category, items: [] });
-			byKey.get(key)!.items.push(s);
+			const k = keyOf(s);
+			if (!groups.has(k)) groups.set(k, []);
+			groups.get(k)!.push(s);
 		}
 
-		const pages: GroupPage[] = [];
-		byKey.forEach(({ distance, weapon, category, items }) => {
-			// on part de Shooter, on ajoute rank
-			const rows: RankedShooter[] = items.map((s) => ({ ...s, rank: 0 })).sort((a, b) => (b.totalScore ?? 0) - (a.totalScore ?? 0));
+		const pages: Page[] = [];
 
-			// Attribution du rang (gestion des ex aequo sur 2 décimales)
-			for (let i = 0; i < rows.length; i++) {
-				if (i > 0 && Number((rows[i].totalScore ?? 0).toFixed(2)) === Number((rows[i - 1].totalScore ?? 0).toFixed(2))) {
-					rows[i].rank = rows[i - 1].rank; // même rang que le précédent
-				} else {
-					rows[i].rank = i + 1; // rang suivant
+		for (const [key, list] of groups) {
+			const [distance, weapon, category] = key.split('|||');
+
+			// enrichit + détermine la "dernière série jouée"
+			const enriched: RankedShooter[] = list.map((s) => ({
+				...s,
+				isSeniorOrDame: this.isSeniorOrDameCategory(s.categoryName),
+				rank: 0,
+			}));
+
+			// Tri :
+			// 1) totalScore DESC
+			// 2) dernière série jouée (S4 si senior/dame, sinon S6)
+			// 3) fallback: on remonte S3->S1 pour casser une égalité totale
+			enriched.sort((a, b) => {
+				const at = Number(a.totalScore ?? 0);
+				const bt = Number(b.totalScore ?? 0);
+				if (bt !== at) return bt - at;
+
+				const lastA = a.isSeniorOrDame ? 4 : 6;
+				const lastB = b.isSeniorOrDame ? 4 : 6;
+				const al = this.serieScore(a, lastA as 4 | 6);
+				const bl = this.serieScore(b, lastB as 4 | 6);
+				if (bl !== al) return bl - al;
+
+				// Fallback : S3 -> S1
+				for (let i = 3 as 3 | 2 | 1; i >= 1; i = (i - 1) as 3 | 2 | 1) {
+					const ai = this.serieScore(a, i);
+					const bi = this.serieScore(b, i);
+					if (bi !== ai) return bi - ai;
 				}
+				return 0;
+			});
+
+			// Numérotation des rangs (après tie-break)
+			enriched.forEach((s, i) => (s.rank = i + 1));
+
+			// Pagination par tranches de 8
+			const total = enriched.length;
+			const pageCount = Math.ceil(total / this.PAGE_SIZE);
+			for (let p = 0; p < pageCount; p++) {
+				const start = p * this.PAGE_SIZE;
+				const rows = enriched.slice(start, start + this.PAGE_SIZE);
+				pages.push({
+					weapon,
+					distance,
+					category,
+					rows,
+					groupSize: total,
+					pageNumberInGroup: p + 1,
+					pageCountInGroup: pageCount,
+				});
 			}
-
-			pages.push({ distance, weapon, category, rows });
-		});
-
-		// Option: tri de l’ordre d’affichage des pages
-		pages.sort((a, b) => {
-			const ca = `${a.weapon} ${a.distance} ${a.category}`.toLowerCase();
-			const cb = `${b.weapon} ${b.distance} ${b.category}`.toLowerCase();
-			return ca.localeCompare(cb);
-		});
+		}
 
 		return pages;
 	}
@@ -140,9 +174,10 @@ export class RankingComponent {
 		const page = this.pages[index];
 
 		this.classementData = page.rows;
-		this.participantsCount = page.rows.length;
-		this.currentPage = index + 1;
-		this.discipline = `${page.weapon} ${page.distance} - Catégorie ${page.category}`;
+		this.participantsCount = page.groupSize; // nb total dans la discipline
+		this.currentPage = page.pageNumberInGroup; // X
+		this.totalPages = page.pageCountInGroup; // Y
+		this.discipline = `${page.weapon} ${page.distance} - ${page.category}`;
 	}
 
 	/**
@@ -160,5 +195,29 @@ export class RankingComponent {
 			const next = (this.currentIndex + 1) % this.pages.length;
 			this.ngZone.run(() => this.showPage(next));
 		}, this.rotationMs);
+	}
+
+	private normalize = (s: string | undefined | null) =>
+		(s ?? '')
+			.toLowerCase()
+			.normalize('NFD')
+			.replace(/[\u0300-\u036f]/g, '');
+
+	private isSeniorOrDameCategory = (categoryName: string) => {
+		const n = this.normalize(categoryName);
+		// "senior" ou "dame", optionnellement suivis de 1/2/3
+		return /\b(senior|dame)\s*(1|2|3)?\b/.test(n);
+	};
+
+	private serieScore(s: Shooter, idx: 1 | 2 | 3 | 4 | 5 | 6): number {
+		const map: Record<number, number | null | undefined> = {
+			1: s.scoreSerie1,
+			2: s.scoreSerie2,
+			3: s.scoreSerie3,
+			4: s.scoreSerie4,
+			5: s.scoreSerie5,
+			6: s.scoreSerie6,
+		};
+		return Number(map[idx] ?? 0);
 	}
 }
