@@ -4,17 +4,16 @@
 		<div class="px-6 py-3 relative h-20">
 			<div class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-center">
 				<h1 class="text-2xl font-bold text-gray-700">CLASSEMENT EN DIRECT</h1>
-				<p class="text-sm text-prime-blue font-medium">{{ competitionTitle }}</p>
+				<p class="text-base text-prime-blue font-medium">{{ competitionTitle }}</p>
 			</div>
 			<div class="flex items-center justify-between h-full">
 				<div class="flex items-center">
-					<img src="../../../assets/img/logo.png" alt="Logo" class="h-8 w-8 mr-4" />
-					<div>
+					<img src="../../../assets/img/logo.png" alt="Logo" class="h-10 w-10 mr-4" />
+					<div class="flex flex-col leading-tight gap-0">
 						<h2 class="text-lg font-semibold">Aim Display</h2>
-						<p class="text-sm text-gray-500">Gestion de tir sportif</p>
+						<p class="text-sm text-gray-500 -mt-0.5">Gestion de tir sportif</p>
 					</div>
 				</div>
-				<div class="w-24"></div>
 			</div>
 		</div>
 	</div>
@@ -24,7 +23,9 @@
 		<!-- Catégorie -->
 		<div class="mb-5 ml-auto mr-auto w-11/12">
 			<div class="bg-white/80 backdrop-blur-md rounded-xl shadow-lg border border-gray-200/50 px-7 py-4 inline-block">
-				<h2 class="text-2xl font-bold text-gray-900">Pistolet 25m - Catégorie Senior</h2>
+				<h2 class="text-2xl font-bold text-gray-900">
+					{{ discipline }}
+				</h2>
 				<div class="flex items-center space-x-4 mt-2">
 					<!-- Participants -->
 					<div class="flex items-center space-x-2">
@@ -58,15 +59,18 @@
 						</tr>
 					</thead>
 					<tbody>
-						<!-- TODO FAIRE EN SORTE DE NE PAS AFFICHER LA BORDER B POUR LA DERNIERE LIGNE -->
-						<tr *ngFor="let shooter of classementData" class="border-b border-gray-200">
+						<tr *ngFor="let shooter of classementData; let last = last" class="border-gray-200" [class.border-b]="!last">
 							<td class="text-center py-3" [innerHTML]="getPositionBadge(shooter.rank)"></td>
-							<div class="font-bold text-gray-900 text-base">
-								{{ shooter.lastName }}
-							</div>
-							<div class="text-sm text-gray-600">
+
+							<td class="text-gray-900 text-base py-3">
+								<span class="font-bold">{{ shooter.lastName }}</span>
 								{{ shooter.firstName }}
-							</div>
+							</td>
+
+							<td class="text-left py-3">
+								{{ shooter.clubName || "—" }}
+							</td>
+
 							<td class="text-center font-mono text-[1.1rem] py-3 w-30">
 								{{ shooter.scoreSerie1 == null ? "-" : (shooter.scoreSerie1 | number : "1.0-2") }}
 							</td>
@@ -80,10 +84,10 @@
 								{{ shooter.scoreSerie4 == null ? "-" : (shooter.scoreSerie4 | number : "1.0-2") }}
 							</td>
 							<td class="text-center font-mono text-[1.1rem] py-3 w-30">
-								{{ shooter.scoreSerie5 == null ? "-" : (shooter.scoreSerie5 | number : "1.0-2") }}
+								{{ shooter.isSeniorOrDame ? "—" : shooter.scoreSerie5 == null ? "-" : (shooter.scoreSerie5 | number : "1.0-2") }}
 							</td>
 							<td class="text-center font-mono text-[1.1rem] py-3 w-30">
-								{{ shooter.scoreSerie6 == null ? "-" : (shooter.scoreSerie6 | number : "1.0-2") }}
+								{{ shooter.isSeniorOrDame ? "—" : shooter.scoreSerie6 == null ? "-" : (shooter.scoreSerie6 | number : "1.0-2") }}
 							</td>
 							<td class="text-center font-mono text-xl font-bold text-prime-blue bg-gradient-to-r from-blue-50 to-indigo-50 py-3">
 								{{ shooter.totalScore | number : "1.0-2" }}
