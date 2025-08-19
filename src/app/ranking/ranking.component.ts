@@ -36,15 +36,18 @@ export class RankingComponent implements OnInit, OnDestroy {
 	// Libellé « discipline » affiché dans le titre (arme + distance + catégorie).
 	discipline: string = '';
 
-	/** Nombre de lignes par page. */
+	// Nombre de lignes par page.
 	private readonly PAGE_SIZE = 8;
 
-	/** Timer de rotation (identifiant du setTimeout). */
+	// Timer de rotation (identifiant du setTimeout).
 	private rotationTimerId: number | undefined;
-	/** Indique que le composant est détruit (empêche les ticks ultérieurs). */
+	// Indique que le composant est détruit (empêche les ticks ultérieurs).
 	private destroyed = false;
-	/** Évite les rafraîchissements concurrents. */
+	// Évite les rafraîchissements concurrents.
 	private isRefreshing = false;
+
+	// Style bindé sur la barre (width + transition).
+	progressStyle: { [k: string]: string } = { width: '0%', transition: 'none' };
 
 	constructor(private readonly commonService: CommonService, private readonly supabase: SupabaseService, private readonly route: ActivatedRoute) {}
 
@@ -133,7 +136,7 @@ export class RankingComponent implements OnInit, OnDestroy {
 		this.participantsCount = page.groupSize;
 		this.currentPage = page.pageNumberInGroup;
 		this.totalPages = page.pageCountInGroup;
-		this.discipline = `${page.weapon} ${page.distance} - Catégorie ${page.category}`;
+		this.discipline = `${page.weapon} - ${page.distance} - ${page.category}`;
 	}
 
 	// ──────────────────────────────────────────────────────────────────────────────
@@ -249,6 +252,7 @@ export class RankingComponent implements OnInit, OnDestroy {
 			clearTimeout(this.rotationTimerId);
 			this.rotationTimerId = undefined;
 		}
+		this.resetProgressBar();
 	}
 
 	/**
@@ -257,9 +261,11 @@ export class RankingComponent implements OnInit, OnDestroy {
 	 */
 	private scheduleNextTick(): void {
 		if (this.destroyed || !this.pages?.length) return;
-
 		const page = this.pages[this.currentIndex];
 		const delay = this.getPageDisplayDuration(page);
+
+		// ↙ démarre la barre pour la durée de la page
+		this.startProgressBar(delay);
 
 		this.rotationTimerId = window.setTimeout(() => {
 			void this.advanceOrRefresh();
@@ -285,32 +291,53 @@ export class RankingComponent implements OnInit, OnDestroy {
 	}
 
 	/**
-	 * Recharge les tireurs de la compétition, reconstruit les pages,
-	 * revient à la page 0 et relance la rotation.
+	 * Rafraîchit le classement à partir de la base, puis relance
+	 * l’affichage depuis la première page.
 	 */
 	private async refreshAndRestart(): Promise<void> {
-		if (this.isRefreshing || this.destroyed) return;
+		if (this.destroyed || this.isRefreshing) return;
+
 		this.isRefreshing = true;
+		// Coupe toute rotation/barre en cours pour repartir proprement
 		this.stopRotation();
 
 		try {
-			const shooters = await this.supabase.getShootersByCompetitionId(this.competitionId);
-			this.pages = this.buildPagesFromShooters(shooters);
+			if (!Number.isFinite(this.competitionId)) {
+				throw new Error('Identifiant de compétition manquant.');
+			}
 
-			if (!this.pages.length) {
+			// (1) Récupération BDD
+			const shooters = await this.supabase.getShootersByCompetitionId(this.competitionId);
+
+			// (2) Reconstruction des pages
+			const rebuiltPages = this.buildPagesFromShooters(shooters);
+
+			// (3) Aucun contenu → nettoyage + info
+			if (!rebuiltPages.length) {
+				this.pages = [];
+				this.currentIndex = 0;
+				this.classementData = [];
+				this.participantsCount = 0;
+				this.currentPage = 0;
+				this.totalPages = 0;
+				this.discipline = '';
+				this.resetProgressBar();
 				this.commonService.showSwalToast('Aucun tireur pour cette compétition.', 'info');
 				return;
 			}
 
-			this.showPage(0);
+			// (4) Remise à zéro sur la première page et relance
+			this.pages = rebuiltPages;
+			this.currentIndex = 0;
+			this.showPage(0); // met à jour l’état (participantsCount, X/Y, discipline…)
+			this.scheduleNextTick(); // redémarre le timer + barre (via startProgressBar)
 		} catch (err: any) {
+			// Échec → on remet la barre à l’arrêt et on notifie
+			this.resetProgressBar();
 			this.commonService.showSwalToast(err?.message ?? 'Erreur lors de la mise à jour du classement.', 'error');
-			return; // évite une boucle d’erreurs
 		} finally {
 			this.isRefreshing = false;
 		}
-
-		this.scheduleNextTick();
 	}
 
 	// ──────────────────────────────────────────────────────────────────────────────
@@ -370,5 +397,28 @@ export class RankingComponent implements OnInit, OnDestroy {
 			6: s.scoreSerie6,
 		};
 		return this.toNum(map[idx]);
+	}
+
+	// ──────────────────────────────────────────────────────────────────────────────
+	// Barre de chargement
+	// ──────────────────────────────────────────────────────────────────────────────
+
+	/** Démarre la barre inversée pour `durationMs`. */
+	private startProgressBar(durationMs: number): void {
+		// Reset instantané à 100% sans transition
+		this.progressStyle = { width: '100%', transition: 'none' };
+
+		// Prochaine frame: on lance la transition vers 0% sur toute la durée
+		requestAnimationFrame(() => {
+			this.progressStyle = {
+				width: '0%',
+				transition: `width ${durationMs}ms linear`,
+			};
+		});
+	}
+
+	/** Réinitialise la barre (optionnellement la masque). */
+	private resetProgressBar(): void {
+		this.progressStyle = { width: '0%', transition: 'none' };
 	}
 }
