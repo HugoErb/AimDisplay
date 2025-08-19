@@ -2,6 +2,18 @@ import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { AutoCompleteModule } from 'primeng/autocomplete';
+import { CommonService } from '../services/common.service';
+import { SupabaseService } from '../services/supabase.service';
+import { ActivatedRoute } from '@angular/router';
+import { RankedShooter, Shooter } from '../interfaces/shooter';
+import { NgZone } from '@angular/core';
+
+type GroupPage = {
+	distance: string;
+	weapon: string;
+	category: string;
+	rows: RankedShooter[];
+};
 
 @Component({
 	selector: 'app-ranking',
@@ -11,116 +23,47 @@ import { AutoCompleteModule } from 'primeng/autocomplete';
 	schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class RankingComponent {
+	constructor(protected commonService: CommonService, private supabase: SupabaseService, private route: ActivatedRoute, private ngZone: NgZone) {}
+
 	currentPage: number = 1;
 	totalPages: number = 5;
+	competitionId!: number;
+	competitionTitle = '';
+	currentIndex = 0;
+	rotationMs = 8000;
+	rotationTimer: any;
+	participantsCount = 0; // ← number of shooters on current page
+	discipline = '';
 
-	// Données d'exemple pour le classement
-	classementData = [
-		{
-			position: 1,
-			nom: 'Dupont',
-			prenom: 'Martin',
-			club: 'Club de Tir Parisien',
-			serie1: 9.8,
-			serie2: 9.6,
-			serie3: 9.9,
-			serie4: 9.7,
-			serie5: 9.8,
-			serie6: 9.5,
-			total: 58.3,
-		},
-		{
-			position: 2,
-			nom: 'Bernard',
-			prenom: 'Sophie',
-			club: 'Société de Tir de Lyon',
-			serie1: 9.5,
-			serie2: 9.7,
-			serie3: 9.4,
-			serie4: 9.8,
-			serie5: 9.6,
-			serie6: 9.7,
-			total: 57.7,
-		},
-		{
-			position: 3,
-			nom: 'Moreau',
-			prenom: 'Pierre',
-			club: 'Club Olympique de Marseille',
-			serie1: 9.3,
-			serie2: 9.5,
-			serie3: 9.6,
-			serie4: 9.4,
-			serie5: 9.5,
-			serie6: 9.4,
-			total: 56.7,
-		},
-		{
-			position: 4,
-			nom: 'Leroy',
-			prenom: 'Marie',
-			club: 'Club de Tir Parisien',
-			serie1: 9.2,
-			serie2: 9.4,
-			serie3: 9.3,
-			serie4: 9.5,
-			serie5: 9.3,
-			serie6: 9.6,
-			total: 56.3,
-		},
-		{
-			position: 5,
-			nom: 'Petit',
-			prenom: 'Jean',
-			club: 'Société de Tir de Lyon',
-			serie1: 9.1,
-			serie2: 9.3,
-			serie3: 9.2,
-			serie4: 9.3,
-			serie5: 9.4,
-			serie6: 9.2,
-			total: 55.5,
-		},
-		{
-			position: 6,
-			nom: 'Roux',
-			prenom: 'Claire',
-			club: 'Club Olympique de Marseille',
-			serie1: 9.0,
-			serie2: 9.2,
-			serie3: 9.1,
-			serie4: 9.2,
-			serie5: 9.1,
-			serie6: 9.3,
-			total: 54.9,
-		},
-		{
-			position: 7,
-			nom: 'Blanc',
-			prenom: 'Thomas',
-			club: 'Club de Tir Parisien',
-			serie1: 8.9,
-			serie2: 9.1,
-			serie3: 9.0,
-			serie4: 9.1,
-			serie5: 9.0,
-			serie6: 9.1,
-			total: 54.2,
-		},
-		{
-			position: 8,
-			nom: 'Garnier',
-			prenom: 'Isabelle',
-			club: 'Société de Tir de Lyon',
-			serie1: 8.8,
-			serie2: 9.0,
-			serie3: 8.9,
-			serie4: 9.0,
-			serie5: 8.9,
-			serie6: 9.0,
-			total: 53.6,
-		},
-	];
+	pages: GroupPage[] = [];
+	classementData: RankedShooter[] = [];
+
+	async ngOnInit(): Promise<void> {
+		const idParam = this.route.snapshot.paramMap.get('competitionId');
+		const nameParam = this.route.snapshot.paramMap.get('competitionName') ?? '';
+
+		const id = Number(idParam);
+		if (!Number.isFinite(id) || id <= 0 || !nameParam.trim()) {
+			this.commonService.showSwalToast('Compétition invalide.', 'error');
+			return;
+		}
+
+		this.competitionId = id;
+		// paramMap te donne déjà une valeur décodée
+		this.competitionTitle = nameParam.trim();
+
+		const shooters = await this.supabase.getShootersByCompetitionId(this.competitionId);
+		this.pages = this.buildPagesFromShooters(shooters);
+
+		if (!this.pages.length) {
+			this.commonService.showSwalToast('Aucun tireur pour cette compétition.', 'info');
+			return;
+		}
+
+		this.totalPages = this.pages.length;
+		this.showPage(0);
+		this.startRotation();
+	}
 
 	getPositionBadge(position: number): string {
 		let bgClass = '';
@@ -145,5 +88,77 @@ export class RankingComponent {
 		}
 
 		return `<span class="px-2 py-1 rounded-full text-sm font-medium transition-colors duration-150 ${bgClass}">${text}</span>`;
+	}
+
+	private buildPagesFromShooters(shooters: Shooter[]): GroupPage[] {
+		const byKey = new Map<string, { distance: string; weapon: string; category: string; items: Shooter[] }>();
+
+		for (const s of shooters) {
+			const distance = s.distance ?? '';
+			const weapon = s.weapon ?? '';
+			const category = s.categoryName ?? '';
+			const key = `${distance}|${weapon}|${category}`;
+			if (!byKey.has(key)) byKey.set(key, { distance, weapon, category, items: [] });
+			byKey.get(key)!.items.push(s);
+		}
+
+		const pages: GroupPage[] = [];
+		byKey.forEach(({ distance, weapon, category, items }) => {
+			// on part de Shooter, on ajoute rank
+			const rows: RankedShooter[] = items.map((s) => ({ ...s, rank: 0 })).sort((a, b) => (b.totalScore ?? 0) - (a.totalScore ?? 0));
+
+			// Attribution du rang (gestion des ex aequo sur 2 décimales)
+			for (let i = 0; i < rows.length; i++) {
+				if (i > 0 && Number((rows[i].totalScore ?? 0).toFixed(2)) === Number((rows[i - 1].totalScore ?? 0).toFixed(2))) {
+					rows[i].rank = rows[i - 1].rank; // même rang que le précédent
+				} else {
+					rows[i].rank = i + 1; // rang suivant
+				}
+			}
+
+			pages.push({ distance, weapon, category, rows });
+		});
+
+		// Option: tri de l’ordre d’affichage des pages
+		pages.sort((a, b) => {
+			const ca = `${a.weapon} ${a.distance} ${a.category}`.toLowerCase();
+			const cb = `${b.weapon} ${b.distance} ${b.category}`.toLowerCase();
+			return ca.localeCompare(cb);
+		});
+
+		return pages;
+	}
+
+	/**
+	 * Affiche la page de classement située à l’index donné et met à jour l’état du composant.
+	 *
+	 * @param {number} index Index de la page à afficher (base 0).
+	 *                       Doit être compris entre `0` et `this.pages.length - 1`.
+	 */
+	private showPage(index: number): void {
+		this.currentIndex = index;
+		const page = this.pages[index];
+
+		this.classementData = page.rows;
+		this.participantsCount = page.rows.length;
+		this.currentPage = index + 1;
+		this.discipline = `${page.weapon} ${page.distance} - Catégorie ${page.category}`;
+	}
+
+	/**
+	 * Lance la rotation automatique des pages de classement.
+	 */
+	private startRotation(): void {
+		if (this.rotationTimer) {
+			clearInterval(this.rotationTimer);
+			this.rotationTimer = null;
+		}
+
+		if (!Array.isArray(this.pages) || this.pages.length <= 1) return;
+
+		this.rotationTimer = window.setInterval(() => {
+			const next = (this.currentIndex + 1) % this.pages.length;
+			this.ngZone.run(() => this.showPage(next));
+		}, this.rotationMs);
 	}
 }

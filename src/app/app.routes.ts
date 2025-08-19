@@ -1,5 +1,6 @@
 import { Routes } from '@angular/router';
 import { AuthGuard } from './services/auth.guard';
+
 import { HomeComponent } from './home/home.component';
 import { CreationShooterComponent } from './creation_shooter/creation_shooter.component';
 import { CreationCompetitionComponent } from './creation_competition/creation_competition.component';
@@ -18,23 +19,25 @@ import { ForgotPasswordComponent } from './forgot-password/forgot-password.compo
 import { ResetPasswordComponent } from './reset-password/reset-password.component';
 
 export const routes: Routes = [
-	// On envoie la racine vers la page de login (pas vers home)
+	// Redirection initiale vers login
 	{ path: '', redirectTo: 'login', pathMatch: 'full' },
 
-	// Pages accessibles sans être connecté
+	// Pages publiques (sans authentification)
 	{ path: 'login', component: LoginComponent },
 	{ path: 'register', component: RegisterComponent },
 	{ path: 'forgot-password', component: ForgotPasswordComponent },
 	{ path: 'reset-password', component: ResetPasswordComponent },
 
-	// Tout le reste est protégé
+	// Route "ranking" protégée, Sans BaseLayout
+	{ path: 'ranking/:competitionId/:competitionName', component: RankingComponent, canActivate: [AuthGuard] },
+
+	// Toutes les autres routes protégées sous le layout
 	{
 		path: '',
 		component: BaseLayoutComponent,
-		canActivateChild: [AuthGuard], // protège tous les enfants ci-dessous
+		canActivateChild: [AuthGuard],
 		children: [
 			{ path: 'home', component: HomeComponent },
-			{ path: 'ranking', component: RankingComponent },
 			{ path: 'creation_shooter', component: CreationShooterComponent },
 			{ path: 'creation_shooter/:id', component: CreationShooterComponent },
 			{ path: 'creation_competition', component: CreationCompetitionComponent },

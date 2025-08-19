@@ -17,3 +17,5 @@ export interface Shooter {
 	totalScore: number;
 	userId: string;
 }
+
+export type RankedShooter = Shooter & { rank: number };
