@@ -178,8 +178,8 @@
 
 	/* Gestion de la taille du calendrier */
 	.p-datepicker-panel {
-        min-width: 400px !important;
-        max-width: 400px !important;
+		min-width: 400px !important;
+		max-width: 400px !important;
 	}
 
 	/* Harmonisation des styles des boutons des inputs PrimeNG */
@@ -290,22 +290,49 @@
 		transition: all;
 	}
 
-    /* Style de la barre de défilement horizontale des tableaux */
-    .p-datatable-table-container {
-        scrollbar-width: thin;
-        scrollbar-color: #9ca3af transparent; /* gris + fond transparent */
-    }
+	/* Style de la barre de défilement horizontale des tableaux */
+	.p-datatable-table-container {
+		scrollbar-width: thin;
+		scrollbar-color: #9ca3af transparent; /* gris + fond transparent */
+	}
 
-    /* Couleur du bouton de confirmation des sweet alert */
-    .custom-prime-button {
-        background-color: var(--color-prime-blue) !important;
-        color: white !important;
-        border: none !important;
-    }
+	/* Couleur du bouton de confirmation des sweet alert */
+	.custom-prime-button {
+		background-color: var(--color-prime-blue) !important;
+		color: white !important;
+		border: none !important;
+	}
 
-    html{
-        scrollbar-width: thin;
-    }
+	html {
+		scrollbar-width: thin;
+	}
+
+	/* Animations de la page de ranking */
+	@keyframes swipeRightIn {
+		0% {
+			opacity: 0;
+			transform: translateX(10px);
+		}
+		100% {
+			opacity: 1;
+			transform: translateX(0);
+		}
+	}
+	@keyframes swipeLeftOut {
+		0% {
+			opacity: 1;
+			transform: translateX(0);
+		}
+		100% {
+			opacity: 0;
+			transform: translateX(-10px);
+		}
+	}
+
+	.animate-swipe-right-in {
+		animation: swipeRightIn 0.4s ease forwards;
+	}
+	.animate-swipe-left-out {
+		animation: swipeLeftOut 0.4s ease forwards;
+	}
 }
-
-
