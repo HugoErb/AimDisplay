@@ -47,8 +47,11 @@ export class RankingComponent implements OnInit, OnDestroy {
 	private isRefreshing = false;
 
 	private progressRun = 0; // identifiant pour invalider les anciennes animations
-	// Style bindé sur la barre (width + transition).
-	progressStyle: { [k: string]: string } = { width: '0%', transition: 'none' };
+	progressStyle: { [k: string]: string } = { width: '0%', transition: 'none' }; // Style bindé sur la barre (width + transition)
+	private readonly ANIM_MS = 400; // Durée d'animation (doit matcher avec styles.css)
+
+	tableAnimClass: string | null = 'animate-swipe-right-in';
+	headerAnimClass: string | null = 'animate-swipe-right-in';
 
 	constructor(private readonly commonService: CommonService, private readonly supabase: SupabaseService, private readonly route: ActivatedRoute) {}
 
@@ -233,10 +236,6 @@ export class RankingComponent implements OnInit, OnDestroy {
 		return pages;
 	}
 
-	// ──────────────────────────────────────────────────────────────────────────────
-	// Rotation infinie (10s + 1s par tireur) + refresh BDD en fin de cycle
-	// ──────────────────────────────────────────────────────────────────────────────
-
 	/**
 	 * Démarre la rotation des pages (boucle infinie).
 	 * À la fin de la dernière page, recharge la BDD puis recommence.
@@ -280,14 +279,21 @@ export class RankingComponent implements OnInit, OnDestroy {
 	private async advanceOrRefresh(): Promise<void> {
 		if (this.destroyed) return;
 
-		// Il reste des pages → page suivante
+		const isGroupEnd = this.isLastPageOfGroup; // dernière page de la discipline ?
+		await this.playExitAnimations(isGroupEnd);
+
+		// Page suivante ?
 		if (this.currentIndex < this.pages.length - 1) {
-			this.showPage(this.currentIndex + 1);
+			const nextIndex = this.currentIndex + 1;
+			const nextIsGroupStart = this.pages[nextIndex].pageNumberInGroup === 1;
+
+			this.showPage(nextIndex);
+			this.playEnterAnimations(nextIsGroupStart); // header seulement si nouvelle discipline
 			this.scheduleNextTick();
 			return;
 		}
 
-		// Dernière page atteinte → rafraîchir depuis la BDD et recommencer
+		// Fin du cycle → refresh BDD + restart
 		await this.refreshAndRestart();
 	}
 
@@ -296,49 +302,75 @@ export class RankingComponent implements OnInit, OnDestroy {
 	 * l’affichage depuis la première page.
 	 */
 	private async refreshAndRestart(): Promise<void> {
-		if (this.destroyed || this.isRefreshing) return;
-
+		if (this.isRefreshing || this.destroyed) return;
 		this.isRefreshing = true;
-		// Coupe toute rotation/barre en cours pour repartir proprement
 		this.stopRotation();
 
 		try {
-			if (!Number.isFinite(this.competitionId)) {
-				throw new Error('Identifiant de compétition manquant.');
-			}
-
-			// (1) Récupération BDD
 			const shooters = await this.supabase.getShootersByCompetitionId(this.competitionId);
-
-			// (2) Reconstruction des pages
-			const rebuiltPages = this.buildPagesFromShooters(shooters);
-
-			// (3) Aucun contenu → nettoyage + info
-			if (!rebuiltPages.length) {
-				this.pages = [];
-				this.currentIndex = 0;
-				this.classementData = [];
-				this.participantsCount = 0;
-				this.currentPage = 0;
-				this.totalPages = 0;
-				this.discipline = '';
-				this.resetProgressBar();
+			this.pages = this.buildPagesFromShooters(shooters);
+			if (!this.pages.length) {
 				this.commonService.showSwalToast('Aucun tireur pour cette compétition.', 'info');
 				return;
 			}
-
-			// (4) Remise à zéro sur la première page et relance
-			this.pages = rebuiltPages;
-			this.currentIndex = 0;
-			this.showPage(0); // met à jour l’état (participantsCount, X/Y, discipline…)
-			this.scheduleNextTick(); // redémarre le timer + barre (via startProgressBar)
+			this.showPage(0);
+			this.playEnterAnimations(true); // nouvelle 1re page d’une discipline → header + table
 		} catch (err: any) {
-			// Échec → on remet la barre à l’arrêt et on notifie
-			this.resetProgressBar();
 			this.commonService.showSwalToast(err?.message ?? 'Erreur lors de la mise à jour du classement.', 'error');
+			return;
 		} finally {
 			this.isRefreshing = false;
 		}
+
+		this.scheduleNextTick();
+	}
+
+	// ──────────────────────────────────────────────────────────────────────────────
+	// Animations
+	// ──────────────────────────────────────────────────────────────────────────────
+
+	/** Anime la sortie. Si `withHeader` = true, header et tableau sortent ensemble. */
+	private playExitAnimations(withHeader: boolean): Promise<void> {
+		// reset classes pour forcer le replay propre
+		this.tableAnimClass = '';
+		if (withHeader) this.headerAnimClass = '';
+
+		return new Promise((resolve) => {
+			requestAnimationFrame(() => {
+				// Applique les 2 classes dans la même frame → synchro parfaite
+				this.tableAnimClass = 'animate-swipe-left-out';
+				if (withHeader) this.headerAnimClass = 'animate-swipe-left-out';
+
+				setTimeout(resolve, this.ANIM_MS);
+			});
+		});
+	}
+
+	/** Anime l’entrée. Si `withHeader` = true, header ET tableau entrent, sinon seulement le tableau. */
+	private playEnterAnimations(withHeader: boolean): void {
+		// reset
+		this.tableAnimClass = '';
+		if (withHeader) this.headerAnimClass = '';
+
+		requestAnimationFrame(() => {
+			this.tableAnimClass = 'animate-swipe-right-in';
+			if (withHeader) this.headerAnimClass = 'animate-swipe-right-in';
+		});
+	}
+
+	// Renvoie la page courante (ou undefined si out-of-range)
+	get currentPageMeta() {
+		return this.pages?.[this.currentIndex];
+	}
+
+	get isFirstPageOfGroup(): boolean {
+		const p = this.currentPageMeta;
+		return !!p && p.pageNumberInGroup === 1;
+	}
+
+	get isLastPageOfGroup(): boolean {
+		const p = this.currentPageMeta;
+		return !!p && p.pageNumberInGroup === p.pageCountInGroup;
 	}
 
 	// ──────────────────────────────────────────────────────────────────────────────
