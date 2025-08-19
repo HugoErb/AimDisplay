@@ -46,6 +46,7 @@ export class RankingComponent implements OnInit, OnDestroy {
 	// Évite les rafraîchissements concurrents.
 	private isRefreshing = false;
 
+	private progressRun = 0; // identifiant pour invalider les anciennes animations
 	// Style bindé sur la barre (width + transition).
 	progressStyle: { [k: string]: string } = { width: '0%', transition: 'none' };
 
@@ -405,20 +406,31 @@ export class RankingComponent implements OnInit, OnDestroy {
 
 	/** Démarre la barre inversée pour `durationMs`. */
 	private startProgressBar(durationMs: number): void {
-		// Reset instantané à 100% sans transition
+		const run = ++this.progressRun;
+
+		// 1) Reset instantané, barre pleine, sans transition
 		this.progressStyle = { width: '100%', transition: 'none' };
 
-		// Prochaine frame: on lance la transition vers 0% sur toute la durée
+		// 2) Première frame : on force un reflow pour figer l’état visuellement
 		requestAnimationFrame(() => {
-			this.progressStyle = {
-				width: '0%',
-				transition: `width ${durationMs}ms linear`,
-			};
+			if (run !== this.progressRun || this.destroyed) return;
+			// force le reflow ; pas besoin d'ElementRef ici
+			void document.body.offsetWidth;
+
+			// 3) Deuxième frame : on lance la transition vers 0%
+			requestAnimationFrame(() => {
+				if (run !== this.progressRun || this.destroyed) return;
+				this.progressStyle = {
+					width: '0%',
+					transition: `width ${durationMs}ms linear`,
+				};
+			});
 		});
 	}
 
 	/** Réinitialise la barre (optionnellement la masque). */
 	private resetProgressBar(): void {
-		this.progressStyle = { width: '0%', transition: 'none' };
+		this.progressRun++; // invalide les rAF précédents
+		this.progressStyle = { width: '100%', transition: 'none' };
 	}
 }
