@@ -5,6 +5,8 @@ import { CommonService } from '../services/common.service';
 import { SupabaseService } from '../services/supabase.service';
 import { Competition } from '../interfaces/competition';
 import { FormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
+import { Location } from '@angular/common';
 
 @Component({
 	selector: 'app-display',
@@ -14,7 +16,7 @@ import { FormsModule } from '@angular/forms';
 	schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class DisplayComponent {
-	constructor(protected commonService: CommonService, private supabase: SupabaseService) {}
+	constructor(protected commonService: CommonService, private supabase: SupabaseService, private router: Router, private location: Location) {}
 
 	@ViewChildren('inputField', { read: ElementRef }) inputFields!: QueryList<ElementRef>;
 	public inputLabelMap = new Map<string, string>();
@@ -38,16 +40,25 @@ export class DisplayComponent {
 	 * @returns {Promise<void>} Une promesse qui se résout une fois que l'affichage est effectué et que les
 	 * champs de saisie ont été réinitialisés en cas de succès.
 	 */
-	async launchDisplay(): Promise<void> {
-		this.inputLabelMap = this.commonService.getInputLabelMap(this.inputFields);
+	launchDisplay(): void {
+		const comp: any = this.selectedCompetition;
+		const id = comp?.id;
+		const name = (comp?.name ?? '').trim();
 
-		if (await this.commonService.validateInputs(this.inputLabelMap, false)) {
-			// Ouvre la fenêtre du ranking avec les params
-            console.log(this.selectedCompetition?.id);
-            
-			const url = `/ranking?competitionId=${this.selectedCompetition?.id}`;
-			window.open(url, '_blank');
-			this.commonService.resetInputFields(this.inputFields);
+		if (!id || !name) {
+			this.commonService.showSwalToast('Veuillez sélectionner une compétition.', 'error');
+			return;
 		}
+
+		// Construire l’URL /ranking/:id/:name (Angular encode le segment pour nous)
+		const tree = this.router.createUrlTree(['/ranking', id, name]);
+		const url = this.location.prepareExternalUrl(this.router.serializeUrl(tree));
+
+		// Ouvrir dans un nouvel onglet
+		window.open(url, '_blank');
+
+		// Reset local
+		this.commonService.resetInputFields(this.inputFields);
+		this.selectedCompetition = null;
 	}
 }
