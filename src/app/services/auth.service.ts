@@ -76,6 +76,12 @@ export class AuthService implements OnDestroy {
 		}
 	}
 
+	async getCurrentSession() {
+		const { data, error } = await this.supabase.auth.getSession();
+		if (error) return null;
+		return data?.session ?? null;
+	}
+
 	/**
 	 * Inscrit un nouvel utilisateur (email + password + displayName)
 	 *

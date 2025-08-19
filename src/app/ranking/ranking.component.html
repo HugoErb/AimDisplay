@@ -4,7 +4,7 @@
 		<div class="px-6 py-3 relative h-20">
 			<div class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-center">
 				<h1 class="text-2xl font-bold text-gray-700">CLASSEMENT EN DIRECT</h1>
-				<p class="text-sm text-prime-blue font-medium">Championnat Régional 2024</p>
+				<p class="text-sm text-prime-blue font-medium">{{ competitionTitle }}</p>
 			</div>
 			<div class="flex items-center justify-between h-full">
 				<div class="flex items-center">
@@ -29,7 +29,7 @@
 					<!-- Participants -->
 					<div class="flex items-center space-x-2">
 						<div class="w-2.5 h-2.5 bg-green-500 rounded-full"></div>
-						<span class="text-sm text-gray-600">8 participants</span>
+						<span class="text-sm text-gray-600">{{ participantsCount }} participants</span>
 					</div>
 
 					<!-- Séparateur -->
@@ -53,28 +53,40 @@
 							<th class="text-center font-bold text-gray-800 py-3 text-sm">Classement</th>
 							<th class="text-left font-bold text-gray-800 text-sm">Tireur</th>
 							<th class="text-left font-bold text-gray-800 text-sm">Club</th>
-
 							<th class="text-center font-bold text-gray-800 text-sm" *ngFor="let i of [1, 2, 3, 4, 5, 6]">S{{ i }}</th>
 							<th class="text-center font-bold text-blue-800 bg-blue-100 text-sm">TOTAL</th>
 						</tr>
 					</thead>
 					<tbody>
-                        <!-- TODO FAIRE EN SORTE DE NE PAS AFFICHER LA BORDER B POUR LA DERNIERE LIGNE -->
-						<tr *ngFor="let tireur of classementData" class="border-b border-gray-200">
-							<td class="text-center py-3" [innerHTML]="getPositionBadge(tireur.position)"></td>
-							<td class="py-3">
-								<div class="font-bold text-gray-900 text-base">{{ tireur.nom }}</div>
-								<div class="text-sm text-gray-600">{{ tireur.prenom }}</div>
+						<!-- TODO FAIRE EN SORTE DE NE PAS AFFICHER LA BORDER B POUR LA DERNIERE LIGNE -->
+						<tr *ngFor="let shooter of classementData" class="border-b border-gray-200">
+							<td class="text-center py-3" [innerHTML]="getPositionBadge(shooter.rank)"></td>
+							<div class="font-bold text-gray-900 text-base">
+								{{ shooter.lastName }}
+							</div>
+							<div class="text-sm text-gray-600">
+								{{ shooter.firstName }}
+							</div>
+							<td class="text-center font-mono text-[1.1rem] py-3 w-30">
+								{{ shooter.scoreSerie1 == null ? "-" : (shooter.scoreSerie1 | number : "1.0-2") }}
 							</td>
-							<td class="text-gray-600 py-3 text-base">{{ tireur.club }}</td>
-							<td class="text-center font-mono text-[1.1rem] py-3 w-30">{{ tireur.serie1.toFixed(1) }}</td>
-							<td class="text-center font-mono text-[1.1rem] py-3 w-30">{{ tireur.serie2.toFixed(1) }}</td>
-							<td class="text-center font-mono text-[1.1rem] py-3 w-30">{{ tireur.serie3.toFixed(1) }}</td>
-							<td class="text-center font-mono text-[1.1rem] py-3 w-30">{{ tireur.serie4.toFixed(1) }}</td>
-							<td class="text-center font-mono text-[1.1rem] py-3 w-30">{{ tireur.serie5.toFixed(1) }}</td>
-							<td class="text-center font-mono text-[1.1rem] py-3 w-30">{{ tireur.serie6.toFixed(1) }}</td>
+							<td class="text-center font-mono text-[1.1rem] py-3 w-30">
+								{{ shooter.scoreSerie2 == null ? "-" : (shooter.scoreSerie2 | number : "1.0-2") }}
+							</td>
+							<td class="text-center font-mono text-[1.1rem] py-3 w-30">
+								{{ shooter.scoreSerie3 == null ? "-" : (shooter.scoreSerie3 | number : "1.0-2") }}
+							</td>
+							<td class="text-center font-mono text-[1.1rem] py-3 w-30">
+								{{ shooter.scoreSerie4 == null ? "-" : (shooter.scoreSerie4 | number : "1.0-2") }}
+							</td>
+							<td class="text-center font-mono text-[1.1rem] py-3 w-30">
+								{{ shooter.scoreSerie5 == null ? "-" : (shooter.scoreSerie5 | number : "1.0-2") }}
+							</td>
+							<td class="text-center font-mono text-[1.1rem] py-3 w-30">
+								{{ shooter.scoreSerie6 == null ? "-" : (shooter.scoreSerie6 | number : "1.0-2") }}
+							</td>
 							<td class="text-center font-mono text-xl font-bold text-prime-blue bg-gradient-to-r from-blue-50 to-indigo-50 py-3">
-								{{ tireur.total.toFixed(1) }}
+								{{ shooter.totalScore | number : "1.0-2" }}
 							</td>
 						</tr>
 					</tbody>
@@ -87,8 +99,8 @@
 			<div class="bg-blue-50/80 backdrop-blur-md rounded-lg px-6 py-3 shadow-md border border-blue-200/50 max-w-4xl">
 				<p class="text-sm text-blue-700 text-center">
 					<iconify-icon icon="lucide:info" class="text-[1.1rem] mb-0.5 mr-1 text-blue-600 align-middle"></iconify-icon>
-					Certains tireurs peuvent ne pas être encore présents dans le tableau, ou afficher des séries à 0, car ils n'ont pas encore terminé
-					de tirer ou leurs résultats n'ont pas encore été mis à jour par les organisateurs.
+					Certains shooters peuvent ne pas être encore présents dans le tableau, ou afficher des séries à 0, car ils n'ont pas encore
+					terminé de tirer ou leurs résultats n'ont pas encore été mis à jour par les organisateurs.
 				</p>
 			</div>
 		</div>

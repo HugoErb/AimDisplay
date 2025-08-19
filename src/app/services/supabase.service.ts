@@ -279,6 +279,82 @@ export class SupabaseService {
 	}
 
 	/**
+	 * Récupère tous les tireurs de l’utilisateur courant depuis la table `shooters`
+	 * puis normalise les données pour l’interface `Shooter`.
+	 *
+	 * @returns {Promise<Shooter[]>} La liste des tireurs normalisés pour l’UI.
+	 */
+	async getShootersByCompetitionId(competitionId: number): Promise<Shooter[]> {
+		// Utilisateur courant
+		const { data: userData, error: userError } = await this.supabase.auth.getUser();
+		if (userError) throw new Error(`Impossible de récupérer l'utilisateur: ${userError.message}`);
+		const currentUser = userData?.user;
+		if (!currentUser) throw new Error('Aucun utilisateur connecté.');
+
+		// Récupère les tireurs pour la compétition en paramètre
+		const { data: shooterRows, error: shootersError } = await this.supabase
+			.from('shooters')
+			.select('*')
+			.eq('user_id', currentUser.id)
+			.eq('competition_id', competitionId)
+			.order('id', { ascending: true });
+
+		if (shootersError) throw new Error(`Erreur lors de la récupération des tireurs: ${shootersError.message}`);
+		const rows = shooterRows ?? [];
+		if (!rows.length) return [];
+
+		// Référentiels
+		const [{ data: competitions }, { data: clubs }, { data: distances }, { data: weapons }, { data: categories }] = await Promise.all([
+			this.supabase.from('competitions').select('id, name'),
+			this.supabase.from('clubs').select('id, name'),
+			this.supabase.from('distances').select('id, label'),
+			this.supabase.from('weapons').select('id, label'),
+			this.supabase.from('categories').select('id, label'),
+		]);
+
+		const mapName = <T extends { id: number; name?: string; label?: string }>(arr?: T[] | null) =>
+			new Map((arr ?? []).map((x) => [x.id, (x as any).name ?? (x as any).label ?? '']));
+
+		const competitionById = mapName(competitions as any[]);
+		const clubById = mapName(clubs as any[]);
+		const distanceById = mapName(distances as any[]);
+		const weaponById = mapName(weapons as any[]);
+		const categoryById = mapName(categories as any[]);
+
+		const toNum = (v: any) => (v == null ? 0 : Number(v) || 0);
+
+		return rows.map((row: any): Shooter => {
+			const s1 = toNum(row.serie1_score);
+			const s2 = toNum(row.serie2_score);
+			const s3 = toNum(row.serie3_score);
+			const s4 = toNum(row.serie4_score);
+			const s5 = toNum(row.serie5_score);
+			const s6 = toNum(row.serie6_score);
+			const total = s1 + s2 + s3 + s4 + s5 + s6;
+
+			return {
+				id: row.id,
+				lastName: row.last_name,
+				firstName: row.first_name,
+				email: row.email,
+				competitionName: competitionById.get(row.competition_id) ?? '',
+				clubName: clubById.get(row.club_id) ?? '',
+				distance: distanceById.get(row.distance_id) ?? '',
+				weapon: weaponById.get(row.weapon_id) ?? '',
+				categoryName: categoryById.get(row.category_id) ?? '',
+				scoreSerie1: s1,
+				scoreSerie2: s2,
+				scoreSerie3: s3,
+				scoreSerie4: s4,
+				scoreSerie5: s5,
+				scoreSerie6: s6,
+				totalScore: Number(total.toFixed(2)),
+				userId: row.user_id,
+			};
+		});
+	}
+
+	/**
 	 * Récupère les compétitions de l’utilisateur courant (mappées en camelCase avec dates en Date).
 	 * @param none
 	 * @return La liste des compétitions appartenant à l’utilisateur connecté.
@@ -424,7 +500,7 @@ export class SupabaseService {
 				id: row.id,
 				lastName: row.last_name,
 				firstName: row.first_name,
-                email: row.email,
+				email: row.email,
 				competitionName: competitionById.get(row.competition_id) ?? '',
 				clubName: clubById.get(row.club_id) ?? '',
 				distance: distanceById.get(row.distance_id) ?? '',
