@@ -87,10 +87,10 @@
 								{{ shooter.scoreSerie4 == null ? "-" : (shooter.scoreSerie4 | number : "1.0-2") }}
 							</td>
 							<td class="text-center font-mono text-[1.1rem] py-3 w-30">
-								{{ shooter.isSeniorOrDame ? "—" : shooter.scoreSerie5 == null ? "-" : (shooter.scoreSerie5 | number : "1.0-2") }}
+								{{ shooter.isSeniorOrDame ? (shooter.scoreSerie5 == null ? "-" : (shooter.scoreSerie5 | number : "1.0-2")) : "—" }}
 							</td>
 							<td class="text-center font-mono text-[1.1rem] py-3 w-30">
-								{{ shooter.isSeniorOrDame ? "—" : shooter.scoreSerie6 == null ? "-" : (shooter.scoreSerie6 | number : "1.0-2") }}
+								{{ shooter.isSeniorOrDame ? (shooter.scoreSerie6 == null ? "-" : (shooter.scoreSerie6 | number : "1.0-2")) : "—" }}
 							</td>
 							<td class="text-center font-mono text-xl font-bold text-prime-blue bg-gradient-to-r from-blue-50 to-indigo-50 py-3">
 								{{ shooter.totalScore | number : "1.0-2" }}
