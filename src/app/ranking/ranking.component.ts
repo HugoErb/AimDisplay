@@ -15,36 +15,21 @@ import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 	schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class RankingComponent implements OnInit, OnDestroy {
-	// Identifiant et titre de la compétition (récupéré via l’URL).
-	competitionId!: number;
-	competitionTitle: string = '';
+	competitionId!: number; // Identifiant de la compétition (récupéré via l’URL)
+	competitionTitle: string = ''; // Titre de la compétition (récupéré via l’URL)
 
-	// Pages construites à partir des tireurs.
-	pages: RankingPage[] = [];
-	// Index de la page actuellement affichée (base 0).
-	currentIndex: number = 0;
-	// Numéro de la page courante (affiché à l’écran, base 1).
-	currentPage: number = 1;
-	// Nombre total de pages pour la discipline courante.
-	totalPages: number = 1;
+	pages: RankingPage[] = []; // Pages construites à partir des tireurs
+	currentIndex: number = 0; // Index de la page actuellement affichée (base 0)
+	currentPage: number = 1; // Numéro de la page courante (affiché à l’écran, base 1)
+	totalPages: number = 1; // Nombre total de pages pour la discipline courante
+	classementData: RankedShooter[] = []; // Données affichées dans le tableau pour la page courante
+	participantsCount: number = 0; // Nombre total de participants dans la discipline courante
+	discipline: string = ''; // Libellé « discipline » affiché dans le titre (arme + distance + catégorie)
+	private readonly PAGE_SIZE = 8; // Nombre de lignes par page.
 
-	// Données affichées dans le tableau pour la page courante.
-	classementData: RankedShooter[] = [];
-	// Nombre total de participants dans la discipline courante.
-	participantsCount: number = 0;
-
-	// Libellé « discipline » affiché dans le titre (arme + distance + catégorie).
-	discipline: string = '';
-
-	// Nombre de lignes par page.
-	private readonly PAGE_SIZE = 8;
-
-	// Timer de rotation (identifiant du setTimeout).
-	private rotationTimerId: number | undefined;
-	// Indique que le composant est détruit (empêche les ticks ultérieurs).
-	private destroyed = false;
-	// Évite les rafraîchissements concurrents.
-	private isRefreshing = false;
+	private rotationTimerId: number | undefined; // Timer de rotation (identifiant du setTimeout)
+	private destroyed = false; // Indique que le composant est détruit (empêche les ticks ultérieurs)
+	private isRefreshing = false; // Évite les rafraîchissements concurrents
 
 	private progressRun = 0; // identifiant pour invalider les anciennes animations
 	progressStyle: { [k: string]: string } = { width: '0%', transition: 'none' }; // Style bindé sur la barre (width + transition)
@@ -58,6 +43,8 @@ export class RankingComponent implements OnInit, OnDestroy {
 	showFsButton = false; // contrôle l’affichage du bouton
 	private hideFsBtnTimer: any; // timer d’auto-masquage
 	private fsChangeHandler = () => this.updateFullscreenState();
+	private fsPinned = false; // souris sur le bouton => pas d'auto-hide
+	private fsHideTimer: any | null = null;
 
 	constructor(private readonly commonService: CommonService, private readonly supabase: SupabaseService, private readonly route: ActivatedRoute) {}
 
@@ -97,6 +84,7 @@ export class RankingComponent implements OnInit, OnDestroy {
 		document.addEventListener('mozfullscreenchange', this.fsChangeHandler as any);
 		document.addEventListener('MSFullscreenChange', this.fsChangeHandler as any);
 		this.updateFullscreenState();
+		window.addEventListener('mousemove', this.onGlobalMouseMove, { passive: true });
 	}
 
 	/**
@@ -110,6 +98,8 @@ export class RankingComponent implements OnInit, OnDestroy {
 		document.removeEventListener('webkitfullscreenchange', this.fsChangeHandler as any);
 		document.removeEventListener('mozfullscreenchange', this.fsChangeHandler as any);
 		document.removeEventListener('MSFullscreenChange', this.fsChangeHandler as any);
+		window.removeEventListener('mousemove', this.onGlobalMouseMove as any);
+		if (this.fsHideTimer) clearTimeout(this.fsHideTimer);
 	}
 
 	// ──────────────────────────────────────────────────────────────────────────────
@@ -485,7 +475,7 @@ export class RankingComponent implements OnInit, OnDestroy {
 	}
 
 	// ──────────────────────────────────────────────────────────────────────────────
-	// Barre de chargement
+	// Bouton de mise en plein écran
 	// ──────────────────────────────────────────────────────────────────────────────
 
 	// Affiche le bouton et programme son masquage après 2s d'inactivité
@@ -534,5 +524,35 @@ export class RankingComponent implements OnInit, OnDestroy {
 		else if (d.mozCancelFullScreen) await d.mozCancelFullScreen();
 		else if (d.msExitFullscreen) await d.msExitFullscreen();
 		this.updateFullscreenState();
+	}
+
+	@HostListener('document:mousemove', ['$event'])
+	onGlobalMouseMove(_e: MouseEvent) {
+		// dès qu'on bouge la souris n'importe où, on montre le bouton et on relance le timer
+		this.showFsButton = true;
+		this.restartFsHideTimer(); // 1.8s par défaut
+	}
+
+	onFsMouseEnter() {
+		// on "épingle" le bouton -> tant que la souris est dessus il reste visible
+		this.fsPinned = true;
+		this.showFsButton = true;
+		if (this.fsHideTimer) {
+			clearTimeout(this.fsHideTimer);
+			this.fsHideTimer = null;
+		}
+	}
+
+	onFsMouseLeave() {
+		// on "dé-épingle" et on lance un petit délai avant de cacher
+		this.fsPinned = false;
+		this.restartFsHideTimer(700); // petit délai pour éviter un flicker
+	}
+
+	private restartFsHideTimer(delay = 1800) {
+		if (this.fsHideTimer) clearTimeout(this.fsHideTimer);
+		this.fsHideTimer = setTimeout(() => {
+			if (!this.fsPinned) this.showFsButton = false;
+		}, delay);
 	}
 }
