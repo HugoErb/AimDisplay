@@ -26,7 +26,10 @@ export class RankingComponent implements OnInit, OnDestroy {
 	classementData: RankedShooter[] = []; // Données affichées dans le tableau pour la page courante
 	participantsCount: number = 0; // Nombre total de participants dans la discipline courante
 	discipline: string = ''; // Libellé « discipline » affiché dans le titre (arme + distance + catégorie)
-	private readonly PAGE_SIZE = 8; // Nombre de lignes par page.
+
+	private allShooters: Shooter[] = []; // Mémorise la liste complète pour pouvoir rebâtir les pages après un resize
+
+	private lastRowsPerPage: number = this.getNbRowsPerPage(); // Dernier nombre de lignes utilisé (pour éviter de recalculer pour rien)
 
 	private rotationTimerId: number | undefined; // Timer de rotation (identifiant du setTimeout)
 	private destroyed = false; // Indique que le composant est détruit (empêche les ticks ultérieurs)
@@ -74,6 +77,7 @@ export class RankingComponent implements OnInit, OnDestroy {
 		this.competitionTitle = nameParam.trim();
 
 		const shooters = await this.supabase.getShootersByCompetitionId(this.competitionId);
+		this.allShooters = shooters;
 		this.pages = this.buildPagesFromShooters(shooters);
 
 		if (!this.pages.length) {
@@ -170,7 +174,6 @@ export class RankingComponent implements OnInit, OnDestroy {
 	 *   (S4 si Senior/Dame, sinon S6), puis S3 → S1, puis ordre alphabétique
 	 *   (nom, prénom, club), puis id,
 	 * - numérote les rangs,
-	 * - pagine par tranches de `PAGE_SIZE`.
 	 */
 	private buildPagesFromShooters(shooters: Shooter[]): RankingPage[] {
 		// Regroupement par triplet discipline
@@ -229,13 +232,14 @@ export class RankingComponent implements OnInit, OnDestroy {
 			// Numérotation des rangs (après tie-break)
 			enriched.forEach((s, i) => (s.rank = i + 1));
 
-			// Pagination par tranches PAGE_SIZE
+			// Pagination par tranches
+			const rowsPerPage = this.getNbRowsPerPage();
 			const total = enriched.length;
-			const pageCount = Math.ceil(total / this.PAGE_SIZE);
+			const pageCount = Math.ceil(total / rowsPerPage);
 
 			for (let p = 0; p < pageCount; p++) {
-				const start = p * this.PAGE_SIZE;
-				const rows = enriched.slice(start, start + this.PAGE_SIZE);
+				const start = p * rowsPerPage;
+				const rows = enriched.slice(start, start + rowsPerPage);
 
 				pages.push({
 					weapon,
@@ -250,6 +254,69 @@ export class RankingComponent implements OnInit, OnDestroy {
 		}
 
 		return pages;
+	}
+
+	/**
+	 * Calcule dynamiquement le nombre optimal de lignes à afficher dans le tableau,
+	 * en prenant des tailles fixes d'éléments du tableau et en les
+	 * soustrayant à la taille disponible dans la fenêtre.
+	 *
+	 * @returns {Promise<number>} Le nombre de lignes à afficher.
+	 */
+	getNbRowsPerPage(): number {
+		// Mesures
+		const headerH = 80;
+		const headerTabH = 45;
+		const disciplineContainerH = 94;
+		const defaultRowH = 53;
+		const defaultPadding = 75;
+
+		// Calcul de l’espace disponible
+		const available = window.innerHeight - headerH - disciplineContainerH - headerTabH - defaultPadding;
+
+		// Nombre de lignes complètes
+		const count = Math.floor(available / defaultRowH);
+
+		// On renvoie au moins 1
+		return Math.max(1, count);
+	}
+
+	@HostListener('window:resize')
+	onResize(): void {
+		const newRows = this.getNbRowsPerPage();
+		if (newRows === this.lastRowsPerPage) return; // rien à faire
+
+		this.lastRowsPerPage = newRows;
+
+		// S’il nous manque les données “source”, on ne peut rien rebâtir
+		if (!this.allShooters?.length) return;
+
+		// Sauvegarde le « contexte » courant (discipline + page dans la discipline)
+		const cur = this.pages[this.currentIndex];
+		const curKey = cur ? `${cur.distance}|||${cur.weapon}|||${cur.category}` : null;
+		const curPageInGroup = cur?.pageNumberInGroup ?? 1;
+
+		// Stoppe la rotation + la barre, rebâtit les pages
+		this.stopRotation();
+		this.pages = this.buildPagesFromShooters(this.allShooters);
+
+		// Essaie de retrouver la même discipline…
+		let newIndex = 0;
+		if (curKey) {
+			const groupPages = this.pages.filter((p) => `${p.distance}|||${p.weapon}|||${p.category}` === curKey);
+			if (groupPages.length) {
+				const wantedPage = Math.min(curPageInGroup, groupPages[0].pageCountInGroup);
+				const idx = this.pages.findIndex(
+					(p) => `${p.distance}|||${p.weapon}|||${p.category}` === curKey && p.pageNumberInGroup === wantedPage
+				);
+				if (idx >= 0) newIndex = idx;
+			}
+		}
+
+		// Réaffiche et relance la rotation
+		this.showPage(newIndex);
+		this.playEnterAnimations(this.pages[newIndex].pageNumberInGroup === 1); // header si nouvelle discipline
+		this.scheduleNextTick();
 	}
 
 	/**
@@ -449,7 +516,7 @@ export class RankingComponent implements OnInit, OnDestroy {
 	 * @param page Page courante
 	 */
 	private getPageDisplayDuration(page: RankingPage): number {
-		const BASE_MS = 10_000;
+		const BASE_MS = 1_000;
 		const PER_SHOOTER_MS = 1_000;
 		const n = page?.rows?.length ?? 0;
 		return BASE_MS + n * PER_SHOOTER_MS;
