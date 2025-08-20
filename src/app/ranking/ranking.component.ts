@@ -516,7 +516,7 @@ export class RankingComponent implements OnInit, OnDestroy {
 	 * @param page Page courante
 	 */
 	private getPageDisplayDuration(page: RankingPage): number {
-		const BASE_MS = 1_000;
+		const BASE_MS = 10_000;
 		const PER_SHOOTER_MS = 1_000;
 		const n = page?.rows?.length ?? 0;
 		return BASE_MS + n * PER_SHOOTER_MS;
