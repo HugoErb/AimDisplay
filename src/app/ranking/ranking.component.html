@@ -122,11 +122,14 @@
 <!-- Bouton plein écran (apparaît au mouvement de souris) -->
 <button
 	(click)="toggleFullscreen()"
-	class="fixed top-4 right-4 z-50 px-3 py-1 rounded-full bg-gray-700/80 text-white text-sm shadow hover:bg-gray-700 transition pointer-events-auto cursor-pointer md:top-6 md:right-6"
+	(mouseenter)="onFsMouseEnter()"
+	(mouseleave)="onFsMouseLeave()"
+	class="fixed top-4 right-4 z-50 px-3 py-1 rounded-full bg-gray-700/80 text-white text-sm shadow hover:bg-gray-700 transition pointer-events-auto cursor-pointer md:top-6 md:right-6 focus:outline-none"
 	[class.opacity-0]="!showFsButton"
 	[class.pointer-events-none]="!showFsButton"
 	[attr.aria-label]="isFullscreen ? 'Quitter le plein écran' : 'Passer en plein écran'"
 	[attr.title]="isFullscreen ? 'Quitter le plein écran' : 'Passer en plein écran'"
+	tabindex="-1"
 >
 	<iconify-icon [icon]="isFullscreen ? 'lucide:minimize-2' : 'lucide:maximize-2'" class="text-[1rem] align-[-2px] mr-1"></iconify-icon>
 	{{ isFullscreen ? "Quitter" : "Plein écran" }}
