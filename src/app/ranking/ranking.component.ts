@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, HostListener, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { CommonService } from '../services/common.service';
 import { SupabaseService } from '../services/supabase.service';
@@ -53,6 +53,12 @@ export class RankingComponent implements OnInit, OnDestroy {
 	tableAnimClass: string | null = 'animate-swipe-right-in';
 	headerAnimClass: string | null = 'animate-swipe-right-in';
 
+	// --- Plein écran ---
+	isFullscreen = false; // vrai si la page est en plein écran
+	showFsButton = false; // contrôle l’affichage du bouton
+	private hideFsBtnTimer: any; // timer d’auto-masquage
+	private fsChangeHandler = () => this.updateFullscreenState();
+
 	constructor(private readonly commonService: CommonService, private readonly supabase: SupabaseService, private readonly route: ActivatedRoute) {}
 
 	// ──────────────────────────────────────────────────────────────────────────────
@@ -84,6 +90,13 @@ export class RankingComponent implements OnInit, OnDestroy {
 		this.showPage(0);
 		// Lance la rotation (infinie).
 		this.startRotation();
+
+		// plein écran: écoute les changements du navigateur
+		document.addEventListener('fullscreenchange', this.fsChangeHandler);
+		document.addEventListener('webkitfullscreenchange', this.fsChangeHandler as any);
+		document.addEventListener('mozfullscreenchange', this.fsChangeHandler as any);
+		document.addEventListener('MSFullscreenChange', this.fsChangeHandler as any);
+		this.updateFullscreenState();
 	}
 
 	/**
@@ -92,6 +105,11 @@ export class RankingComponent implements OnInit, OnDestroy {
 	ngOnDestroy(): void {
 		this.destroyed = true;
 		this.stopRotation();
+		clearTimeout(this.hideFsBtnTimer);
+		document.removeEventListener('fullscreenchange', this.fsChangeHandler);
+		document.removeEventListener('webkitfullscreenchange', this.fsChangeHandler as any);
+		document.removeEventListener('mozfullscreenchange', this.fsChangeHandler as any);
+		document.removeEventListener('MSFullscreenChange', this.fsChangeHandler as any);
 	}
 
 	// ──────────────────────────────────────────────────────────────────────────────
@@ -464,5 +482,57 @@ export class RankingComponent implements OnInit, OnDestroy {
 	private resetProgressBar(): void {
 		this.progressRun++; // invalide les rAF précédents
 		this.progressStyle = { width: '100%', transition: 'none' };
+	}
+
+	// ──────────────────────────────────────────────────────────────────────────────
+	// Barre de chargement
+	// ──────────────────────────────────────────────────────────────────────────────
+
+	// Affiche le bouton et programme son masquage après 2s d'inactivité
+	private showFsButtonNow(): void {
+		this.showFsButton = true;
+		clearTimeout(this.hideFsBtnTimer);
+		this.hideFsBtnTimer = setTimeout(() => (this.showFsButton = false), 2000);
+	}
+
+	// Suit les mouvements de souris pour faire apparaître le bouton
+	@HostListener('document:mousemove')
+	onDocMouseMove(): void {
+		this.showFsButtonNow();
+	}
+
+	// Met à jour `isFullscreen` en écoutant l’événement `fullscreenchange`
+	private updateFullscreenState(): void {
+		const d: any = document;
+		this.isFullscreen = !!(document.fullscreenElement || d.webkitFullscreenElement || d.mozFullScreenElement || d.msFullscreenElement);
+	}
+
+	// Bascule plein écran <-> fenêtre
+	async toggleFullscreen(): Promise<void> {
+		if (this.isFullscreen) {
+			await this.exitFullscreen();
+		} else {
+			await this.enterFullscreen();
+		}
+	}
+
+	// Entre en plein écran (compatibilité multi-navigateurs)
+	private async enterFullscreen(): Promise<void> {
+		const el: any = document.documentElement;
+		if (el.requestFullscreen) await el.requestFullscreen();
+		else if (el.webkitRequestFullscreen) await el.webkitRequestFullscreen();
+		else if (el.mozRequestFullScreen) await el.mozRequestFullScreen();
+		else if (el.msRequestFullscreen) await el.msRequestFullscreen();
+		this.updateFullscreenState();
+	}
+
+	// Quitte le plein écran (compatibilité multi-navigateurs)
+	private async exitFullscreen(): Promise<void> {
+		const d: any = document;
+		if (document.exitFullscreen) await document.exitFullscreen();
+		else if (d.webkitExitFullscreen) await d.webkitExitFullscreen();
+		else if (d.mozCancelFullScreen) await d.mozCancelFullScreen();
+		else if (d.msExitFullscreen) await d.msExitFullscreen();
+		this.updateFullscreenState();
 	}
 }
