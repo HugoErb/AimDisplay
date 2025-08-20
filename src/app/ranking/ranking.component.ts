@@ -18,6 +18,7 @@ export class RankingComponent implements OnInit, OnDestroy {
 	competitionId!: number; // Identifiant de la compétition (récupéré via l’URL)
 	competitionTitle: string = ''; // Titre de la compétition (récupéré via l’URL)
 
+	// --- Pages ---
 	pages: RankingPage[] = []; // Pages construites à partir des tireurs
 	currentIndex: number = 0; // Index de la page actuellement affichée (base 0)
 	currentPage: number = 1; // Numéro de la page courante (affiché à l’écran, base 1)
@@ -31,10 +32,17 @@ export class RankingComponent implements OnInit, OnDestroy {
 	private destroyed = false; // Indique que le composant est détruit (empêche les ticks ultérieurs)
 	private isRefreshing = false; // Évite les rafraîchissements concurrents
 
+	// --- Pré-chargement du prochain cycle ---
+	private isPrefetching = false; // évite de lancer plusieurs précharges en //
+	private prefetchedPages: RankingPage[] | null = null; // pages reconstruites en avance
+	private prefetchRun = 0; // id de course pour invalider les anciennes promesses
+
+	// --- Barre de progression ---
 	private progressRun = 0; // identifiant pour invalider les anciennes animations
 	progressStyle: { [k: string]: string } = { width: '0%', transition: 'none' }; // Style bindé sur la barre (width + transition)
 	private readonly ANIM_MS = 400; // Durée d'animation (doit matcher avec styles.css)
 
+	// --- Animations ---
 	tableAnimClass: string | null = 'animate-swipe-right-in';
 	headerAnimClass: string | null = 'animate-swipe-right-in';
 
@@ -264,20 +272,54 @@ export class RankingComponent implements OnInit, OnDestroy {
 	}
 
 	/**
-	 * Programme l’affichage de l’étape suivante selon la durée de la page courante.
-	 * Durée = 10 secondes + 1 seconde par tireur affiché.
+	 * Programme l’étape suivante en fonction de la durée de la page courante,
+	 * démarre la barre de progression, et si l’on est sur la DERNIÈRE page du cycle,
+	 * lance en tâche de fond la précharge du prochain cycle.
 	 */
 	private scheduleNextTick(): void {
 		if (this.destroyed || !this.pages?.length) return;
+
 		const page = this.pages[this.currentIndex];
 		const delay = this.getPageDisplayDuration(page);
 
-		// ↙ démarre la barre pour la durée de la page
+		// barre de progression
 		this.startProgressBar(delay);
+
+		// si on est sur la dernière page du cycle → pré-charger le prochain
+		const isLastPageOfCycle = this.currentIndex === this.pages.length - 1;
+		if (isLastPageOfCycle && !this.isPrefetching) {
+			void this.prefetchNextCycle(); // async, en tâche de fond
+		}
 
 		this.rotationTimerId = window.setTimeout(() => {
 			void this.advanceOrRefresh();
 		}, delay);
+	}
+
+	/**
+	 * Précharge le prochain cycle :
+	 * - récupère les tireurs en BDD,
+	 * - reconstruit les pages,
+	 * - les stocke dans `prefetchedPages` sans toucher à l’affichage courant.
+	 *
+	 * Utilise un "run id" pour ignorer les résultats obsolètes si plusieurs précharges
+	 * se chevauchent (ex: refresh très rapide ou navigation).
+	 */
+	private async prefetchNextCycle(): Promise<void> {
+		if (this.isPrefetching || this.destroyed) return;
+		this.isPrefetching = true;
+		const run = ++this.prefetchRun;
+
+		try {
+			const shooters = await this.supabase.getShootersByCompetitionId(this.competitionId);
+			const pages = this.buildPagesFromShooters(shooters);
+			if (run !== this.prefetchRun || this.destroyed) return; // résultat obsolète
+			this.prefetchedPages = pages;
+		} catch {
+			if (run === this.prefetchRun) this.prefetchedPages = null;
+		} finally {
+			if (run === this.prefetchRun) this.isPrefetching = false;
+		}
 	}
 
 	/**
@@ -287,7 +329,8 @@ export class RankingComponent implements OnInit, OnDestroy {
 	private async advanceOrRefresh(): Promise<void> {
 		if (this.destroyed) return;
 
-		const isGroupEnd = this.isLastPageOfGroup; // dernière page de la discipline ?
+		// Jouer la sortie (header aussi si fin de discipline)
+		const isGroupEnd = this.isLastPageOfGroup;
 		await this.playExitAnimations(isGroupEnd);
 
 		// Page suivante ?
@@ -296,12 +339,23 @@ export class RankingComponent implements OnInit, OnDestroy {
 			const nextIsGroupStart = this.pages[nextIndex].pageNumberInGroup === 1;
 
 			this.showPage(nextIndex);
-			this.playEnterAnimations(nextIsGroupStart); // header seulement si nouvelle discipline
+			this.playEnterAnimations(nextIsGroupStart);
 			this.scheduleNextTick();
 			return;
 		}
 
-		// Fin du cycle → refresh BDD + restart
+		// Dernière page du cycle → bascule sur les pages préchargées si dispo
+		if (this.prefetchedPages && this.prefetchedPages.length) {
+			this.pages = this.prefetchedPages;
+			this.prefetchedPages = null;
+			this.currentIndex = 0;
+			this.showPage(0);
+			this.playEnterAnimations(true); // nouvelle discipline en général
+			this.scheduleNextTick();
+			return;
+		}
+
+		// Pas encore préchargé / échec → fallback
 		await this.refreshAndRestart();
 	}
 
@@ -317,17 +371,22 @@ export class RankingComponent implements OnInit, OnDestroy {
 		try {
 			const shooters = await this.supabase.getShootersByCompetitionId(this.competitionId);
 			this.pages = this.buildPagesFromShooters(shooters);
+
 			if (!this.pages.length) {
 				this.commonService.showSwalToast('Aucun tireur pour cette compétition.', 'info');
 				return;
 			}
+
 			this.showPage(0);
-			this.playEnterAnimations(true); // nouvelle 1re page d’une discipline → header + table
+			this.playEnterAnimations(true);
 		} catch (err: any) {
 			this.commonService.showSwalToast(err?.message ?? 'Erreur lors de la mise à jour du classement.', 'error');
 			return;
 		} finally {
 			this.isRefreshing = false;
+			// invalide toute ancienne précharge
+			this.prefetchRun++;
+			this.prefetchedPages = null;
 		}
 
 		this.scheduleNextTick();
@@ -390,7 +449,7 @@ export class RankingComponent implements OnInit, OnDestroy {
 	 * @param page Page courante
 	 */
 	private getPageDisplayDuration(page: RankingPage): number {
-		const BASE_MS = 10_000;
+		const BASE_MS = 1_000;
 		const PER_SHOOTER_MS = 1_000;
 		const n = page?.rows?.length ?? 0;
 		return BASE_MS + n * PER_SHOOTER_MS;
