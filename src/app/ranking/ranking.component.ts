@@ -115,42 +115,14 @@ export class RankingComponent implements OnInit, OnDestroy {
 	}
 
 	// ──────────────────────────────────────────────────────────────────────────────
-	// Affichage / Formatage
+	// Gestion et construction des pages (grouping + tri + pagination)
 	// ──────────────────────────────────────────────────────────────────────────────
 
 	/**
-	 * Renvoie le badge HTML (couleur/texte) représentant la position du tireur.
-	 * @param position Rang (1, 2, 3, …)
-	 */
-	getPositionBadge(position: number): string {
-		let bgClass = '';
-		let text = '';
-
-		switch (position) {
-			case 1:
-				bgClass = 'bg-yellow-500 text-white';
-				text = '1er';
-				break;
-			case 2:
-				bgClass = 'bg-gray-400 text-white';
-				text = '2ème';
-				break;
-			case 3:
-				bgClass = 'bg-amber-600 text-white';
-				text = '3ème';
-				break;
-			default:
-				bgClass = 'border border-gray-400 text-gray-700';
-				text = `${position}ème`;
-		}
-
-		return `<span class="px-2 py-1 rounded-full text-sm font-medium transition-colors duration-150 ${bgClass}">${text}</span>`;
-	}
-
-	/**
-	 * Affiche la page située à l’index donné et met à jour l’état du composant
-	 * (tableau, titre de discipline, pagination).
-	 * @param index Index de la page (base 0).
+	 * Met à jour l’état pour afficher la page de classement ciblée depuis `this.pages[index]`.
+	 *
+	 * @param {number} index - Indice (base 0) de la page à afficher dans `this.pages`.
+	 * @returns {void} Ne retourne rien.
 	 */
 	private showPage(index: number): void {
 		this.currentIndex = index;
@@ -163,17 +135,11 @@ export class RankingComponent implements OnInit, OnDestroy {
 		this.discipline = `${page.weapon} - ${page.distance} - ${page.category}`;
 	}
 
-	// ──────────────────────────────────────────────────────────────────────────────
-	// Construction des pages (grouping + tri + pagination)
-	// ──────────────────────────────────────────────────────────────────────────────
-
 	/**
-	 * Construit les pages de classement à partir d’une liste de tireurs :
-	 * - regroupe par discipline (arme/distance/catégorie),
-	 * - trie chaque discipline par total décroissant, tie-break sur la dernière série
-	 *   (S4 si Senior/Dame, sinon S6), puis S3 → S1, puis ordre alphabétique
-	 *   (nom, prénom, club), puis id,
-	 * - numérote les rangs,
+	 * Construit les pages de classement.
+	 *
+	 * @param {Shooter[]} shooters - Liste des tireurs à classer ; si vide ou indéfinie, aucune page n’est générée.
+	 * @returns {RankingPage[]} Pages paginées par discipline contenant les lignes triées et les métadonnées.
 	 */
 	private buildPagesFromShooters(shooters: Shooter[]): RankingPage[] {
 		// Regroupement par triplet discipline
@@ -257,6 +223,37 @@ export class RankingComponent implements OnInit, OnDestroy {
 	}
 
 	/**
+	 * Génère le badge HTML d’une position de classement avec style adapté (or/argent/bronze pour 1–3, style générique sinon).
+	 *
+	 * @param {number} position - Position dans le classement (1 pour premier, 2 pour deuxième, etc.).
+	 * @returns {string} HTML d’un <span> stylé (classes Tailwind) affichant le rang correspondant.
+	 */
+	getPositionBadge(position: number): string {
+		let bgClass = '';
+		let text = '';
+
+		switch (position) {
+			case 1:
+				bgClass = 'bg-yellow-500 text-white';
+				text = '1er';
+				break;
+			case 2:
+				bgClass = 'bg-gray-400 text-white';
+				text = '2ème';
+				break;
+			case 3:
+				bgClass = 'bg-amber-600 text-white';
+				text = '3ème';
+				break;
+			default:
+				bgClass = 'border border-gray-400 text-gray-700';
+				text = `${position}ème`;
+		}
+
+		return `<span class="px-2 py-1 rounded-full text-sm font-medium transition-colors duration-150 ${bgClass}">${text}</span>`;
+	}
+
+	/**
 	 * Calcule dynamiquement le nombre optimal de lignes à afficher dans le tableau,
 	 * en prenant des tailles fixes d'éléments du tableau et en les
 	 * soustrayant à la taille disponible dans la fenêtre.
@@ -281,6 +278,12 @@ export class RankingComponent implements OnInit, OnDestroy {
 		return Math.max(1, count);
 	}
 
+	/**
+	 * Gère le redimensionnement de la fenêtre : recalcule les lignes par page, rebâtit
+	 * les pages en conservant le contexte courant et relance la rotation.
+	 *
+	 * @returns {void} Ne retourne rien.
+	 */
 	@HostListener('window:resize')
 	onResize(): void {
 		const newRows = this.getNbRowsPerPage();
@@ -320,8 +323,9 @@ export class RankingComponent implements OnInit, OnDestroy {
 	}
 
 	/**
-	 * Démarre la rotation des pages (boucle infinie).
-	 * À la fin de la dernière page, recharge la BDD puis recommence.
+	 * Démarre la rotation automatique des pages si l’affichage est valide.
+	 *
+	 * @returns {void} Ne retourne rien.
 	 */
 	startRotation(): void {
 		this.stopRotation();
@@ -329,7 +333,11 @@ export class RankingComponent implements OnInit, OnDestroy {
 		this.scheduleNextTick();
 	}
 
-	/** Arrête immédiatement la rotation si elle est en cours. */
+	/**
+	 * Arrête la rotation en cours et réinitialise la barre de progression.
+	 *
+	 * @returns {void} Ne retourne rien.
+	 */
 	stopRotation(): void {
 		if (this.rotationTimerId !== undefined) {
 			clearTimeout(this.rotationTimerId);
@@ -339,9 +347,10 @@ export class RankingComponent implements OnInit, OnDestroy {
 	}
 
 	/**
-	 * Programme l’étape suivante en fonction de la durée de la page courante,
-	 * démarre la barre de progression, et si l’on est sur la DERNIÈRE page du cycle,
-	 * lance en tâche de fond la précharge du prochain cycle.
+	 * Planifie le prochain tick de rotation : calcule le délai de la page courante,
+	 * Lance la barre de progression, précharge le cycle suivant si nécessaire, puis programme l’avance.
+	 *
+	 * @returns {void} Ne retourne rien.
 	 */
 	private scheduleNextTick(): void {
 		if (this.destroyed || !this.pages?.length) return;
@@ -364,13 +373,10 @@ export class RankingComponent implements OnInit, OnDestroy {
 	}
 
 	/**
-	 * Précharge le prochain cycle :
-	 * - récupère les tireurs en BDD,
-	 * - reconstruit les pages,
-	 * - les stocke dans `prefetchedPages` sans toucher à l’affichage courant.
+	 * Précharge en arrière-plan le prochain cycle de pages (fetch des tireurs,
+	 * construction des pages) et enregistre le résultat s’il est toujours d’actualité.
 	 *
-	 * Utilise un "run id" pour ignorer les résultats obsolètes si plusieurs précharges
-	 * se chevauchent (ex: refresh très rapide ou navigation).
+	 * @returns {Promise<void>} Promesse résolue à la fin du préchargement.
 	 */
 	private async prefetchNextCycle(): Promise<void> {
 		if (this.isPrefetching || this.destroyed) return;
@@ -390,8 +396,10 @@ export class RankingComponent implements OnInit, OnDestroy {
 	}
 
 	/**
-	 * Passe à la page suivante si disponible ; sinon recharge la BDD,
-	 * reconstruit les pages et repart de la première page.
+	 * Avance à la page suivante avec animations ou, en fin de cycle,
+	 * bascule sur les pages préchargées ; à défaut, rafraîchit et redémarre.
+	 *
+	 * @returns {Promise<void>} Promesse résolue une fois l’action effectuée.
 	 */
 	private async advanceOrRefresh(): Promise<void> {
 		if (this.destroyed) return;
@@ -427,8 +435,10 @@ export class RankingComponent implements OnInit, OnDestroy {
 	}
 
 	/**
-	 * Rafraîchit le classement à partir de la base, puis relance
-	 * l’affichage depuis la première page.
+	 * Rafraîchit le classement depuis Supabase, reconstruit les pages,
+	 * affiche la première et relance la rotation (avec toasts en cas de vide/erreur).
+	 *
+	 * @returns {Promise<void>} Promesse résolue à la fin.
 	 */
 	private async refreshAndRestart(): Promise<void> {
 		if (this.isRefreshing || this.destroyed) return;
@@ -463,7 +473,13 @@ export class RankingComponent implements OnInit, OnDestroy {
 	// Animations
 	// ──────────────────────────────────────────────────────────────────────────────
 
-	/** Anime la sortie. Si `withHeader` = true, header et tableau sortent ensemble. */
+	/**
+	 * Joue l’animation de sortie (glissement vers la gauche) pour la table
+	 * et, optionnellement, pour le header, puis attend la fin.
+	 *
+	 * @param {boolean} withHeader - Indique s’il faut animer le header en plus de la table.
+	 * @returns {Promise<void>} Promesse résolue à la fin de l’animation.
+	 */
 	private playExitAnimations(withHeader: boolean): Promise<void> {
 		// reset classes pour forcer le replay propre
 		this.tableAnimClass = '';
@@ -480,7 +496,13 @@ export class RankingComponent implements OnInit, OnDestroy {
 		});
 	}
 
-	/** Anime l’entrée. Si `withHeader` = true, header ET tableau entrent, sinon seulement le tableau. */
+	/**
+	 * Joue l’animation d’entrée (glissement depuis la droite)
+	 * pour la table et, optionnellement, pour le header.
+	 *
+	 * @param {boolean} withHeader - true pour animer aussi le header en plus de la table.
+	 * @returns {void} Ne retourne rien.
+	 */
 	private playEnterAnimations(withHeader: boolean): void {
 		// reset
 		this.tableAnimClass = '';
@@ -492,16 +514,31 @@ export class RankingComponent implements OnInit, OnDestroy {
 		});
 	}
 
-	// Renvoie la page courante (ou undefined si out-of-range)
+	/**
+	 * Retourne les métadonnées de la page actuellement affichée.
+	 *
+	 * @returns {RankingPage | undefined} L’objet de la page courante,
+	 * ou `undefined` si aucune page n’est disponible.
+	 */
 	get currentPageMeta() {
 		return this.pages?.[this.currentIndex];
 	}
 
+	/**
+	 * Indique si la page courante est la première de son groupe (discipline).
+	 *
+	 * @returns {boolean} `true` si `pageNumberInGroup === 1`, sinon `false`.
+	 */
 	get isFirstPageOfGroup(): boolean {
 		const p = this.currentPageMeta;
 		return !!p && p.pageNumberInGroup === 1;
 	}
 
+	/**
+	 * Indique si la page courante est la dernière de son groupe (discipline).
+	 *
+	 * @returns {boolean} `true` si `pageNumberInGroup === pageCountInGroup`, sinon `false`.
+	 */
 	get isLastPageOfGroup(): boolean {
 		const p = this.currentPageMeta;
 		return !!p && p.pageNumberInGroup === p.pageCountInGroup;
@@ -512,8 +549,10 @@ export class RankingComponent implements OnInit, OnDestroy {
 	// ──────────────────────────────────────────────────────────────────────────────
 
 	/**
-	 * Durée d’affichage d’une page = **10s + 1s par tireur affiché**.
-	 * @param page Page courante
+	 * Calcule la durée d’affichage d’une page en millisecondes (base + 1 s par tireur).
+	 *
+	 * @param {RankingPage} page - Page dont le nombre de lignes (rows) détermine la durée.
+	 * @returns {number} Durée d’affichage en millisecondes.
 	 */
 	private getPageDisplayDuration(page: RankingPage): number {
 		const BASE_MS = 10_000;
@@ -522,17 +561,33 @@ export class RankingComponent implements OnInit, OnDestroy {
 		return BASE_MS + n * PER_SHOOTER_MS;
 	}
 
-	/** Convertit prudemment un score en nombre (0 si invalide). */
+	/**
+	 * Convertit une valeur potentiellement invalide en nombre sûr (retourne 0 si absent, NaN ou infini).
+	 *
+	 * @param {number | null | undefined} v - Valeur à convertir en nombre fini.
+	 * @returns {number} Le nombre valide, ou 0 en repli.
+	 */
 	private toNum(v: number | null | undefined): number {
 		return typeof v === 'number' && isFinite(v) ? v : 0;
 	}
 
-	/** Compare deux chaînes en ordre alphabétique (fr, insensible aux accents/majuscules). */
+	/**
+	 * Compare deux chaînes en ordre alphabétique français, insensible à la casse et aux accents.
+	 *
+	 * @param {string | undefined} [a] - Première chaîne à comparer.
+	 * @param {string | undefined} [b] - Deuxième chaîne à comparer.
+	 * @returns {number} Négatif si `a` < `b`, 0 si égal, positif si `a` > `b`.
+	 */
 	private cmpAlpha(a?: string, b?: string): number {
 		return (a ?? '').localeCompare(b ?? '', 'fr', { sensitivity: 'base' });
 	}
 
-	/** Normalise une chaîne (minuscule + retrait des accents). */
+	/**
+	 * Normalise une chaîne en minuscules et sans accents.
+	 *
+	 * @param {string | null | undefined} [s] - Chaîne à normaliser.
+	 * @returns {string} Chaîne normalisée (minuscule, sans accents).
+	 */
 	private normalize(s?: string | null): string {
 		return (s ?? '')
 			.toLowerCase()
@@ -541,8 +596,10 @@ export class RankingComponent implements OnInit, OnDestroy {
 	}
 
 	/**
-	 * Indique si la catégorie est de type "Senior" ou "Dame"
-	 * (optionnellement suivie d’un numéro 1/2/3).
+	 * Détermine si un libellé correspond à une catégorie Senior ou Dame.
+	 *
+	 * @param {string} categoryName - Libellé de la catégorie (ex. "Senior 1", "Dame 2").
+	 * @returns {boolean} `true` si la catégorie est Senior/Dame, sinon `false`.
 	 */
 	private isSeniorOrDameCategory(categoryName: string): boolean {
 		const n = this.normalize(categoryName);
@@ -550,9 +607,11 @@ export class RankingComponent implements OnInit, OnDestroy {
 	}
 
 	/**
-	 * Retourne le score d’une série (S1..S6) pour un tireur (0 si vide).
-	 * @param s Tireur
-	 * @param idx Numéro de série 1..6
+	 * Retourne le score d’une série S1..S6 pour un tireur (0 si vide ou invalide).
+	 *
+	 * @param {Shooter} s - Tireur dont on récupère le score de série.
+	 * @param {1|2|3|4|5|6} idx - Numéro de série à lire (S1 à S6).
+	 * @returns {number} Score numérique de la série, ou 0 si absent/invalide.
 	 */
 	private serieScore(s: Shooter, idx: 1 | 2 | 3 | 4 | 5 | 6): number {
 		const map: Record<number, number | null | undefined> = {
@@ -570,7 +629,13 @@ export class RankingComponent implements OnInit, OnDestroy {
 	// Barre de chargement
 	// ──────────────────────────────────────────────────────────────────────────────
 
-	/** Démarre la barre inversée pour `durationMs`. */
+	/**
+	 * Lance l’animation de la barre de progression : reset instantané
+	 * à 100% puis transition linéaire vers 0% sur deux frames.
+	 *
+	 * @param {number} durationMs - Durée de la transition en millisecondes (100% → 0%).
+	 * @returns {void} Ne retourne rien.
+	 */
 	private startProgressBar(durationMs: number): void {
 		const run = ++this.progressRun;
 
@@ -594,7 +659,11 @@ export class RankingComponent implements OnInit, OnDestroy {
 		});
 	}
 
-	/** Réinitialise la barre (optionnellement la masque). */
+	/**
+	 * Réinitialise instantanément la barre de progression et invalide toute animation en cours.
+	 *
+	 * @returns {void} Ne retourne rien.
+	 */
 	private resetProgressBar(): void {
 		this.progressRun++; // invalide les rAF précédents
 		this.progressStyle = { width: '100%', transition: 'none' };
@@ -604,26 +673,41 @@ export class RankingComponent implements OnInit, OnDestroy {
 	// Bouton de mise en plein écran
 	// ──────────────────────────────────────────────────────────────────────────────
 
-	// Affiche le bouton et programme son masquage après 2s d'inactivité
+	/**
+	 * Affiche temporairement le bouton plein écran
+	 * et relance le timer d’auto-masquage (2s).
+	 *
+	 * @returns {void} Ne retourne rien.
+	 */
 	private showFsButtonNow(): void {
 		this.showFsButton = true;
 		clearTimeout(this.hideFsBtnTimer);
 		this.hideFsBtnTimer = setTimeout(() => (this.showFsButton = false), 2000);
 	}
 
-	// Suit les mouvements de souris pour faire apparaître le bouton
+	/**
+	 * Affiche le bouton plein écran lors d’un mouvement de souris.
+	 *
+	 * @returns {void} Ne retourne rien.
+	 */
 	@HostListener('document:mousemove')
 	onDocMouseMove(): void {
 		this.showFsButtonNow();
 	}
 
-	// Met à jour `isFullscreen` en écoutant l’événement `fullscreenchange`
+	/**
+	 * Met à jour l’état plein écran (`isFullscreen`).
+	 * @returns {void} Ne retourne rien.
+	 */
 	private updateFullscreenState(): void {
 		const d: any = document;
 		this.isFullscreen = !!(document.fullscreenElement || d.webkitFullscreenElement || d.mozFullScreenElement || d.msFullscreenElement);
 	}
 
-	// Bascule plein écran <-> fenêtre
+	/**
+	 * Bascule l’affichage entre plein écran et fenêtre selon l’état courant.
+	 * @returns {Promise<void>} Promesse résolue après l’entrée ou la sortie du mode plein écran.
+	 */
 	async toggleFullscreen(): Promise<void> {
 		if (this.isFullscreen) {
 			await this.exitFullscreen();
@@ -632,7 +716,11 @@ export class RankingComponent implements OnInit, OnDestroy {
 		}
 	}
 
-	// Entre en plein écran (compatibilité multi-navigateurs)
+	/**
+	 * Passe l’application en plein écran.
+	 *
+	 * @returns {Promise<void>} Promesse résolue après la demande de plein écran.
+	 */
 	private async enterFullscreen(): Promise<void> {
 		const el: any = document.documentElement;
 		if (el.requestFullscreen) await el.requestFullscreen();
@@ -642,7 +730,11 @@ export class RankingComponent implements OnInit, OnDestroy {
 		this.updateFullscreenState();
 	}
 
-	// Quitte le plein écran (compatibilité multi-navigateurs)
+	/**
+	 * Quitte le plein écran.
+	 *
+	 * @returns {Promise<void>} Promesse résolue après avoir quitter le plein écran.
+	 */
 	private async exitFullscreen(): Promise<void> {
 		const d: any = document;
 		if (document.exitFullscreen) await document.exitFullscreen();
@@ -652,6 +744,12 @@ export class RankingComponent implements OnInit, OnDestroy {
 		this.updateFullscreenState();
 	}
 
+	/**
+	 * Affiche le bouton plein écran au moindre mouvement global de souris et relance le timer d’auto-masquage.
+	 *
+	 * @param {MouseEvent} _e - Événement souris provenant du listener `document:mousemove`.
+	 * @returns {void} Ne retourne rien.
+	 */
 	@HostListener('document:mousemove', ['$event'])
 	onGlobalMouseMove(_e: MouseEvent) {
 		// dès qu'on bouge la souris n'importe où, on montre le bouton et on relance le timer
@@ -659,6 +757,10 @@ export class RankingComponent implements OnInit, OnDestroy {
 		this.restartFsHideTimer(); // 1.8s par défaut
 	}
 
+	/**
+	 * Épingle le bouton plein écran lors du survol pour le garder visible et annule le timer courant.
+	 * @returns {void} Ne retourne rien ; met `fsPinned` et `showFsButton` à true et efface le timer.
+	 */
 	onFsMouseEnter() {
 		// on "épingle" le bouton -> tant que la souris est dessus il reste visible
 		this.fsPinned = true;
@@ -669,12 +771,23 @@ export class RankingComponent implements OnInit, OnDestroy {
 		}
 	}
 
+	/**
+	 * Désépingle le bouton plein écran en sortie de survol et lance un court délai avant masquage.
+	 *
+	 * @returns {void} Ne retourne rien.
+	 */
 	onFsMouseLeave() {
 		// on "dé-épingle" et on lance un petit délai avant de cacher
 		this.fsPinned = false;
 		this.restartFsHideTimer(700); // petit délai pour éviter un flicker
 	}
 
+	/**
+	 * (Ré)initialise le timer de masquage du bouton plein écran, en annulant l’éventuel timer actif.
+	 *
+	 * @param {number} [delay=1800] - Délai en millisecondes avant de masquer le bouton si non épinglé.
+	 * @returns {void} Ne retourne rien..
+	 */
 	private restartFsHideTimer(delay = 1800) {
 		if (this.fsHideTimer) clearTimeout(this.fsHideTimer);
 		this.fsHideTimer = setTimeout(() => {
