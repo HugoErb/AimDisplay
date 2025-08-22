@@ -39,15 +39,25 @@ export class PdfGeneratorService {
 
 			const competitionTitle = (shooters[0]?.competitionName ?? '').toString().trim() || 'Compétition';
 
-			// Distance → Catégorie → Arme
-			const groups = this.groupAndSortByDistanceCategoryWeapon(shooters);
+			// 1) Distance → Catégorie → Arme, puis on retire les groupes vides
+			const groups = this.groupAndSortByDistanceCategoryWeapon(shooters)
+				.map((g) => ({ ...g, shooters: (g.shooters || []).filter(Boolean) }))
+				.filter((g) => (g.shooters?.length ?? 0) > 0);
 
+			// 2) Construit le contenu (une carte par groupe)
 			const content: Content[] = [];
-			for (const g of groups) {
-				const ordered = [...g.shooters].sort((a, b) => (b?.totalScore ?? 0) - (a?.totalScore ?? 0));
+			groups.forEach((g, idx) => {
+				const useSix = this.isSixSeriesCategory(g.category); // 4 ou 6 séries selon catégorie
+				const ordered = [...g.shooters].sort((a, b) => this.compareShooters(a, b, useSix)); // départage
+
 				const title = `${g.distance} • ${g.category} • ${g.weapon}`;
-				content.push(this.buildGroupCard(title, ordered));
-			}
+				const card = this.buildGroupCard(title, ordered); // ⚠️ signature à 2 arguments conservée
+				if (!card) return; // au cas où buildGroupCard retourne null si pas de lignes
+
+				// Saut de page entre cartes, mais pas après la dernière (évite une page finale vide)
+				if (idx < groups.length - 1) (card as any).pageBreak = 'after';
+				content.push(card);
+			});
 
 			const docDefinition: TDocumentDefinitions = {
 				pageSize: 'A4',
@@ -64,7 +74,7 @@ export class PdfGeneratorService {
 
 				// Header bleu
 				header: () => ({
-					margin: [0, 0, 0, 8],
+					margin: [0, 0, 0, 0],
 					table: {
 						widths: ['*'],
 						body: [
@@ -115,7 +125,21 @@ export class PdfGeneratorService {
 		return c.startsWith('dame') || c.startsWith('senior');
 	}
 
-	/** Carte sans espace blanc autour du tableau (affiche S5/S6 seulement pour Dame/Sénior) */
+	/**
+	 * Construit un bloc "carte de classement" : bandeau bleu + tableau des tireurs.
+	 *
+	 * Principes :
+	 * - Les lignes (rows) doivent être déjà triées en amont.
+	 * - Le BANDEAU seul est non-cassable (unbreakable) pour éviter qu'il reste orphelin.
+	 * - Le TABLEAU est cassable (pas d'unbreakable global), ce qui supprime la
+	 *   page blanche finale quand le tableau dépasse une page.
+	 * - Détection automatique 4/6 séries selon la catégorie (Dame/Sénior → 6).
+	 * - `keepWithHeaderRows: 1` évite qu'un header soit imprimé en bas de page sans ligne dessous.
+	 *
+	 * @param title  Titre à afficher dans le bandeau (ex. "25 m • Sénior • Pistolet").
+	 * @param rows   Lignes de tireurs à afficher (déjà ordonnées).
+	 * @return       Un noeud pdfMake à pousser dans `content`.
+	 */
 	private buildGroupCard(title: string, rows: Shooter[]): Content {
 		const showSix = this.isSixSeriesCategory(rows[0]?.categoryName ?? '');
 
@@ -130,11 +154,9 @@ export class PdfGeneratorService {
 			{ text: 'S3', style: 'th', alignment: 'right' },
 			{ text: 'S4', style: 'th', alignment: 'right' },
 		];
-
 		if (showSix) {
 			headerRow.push({ text: 'S5', style: 'th', alignment: 'right' }, { text: 'S6', style: 'th', alignment: 'right' });
 		}
-
 		headerRow.push({ text: 'Total', style: 'th', alignment: 'right' });
 
 		// Largeurs adaptées
@@ -164,12 +186,11 @@ export class PdfGeneratorService {
 		});
 
 		return {
-			// Garde bandeau + au moins une ligne ensemble
-			unbreakable: true,
 			margin: [40, 0, 40, 12],
 			stack: [
-				// Bandeau bleu
+				// Bandeau (non-cassable) — OK s'il reste seul en bas d'une page
 				{
+					unbreakable: true,
 					table: {
 						widths: ['*'],
 						body: [
@@ -179,31 +200,36 @@ export class PdfGeneratorService {
 									style: 'cardTitle',
 									fillColor: this.theme.primary,
 									color: '#fff',
-									margin: [12, 10, 12, 10],
+									margin: [12, 8, 12, 8],
 								},
 							],
 						],
 					},
-					layout: 'noBorders',
-					margin: [0, 0, 0, 0],
+					layout: {
+						hLineWidth: () => 0,
+						vLineWidth: () => 0,
+					},
+					margin: [0, 0, 0, 4],
 				},
-				// Tableau : supprime la ligne supérieure
+
+				// Tableau (cassable)
 				{
 					table: {
 						headerRows: 1,
+						keepWithHeaderRows: 1,
 						widths,
 						body,
 					},
 					layout: {
-						hLineWidth: (i) => (i === 0 ? 0 : 1),
+						hLineWidth: (i: number) => (i === 0 ? 0 : 1),
 						hLineColor: this.theme.border,
 						vLineColor: this.theme.border,
 						paddingLeft: () => 6,
 						paddingRight: () => 6,
 						paddingTop: () => 4,
 						paddingBottom: () => 4,
+						fillColor: (rowIndex: number) => (rowIndex === 0 ? '#F3F4F6' : null),
 					},
-					margin: [0, 0, 0, 0],
 				},
 			],
 		};
@@ -244,5 +270,32 @@ export class PdfGeneratorService {
 		});
 
 		return groups;
+	}
+
+	/** Transforme un tireur en tableau de séries (4 ou 6 selon la catégorie) */
+	private seriesOf(s: any, useSix: boolean): number[] {
+		const toNum = (x: any) => (x == null || Number.isNaN(Number(x)) ? 0 : Number(x));
+		const base = [toNum(s.scoreSerie1), toNum(s.scoreSerie2), toNum(s.scoreSerie3), toNum(s.scoreSerie4)];
+		return useSix ? [...base, toNum(s.scoreSerie5), toNum(s.scoreSerie6)] : base;
+	}
+
+	/** Tri: total desc → dernière série desc → ... → première série desc → Nom/Prénom asc */
+	private compareShooters(a: any, b: any, useSix: boolean): number {
+		// 1) Total
+		const byTotal = (b?.totalScore ?? 0) - (a?.totalScore ?? 0);
+		if (byTotal !== 0) return byTotal;
+
+		// 2) Séries de la fin vers le début
+		const sa = this.seriesOf(a, useSix);
+		const sb = this.seriesOf(b, useSix);
+		for (let i = sa.length - 1; i >= 0; i--) {
+			const diff = (sb[i] ?? 0) - (sa[i] ?? 0); // desc
+			if (diff !== 0) return diff;
+		}
+
+		// 3) Alphabétique (Nom puis Prénom)
+		const ln = (a.lastName || '').localeCompare(b.lastName || '', 'fr', { sensitivity: 'base' });
+		if (ln !== 0) return ln;
+		return (a.firstName || '').localeCompare(b.firstName || '', 'fr', { sensitivity: 'base' });
 	}
 }
