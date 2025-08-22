@@ -209,7 +209,7 @@ export class PdfGeneratorService {
 						hLineWidth: () => 0,
 						vLineWidth: () => 0,
 					},
-					margin: [0, 0, 0, 4],
+					margin: [0, 0, 0, 0],
 				},
 
 				// Tableau (cassable)
@@ -217,6 +217,7 @@ export class PdfGeneratorService {
 					table: {
 						headerRows: 1,
 						keepWithHeaderRows: 1,
+						dontBreakRows: true, // empêche la petite “ligne” au break
 						widths,
 						body,
 					},
