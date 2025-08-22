@@ -44,30 +44,62 @@
 					<h2 class="text-lg font-semibold text-gray-900 pb-2 border-b border-gray-200 dark:border-gray-700 dark:text-gray-300">
 						Générer un rapport de compétition
 					</h2>
-					<div class="flex flex-col space-y-1 w-1/2">
-						<label for="selectedCompetition" class="text-sm font-medium text-gray-700 dark:text-gray-300 ml-1">Compétition *</label>
-						<p-autoComplete
-							#inputField
-							[(ngModel)]="selectedCompetition"
-							[forceSelection]="true"
-							[suggestions]="filteredCompetitions"
-							(completeMethod)="filteredCompetitions = commonService.filterByName($event.query, competitions)"
-							name="selectedCompetition"
-							inputId="selectedCompetition"
-							(onSelect)="selectedCompetition = $event.value"
-							optionLabel="name"
-							[dropdown]="true"
-							placeholder="Compétition à exporter"
-						></p-autoComplete>
+					<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+						<div class="flex flex-col space-y-1">
+							<label for="selectedCompetition" class="text-sm font-medium text-gray-700 dark:text-gray-300 ml-1">Compétition *</label>
+							<p-autoComplete
+								#inputField
+								[(ngModel)]="selectedCompetition"
+								[forceSelection]="true"
+								[suggestions]="filteredCompetitions"
+								(completeMethod)="filteredCompetitions = commonService.filterByName($event.query, competitions)"
+								name="selectedCompetition"
+								inputId="selectedCompetition"
+								(onSelect)="selectedCompetition = $event.value"
+								optionLabel="name"
+								[dropdown]="true"
+								placeholder="Compétition à exporter"
+							></p-autoComplete>
+						</div>
+						<div class="flex flex-col space-y-1">
+							<label for="selectedCompetition" class="text-sm font-medium text-gray-700 dark:text-gray-300 ml-1">
+								Activer les infos pour le club
+							</label>
+							<p-toggleswitch
+								[(ngModel)]="activateClubInfos"
+								styleClass="inline-block origin-left scale-125 mt-[8px]"
+								name="activateClubInfos"
+							>
+								<ng-template pTemplate="handle" let-checked="checked">
+									<iconify-icon [icon]="checked ? 'mdi:check' : 'mdi:close'" [width]="14" [height]="14"></iconify-icon>
+								</ng-template>
+							</p-toggleswitch>
+						</div>
 					</div>
 					<div class="bg-blue-50 dark:bg-gray-700 rounded-lg p-4 border border-blue-200 dark:border-gray-500 my-6">
 						<h3 class="font-medium text-blue-900 dark:text-gray-300 mb-2">Contenu du rapport de compétition :</h3>
 						<ul class="text-sm text-blue-800 dark:text-gray-300 space-y-1">
 							<li>• Classement général par catégorie</li>
 							<li>• Résultats détaillés des participants</li>
-							<li>• Statistiques diverses sur la compétition</li>
-							<li>• Informations sur les clubs participants</li>
 						</ul>
+
+						<!-- Conteneur animé -->
+						<div
+							class="grid transition-all duration-300 ease-out"
+							[class.grid-rows-[1fr]]="activateClubInfos"
+							[class.grid-rows-[0fr]]="!activateClubInfos"
+						>
+							<div
+								class="overflow-hidden transition-opacity duration-300"
+								[class.opacity-100]="activateClubInfos"
+								[class.opacity-0]="!activateClubInfos"
+							>
+								<ul class="mt-1 text-sm text-blue-800 dark:text-gray-300 space-y-1">
+									<li>• Statistiques diverses sur la compétition</li>
+									<li>• Informations sur les clubs participants</li>
+								</ul>
+							</div>
+						</div>
 					</div>
 				</div>
 

@@ -7,11 +7,12 @@ import { PdfGeneratorService } from '../services/pdf-generator.service';
 import { SupabaseService } from '../services/supabase.service';
 import { FormsModule } from '@angular/forms';
 import { Competition } from '../interfaces/competition';
+import { ToggleSwitchModule } from 'primeng/toggleswitch';
 
 @Component({
 	selector: 'app-generer-pdf',
 	standalone: true,
-	imports: [AutoCompleteModule, CommonModule, FormsModule],
+	imports: [AutoCompleteModule, CommonModule, FormsModule, ToggleSwitchModule],
 	templateUrl: './generer_pdf.component.html',
 	schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
@@ -29,6 +30,7 @@ export class GenererPDFComponent {
 
 	//Variables de selection d'entité à exporter
 	selectedCompetition: Competition | null = null;
+	activateClubInfos: boolean = false;
 	selectedShooterName: { name: string } | null = null;
 	selectedShooterCompetitionName: { name: string } | null = null;
 
