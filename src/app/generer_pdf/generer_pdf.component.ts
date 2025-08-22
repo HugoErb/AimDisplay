@@ -106,6 +106,7 @@ export class GenererPDFComponent {
 					await this.pdfGeneratorService.generateCompetitionReport(this.selectedCompetition?.id);
 				}
 				this.commonService.resetInputFields(this.inputFields);
+				this.selectedCompetition = null;
 			}
 		} catch (e: any) {
 			this.commonService.showSwalToast(e?.message ?? 'Erreur lors de la génération du PDF', 'error');
