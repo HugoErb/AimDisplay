@@ -105,7 +105,7 @@ export class GenererPDFComponent {
 						this.commonService.showSwalToast('Veuillez sélectionner une compétition.', 'error');
 						return;
 					}
-					await this.pdfGeneratorService.generateCompetitionReport(this.selectedCompetition?.id);
+					await this.pdfGeneratorService.generateCompetitionReport(this.selectedCompetition?.id, this.activateClubInfos);
 				}
 				this.commonService.resetInputFields(this.inputFields);
 				this.selectedCompetition = null;
