@@ -5,25 +5,20 @@ import { CommonService } from '../../services/common.service';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 
 @Component({
-  selector: 'app-sidebar',
-  standalone: true,
-  imports: [CommonModule],
-  templateUrl: './sidebar.component.html',
-  schemas: [CUSTOM_ELEMENTS_SCHEMA],
+	selector: 'app-sidebar',
+	standalone: true,
+	imports: [CommonModule],
+	templateUrl: './sidebar.component.html',
+	schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class SidebarComponent implements OnInit {
-  avatarUrl$!: ReturnType<AuthService['avatarUrl$']['subscribe']> extends never
-    ? any
-    : typeof this.authService.avatarUrl$;
+	avatarUrl$!: ReturnType<AuthService['avatarUrl$']['subscribe']> extends never ? any : typeof this.authService.avatarUrl$;
 
-  constructor(
-    protected commonService: CommonService,
-    protected authService: AuthService
-  ) {
-    this.avatarUrl$ = this.authService.avatarUrl$;
-  }
+	constructor(protected commonService: CommonService, protected authService: AuthService) {
+		this.avatarUrl$ = this.authService.avatarUrl$;
+	}
 
-  async ngOnInit() {
-    await this.authService.refreshAvatarUrl();
-  }
+	async ngOnInit() {
+		await this.authService.refreshAvatarUrl();
+	}
 }
