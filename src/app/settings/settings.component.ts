@@ -1,7 +1,7 @@
 import { Component, ElementRef, QueryList, ViewChildren } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { DropdownModule } from 'primeng/dropdown';
-import { InputSwitchModule } from 'primeng/inputswitch';
+import { ToggleSwitchModule } from 'primeng/toggleswitch';
 import { InputTextModule } from 'primeng/inputtext';
 import { CommonService } from './../services/common.service';
 import { UserParams } from '../interfaces/user-params';
@@ -18,7 +18,7 @@ type ModalKey = 'renameClub' | 'changePassword';
 @Component({
 	selector: 'app-settings',
 	standalone: true,
-	imports: [DropdownModule, InputSwitchModule, FormsModule, InputTextModule, TextareaModule, TableModule, CommonModule],
+	imports: [DropdownModule, ToggleSwitchModule, FormsModule, InputTextModule, TextareaModule, TableModule, CommonModule],
 	templateUrl: './settings.component.html',
 	schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
@@ -48,8 +48,8 @@ export class SettingsComponent {
 	emailMail: string = '';
 	messageMail: string = '';
 	hovering: boolean = false;
-    isLoading: boolean = false;
-    avatarUrl: string | undefined = ';'
+	isLoading: boolean = false;
+	avatarUrl: string | undefined = ';';
 
 	// subscriptionPlans = [
 	// 	{
@@ -126,26 +126,26 @@ export class SettingsComponent {
 	// ];
 
 	async ngOnInit() {
-        this.avatarUrl = await this.authService.getSignedAvatarUrl();
+		this.avatarUrl = await this.authService.getSignedAvatarUrl();
 		const userParams: UserParams = JSON.parse(localStorage.getItem(this.userParamsName)!);
 		this.darkMode = this.themeService.getTheme() === 'dark';
 	}
 
 	async onAvatarFileSelected(event: Event): Promise<void> {
-        this.isLoading = true;
-        const input = event.target as HTMLInputElement;
-        const file = input.files?.[0];
-        if (!file) return;
-        try {
-            const url = await this.authService.uploadAvatar(file);
-            this.avatarUrl = url;
-        } catch (e) {
-            console.error('Erreur upload avatar', e);
-        } finally {
-            this.isLoading = false;
-            input.value = '';
-        }
-    }
+		this.isLoading = true;
+		const input = event.target as HTMLInputElement;
+		const file = input.files?.[0];
+		if (!file) return;
+		try {
+			const url = await this.authService.uploadAvatar(file);
+			this.avatarUrl = url;
+		} catch (e) {
+			console.error('Erreur upload avatar', e);
+		} finally {
+			this.isLoading = false;
+			input.value = '';
+		}
+	}
 
 	/**
 	 * Ouvre le modal identifié par sa clé.
@@ -172,22 +172,22 @@ export class SettingsComponent {
 	 * @returns {Promise<void>} Une promesse qui se résout lorsque toutes les opérations sont terminées.
 	 */
 	async saveNewClubName(): Promise<void> {
-        try {
+		try {
 			this.isLoading = true;
 
-            // On ne veut garder que l’ElementRef dont l’input a pour id 'newClubName'
-            const clubFieldList = new QueryList<ElementRef>();
-            clubFieldList.reset(this.inputFields.toArray().filter((ref) => (ref.nativeElement as HTMLInputElement).id === 'newClubName'));
+			// On ne veut garder que l’ElementRef dont l’input a pour id 'newClubName'
+			const clubFieldList = new QueryList<ElementRef>();
+			clubFieldList.reset(this.inputFields.toArray().filter((ref) => (ref.nativeElement as HTMLInputElement).id === 'newClubName'));
 
-            // Vérification des champs
-            this.inputLabelMap = this.commonService.getInputLabelMap(clubFieldList);
-            const areInputsValid = await this.commonService.validateInputs(this.inputLabelMap, true);
-            if (areInputsValid) {
-                this.authService.setUserDisplayName(this.newClubName);
-                this.newClubName = '';
-                this.closeModal('renameClub');
-            }
-        } finally {
+			// Vérification des champs
+			this.inputLabelMap = this.commonService.getInputLabelMap(clubFieldList);
+			const areInputsValid = await this.commonService.validateInputs(this.inputLabelMap, true);
+			if (areInputsValid) {
+				this.authService.setUserDisplayName(this.newClubName);
+				this.newClubName = '';
+				this.closeModal('renameClub');
+			}
+		} finally {
 			this.isLoading = false;
 		}
 	}
@@ -198,28 +198,28 @@ export class SettingsComponent {
 	 * @returns {Promise<void>} Une promesse qui se résout lorsque toutes les opérations sont terminées.
 	 */
 	async saveNewPassword(): Promise<void> {
-        try {
+		try {
 			this.isLoading = true;
 
-            // On ne veut garder que l’ElementRef dont l’input a pour id un string qui contient 'password'
-            const passwordFieldList = new QueryList<ElementRef>();
-            passwordFieldList.reset(this.inputFields.toArray().filter((ref) => (ref.nativeElement as HTMLInputElement).id.includes('Password')));
+			// On ne veut garder que l’ElementRef dont l’input a pour id un string qui contient 'password'
+			const passwordFieldList = new QueryList<ElementRef>();
+			passwordFieldList.reset(this.inputFields.toArray().filter((ref) => (ref.nativeElement as HTMLInputElement).id.includes('Password')));
 
-            // Vérification des champs
-            this.inputLabelMap = this.commonService.getInputLabelMap(passwordFieldList);
-            const areInputsValid = await this.commonService.validateInputs(this.inputLabelMap, true);
-            if (areInputsValid) {
-                try{
-                    await this.authService.changePasswordWithVerification(this.currentPassword, this.newPassword);
-                    this.currentPassword = '';
-                    this.newPassword = '';
-                    this.newPasswordConfirmation = '';
-                    this.closeModal('changePassword');
-                }catch (error){
-                    console.error('Erreur lors du changement de mot de passe :', error);
-                }
-            }
-        } finally {
+			// Vérification des champs
+			this.inputLabelMap = this.commonService.getInputLabelMap(passwordFieldList);
+			const areInputsValid = await this.commonService.validateInputs(this.inputLabelMap, true);
+			if (areInputsValid) {
+				try {
+					await this.authService.changePasswordWithVerification(this.currentPassword, this.newPassword);
+					this.currentPassword = '';
+					this.newPassword = '';
+					this.newPasswordConfirmation = '';
+					this.closeModal('changePassword');
+				} catch (error) {
+					console.error('Erreur lors du changement de mot de passe :', error);
+				}
+			}
+		} finally {
 			this.isLoading = false;
 		}
 	}
