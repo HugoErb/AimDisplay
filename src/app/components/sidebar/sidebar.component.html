@@ -2,7 +2,10 @@
 	class="w-64 fixed h-full border-r border-gray-200 dark:border-gray-700 flex flex-col bg-white dark:bg-secondary-dark-bg text-gray-700 dark:text-gray-300 transition-all duration-500"
 >
 	<!-- Header -->
-	<div class="border-b border-gray-200 dark:border-gray-700 p-4 transition-all duration-500 cursor-pointer" (click)="commonService.redirectTo('home')">
+	<div
+		class="border-b border-gray-200 dark:border-gray-700 p-4 transition-all duration-500 cursor-pointer"
+		(click)="commonService.redirectTo('home')"
+	>
 		<div class="flex items-center space-x-2">
 			<img src="../../../assets/img/logo.png" alt="Logo" class="h-7 w-7 mr-4" />
 			<div>
@@ -142,12 +145,11 @@
 	<!-- Footer -->
 	<div class="border-t border-gray-200 dark:border-gray-700 transition-all duration-500 p-4">
 		<div class="flex items-center space-x-3">
-			<ng-container *ngIf="avatarUrl$ | async as avatarUrl; else fallbackAvatar">
-                <img [src]="avatarUrl" class="h-10 w-10 rounded-full bg-gray-200 object-cover" alt="Photo du club" />
-            </ng-container>
-            <ng-template #fallbackAvatar>
-                <img src="../../assets/img/logo.png" alt="Logo Aim Display" class="h-10 w-10 rounded-full bg-gray-200 object-cover" />
-            </ng-template>
+			@let avatarUrl = (avatarUrl$ | async); @if (avatarUrl) {
+			<img [src]="avatarUrl" class="h-10 w-10 rounded-full bg-gray-200 object-cover" alt="Photo du club" />
+			} @else {
+			<img src="../../assets/img/logo.png" alt="Logo Aim Display" class="h-10 w-10 rounded-full bg-gray-200 object-cover" />
+			}
 			<div class="flex-1 min-w-0">
 				<p class="text-sm font-medium text-gray-700 dark:text-gray-300 transition-all duration-500 truncate">
 					{{ authService.getUserDisplayName() || "Nom du club" }}
