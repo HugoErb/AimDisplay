@@ -112,13 +112,11 @@
 			<div
 				*ngFor="let group of categoryGroups; let i = index"
 				class="grid transition-all duration-300 ease-out"
-				[class.grid-rows-[1fr]]="group._open"
-				[class.grid-rows-[0fr]]="!group._open"
+				[ngClass]="isEditMode || group._open ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'"
 			>
 				<div
 					class="space-y-4 overflow-hidden transition-opacity duration-300"
-					[class.opacity-100]="group._open"
-					[class.opacity-0]="!group._open"
+					[ngClass]="isEditMode || group._open ? 'opacity-100' : 'opacity-0'"
 				>
 					<h2 class="text-lg font-semibold text-gray-900 pb-2 border-b border-gray-200 dark:border-gray-700 dark:text-gray-300">
 						Catégorie et scores du tireur dans la compétition
