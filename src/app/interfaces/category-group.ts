@@ -9,6 +9,7 @@ export interface CategoryGroup {
 	scoreSerie5: number | null;
 	scoreSerie6: number | null;
 	isSeniorOrDame: boolean;
+	_open: boolean; // uniquement pour l’animation
 
 	// autorise l'accès dynamique avec une string
 	[key: string]: any;

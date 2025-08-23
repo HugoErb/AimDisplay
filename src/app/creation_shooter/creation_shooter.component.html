@@ -85,6 +85,7 @@
 							id="shooterClubName"
 							[dropdown]="true"
 							placeholder="Club du tireur"
+							[appendTo]="'body'"
 						></p-autoComplete>
 					</div>
 
@@ -101,156 +102,172 @@
 							optionLabel="name"
 							[dropdown]="true"
 							placeholder="Compétition du tireur"
+							[appendTo]="'body'"
 						></p-autoComplete>
 					</div>
 				</div>
 			</div>
 
 			<!-- Catégorie et scores du tireur dans la compétition -->
-			<div class="space-y-8" *ngFor="let group of categoryGroups; let i = index">
-				<h2 class="text-lg font-semibold text-gray-900 pb-2 border-b border-gray-200 dark:border-gray-700 dark:text-gray-300">
-					Catégorie et scores du tireur dans la compétition
-					<ng-container *ngIf="i > 0">{{ i + 1 }}</ng-container>
-				</h2>
+			<div
+				*ngFor="let group of categoryGroups; let i = index"
+				class="grid transition-all duration-300 ease-out"
+				[class.grid-rows-[1fr]]="group._open"
+				[class.grid-rows-[0fr]]="!group._open"
+			>
+				<div
+					class="space-y-4 overflow-hidden transition-opacity duration-300"
+					[class.opacity-100]="group._open"
+					[class.opacity-0]="!group._open"
+				>
+					<h2 class="text-lg font-semibold text-gray-900 pb-2 border-b border-gray-200 dark:border-gray-700 dark:text-gray-300">
+						Catégorie et scores du tireur dans la compétition
+						<ng-container *ngIf="i > 0">{{ i + 1 }}</ng-container>
+					</h2>
 
-				<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-					<!-- Distance -->
-					<div class="flex flex-col space-y-1">
-						<label [for]="'shooterDistance_' + i" class="text-sm font-medium text-gray-700 dark:text-gray-300 ml-1">
-							Distance de tir
-							<ng-container *ngIf="i > 0">({{ i + 1 }})</ng-container>
-							*
-						</label>
-						<p-autoComplete
-							#inputField
-							[(ngModel)]="group.shooterDistance"
-							[forceSelection]="true"
-							[suggestions]="filteredDistances"
-							(completeMethod)="filteredDistances = commonService.filterByName($event.query, distances)"
-							[name]="'shooterDistance_' + i"
-							[inputId]="'shooterDistance_' + i"
-							optionLabel="name"
-							[dropdown]="true"
-							placeholder="Distance de tir du tireur"
-						></p-autoComplete>
+					<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+						<!-- Distance -->
+						<div class="flex flex-col space-y-1">
+							<label [for]="'shooterDistance_' + i" class="text-sm font-medium text-gray-700 dark:text-gray-300 ml-1">
+								Distance de tir
+								<ng-container *ngIf="i > 0">({{ i + 1 }})</ng-container>
+								*
+							</label>
+							<p-autoComplete
+								#inputField
+								[(ngModel)]="group.shooterDistance"
+								[forceSelection]="true"
+								[suggestions]="filteredDistances"
+								(completeMethod)="filteredDistances = commonService.filterByName($event.query, distances)"
+								[name]="'shooterDistance_' + i"
+								[inputId]="'shooterDistance_' + i"
+								optionLabel="name"
+								[dropdown]="true"
+								placeholder="Distance de tir du tireur"
+								[appendTo]="'body'"
+							></p-autoComplete>
+						</div>
+
+						<!-- Arme -->
+						<div class="flex flex-col space-y-1">
+							<label [for]="'shooterWeapon_' + i" class="text-sm font-medium text-gray-700 dark:text-gray-300 ml-1">
+								Type d'arme
+								<ng-container *ngIf="i > 0">({{ i + 1 }})</ng-container>
+								*
+							</label>
+							<p-autoComplete
+								#inputField
+								[(ngModel)]="group.shooterWeapon"
+								[forceSelection]="true"
+								[suggestions]="filteredWeapons"
+								(completeMethod)="filteredWeapons = commonService.filterByName($event.query, weapons)"
+								[name]="'shooterWeapon_' + i"
+								[inputId]="'shooterWeapon_' + i"
+								optionLabel="name"
+								[dropdown]="true"
+								placeholder="Type d'arme utilisé"
+								[appendTo]="'body'"
+							></p-autoComplete>
+						</div>
+
+						<!-- Catégorie -->
+						<div class="flex flex-col space-y-1">
+							<label [for]="'shooterCategory_' + i" class="text-sm font-medium text-gray-700 dark:text-gray-300 ml-1">
+								Catégorie
+								<ng-container *ngIf="i > 0">({{ i + 1 }})</ng-container>
+								*
+							</label>
+							<p-autoComplete
+								#inputField
+								[(ngModel)]="group.shooterCategory"
+								[forceSelection]="true"
+								[suggestions]="filteredShooterCategories"
+								(completeMethod)="filteredShooterCategories = commonService.filterByName($event.query, shooterCategories)"
+								(onSelect)="onCategorySelected($event, group)"
+								[name]="'shooterCategory_' + i"
+								[inputId]="'shooterCategory_' + i"
+								optionLabel="name"
+								[dropdown]="true"
+								placeholder="Catégorie du tireur"
+								[appendTo]="'body'"
+							></p-autoComplete>
+						</div>
 					</div>
 
-					<!-- Arme -->
-					<div class="flex flex-col space-y-1">
-						<label [for]="'shooterWeapon_' + i" class="text-sm font-medium text-gray-700 dark:text-gray-300 ml-1">
-							Type d'arme
-							<ng-container *ngIf="i > 0">({{ i + 1 }})</ng-container>
-							*
-						</label>
-						<p-autoComplete
-							#inputField
-							[(ngModel)]="group.shooterWeapon"
-							[forceSelection]="true"
-							[suggestions]="filteredWeapons"
-							(completeMethod)="filteredWeapons = commonService.filterByName($event.query, weapons)"
-							[name]="'shooterWeapon_' + i"
-							[inputId]="'shooterWeapon_' + i"
-							optionLabel="name"
-							[dropdown]="true"
-							placeholder="Type d'arme utilisé"
-						></p-autoComplete>
-					</div>
+					<!-- Wrapper pour ne plus avoir de gap quand 5–6 est fermé -->
+					<div>
+						<!-- Scores 1..4 -->
+						<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+							<div *ngFor="let serie of [1, 2, 3, 4]; let s = index">
+								<label [for]="'serie' + serie + '_' + i" class="text-sm font-medium text-gray-700 dark:text-gray-300 ml-1">
+									Score série {{ serie }}
+									<ng-container *ngIf="i > 0">({{ i + 1 }})</ng-container>
+								</label>
+								<p-inputNumber
+									#inputField
+									[(ngModel)]="group['scoreSerie' + serie]"
+									mode="decimal"
+									[minFractionDigits]="2"
+									[maxFractionDigits]="2"
+									[min]="0"
+									[max]="100.1"
+									[showButtons]="true"
+									[name]="'serie' + serie + '_' + i"
+									[inputId]="'serie' + serie + '_' + i"
+									placeholder="Score série {{ serie }}"
+								></p-inputNumber>
+							</div>
+						</div>
 
-					<!-- Catégorie -->
-					<div class="flex flex-col space-y-1">
-						<label [for]="'shooterCategory_' + i" class="text-sm font-medium text-gray-700 dark:text-gray-300 ml-1">
-							Catégorie
-							<ng-container *ngIf="i > 0">({{ i + 1 }})</ng-container>
-							*
-						</label>
-						<p-autoComplete
-							#inputField
-							[(ngModel)]="group.shooterCategory"
-							[forceSelection]="true"
-							[suggestions]="filteredShooterCategories"
-							(completeMethod)="filteredShooterCategories = commonService.filterByName($event.query, shooterCategories)"
-							(onSelect)="onCategorySelected($event, group)"
-							[name]="'shooterCategory_' + i"
-							[inputId]="'shooterCategory_' + i"
-							optionLabel="name"
-							[dropdown]="true"
-							placeholder="Catégorie du tireur"
-						></p-autoComplete>
-					</div>
-				</div>
-
-				<!-- Scores -->
-				<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-					<div *ngFor="let serie of [1, 2, 3, 4]; let s = index">
-						<label [for]="'serie' + serie + '_' + i" class="text-sm font-medium text-gray-700 dark:text-gray-300 ml-1">
-							Score série {{ serie }}
-							<ng-container *ngIf="i > 0">({{ i + 1 }})</ng-container>
-						</label>
-						<p-inputNumber
-							#inputField
-							[(ngModel)]="group['scoreSerie' + serie]"
-							mode="decimal"
-							[minFractionDigits]="2"
-							[min]="0"
-							[max]="100.1"
-							[showButtons]="true"
-							[name]="'serie' + serie + '_' + i"
-							[inputId]="'serie' + serie + '_' + i"
-							[maxFractionDigits]="2"
-							placeholder="Score série {{ serie }}"
-						></p-inputNumber>
-					</div>
-
-					<!-- Séries 5 & 6 si senior/dame -->
-					<div
-						class="md:col-span-2 lg:col-span-4 grid transition-all duration-300 ease-out"
-						[class.grid-rows-[1fr]]="group.isSeniorOrDame"
-						[class.grid-rows-[0fr]]="!group.isSeniorOrDame"
-					>
+						<!-- Séries 5 & 6 : en-dehors de la grid des 1–4, avec marge seulement si ouvert -->
 						<div
-							class="overflow-hidden transition-opacity duration-300"
-							[class.opacity-100]="group.isSeniorOrDame"
-							[class.opacity-0]="!group.isSeniorOrDame"
+							class="transition-all duration-300 ease-out"
+							[ngClass]="group.isSeniorOrDame ? 'grid grid-rows-[1fr] mt-6' : 'grid grid-rows-[0fr] mt-0'"
 						>
-							<div class="grid grid-cols-1 md:grid-cols-4 gap-6">
-								<div class="flex flex-col space-y-1">
-									<label [for]="'serie5_' + i" class="text-sm font-medium text-gray-700 dark:text-gray-300 ml-1">
-										Score série 5
-										<ng-container *ngIf="i > 0">({{ i + 1 }})</ng-container>
-									</label>
-									<p-inputNumber
-										#inputField
-										[(ngModel)]="group.scoreSerie5"
-										mode="decimal"
-										[minFractionDigits]="2"
-										[maxFractionDigits]="2"
-										[min]="0"
-										[max]="100.1"
-										[name]="'scoreSerie5_' + i"
-										[inputId]="'serie5_' + i"
-										[showButtons]="true"
-										placeholder="Score série 5"
-									></p-inputNumber>
-								</div>
+							<div
+								class="overflow-hidden transition-opacity duration-300"
+								[ngClass]="group.isSeniorOrDame ? 'opacity-100' : 'opacity-0'"
+							>
+								<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+									<div class="flex flex-col space-y-1">
+										<label [for]="'serie5_' + i" class="text-sm font-medium text-gray-700 dark:text-gray-300 ml-1">
+											Score série 5
+											<ng-container *ngIf="i > 0">({{ i + 1 }})</ng-container>
+										</label>
+										<p-inputNumber
+											#inputField
+											[(ngModel)]="group.scoreSerie5"
+											mode="decimal"
+											[minFractionDigits]="2"
+											[maxFractionDigits]="2"
+											[min]="0"
+											[max]="100.1"
+											[name]="'scoreSerie5_' + i"
+											[inputId]="'serie5_' + i"
+											[showButtons]="true"
+											placeholder="Score série 5"
+										></p-inputNumber>
+									</div>
 
-								<div class="flex flex-col space-y-1">
-									<label [for]="'serie6_' + i" class="text-sm font-medium text-gray-700 dark:text-gray-300 ml-1">
-										Score série 6
-										<ng-container *ngIf="i > 0">({{ i + 1 }})</ng-container>
-									</label>
-									<p-inputNumber
-										#inputField
-										[(ngModel)]="group.scoreSerie6"
-										mode="decimal"
-										[minFractionDigits]="2"
-										[maxFractionDigits]="2"
-										[min]="0"
-										[max]="100.1"
-										[name]="'scoreSerie6_' + i"
-										[inputId]="'serie6_' + i"
-										[showButtons]="true"
-										placeholder="Score série 6"
-									></p-inputNumber>
+									<div class="flex flex-col space-y-1">
+										<label [for]="'serie6_' + i" class="text-sm font-medium text-gray-700 dark:text-gray-300 ml-1">
+											Score série 6
+											<ng-container *ngIf="i > 0">({{ i + 1 }})</ng-container>
+										</label>
+										<p-inputNumber
+											#inputField
+											[(ngModel)]="group.scoreSerie6"
+											mode="decimal"
+											[minFractionDigits]="2"
+											[maxFractionDigits]="2"
+											[min]="0"
+											[max]="100.1"
+											[name]="'scoreSerie6_' + i"
+											[inputId]="'serie6_' + i"
+											[showButtons]="true"
+											placeholder="Score série 6"
+										></p-inputNumber>
+									</div>
 								</div>
 							</div>
 						</div>

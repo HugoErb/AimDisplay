@@ -108,7 +108,7 @@ export class CreationShooterComponent {
 	 *
 	 * @returns {CategoryGroup} Un nouvel objet de type CategoryGroup avec des valeurs par défaut.
 	 */
-	createCategoryGroup(): CategoryGroup {
+	createCategoryGroup(partial: Partial<CategoryGroup> = {}): CategoryGroup {
 		return {
 			shooterDistance: null,
 			shooterWeapon: null,
@@ -120,6 +120,8 @@ export class CreationShooterComponent {
 			scoreSerie5: null,
 			scoreSerie6: null,
 			isSeniorOrDame: false,
+			_open: true, // visible par défaut (édition)
+			...partial,
 		};
 	}
 
@@ -130,7 +132,10 @@ export class CreationShooterComponent {
 	 * supplémentaire à l'interface via le bouton d'ajout.
 	 */
 	addCategoryGroup(): void {
-		this.categoryGroups.push(this.createCategoryGroup());
+		if (this.isEditMode) return; // pas d'ajout en édition
+		const newGroup = this.createCategoryGroup({ _open: false });
+		this.categoryGroups.push(newGroup);
+		setTimeout(() => (newGroup._open = true)); // 0fr -> 1fr + fade-in
 	}
 
 	/**
@@ -235,6 +240,7 @@ export class CreationShooterComponent {
 					scoreSerie5: null,
 					scoreSerie6: null,
 					isSeniorOrDame: false,
+					_open: false,
 				},
 			];
 
@@ -292,6 +298,7 @@ export class CreationShooterComponent {
 				scoreSerie5: shooter.scoreSerie5 ?? null,
 				scoreSerie6: shooter.scoreSerie6 ?? null,
 				isSeniorOrDame,
+				_open: false,
 			},
 		];
 
