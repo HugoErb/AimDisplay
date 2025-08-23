@@ -63,7 +63,7 @@
 						</div>
 						<div class="flex flex-col space-y-1">
 							<label for="selectedCompetition" class="text-sm font-medium text-gray-700 dark:text-gray-300 ml-1">
-								Activer les infos pour le club
+								Générer les statistiques de compétition
 							</label>
 							<p-toggleswitch
 								[(ngModel)]="activateClubInfos"
@@ -95,10 +95,10 @@
 								[class.opacity-0]="!activateClubInfos"
 							>
 								<ul class="mt-1 text-sm text-blue-800 dark:text-gray-300 space-y-1">
-									<li>• Résumé statistique sur la compétition</li>
-									<li>• Recettes de la compétition</li>
-									<li>• Informations sur les nombres d'inscriptions</li>
-									<li>• Informations sur les scores de la compétition</li>
+									<li>• Synthèse statistique de la compétition</li>
+									<li>• Recettes de la compétition pour votre club</li>
+									<li>• Statistiques sur les inscriptions</li>
+									<li>• Statistiques sur les scores des tireurs</li>
 								</ul>
 							</div>
 						</div>
