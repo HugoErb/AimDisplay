@@ -1,3 +1,1 @@
-export interface UserParams {
-
-}
+export interface UserParams {}

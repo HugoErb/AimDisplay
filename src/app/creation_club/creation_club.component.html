@@ -5,7 +5,9 @@
 				<iconify-icon icon="uit:house-user" class="text-[2.5rem] mr-5"></iconify-icon>
 				<div>
 					<h1 class="text-2xl font-bold">{{ isEditMode ? "Modification d'un club de tir" : "Création d'un club de tir" }}</h1>
-					<p class="text-blue-100 mt-1">{{ isEditMode ? "Mettez à jour les détails de ce club" : "Renseignez les informations du nouveau club" }}</p>
+					<p class="text-blue-100 mt-1">
+						{{ isEditMode ? "Mettez à jour les détails de ce club" : "Renseignez les informations du nouveau club" }}
+					</p>
 				</div>
 			</div>
 		</div>
@@ -36,9 +38,11 @@
 				<div class="flex justify-end">
 					<button
 						class="inline-flex h-12 items-center justify-center rounded-md bg-prime-blue text-white dark:text-gray-300 hover:bg-hover-prime-blue px-5 text-base font-medium shadow transition-colors duration-250 cursor-pointer"
-                        type="submit" [disabled]="isSaving">
+						type="submit"
+						[disabled]="isSaving"
+					>
 						<iconify-icon icon="material-symbols-light:save-rounded" class="text-[1.5rem] mr-3"></iconify-icon>
-                        Enregistrer le club
+						Enregistrer le club
 					</button>
 				</div>
 			</div>
