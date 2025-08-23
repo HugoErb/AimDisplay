@@ -119,17 +119,14 @@
 					[ngClass]="isEditMode || group._open ? 'opacity-100' : 'opacity-0'"
 				>
 					<h2 class="text-lg font-semibold text-gray-900 pb-2 border-b border-gray-200 dark:border-gray-700 dark:text-gray-300">
-						Catégorie et scores du tireur dans la compétition
-						<ng-container *ngIf="i > 0">{{ i + 1 }}</ng-container>
+						Catégorie et scores du tireur dans la compétition @if (i > 0) {{{ i + 1 }}}
 					</h2>
 
 					<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
 						<!-- Distance -->
 						<div class="flex flex-col space-y-1">
 							<label [for]="'shooterDistance_' + i" class="text-sm font-medium text-gray-700 dark:text-gray-300 ml-1">
-								Distance de tir
-								<ng-container *ngIf="i > 0">({{ i + 1 }})</ng-container>
-								*
+								Distance de tir @if (i > 0) {({{ i + 1 }})} *
 							</label>
 							<p-autoComplete
 								#inputField
@@ -149,9 +146,7 @@
 						<!-- Arme -->
 						<div class="flex flex-col space-y-1">
 							<label [for]="'shooterWeapon_' + i" class="text-sm font-medium text-gray-700 dark:text-gray-300 ml-1">
-								Type d'arme
-								<ng-container *ngIf="i > 0">({{ i + 1 }})</ng-container>
-								*
+								Type d'arme @if (i > 0) {({{ i + 1 }})} *
 							</label>
 							<p-autoComplete
 								#inputField
@@ -171,9 +166,7 @@
 						<!-- Catégorie -->
 						<div class="flex flex-col space-y-1">
 							<label [for]="'shooterCategory_' + i" class="text-sm font-medium text-gray-700 dark:text-gray-300 ml-1">
-								Catégorie
-								<ng-container *ngIf="i > 0">({{ i + 1 }})</ng-container>
-								*
+								Catégorie @if (i > 0) {({{ i + 1 }})} *
 							</label>
 							<p-autoComplete
 								#inputField
@@ -198,8 +191,7 @@
 						<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
 							<div *ngFor="let serie of [1, 2, 3, 4]; let s = index">
 								<label [for]="'serie' + serie + '_' + i" class="text-sm font-medium text-gray-700 dark:text-gray-300 ml-1">
-									Score série {{ serie }}
-									<ng-container *ngIf="i > 0">({{ i + 1 }})</ng-container>
+									Score série {{ serie }} @if (i > 0) {({{ i + 1 }})}
 								</label>
 								<p-inputNumber
 									#inputField
@@ -229,8 +221,7 @@
 								<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
 									<div class="flex flex-col space-y-1">
 										<label [for]="'serie5_' + i" class="text-sm font-medium text-gray-700 dark:text-gray-300 ml-1">
-											Score série 5
-											<ng-container *ngIf="i > 0">({{ i + 1 }})</ng-container>
+											Score série 5 @if (i > 0) {({{ i + 1 }})}
 										</label>
 										<p-inputNumber
 											#inputField
@@ -249,8 +240,7 @@
 
 									<div class="flex flex-col space-y-1">
 										<label [for]="'serie6_' + i" class="text-sm font-medium text-gray-700 dark:text-gray-300 ml-1">
-											Score série 6
-											<ng-container *ngIf="i > 0">({{ i + 1 }})</ng-container>
+											Score série 6 @if (i > 0) {({{ i + 1 }})}
 										</label>
 										<p-inputNumber
 											#inputField
