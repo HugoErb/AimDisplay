@@ -24,7 +24,7 @@ export class PdfGeneratorService {
 		textMuted: '#6B7280',
 	};
 
-	async generateCompetitionReport(competitionId: number): Promise<void> {
+	async generateCompetitionReport(competitionId: number, showStats: boolean): Promise<void> {
 		try {
 			if (!competitionId) {
 				this.commonService.showSwalToast('Veuillez sélectionner une compétition.', 'error');
@@ -58,6 +58,18 @@ export class PdfGeneratorService {
 				if (idx < groups.length - 1) (card as any).pageBreak = 'after';
 				content.push(card);
 			});
+
+			// ➜ Ajouter la page "Statistiques" en toute fin si demandé
+			if (showStats) {
+				const statsPage = await this.buildStatsPage(competitionId, shooters);
+				if (statsPage) {
+					if (content.length > 0) {
+						this.removeTrailingPageBreaks(content[content.length - 1]); // nettoie 'after' enfouis
+						(statsPage as any).pageBreak = 'before'; // stats commence sur une nouvelle page
+					}
+					content.push(statsPage);
+				}
+			}
 
 			const docDefinition: TDocumentDefinitions = {
 				pageSize: 'A4',
@@ -298,5 +310,442 @@ export class PdfGeneratorService {
 		const ln = (a.lastName || '').localeCompare(b.lastName || '', 'fr', { sensitivity: 'base' });
 		if (ln !== 0) return ln;
 		return (a.firstName || '').localeCompare(b.firstName || '', 'fr', { sensitivity: 'base' });
+	}
+
+	/** Construit la page finale "Statistiques" (ajoutée en dernière page). */
+	private async buildStatsPage(competitionId: number, shooters: Shooter[]): Promise<Content> {
+		// ---- helpers
+		const toNum = (x: any) => (x == null || Number.isNaN(Number(x)) ? 0 : Number(x));
+		const money = (n: number) => `${n.toFixed(2)} €`;
+		const keyOfShooter = (s: any) =>
+			s.shooterId ?? s.licenceNumber ?? `${(s.lastName || '').trim().toLowerCase()}|${(s.firstName || '').trim().toLowerCase()}`;
+
+		// ---- infos compétition (prix)
+		let basePrice = 0,
+			extraCatPrice = 0,
+			competitionName = '';
+		try {
+			const comps: any[] = await (this.supabase as any).getCompetitions?.();
+			const comp = Array.isArray(comps) ? comps.find((c) => c?.id === competitionId) : null;
+			basePrice = toNum(comp?.price ?? comp?.basePrice ?? comp?.tarif ?? 0);
+			extraCatPrice = toNum(comp?.extraCategoryPrice ?? comp?.extraPrice ?? comp?.tarifSupp ?? 0);
+			competitionName = comp?.name ?? comp?.title ?? '';
+		} catch {
+			/* valeurs par défaut à 0 si échec */
+		}
+
+		// ---- agrégats volumétrie
+		const entries = shooters.length; // nb d'inscriptions (1 ligne = 1 inscription)
+
+		const countByShooter = new Map<string, number>();
+		shooters.forEach((s) => {
+			const k = keyOfShooter(s);
+			countByShooter.set(k, (countByShooter.get(k) || 0) + 1);
+		});
+		const uniqueShooters = countByShooter.size;
+		const extraEntries = Array.from(countByShooter.values()).reduce((acc, c) => acc + Math.max(0, c - 1), 0);
+
+		const clubsMap = new Map<string, number>();
+		shooters.forEach((s) => {
+			const c = (s.clubName || '').trim();
+			if (c) clubsMap.set(c, (clubsMap.get(c) || 0) + 1);
+		});
+		const clubsCount = clubsMap.size;
+		const topClubs = Array.from(clubsMap.entries())
+			.sort((a, b) => b[1] - a[1])
+			.slice(0, 5);
+
+		const categoriesMap = new Map<string, number>();
+		shooters.forEach((s) => {
+			const c = (s.categoryName || '').trim();
+			if (c) categoriesMap.set(c, (categoriesMap.get(c) || 0) + 1);
+		});
+		const catCount = categoriesMap.size;
+		const topCategories = Array.from(categoriesMap.entries())
+			.sort((a, b) => b[1] - a[1])
+			.slice(0, 5);
+
+		const distMap = new Map<string, number>();
+		const weapMap = new Map<string, number>();
+		shooters.forEach((s) => {
+			const d = (s.distance || '').trim();
+			if (d) distMap.set(d, (distMap.get(d) || 0) + 1);
+			const w = (s.weapon || '').trim();
+			if (w) weapMap.set(w, (weapMap.get(w) || 0) + 1);
+		});
+		const topDistances = Array.from(distMap.entries())
+			.sort((a, b) => b[1] - a[1])
+			.slice(0, 5);
+		const topWeapons = Array.from(weapMap.entries())
+			.sort((a, b) => b[1] - a[1])
+			.slice(0, 5);
+
+		// ---- recettes (estimation simple)
+		const baseRevenue = basePrice * uniqueShooters;
+		const extraRevenue = extraCatPrice * extraEntries;
+		const totalRevenue = baseRevenue + extraRevenue;
+		const avgPerEntry = entries ? totalRevenue / entries : 0;
+		const avgPerShooter = uniqueShooters ? totalRevenue / uniqueShooters : 0;
+
+		// ---- stats de scores séparées 4 séries / 6 séries
+		const is6 = (s: Shooter) => this.isSixSeriesCategory(s.categoryName ?? '');
+		const shooters6 = shooters.filter(is6);
+		const shooters4 = shooters.filter((s) => !is6(s));
+		const scoreStats = (arr: Shooter[]) => {
+			const vals = arr.map((s) => toNum((s as any).totalScore)).filter((n) => n > 0);
+			const avg = vals.length ? vals.reduce((a, b) => a + b, 0) / vals.length : 0;
+			const median = (() => {
+				if (!vals.length) return 0;
+				const sorted = [...vals].sort((a, b) => a - b);
+				const mid = Math.floor(sorted.length / 2);
+				return sorted.length % 2 ? sorted[mid] : (sorted[mid - 1] + sorted[mid]) / 2;
+			})();
+			let bestVal = -Infinity;
+			let bestShooter: Shooter | undefined;
+			arr.forEach((s) => {
+				const v = toNum((s as any).totalScore);
+				if (v > bestVal) {
+					bestVal = v;
+					bestShooter = s;
+				}
+			});
+			return {
+				avg,
+				median,
+				bestText: bestShooter ? `${bestVal.toFixed(2)} — ${bestShooter.lastName ?? ''} ${bestShooter.firstName ?? ''}`.trim() : '—',
+				count: vals.length,
+			};
+		};
+		const stats4 = scoreStats(shooters4);
+		const stats6 = scoreStats(shooters6);
+
+		// ---- layout commun
+		const statsLayout: any = {
+			hLineWidth: () => 1,
+			hLineColor: this.theme.border,
+			vLineWidth: () => 1,
+			vLineColor: this.theme.border,
+			hLineWhenBreaks: false,
+
+			// ← header compact + centrage vertical (padding haut = bas)
+			paddingTop: (rowIndex: number) => (rowIndex === 0 ? 2 : 4),
+			paddingBottom: (rowIndex: number, node: any) => (rowIndex === 0 ? 2 : rowIndex === node.table.body.length - 1 ? 0 : 4),
+
+			paddingLeft: () => 6,
+			paddingRight: () => 6,
+
+			fillColor: (rowIndex: number) => (rowIndex === 0 ? '#F3F4F6' : null),
+		};
+
+		// ---- tableaux
+		const resumeTable: Content = {
+			table: {
+				headerRows: 1,
+				keepWithHeaderRows: 1,
+				dontBreakRows: true,
+				widths: ['*', 80],
+				body: [
+					[
+						{ text: 'Résumé', style: 'th' },
+						{ text: '', style: 'th' },
+					],
+					[
+						{ text: 'Inscriptions (lignes)', style: 'td' },
+						{ text: String(entries), style: 'td', alignment: 'right' },
+					],
+					[
+						{ text: 'Participants uniques', style: 'td' },
+						{ text: String(uniqueShooters), style: 'td', alignment: 'right' },
+					],
+					[
+						{ text: 'Clubs', style: 'td' },
+						{ text: String(clubsCount), style: 'td', alignment: 'right' },
+					],
+					[
+						{ text: 'Catégories', style: 'td' },
+						{ text: String(catCount), style: 'td', alignment: 'right' },
+					],
+					[
+						{ text: 'Distances (distinctes)', style: 'td' },
+						{ text: String(distMap.size), style: 'td', alignment: 'right' },
+					],
+					[
+						{ text: 'Armes (distinctes)', style: 'td' },
+						{ text: String(weapMap.size), style: 'td', alignment: 'right' },
+					],
+				],
+			},
+			layout: statsLayout,
+			margin: [0, 6, 0, 6],
+		};
+
+		const pricingTable: Content = {
+			table: {
+				headerRows: 1,
+				keepWithHeaderRows: 1,
+				dontBreakRows: true,
+				widths: ['*', 110],
+				body: [
+					[
+						{ text: 'Tarifs', style: 'th' },
+						{ text: '', style: 'th' },
+					],
+					[
+						{ text: 'Prix de base (1ère catégorie)', style: 'td' },
+						{ text: money(basePrice), style: 'td', alignment: 'right' },
+					],
+					[
+						{ text: 'Prix catégorie supplémentaire', style: 'td' },
+						{ text: money(extraCatPrice), style: 'td', alignment: 'right' },
+					],
+				],
+			},
+			layout: statsLayout,
+			margin: [0, 6, 0, 6],
+		};
+
+		const revenueTable: Content = {
+			table: {
+				headerRows: 1,
+				keepWithHeaderRows: 1,
+				dontBreakRows: true,
+				widths: ['*', 120],
+				body: [
+					[
+						{ text: 'Recettes', style: 'th' },
+						{ text: '', style: 'th' },
+					],
+					[
+						{ text: `Recettes des inscriptions (${uniqueShooters})`, style: 'td' },
+						{ text: money(baseRevenue), style: 'td', alignment: 'right' },
+					],
+					[
+						{ text: `Recettes des inscriptions en catégories supp. (${extraEntries})`, style: 'td' },
+						{ text: money(extraRevenue), style: 'td', alignment: 'right' },
+					],
+					[
+						{ text: 'Total estimé des recettes', style: 'td' },
+						{ text: money(totalRevenue), style: 'td', alignment: 'right' },
+					],
+					[
+						{ text: 'Moyenne par inscription', style: 'td' },
+						{ text: money(avgPerEntry), style: 'td', alignment: 'right' },
+					],
+					[
+						{ text: 'Moyenne par participant unique', style: 'td' },
+						{ text: money(avgPerShooter), style: 'td', alignment: 'right' },
+					],
+				],
+			},
+			layout: statsLayout,
+			margin: [0, 6, 0, 6],
+		};
+
+		const topClubsTable: Content = {
+			table: {
+				headerRows: 1,
+				keepWithHeaderRows: 1,
+				dontBreakRows: true,
+				widths: ['*', 60],
+				body: [
+					[
+						{ text: "Nombre d'inscriptions par club", style: 'th' },
+						{ text: '', style: 'th', alignment: 'right' },
+					],
+					...topClubs.map(([club, n]) => [
+						{ text: club, style: 'td' },
+						{ text: String(n), style: 'td', alignment: 'right' },
+					]),
+				],
+			},
+			layout: statsLayout,
+			margin: [0, 6, 0, 6],
+		};
+
+		const topCategoriesTable: Content = {
+			table: {
+				headerRows: 1,
+				keepWithHeaderRows: 1,
+				dontBreakRows: true,
+				widths: ['*', 60],
+				body: [
+					[
+						{ text: "Nombre d'inscriptions par catégorie", style: 'th' },
+						{ text: '', style: 'th', alignment: 'right' },
+					],
+					...topCategories.map(([cat, n]) => [
+						{ text: cat, style: 'td' },
+						{ text: String(n), style: 'td', alignment: 'right' },
+					]),
+				],
+			},
+			layout: statsLayout,
+			margin: [0, 6, 0, 6],
+		};
+
+		const topDistancesTable: Content = {
+			table: {
+				headerRows: 1,
+				keepWithHeaderRows: 1,
+				dontBreakRows: true,
+				widths: ['*', 60],
+				body: [
+					[
+						{ text: "Nombre d'inscriptions par distance", style: 'th' },
+						{ text: '', style: 'th', alignment: 'right' },
+					],
+					...topDistances.map(([d, n]) => [
+						{ text: d, style: 'td' },
+						{ text: String(n), style: 'td', alignment: 'right' },
+					]),
+				],
+			},
+			layout: statsLayout,
+			margin: [0, 6, 0, 6],
+		};
+
+		const topWeaponsTable: Content = {
+			table: {
+				headerRows: 1,
+				keepWithHeaderRows: 1,
+				dontBreakRows: true,
+				widths: ['*', 60],
+				body: [
+					[
+						{ text: "Nombre d'inscriptions par discipline d'arme", style: 'th' },
+						{ text: '', style: 'th', alignment: 'right' },
+					],
+					...topWeapons.map(([w, n]) => [
+						{ text: w, style: 'td' },
+						{ text: String(n), style: 'td', alignment: 'right' },
+					]),
+				],
+			},
+			layout: statsLayout,
+			margin: [0, 6, 0, 6],
+		};
+
+		const scores4Table: Content = {
+			table: {
+				headerRows: 1,
+				keepWithHeaderRows: 1,
+				dontBreakRows: true,
+				widths: ['*', 110],
+				body: [
+					[
+						{ text: 'Scores sur 4 séries', style: 'th' },
+						{ text: '', style: 'th' },
+					],
+					[
+						{ text: 'Participants', style: 'td' },
+						{ text: String(stats4.count), style: 'td', alignment: 'right' },
+					],
+					[
+						{ text: 'Moyenne', style: 'td' },
+						{ text: stats4.count ? stats4.avg.toFixed(2) : '—', style: 'td', alignment: 'right' },
+					],
+					[
+						{ text: 'Médiane', style: 'td' },
+						{ text: stats4.count ? stats4.median.toFixed(2) : '—', style: 'td', alignment: 'right' },
+					],
+					[
+						{ text: 'Meilleur score', style: 'td' },
+						{ text: stats4.bestText, style: 'td', alignment: 'right' },
+					],
+				],
+			},
+			layout: statsLayout,
+			margin: [0, 6, 0, 6],
+		};
+
+		const scores6Table: Content = {
+			table: {
+				headerRows: 1,
+				keepWithHeaderRows: 1,
+				dontBreakRows: true,
+				widths: ['*', 110],
+				body: [
+					[
+						{ text: 'Scores sur 6 séries', style: 'th' },
+						{ text: '', style: 'th' },
+					],
+					[
+						{ text: 'Participants', style: 'td' },
+						{ text: String(stats6.count), style: 'td', alignment: 'right' },
+					],
+					[
+						{ text: 'Moyenne', style: 'td' },
+						{ text: stats6.count ? stats6.avg.toFixed(2) : '—', style: 'td', alignment: 'right' },
+					],
+					[
+						{ text: 'Médiane', style: 'td' },
+						{ text: stats6.count ? stats6.median.toFixed(2) : '—', style: 'td', alignment: 'right' },
+					],
+					[
+						{ text: 'Meilleur score', style: 'td' },
+						{ text: stats6.bestText, style: 'td', alignment: 'right' },
+					],
+				],
+			},
+			layout: statsLayout,
+			margin: [0, 6, 0, 6],
+		};
+
+		return {
+			margin: [40, 0, 40, 12],
+			stack: [
+				// bandeau
+				{
+					table: {
+						widths: ['*'],
+						body: [
+							[
+								{
+									text: `Statistiques ${competitionName || ''}`.trim(),
+									style: 'cardTitle',
+									fillColor: this.theme.primary,
+									color: '#fff',
+									margin: [12, 8, 12, 8],
+								},
+							],
+						],
+					},
+					layout: 'noBorders',
+					margin: [0, 0, 0, 0],
+				},
+				// colonnes
+				{
+					columns: [
+						{ width: '*', stack: [resumeTable, pricingTable, revenueTable, topDistancesTable] }, // ← on met "Top distances" à gauche
+						{ width: '*', stack: [topClubsTable, topCategoriesTable, topWeaponsTable, scores4Table, scores6Table] },
+					],
+					columnGap: 16,
+				},
+			],
+		} as Content;
+	}
+
+	/** Supprime récursivement les pageBreak:'after' sur le dernier élément d'un bloc */
+	private removeTrailingPageBreaks(node: any): void {
+		if (!node) return;
+
+		const strip = (n: any) => {
+			if (!n || typeof n !== 'object') return;
+			if (Array.isArray(n.stack) && n.stack.length) {
+				this.removeTrailingPageBreaks(n.stack[n.stack.length - 1]);
+			}
+			if (Array.isArray(n.columns) && n.columns.length) {
+				this.removeTrailingPageBreaks(n.columns[n.columns.length - 1]);
+			}
+			// si le tout dernier enfant a un pageBreak:'after', on l'enlève
+			if (n.pageBreak === 'after') delete n.pageBreak;
+		};
+
+		if (Array.isArray(node)) {
+			// pour un tableau d’items (ex: content/stack/columns)
+			this.removeTrailingPageBreaks(node[node.length - 1]);
+		} else {
+			strip(node);
+		}
 	}
 }
