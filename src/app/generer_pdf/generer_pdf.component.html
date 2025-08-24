@@ -63,7 +63,7 @@
 							></p-autoComplete>
 						</div>
 						<div class="flex flex-col space-y-1">
-							<label for="selectedCompetition" class="text-sm font-medium text-gray-700 dark:text-gray-300 ml-1">
+							<label for="activateClubInfos" class="text-sm font-medium text-gray-700 dark:text-gray-300 ml-1">
 								Générer les statistiques de compétition
 							</label>
 							<p-toggleswitch
@@ -125,7 +125,8 @@
 								[(ngModel)]="selectedShooter"
 								[suggestions]="filteredShooters"
 								(completeMethod)="filteredShooters = commonService.filterByName($event.query, shooters)"
-                                (onSelect)="selectedShooter = $event.value"
+								(onSelect)="selectedShooter = $event.value"
+								(ngModelChange)="handleShooterChange($event)"
 								[forceSelection]="true"
 								[dropdown]="true"
 								optionLabel="fullName"
@@ -138,19 +139,27 @@
 							<label for="selectedShooterCompetition" class="text-sm font-medium text-gray-700 dark:text-gray-300 ml-1">
 								Compétition du tireur
 							</label>
-							<p-autoComplete
-								#inputField
-								inputId="selectedShooterCompetition"
-								name="selectedShooterCompetition"
-								[(ngModel)]="selectedShooterCompetition"
-								[forceSelection]="true"
-								[suggestions]="filteredCompetitions"
-								(completeMethod)="filteredCompetitions = commonService.filterByName($event.query, competitions)"
-                                (onSelect)="selectedShooterCompetition = $event.value"
-								optionLabel="name"
-								[dropdown]="true"
-								placeholder="Compétition du tireur (optionnel)"
-							></p-autoComplete>
+							<span
+								class="block"
+								pTooltip="Sélectionnez d'abord un tireur"
+								[tooltipDisabled]="!!selectedShooter"
+								tooltipPosition="top"								
+								[ngClass]="{ 'blocked-cursor': !selectedShooter }"
+							>
+								<p-autoComplete
+									inputId="selectedShooterCompetition"
+									name="selectedShooterCompetition"
+									[(ngModel)]="selectedShooterCompetition"
+									[forceSelection]="true"
+									[suggestions]="filteredCompetitions"
+									(completeMethod)="filteredCompetitions = commonService.filterByName($event.query, competitionsForSelectedShooter)"
+									(onSelect)="selectedShooterCompetition = $event.value"
+									[disabled]="!selectedShooter"
+									optionLabel="name"
+									[dropdown]="true"
+									placeholder="Compétition du tireur (optionnel)"
+								></p-autoComplete>
+							</span>
 						</div>
 					</div>
 
