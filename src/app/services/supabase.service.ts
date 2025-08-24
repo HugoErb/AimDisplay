@@ -631,6 +631,68 @@ export class SupabaseService {
 			: mapped;
 	}
 
+	/**
+	 * Retourne toutes les lignes "shooters" de l'utilisateur courant,
+	 * enrichies des libellés + totalScore (2 décimales) + competitionId.
+	 */
+	async getAllShooterEntries(): Promise<(Shooter & { competitionId: number })[]> {
+		const { data: userData, error: userError } = await this.supabase.auth.getUser();
+		if (userError) throw new Error(`Impossible de récupérer l'utilisateur: ${userError.message}`);
+		const user = userData?.user;
+		if (!user) throw new Error('Aucun utilisateur connecté.');
+
+		const { data: rows, error } = await this.supabase.from('shooters').select('*').eq('user_id', user.id).order('id', { ascending: true });
+
+		if (error) throw new Error(`Erreur lors de la récupération des tireurs: ${error.message}`);
+
+		const [clubs, competitions, distances, weapons, categories] = await Promise.all([
+			this.getClubs(),
+			this.getCompetitions(),
+			this.getDistances(),
+			this.getWeapons(),
+			this.getCategories(),
+		]);
+
+		const clubById = new Map(clubs.map((c) => [c.id, c.name]));
+		const competitionById = new Map(competitions.map((c) => [c.id, c.name]));
+		const distanceById = new Map(distances.map((d) => [d.id, d.name]));
+		const weaponById = new Map(weapons.map((w) => [w.id, w.name]));
+		const categoryById = new Map(categories.map((k) => [k.id, k.name]));
+		const toNum = (v: any) => (typeof v === 'number' ? v : v == null ? 0 : Number(v) || 0);
+
+		return (rows ?? []).map((row: any) => {
+			const s1 = toNum(row.serie1_score);
+			const s2 = toNum(row.serie2_score);
+			const s3 = toNum(row.serie3_score);
+			const s4 = toNum(row.serie4_score);
+			const s5 = toNum(row.serie5_score);
+			const s6 = toNum(row.serie6_score);
+			const total = s1 + s2 + s3 + s4 + s5 + s6;
+
+			const s: Shooter & { competitionId: number } = {
+				id: row.id,
+				lastName: row.last_name,
+				firstName: row.first_name,
+				email: row.email,
+				competitionName: competitionById.get(row.competition_id) ?? '',
+				clubName: clubById.get(row.club_id) ?? '',
+				distance: distanceById.get(row.distance_id) ?? '',
+				weapon: weaponById.get(row.weapon_id) ?? '',
+				categoryName: categoryById.get(row.category_id) ?? '',
+				scoreSerie1: s1,
+				scoreSerie2: s2,
+				scoreSerie3: s3,
+				scoreSerie4: s4,
+				scoreSerie5: s5,
+				scoreSerie6: s6,
+				totalScore: Number(total.toFixed(2)),
+				userId: row.user_id,
+				competitionId: row.competition_id, // 👈 utile pour la liste des compets par tireur
+			};
+			return s;
+		});
+	}
+
 	// DELETE FUNCTIONS /////////////////////////////////////////////////////////////////////
 
 	/**

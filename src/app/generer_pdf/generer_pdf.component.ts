@@ -10,11 +10,12 @@ import { FormsModule } from '@angular/forms';
 import { Competition } from '../interfaces/competition';
 import { ToggleSwitchModule } from 'primeng/toggleswitch';
 import { Shooter } from '../interfaces/shooter';
+import { TooltipModule } from 'primeng/tooltip';
 
 @Component({
 	selector: 'app-generer-pdf',
 	standalone: true,
-	imports: [AutoCompleteModule, CommonModule, FormsModule, ToggleSwitchModule],
+	imports: [AutoCompleteModule, CommonModule, FormsModule, ToggleSwitchModule, TooltipModule],
 	templateUrl: './generer_pdf.component.html',
 	schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
@@ -46,12 +47,19 @@ export class GenererPDFComponent {
 	filteredCompetitions: any[] = [];
 	shooters: any[] = [];
 	filteredShooters: any[] = [];
+	competitionsByShooterKey: Record<string, Array<{ id: number; name: string }>> = {};
+	competitionsForSelectedShooter: Array<{ id: number; name: string }> = [];
 
 	async ngOnInit(): Promise<void> {
 		try {
-			const [shooters, competitions] = await Promise.all([this.supabase.getShooters(), this.supabase.getCompetitions()]);
+			// 1) on charge TOUT ce qu’il faut pour les 2 onglets
+			const [shootersRaw, competitions, entries] = await Promise.all([
+				this.supabase.getShooters(), // pour construire la liste "Tireur"
+				this.supabase.getCompetitions(), // pour l’onglet "Compétition"
+				this.supabase.getAllShooterEntries(), // pour faire la map tireur -> compétitions
+			]);
 
-			// Normalisation pour comparaison (sans accents / casse)
+			// 2) normalise & déduplique les tireurs (comme avant)
 			const normalize = (s: string = '') =>
 				s
 					.normalize('NFD')
@@ -59,27 +67,42 @@ export class GenererPDFComponent {
 					.toLowerCase()
 					.trim();
 
-			// Map + trim
-			const mappedShooters = (shooters ?? []).map((s) => {
+			const mappedShooters = (shootersRaw ?? []).map((s) => {
 				const last = (s.lastName ?? '').trim();
 				const first = (s.firstName ?? '').trim();
 				const fullName = `${last} ${first}`.replace(/\s+/g, ' ').trim();
 				return { ...s, lastName: last, firstName: first, fullName, name: fullName };
 			});
 
-			// Dédup par nom complet (sans accents/casse)
 			const dedup = mappedShooters.filter((shooter, idx, arr) => {
 				const key = normalize(shooter.fullName);
 				return idx === arr.findIndex((x) => normalize(x.fullName) === key);
 			});
-
-			// TRI alphabétique FR sur fullName (ignore casse/accents)
 			dedup.sort((a, b) => a.fullName.localeCompare(b.fullName, 'fr', { sensitivity: 'base' }));
-
 			this.shooters = dedup;
-			this.competitions = competitions;
+
+			// 3) la liste "toutes compétitions" pour l’onglet compétition
+			this.competitions = competitions ?? [];
+
+			// 4) construit la map tireur -> compétitions à partir des entries
+			const keyOf = (s: { lastName: string; firstName: string }) => `${normalize(s.lastName)}|${normalize(s.firstName)}`;
+
+			const compByKey = new Map<string, Map<number, string>>();
+			(entries ?? []).forEach((e: any) => {
+				const key = keyOf(e);
+				if (!compByKey.has(key)) compByKey.set(key, new Map<number, string>());
+				compByKey.get(key)!.set(e.competitionId, e.competitionName);
+			});
+
+			this.competitionsByShooterKey = {};
+			for (const [key, map] of compByKey.entries()) {
+				const arr = Array.from(map.entries()).map(([id, name]) => ({ id, name }));
+				arr.sort((a, b) => a.name.localeCompare(b.name, 'fr', { sensitivity: 'base' }));
+				this.competitionsByShooterKey[key] = arr;
+			}
 		} catch (err) {
 			console.error('Erreur lors du chargement des données :', err);
+			this.commonService.showSwalToast('Erreur lors du chargement des données', 'error');
 		}
 	}
 
@@ -93,6 +116,26 @@ export class GenererPDFComponent {
 		this.selectedTab = tab;
 	}
 
+	handleShooterChange(shooter: Shooter | null): void {
+		this.selectedShooter = shooter || null;
+		this.selectedShooterCompetition = null;
+
+		if (!this.selectedShooter) {
+			this.competitionsForSelectedShooter = [];
+			return;
+		}
+
+		const normalize = (s: string = '') =>
+			s
+				.normalize('NFD')
+				.replace(/[\u0300-\u036f]/g, '')
+				.toLowerCase()
+				.trim();
+		const key = `${normalize(this.selectedShooter.lastName)}|${normalize(this.selectedShooter.firstName)}`;
+
+		this.competitionsForSelectedShooter = this.competitionsByShooterKey[key] || [];
+	}
+
 	/**
 	 * Permet de lancer la génération du PDF à partir des données récoltées dans les champs du formulaire.
 	 * Une phase de validation des inputs est d'abord lancée, puis, si la création réussit,
@@ -100,12 +143,6 @@ export class GenererPDFComponent {
 	 *
 	 * @returns {Promise<void>} Une promesse qui se résout une fois que la création est effectuée et que les
 	 * champs de saisie ont été réinitialisés en cas de succès.
-	 */
-	/**
-	 * Lance la génération du PDF depuis les champs saisis :
-	 * - Onglet "competition" : génère le rapport de compétition (avec stats optionnelles).
-	 * - Onglet "tireur"      : génère le rapport pour un tireur (toutes compétitions
-	 *                          ou filtré par la compétition sélectionnée si fournie).
 	 */
 	async generatePDF(): Promise<void> {
 		this.isSaving = true;
@@ -119,10 +156,7 @@ export class GenererPDFComponent {
 						this.commonService.showSwalToast('Veuillez sélectionner une compétition.', 'error');
 						return;
 					}
-					await this.competitionPDFGenerator.generateCompetitionReport(
-						this.selectedCompetition.id,
-						this.activateClubInfos
-					);
+					await this.competitionPDFGenerator.generateCompetitionReport(this.selectedCompetition.id, this.activateClubInfos);
 
 					// reset champs "competition"
 					this.commonService.resetInputFields(this.inputFields);
