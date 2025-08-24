@@ -13,7 +13,7 @@ const vfsAny: any = (pdfFonts as any).vfs ?? (pdfFonts as any).default?.vfs ?? (
 type Cell = { text: string; style?: string; alignment?: 'left' | 'right' | 'center' | 'justify' };
 
 @Injectable({ providedIn: 'root' })
-export class PdfGeneratorService {
+export class CompetitionPDFGenerator {
 	constructor(private supabase: SupabaseService, private commonService: CommonService) {}
 
 	// Palette

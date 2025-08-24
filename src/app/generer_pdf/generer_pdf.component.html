@@ -117,14 +117,15 @@
 					<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
 						<!-- Tireur -->
 						<div class="flex flex-col space-y-1">
-							<label for="selectedShooterName" class="text-sm font-medium text-gray-700 dark:text-gray-300 ml-1">Tireur *</label>
+							<label for="selectedShooter" class="text-sm font-medium text-gray-700 dark:text-gray-300 ml-1">Tireur *</label>
 							<p-autoComplete
 								#inputField
-								inputId="selectedShooterName"
-								name="selectedShooterName"
-								[(ngModel)]="selectedShooterName"
+								inputId="selectedShooter"
+								name="selectedShooter"
+								[(ngModel)]="selectedShooter"
 								[suggestions]="filteredShooters"
 								(completeMethod)="filteredShooters = commonService.filterByName($event.query, shooters)"
+                                (onSelect)="selectedShooter = $event.value"
 								[forceSelection]="true"
 								[dropdown]="true"
 								optionLabel="fullName"
@@ -134,17 +135,18 @@
 
 						<!-- Compétition -->
 						<div class="flex flex-col space-y-1">
-							<label for="selectedShooterCompetitionName" class="text-sm font-medium text-gray-700 dark:text-gray-300 ml-1">
+							<label for="selectedShooterCompetition" class="text-sm font-medium text-gray-700 dark:text-gray-300 ml-1">
 								Compétition du tireur
 							</label>
 							<p-autoComplete
 								#inputField
-								inputId="selectedShooterCompetitionName"
-								name="selectedShooterCompetitionName"
-								[(ngModel)]="selectedShooterCompetitionName"
+								inputId="selectedShooterCompetition"
+								name="selectedShooterCompetition"
+								[(ngModel)]="selectedShooterCompetition"
 								[forceSelection]="true"
 								[suggestions]="filteredCompetitions"
 								(completeMethod)="filteredCompetitions = commonService.filterByName($event.query, competitions)"
+                                (onSelect)="selectedShooterCompetition = $event.value"
 								optionLabel="name"
 								[dropdown]="true"
 								placeholder="Compétition du tireur (optionnel)"
