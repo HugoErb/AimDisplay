@@ -335,4 +335,10 @@
 	.animate-swipe-left-out {
 		animation: swipeLeftOut 0.4s ease forwards;
 	}
+
+	/* Cursor not-allowed sur liste déroulante compétition de la page "Générer PDF" onglet "Tireur" */
+	.blocked-cursor,
+	.blocked-cursor .p-autocomplete-dropdown {
+		cursor: not-allowed !important;
+	}
 }
