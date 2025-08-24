@@ -518,6 +518,119 @@ export class SupabaseService {
 		});
 	}
 
+	/**
+	 * Retourne toutes les participations d'un tireur (toutes compétitions),
+	 * enrichies avec les libellés (club, distance, arme, catégorie) + séries et totalScore (2 décimales).
+	 *
+	 * @param shooterKey  objet ou string permettant d'identifier le tireur :
+	 *   - { lastName, firstName } ou { fullName }
+	 *   - string "Nom Prénom"
+	 */
+	async getShooterResults(shooterKey: { firstName?: string; lastName?: string; fullName?: string } | string): Promise<Shooter[]> {
+		// --- Auth utilisateur (même pattern que getShootersByCompetition)
+		const { data: userData, error: userError } = await this.supabase.auth.getUser();
+		if (userError) throw new Error(`Impossible de récupérer l'utilisateur: ${userError.message}`);
+		const user = userData?.user;
+		if (!user) throw new Error('Aucun utilisateur connecté.');
+
+		// --- Extraction Nom/Prénom
+		const clean = (s: string) =>
+			(s || '')
+				.normalize('NFD')
+				.replace(/[\u0300-\u036f]/g, '')
+				.trim();
+		let lastName = '';
+		let firstName = '';
+
+		if (typeof shooterKey === 'string') {
+			const parts = shooterKey.split(/\s+/);
+			lastName = clean(parts[0] || '');
+			firstName = clean(parts.slice(1).join(' ') || '');
+		} else {
+			if (shooterKey?.fullName) {
+				const p = shooterKey.fullName.split(/\s+/);
+				lastName = clean(shooterKey.lastName || p[0] || '');
+				firstName = clean(shooterKey.firstName || p.slice(1).join(' ') || '');
+			} else {
+				lastName = clean(shooterKey?.lastName || '');
+				firstName = clean(shooterKey?.firstName || '');
+			}
+		}
+
+		// --- Récupération brute des lignes pour cet utilisateur (filtre par nom/prénom si fournis)
+		let query = this.supabase.from('shooters').select('*').eq('user_id', user.id);
+
+		// On applique un filtrage large côté SQL ; on affinera côté JS avec normalisation
+		if (lastName) query = query.ilike('last_name', `%${lastName}%`);
+		if (firstName) query = query.ilike('first_name', `%${firstName}%`);
+
+		// Ordre stable
+		query = query.order('competition_id', { ascending: true }).order('id', { ascending: true });
+
+		const { data: rows, error } = await query;
+		if (error) throw new Error(`Erreur lors de la récupération des résultats du tireur: ${error.message}`);
+
+		// --- Référentiels pour libellés (même logique que l'autre méthode)
+		const [clubs, competitions, distances, weapons, categories] = await Promise.all([
+			this.getClubs(),
+			this.getCompetitions(),
+			this.getDistances(),
+			this.getWeapons(),
+			this.getCategories(),
+		]);
+
+		const clubById = new Map(clubs.map((c) => [c.id, c.name]));
+		const competitionById = new Map(competitions.map((c) => [c.id, c.name]));
+		const distanceById = new Map(distances.map((d) => [d.id, d.name]));
+		const weaponById = new Map(weapons.map((w) => [w.id, w.name]));
+		const categoryById = new Map(categories.map((k) => [k.id, k.name]));
+
+		const toNum = (v: any) => (typeof v === 'number' ? v : v == null ? 0 : Number(v) || 0);
+		const norm = (s: string) =>
+			(s || '')
+				.normalize('NFD')
+				.replace(/[\u0300-\u036f]/g, '')
+				.toLowerCase()
+				.trim();
+
+		// --- Mapping + filtre fin (exact Nom/Prénom si fournis)
+		const mapped = (rows ?? []).map((row: any): Shooter => {
+			const s1 = toNum(row.serie1_score);
+			const s2 = toNum(row.serie2_score);
+			const s3 = toNum(row.serie3_score);
+			const s4 = toNum(row.serie4_score);
+			const s5 = toNum(row.serie5_score);
+			const s6 = toNum(row.serie6_score);
+			const total = s1 + s2 + s3 + s4 + s5 + s6;
+
+			return {
+				id: row.id,
+				lastName: row.last_name,
+				firstName: row.first_name,
+				email: row.email,
+				competitionName: competitionById.get(row.competition_id) ?? '',
+				clubName: clubById.get(row.club_id) ?? '',
+				distance: distanceById.get(row.distance_id) ?? '',
+				weapon: weaponById.get(row.weapon_id) ?? '',
+				categoryName: categoryById.get(row.category_id) ?? '',
+				scoreSerie1: s1,
+				scoreSerie2: s2,
+				scoreSerie3: s3,
+				scoreSerie4: s4,
+				scoreSerie5: s5,
+				scoreSerie6: s6,
+				totalScore: Number(total.toFixed(2)),
+				userId: row.user_id,
+			};
+		});
+
+		// Filtrage exact (accents/casse insensibles) si Nom/Prénom fournis
+		const hasFilter = Boolean(lastName || firstName);
+		return hasFilter
+			? mapped.filter((r) => (!lastName || norm(r.lastName) === norm(lastName)) && (!firstName || norm(r.firstName) === norm(firstName)))
+			: mapped;
+	}
+
 	// DELETE FUNCTIONS /////////////////////////////////////////////////////////////////////
 
 	/**

@@ -3,11 +3,13 @@ import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { AutoCompleteModule } from 'primeng/autocomplete';
 import { CommonModule } from '@angular/common';
 import { CommonService } from '../services/common.service';
-import { PdfGeneratorService } from '../services/pdf-generator.service';
+import { CompetitionPDFGenerator } from '../services/competition-pdf-generator.service';
+import { ShooterPDFGenerator } from '../services/shooter-pdf-generator-.service';
 import { SupabaseService } from '../services/supabase.service';
 import { FormsModule } from '@angular/forms';
 import { Competition } from '../interfaces/competition';
 import { ToggleSwitchModule } from 'primeng/toggleswitch';
+import { Shooter } from '../interfaces/shooter';
 
 @Component({
 	selector: 'app-generer-pdf',
@@ -17,7 +19,12 @@ import { ToggleSwitchModule } from 'primeng/toggleswitch';
 	schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class GenererPDFComponent {
-	constructor(protected commonService: CommonService, private pdfGeneratorService: PdfGeneratorService, private supabase: SupabaseService) {}
+	constructor(
+		protected commonService: CommonService,
+		private competitionPDFGenerator: CompetitionPDFGenerator,
+		private shooterPDFGenerator: ShooterPDFGenerator,
+		private supabase: SupabaseService
+	) {}
 
 	isSaving: boolean = false;
 
@@ -31,8 +38,8 @@ export class GenererPDFComponent {
 	//Variables de selection d'entité à exporter
 	selectedCompetition: Competition | null = null;
 	activateClubInfos: boolean = false;
-	selectedShooterName: { name: string } | null = null;
-	selectedShooterCompetitionName: { name: string } | null = null;
+	selectedShooter: Shooter | null = null;
+	selectedShooterCompetition: Competition | null = null;
 
 	// Variables de liste
 	competitions: any[] = [];
@@ -94,21 +101,51 @@ export class GenererPDFComponent {
 	 * @returns {Promise<void>} Une promesse qui se résout une fois que la création est effectuée et que les
 	 * champs de saisie ont été réinitialisés en cas de succès.
 	 */
+	/**
+	 * Lance la génération du PDF depuis les champs saisis :
+	 * - Onglet "competition" : génère le rapport de compétition (avec stats optionnelles).
+	 * - Onglet "tireur"      : génère le rapport pour un tireur (toutes compétitions
+	 *                          ou filtré par la compétition sélectionnée si fournie).
+	 */
 	async generatePDF(): Promise<void> {
 		this.isSaving = true;
 		try {
 			this.inputLabelMap = this.commonService.getInputLabelMap(this.inputFields);
 
 			if (await this.commonService.validateInputs(this.inputLabelMap, false)) {
+				// Génération de PDF : rapport compétition
 				if (this.selectedTab === 'competition') {
 					if (!this.selectedCompetition?.id) {
 						this.commonService.showSwalToast('Veuillez sélectionner une compétition.', 'error');
 						return;
 					}
-					await this.pdfGeneratorService.generateCompetitionReport(this.selectedCompetition?.id, this.activateClubInfos);
+					await this.competitionPDFGenerator.generateCompetitionReport(
+						this.selectedCompetition.id,
+						this.activateClubInfos
+					);
+
+					// reset champs "competition"
+					this.commonService.resetInputFields(this.inputFields);
+					this.selectedCompetition = null;
 				}
-				this.commonService.resetInputFields(this.inputFields);
-				this.selectedCompetition = null;
+
+				// Génération de PDF : rapport de tireur
+				if (this.selectedTab === 'tireur') {
+					if (!this.selectedShooter) {
+						this.commonService.showSwalToast('Veuillez sélectionner un tireur.', 'error');
+						return;
+					}
+
+					const shooterKey = this.selectedShooter;
+					const competitionId = this.selectedShooterCompetition?.id ?? undefined;
+
+					await this.shooterPDFGenerator.generateShooterReport(shooterKey, competitionId);
+
+					// reset champs "tireur"
+					this.commonService.resetInputFields(this.inputFields);
+					this.selectedShooter = null;
+					this.selectedShooterCompetition = null;
+				}
 			}
 		} catch (e: any) {
 			this.commonService.showSwalToast(e?.message ?? 'Erreur lors de la génération du PDF', 'error');
