@@ -4,7 +4,7 @@ import { AutoCompleteModule } from 'primeng/autocomplete';
 import { CommonModule } from '@angular/common';
 import { CommonService } from '../services/common.service';
 import { CompetitionPDFGenerator } from '../services/competition-pdf-generator.service';
-import { ShooterPDFGenerator } from '../services/shooter-pdf-generator-.service';
+import { ShooterPDFGenerator } from '../services/shooter-pdf-generator.service';
 import { SupabaseService } from '../services/supabase.service';
 import { FormsModule } from '@angular/forms';
 import { Competition } from '../interfaces/competition';
