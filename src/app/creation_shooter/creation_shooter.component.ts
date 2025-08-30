@@ -174,12 +174,7 @@ export class CreationShooterComponent {
 	 * champs de saisie ont été réinitialisés en cas de succès.
 	 */
 	async createShooter(): Promise<void> {
-		this.isSaving = true;
 		try {
-			this.inputLabelMap = this.commonService.getInputLabelMap(this.inputFields);
-			const areInputsValid = await this.commonService.validateInputs(this.inputLabelMap, false);
-			if (!areInputsValid) return;
-
 			// Données communes (en-tête du formulaire)
 			const shooterLastName = this.shooterLastName?.trim();
 			const shooterFirstName = this.shooterFirstName?.trim();
@@ -245,8 +240,8 @@ export class CreationShooterComponent {
 			];
 
 			this.commonService.showSwalToast('Tireur créé avec succès.');
-		} finally {
-			this.isSaving = false;
+		} catch (e: any) {
+			this.commonService.showSwalToast(e?.message ?? 'Erreur lors de la création du tireur', 'error');
 		}
 	}
 
@@ -256,10 +251,60 @@ export class CreationShooterComponent {
 	 * @returns {Promise<void>} Promesse résolue lorsque l’opération (création ou mise à jour) est terminée.
 	 */
 	async onSubmitShooter(): Promise<void> {
-		if (this.isEditMode) {
-			await this.updateShooter();
-		} else {
-			await this.createShooter();
+		try {
+			this.isSaving = true;
+
+			// Validation des champs
+			this.inputLabelMap = this.commonService.getInputLabelMap(this.inputFields);
+			const areInputsValid = await this.commonService.validateInputs(this.inputLabelMap, false);
+			if (!areInputsValid) {
+				this.isSaving = false;
+				return;
+			}
+
+			const last = (this.shooterLastName ?? '').trim();
+			const first = (this.shooterFirstName ?? '').trim();
+			const competitionName =
+				typeof this.shooterCompetitionName === 'string' ? this.shooterCompetitionName : this.shooterCompetitionName?.name ?? '';
+			const competitionId = this.getIdFromSelection(this.shooterCompetitionName, this.competitions);
+
+			// Vérification anti-doublon pour CHAQUE groupe demandé
+			for (const group of this.categoryGroups) {
+				const exists = await this.supabase.existsShooterDuplicate({
+					lastName: last,
+					firstName: first,
+					competitionId,
+					categoryId: group.shooterCategory?.id,
+					distanceId: group.shooterDistance?.id,
+					weaponId: group.shooterWeapon?.id,
+				});
+
+				if (exists) {
+					const confirmed = await this.commonService.showSwal(
+						'Attention !',
+						`Un tireur ayant le même nom (${last} ${first}) est déjà inscrit dans la compétition "${competitionName}" dans la catégorie ` +
+							`${group.shooterDistance?.name} - ${group.shooterWeapon?.name} - ${group.shooterCategory?.name}.` +
+							`\n\nVoulez-vous tout de même enregistrer ce nouveau tireur ?`,
+						'warning',
+						true
+					);
+
+					if (!confirmed) {
+						this.isSaving = false;
+						return;
+					}
+				}
+			}
+
+			if (this.isEditMode) {
+				await this.updateShooter();
+			} else {
+				await this.createShooter();
+			}
+		} catch (e: any) {
+			this.commonService.showSwalToast(e?.message ?? 'Erreur lors de la validation du formuulaire du tireur', 'error');
+		} finally {
+			this.isSaving = false;
 		}
 	}
 
@@ -314,16 +359,6 @@ export class CreationShooterComponent {
 	 * @returns {Promise<void>} Promesse résolue une fois la mise à jour effectuée.
 	 */
 	async updateShooter(): Promise<void> {
-		this.isSaving = true;
-
-		// Validation des champs
-		this.inputLabelMap = this.commonService.getInputLabelMap(this.inputFields);
-		const areInputsValid = await this.commonService.validateInputs(this.inputLabelMap, false);
-		if (!areInputsValid) {
-			this.isSaving = false;
-			return;
-		}
-
 		try {
 			if (!this.editingShooter?.id) {
 				throw new Error('Aucun tireur sélectionné pour la modification.');
@@ -394,8 +429,6 @@ export class CreationShooterComponent {
 			this.commonService.redirectTo('modification_shooter');
 		} catch (err: any) {
 			this.commonService.showSwalToast(err?.message ?? 'Erreur lors de la mise à jour du tireur', 'error');
-		} finally {
-			this.isSaving = false;
 		}
 	}
 
