@@ -51,8 +51,33 @@
 						<th pSortableColumn="distance" class="!bg-gray-100 hover:dark:!bg-gray-700 hover:!bg-gray-200">
 							<div class="flex items-center">
 								<span class="text-prime-blue dark:text-gray-300 mr-2 whitespace-nowrap">Distance</span>
-								<p-sortIcon field="distance" class="ml-1 mt-[6px] text-gray-500 dark:text-gray-400" />
-								<p-columnFilter type="text" field="distance" display="menu" class="ml-1"></p-columnFilter>
+								<p-sortIcon field="distance" class="ml-1 mt-[6px] text-gray-500 dark:text-gray-400"></p-sortIcon>
+
+								<p-columnFilter
+									field="distance"
+									display="menu"
+									matchMode="in"
+									[showMatchModes]="false"
+									[showOperator]="false"
+									[showAddButton]="false"
+									[showClearButton]="true"
+									class="ml-1"
+								>
+									<ng-template pTemplate="filter" let-value let-filter="filterCallback">
+										<p-multiSelect
+											[options]="distanceOptions"
+											[ngModel]="value"
+											(onChange)="filter($any($event).value)"
+											optionLabel="label"
+											optionValue="value"
+											[showToggleAll]="false"
+											[filter]="false"
+											appendTo="body"
+											placeholder="Toutes les distances"
+											class="min-w-[12rem]"
+										></p-multiSelect>
+									</ng-template>
+								</p-columnFilter>
 							</div>
 						</th>
 						<th pSortableColumn="weapon" class="!bg-gray-100 hover:dark:!bg-gray-700 hover:!bg-gray-200">

@@ -6,11 +6,12 @@ import { Shooter } from '../interfaces/shooter';
 import { SupabaseService } from '../services/supabase.service';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
+import { MultiSelectModule } from 'primeng/multiselect';
 
 @Component({
 	selector: 'app-modification-shooter',
 	standalone: true,
-	imports: [TableModule, CommonModule],
+	imports: [TableModule, CommonModule, MultiSelectModule],
 	templateUrl: './modification_shooter.component.html',
 	schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
@@ -20,6 +21,11 @@ export class ModificationShooterComponent {
 	shooters: Shooter[] = [];
 	nbRowsPerPage: number = 1;
 	isFetchingData: boolean = false;
+	distanceOptions = [
+		{ label: '10 mètres', value: '10 mètres' },
+		{ label: '25 mètres', value: '25 mètres' },
+		{ label: '50 mètres', value: '50 mètres' },
+	];
 
 	async ngOnInit(): Promise<void> {
 		try {
@@ -46,6 +52,14 @@ export class ModificationShooterComponent {
 	@HostListener('window:resize', ['$event'])
 	async onResize(event: any) {
 		this.nbRowsPerPage = await this.commonService.getNbRowsPerPage();
+	}
+
+	onDistanceToggle(checked: boolean, val: string, current: string[] | null | undefined, filterCb: (v: any) => void) {
+		const next = Array.isArray(current) ? [...current] : [];
+		const idx = next.indexOf(val);
+		if (checked && idx === -1) next.push(val);
+		if (!checked && idx >= 0) next.splice(idx, 1);
+		filterCb(next); // applique immédiatement
 	}
 
 	/**
