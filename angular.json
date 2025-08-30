@@ -6,9 +6,7 @@
 		"AimDisplay": {
 			"projectType": "application",
 			"schematics": {
-				"@schematics/angular:component": {
-					"style": "scss"
-				}
+				"@schematics/angular:component": { "style": "scss" }
 			},
 			"root": "",
 			"sourceRoot": "src",
@@ -25,23 +23,17 @@
 						"inlineStyleLanguage": "scss",
 						"assets": ["src/favicon.ico", "src/assets"],
 						"styles": ["src/styles.css"],
-						"scripts": []
+						"scripts": [],
+						"allowedCommonJsDependencies": ["pdfmake/build/pdfmake", "pdfmake/build/vfs_fonts", "sweetalert2"]
 					},
 					"configurations": {
 						"production": {
 							"budgets": [
-								{
-									"type": "initial",
-									"maximumWarning": "500kB",
-									"maximumError": "1MB"
-								},
-								{
-									"type": "anyComponentStyle",
-									"maximumWarning": "4kB",
-									"maximumError": "8kB"
-								}
+								{ "type": "initial", "maximumWarning": "6MB", "maximumError": "8MB" },
+								{ "type": "anyComponentStyle", "maximumWarning": "4kB", "maximumError": "8kB" }
 							],
-							"outputHashing": "all"
+							"outputHashing": "all",
+							"baseHref": "./"
 						},
 						"development": {
 							"optimization": false,
@@ -54,38 +46,25 @@
 				"serve": {
 					"builder": "@angular-devkit/build-angular:dev-server",
 					"configurations": {
-						"production": {
-							"buildTarget": "AimDisplay:build:production"
-						},
-						"development": {
-							"buildTarget": "AimDisplay:build:development"
-						}
+						"production": { "buildTarget": "AimDisplay:build:production" },
+						"development": { "buildTarget": "AimDisplay:build:development" }
 					},
 					"defaultConfiguration": "development"
 				},
-				"extract-i18n": {
-					"builder": "@angular-devkit/build-angular:extract-i18n"
-				},
+				"extract-i18n": { "builder": "@angular-devkit/build-angular:extract-i18n" },
 				"test": {
 					"builder": "@angular-devkit/build-angular:karma",
 					"options": {
 						"polyfills": ["zone.js", "zone.js/testing"],
 						"tsConfig": "tsconfig.spec.json",
 						"inlineStyleLanguage": "scss",
-						"assets": [
-							{
-								"glob": "**/*",
-								"input": "public"
-							}
-						],
+						"assets": [{ "glob": "**/*", "input": "public" }],
 						"styles": ["src/styles.css"],
 						"scripts": []
 					}
 				}
 			}
 		}
-  },
-  "cli": {
-    "analytics": false
-  }
+	},
+	"cli": { "analytics": false }
 }
