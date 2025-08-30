@@ -355,6 +355,51 @@ export class SupabaseService {
 	}
 
 	/**
+	 * Vérifie s'il existe déjà un tireur strictement identique
+	 * (Nom/prénom insensibles à la casse) pour la même compétition/catégorie/distance/arme.
+	 * Optionnellement, exclut un id (utile en édition).
+	 */
+	async existsShooterDuplicate(params: {
+		lastName: string;
+		firstName: string;
+		competitionId: number | undefined;
+		categoryId: number;
+		distanceId: number;
+		weaponId: number;
+		excludeId?: number;
+	}): Promise<boolean> {
+		const { data: userData, error: userError } = await this.supabase.auth.getUser();
+		if (userError) throw new Error(`Impossible de récupérer l'utilisateur: ${userError.message}`);
+		const user = userData?.user;
+		if (!user) throw new Error('Aucun utilisateur connecté.');
+
+		const last = (params.lastName ?? '').trim();
+		const first = (params.firstName ?? '').trim();
+		if (!last || !first) return false;
+
+		let query = this.supabase
+			.from('shooters')
+			// head:true = ne renvoie pas les lignes, juste le count (plus léger)
+			.select('id', { count: 'exact', head: true })
+			.eq('user_id', user.id)
+			.eq('competition_id', params.competitionId)
+			.eq('category_id', params.categoryId)
+			.eq('distance_id', params.distanceId)
+			.eq('weapon_id', params.weaponId)
+			// insensible à la casse : pas de wildcard = "égalité" case-insensitive
+			.ilike('last_name', last)
+			.ilike('first_name', first);
+
+		if (params.excludeId) {
+			query = query.neq('id', params.excludeId);
+		}
+
+		const { count, error } = await query;
+		if (error) throw new Error(`Erreur lors de la vérification d'existence: ${error.message}`);
+		return (count ?? 0) > 0;
+	}
+
+	/**
 	 * Récupère les compétitions de l’utilisateur courant (mappées en camelCase avec dates en Date).
 	 * @param none
 	 * @return La liste des compétitions appartenant à l’utilisateur connecté.
