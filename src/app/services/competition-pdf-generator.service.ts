@@ -318,7 +318,7 @@ export class CompetitionPDFGenerator {
 		const toNum = (x: any) => (x == null || Number.isNaN(Number(x)) ? 0 : Number(x));
 		const money = (n: number) => `${n.toFixed(2)} €`;
 		const keyOfShooter = (s: any) =>
-			s.shooterId ?? s.licenceNumber ?? `${(s.lastName || '').trim().toLowerCase()}|${(s.firstName || '').trim().toLowerCase()}`;
+			s.shooterId ?? `${(s.lastName || '').trim().toLowerCase()}|${(s.firstName || '').trim().toLowerCase()}`;
 
 		// ---- infos compétition (prix)
 		let basePrice = 0,

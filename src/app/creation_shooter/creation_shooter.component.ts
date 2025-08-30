@@ -166,6 +166,72 @@ export class CreationShooterComponent {
 	}
 
 	/**
+	 * Soumet le formulaire du tireur automatiquement entre création et édition selon l’état courant.
+	 *
+	 * @returns {Promise<void>} Promesse résolue lorsque l’opération (création ou mise à jour) est terminée.
+	 */
+	async onSubmitShooter(): Promise<void> {
+		try {
+			this.isSaving = true;
+
+			// Validation des champs
+			this.inputLabelMap = this.commonService.getInputLabelMap(this.inputFields);
+			const areInputsValid = await this.commonService.validateInputs(this.inputLabelMap, false);
+			if (!areInputsValid) {
+				this.isSaving = false;
+				return;
+			}
+
+			const last = (this.shooterLastName ?? '').trim();
+			const first = (this.shooterFirstName ?? '').trim();
+			const competitionName =
+				typeof this.shooterCompetitionName === 'string' ? this.shooterCompetitionName : this.shooterCompetitionName?.name ?? '';
+			const competitionId = this.getIdFromSelection(this.shooterCompetitionName, this.competitions);
+            const clubId = this.getIdFromSelection(this.shooterClubName, this.clubs);
+
+			// Vérification anti-doublon pour CHAQUE groupe demandé
+			for (const group of this.categoryGroups) {
+				const exists = await this.supabase.existsShooterDuplicate({
+					lastName: last,
+					firstName: first,
+					clubId,
+					competitionId,
+					categoryId: group.shooterCategory?.id,
+					distanceId: group.shooterDistance?.id,
+					weaponId: group.shooterWeapon?.id,
+					currentId: this.isEditMode ? this.editingShooter?.id : undefined,
+				});
+
+				if (exists) {
+					const result = await this.commonService.showSwal(
+						'Tireur déjà inscrit',
+						`${last} ${first} est déjà inscrit(e) dans la compétition "${competitionName}" dans la catégorie ` +
+							`${group.shooterDistance?.name} - ${group.shooterWeapon?.name} - ${group.shooterCategory?.name}.` +
+							`\n\nVoulez-vous tout de même enregistrer ce nouveau tireur ?`,
+						'warning',
+						true
+					);
+
+					if (!result.isConfirmed) {
+						this.isSaving = false;
+						return;
+					}
+				}
+			}
+
+			if (this.isEditMode) {
+				await this.updateShooter();
+			} else {
+				await this.createShooter();
+			}
+		} catch (e: any) {
+			this.commonService.showSwalToast(e?.message ?? 'Erreur lors de la validation du formuulaire du tireur', 'error');
+		} finally {
+			this.isSaving = false;
+		}
+	}
+
+	/**
 	 * Permet de créer un tireur à partir des données récoltées dans les champs du formulaire.
 	 * Une phase de validation des inputs est d'abord lancée, puis, si la création réussit,
 	 * on réinitialise les champs de saisie.
@@ -235,76 +301,13 @@ export class CreationShooterComponent {
 					scoreSerie5: null,
 					scoreSerie6: null,
 					isSeniorOrDame: false,
-					_open: false,
+					_open: true,
 				},
 			];
 
 			this.commonService.showSwalToast('Tireur créé avec succès.');
 		} catch (e: any) {
 			this.commonService.showSwalToast(e?.message ?? 'Erreur lors de la création du tireur', 'error');
-		}
-	}
-
-	/**
-	 * Soumet le formulaire du tireur automatiquement entre création et édition selon l’état courant.
-	 *
-	 * @returns {Promise<void>} Promesse résolue lorsque l’opération (création ou mise à jour) est terminée.
-	 */
-	async onSubmitShooter(): Promise<void> {
-		try {
-			this.isSaving = true;
-
-			// Validation des champs
-			this.inputLabelMap = this.commonService.getInputLabelMap(this.inputFields);
-			const areInputsValid = await this.commonService.validateInputs(this.inputLabelMap, false);
-			if (!areInputsValid) {
-				this.isSaving = false;
-				return;
-			}
-
-			const last = (this.shooterLastName ?? '').trim();
-			const first = (this.shooterFirstName ?? '').trim();
-			const competitionName =
-				typeof this.shooterCompetitionName === 'string' ? this.shooterCompetitionName : this.shooterCompetitionName?.name ?? '';
-			const competitionId = this.getIdFromSelection(this.shooterCompetitionName, this.competitions);
-
-			// Vérification anti-doublon pour CHAQUE groupe demandé
-			for (const group of this.categoryGroups) {
-				const exists = await this.supabase.existsShooterDuplicate({
-					lastName: last,
-					firstName: first,
-					competitionId,
-					categoryId: group.shooterCategory?.id,
-					distanceId: group.shooterDistance?.id,
-					weaponId: group.shooterWeapon?.id,
-				});
-
-				if (exists) {
-					const confirmed = await this.commonService.showSwal(
-						'Attention !',
-						`Un tireur ayant le même nom (${last} ${first}) est déjà inscrit dans la compétition "${competitionName}" dans la catégorie ` +
-							`${group.shooterDistance?.name} - ${group.shooterWeapon?.name} - ${group.shooterCategory?.name}.` +
-							`\n\nVoulez-vous tout de même enregistrer ce nouveau tireur ?`,
-						'warning',
-						true
-					);
-
-					if (!confirmed) {
-						this.isSaving = false;
-						return;
-					}
-				}
-			}
-
-			if (this.isEditMode) {
-				await this.updateShooter();
-			} else {
-				await this.createShooter();
-			}
-		} catch (e: any) {
-			this.commonService.showSwalToast(e?.message ?? 'Erreur lors de la validation du formuulaire du tireur', 'error');
-		} finally {
-			this.isSaving = false;
 		}
 	}
 
