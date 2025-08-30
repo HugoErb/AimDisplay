@@ -77,16 +77,16 @@
 			</form>
 
 			<!-- Lien d'inscription -->
-			<div class="mt-8 text-center">
-				<div class="text-gray-600">
-					Vous n'avez pas de compte ?
-					<div
-						(click)="commonService.redirectTo('register')"
-						class="font-medium text-prime-blue hover:text-hover-prime-blue hover:underline cursor-pointer"
-					>
-						Créer un compte
-					</div>
-				</div>
+			<div class="mt-8 flex flex-col items-center">
+				<span class="text-gray-600">Vous n'avez pas de compte ?</span>
+
+				<button
+					type="button"
+					class="font-medium text-prime-blue hover:text-hover-prime-blue hover:underline cursor-pointer"
+					(click)="commonService.redirectTo('register')"
+				>
+					Créer un compte
+				</button>
 			</div>
 		</div>
 	</div>
