@@ -355,18 +355,31 @@ export class SupabaseService {
 	}
 
 	/**
-	 * Vérifie s'il existe déjà un tireur strictement identique
-	 * (Nom/prénom insensibles à la casse) pour la même compétition/catégorie/distance/arme.
-	 * Optionnellement, exclut un id (utile en édition).
+	 * Vérifie l'existence d'un doublon de tireur pour une combinaison précise
+	 * (nom, prénom, club, compétition, catégorie, distance, arme).
+     * 
+	 * @param params - Paramètres d'identification du tireur et du contexte.
+	 * @param params.lastName - Nom du tireur (avant/après espaces supprimés, comparé en `ILIKE`).
+	 * @param params.firstName - Prénom du tireur (idem).
+	 * @param params.clubId - Identifiant du club (obligatoire).
+	 * @param params.competitionId - Identifiant de la compétition (obligatoire).
+	 * @param params.categoryId - Identifiant de la catégorie (obligatoire).
+	 * @param params.distanceId - Identifiant de la distance (obligatoire).
+	 * @param params.weaponId - Identifiant de l'arme (obligatoire).
+	 * @param params.currentId - Identifiant de la ligne en cours d'édition. Si fourni,
+	 *                           applique la règle d'édition décrite ci-dessus.
+	 *
+	 * @returns Promise<boolean> - `true` s'il faut considérer qu'un doublon existe selon les règles ci-dessus.
 	 */
 	async existsShooterDuplicate(params: {
 		lastName: string;
 		firstName: string;
+		clubId: number | undefined;
 		competitionId: number | undefined;
 		categoryId: number;
 		distanceId: number;
 		weaponId: number;
-		excludeId?: number;
+		currentId?: number; // id du tireur en édition
 	}): Promise<boolean> {
 		const { data: userData, error: userError } = await this.supabase.auth.getUser();
 		if (userError) throw new Error(`Impossible de récupérer l'utilisateur: ${userError.message}`);
@@ -377,26 +390,46 @@ export class SupabaseService {
 		const first = (params.firstName ?? '').trim();
 		if (!last || !first) return false;
 
-		let query = this.supabase
+		// 1) Compter toutes les lignes qui matchent les critères cibles (sans exclure l'id courant)
+		const { count: countMatches, error: errCount } = await this.supabase
 			.from('shooters')
-			// head:true = ne renvoie pas les lignes, juste le count (plus léger)
-			.select('id', { count: 'exact', head: true })
+			.select('id', { head: true, count: 'exact' })
 			.eq('user_id', user.id)
+			.eq('club_id', params.clubId)
 			.eq('competition_id', params.competitionId)
 			.eq('category_id', params.categoryId)
 			.eq('distance_id', params.distanceId)
 			.eq('weapon_id', params.weaponId)
-			// insensible à la casse : pas de wildcard = "égalité" case-insensitive
 			.ilike('last_name', last)
 			.ilike('first_name', first);
 
-		if (params.excludeId) {
-			query = query.neq('id', params.excludeId);
+		if (errCount) throw new Error(`Erreur lors du comptage des doublons: ${errCount.message}`);
+		const n = countMatches ?? 0;
+
+		// 2) Création → seuil = 1
+		if (!params.currentId) {
+			return n >= 1;
 		}
 
-		const { count, error } = await query;
-		if (error) throw new Error(`Erreur lors de la vérification d'existence: ${error.message}`);
-		return (count ?? 0) > 0;
+		// 3) Édition → savoir si la ligne courante fait DÉJÀ partie du lot en BDD
+		const { count: selfMatches, error: errSelf } = await this.supabase
+			.from('shooters')
+			.select('id', { head: true, count: 'exact' })
+			.eq('id', params.currentId)
+			.eq('user_id', user.id)
+			.eq('club_id', params.clubId)
+			.eq('competition_id', params.competitionId)
+			.eq('category_id', params.categoryId)
+			.eq('distance_id', params.distanceId)
+			.eq('weapon_id', params.weaponId)
+			.ilike('last_name', last)
+			.ilike('first_name', first);
+
+		if (errSelf) throw new Error(`Erreur lors de la vérification de la ligne courante: ${errSelf.message}`);
+
+		// Si la ligne courante est déjà comptée dans n → seuil 2 ; sinon seuil 1
+		const threshold = (selfMatches ?? 0) > 0 ? 2 : 1;
+		return n >= threshold;
 	}
 
 	/**
