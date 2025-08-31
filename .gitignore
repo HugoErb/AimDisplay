@@ -38,6 +38,7 @@ testem.log
 /typings
 prod/
 .env
+/release/
 
 # System files
 .DS_Store
