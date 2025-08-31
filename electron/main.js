@@ -43,7 +43,7 @@ function createWindow() {
     if (shouldOpenDevtools) win.webContents.openDevTools({ mode: 'detach' });
   } else {
     // Angular 17+ (builder par défaut) -> dist/<app>/browser/index.html
-    const indexPath = path.join(__dirname, '..', 'dist', '<NOM_DU_PROJET>', 'browser', 'index.html');
+    const indexPath = path.join(__dirname, '..', 'dist', '<AimDisplay>', 'browser', 'index.html');
     win.loadFile(indexPath);
   }
 
