@@ -35,6 +35,14 @@
 							"outputHashing": "all",
 							"baseHref": "./"
 						},
+						"electron": {
+							"budgets": [
+								{ "type": "initial", "maximumWarning": "6MB", "maximumError": "8MB" },
+								{ "type": "anyComponentStyle", "maximumWarning": "4kB", "maximumError": "8kB" }
+							],
+							"outputHashing": "all",
+							"baseHref": "./"
+						},
 						"development": {
 							"optimization": false,
 							"extractLicenses": false,
