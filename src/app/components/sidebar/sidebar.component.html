@@ -7,7 +7,7 @@
 		(click)="commonService.redirectTo('home')"
 	>
 		<div class="flex items-center space-x-2">
-			<img src="../../../assets/img/logo.png" alt="Logo" class="h-7 w-7 mr-4" />
+			<img src="../../../assets/img/logo.svg" alt="Logo" class="w-8.5 mr-4" />
 			<div>
 				<h2 class="text-lg font-semibold transition-all duration-500">Aim Display</h2>
 				<p class="text-sm text-gray-500 dark:text-gray-400 transition-all duration-500">Gestion de tir sportif</p>
@@ -148,7 +148,7 @@
 			@let avatarUrl = (avatarUrl$ | async); @if (avatarUrl) {
 			<img [src]="avatarUrl" class="h-10 w-10 rounded-full bg-gray-200 object-cover" alt="Photo du club" />
 			} @else {
-			<img src="../../assets/img/logo.png" alt="Logo Aim Display" class="h-10 w-10 rounded-full bg-gray-200 object-cover" />
+			<img src="../../assets/img/logo.svg" alt="Logo Aim Display" class="h-10 w-10 rounded-full bg-gray-200 object-cover" />
 			}
 			<div class="flex-1 min-w-0">
 				<p class="text-sm font-medium text-gray-700 dark:text-gray-300 transition-all duration-500 truncate">
