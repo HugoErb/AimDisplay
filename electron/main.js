@@ -17,7 +17,7 @@ function assetPathProd(...p) {
 function getWindowIcon() {
   if (isDev) {
     // ton logo pendant le dev
-    return assetPathDev('src', 'assets', 'img', 'logo.png');
+    return assetPathDev('src', 'assets', 'img', 'logo.svg');
   }
   // en prod, privilégie un format adapté à l'OS
   if (process.platform === 'win32') return assetPathProd('icons', 'icon.ico');

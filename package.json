@@ -3,32 +3,39 @@
   "version": "0.0.0",
   "main": "electron/main.js",
   "private": true,
-
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
-
     "electron:dev": "concurrently -k \"ng serve\" \"wait-on http://localhost:4200 && cross-env ELECTRON_ENABLE_LOGGING=1 electron .\"",
     "electron:prod": "npm run build && electron .",
     "pack": "npm run build && electron-builder --dir",
     "dist": "npm run build && electron-builder"
   },
-
   "build": {
     "appId": "com.example.aimdisplay",
     "files": [
       "dist/**/*",
       "electron/**/*"
     ],
-    "directories": { "output": "release" },
-    "win": { "target": "nsis" },
-    "mac": { "category": "public.app-category.productivity" },
-    "linux": { "target": ["AppImage", "deb"] }
+    "directories": {
+      "output": "release"
+    },
+    "win": {
+      "target": "nsis"
+    },
+    "mac": {
+      "category": "public.app-category.productivity"
+    },
+    "linux": {
+      "target": [
+        "AppImage",
+        "deb"
+      ]
+    }
   },
-
   "dependencies": {
     "@angular/common": "^19.2.0",
     "@angular/compiler": "^19.2.0",
@@ -43,6 +50,7 @@
     "@supabase/supabase-js": "^2.53.0",
     "@tailwindcss/postcss": "^4.1.7",
     "axios": "^1.9.0",
+    "electron-updater": "^6.6.2",
     "file-saver": "^2.0.5",
     "iconify-icon": "^3.0.0",
     "pdfmake": "^0.2.20",
@@ -56,7 +64,6 @@
     "tslib": "^2.3.0",
     "zone.js": "~0.15.0"
   },
-
   "devDependencies": {
     "@angular-devkit/build-angular": "^19.2.12",
     "@angular/cli": "^19.2.12",
