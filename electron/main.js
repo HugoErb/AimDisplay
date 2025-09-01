@@ -1,93 +1,60 @@
 // electron/main.js
-const { app, BrowserWindow, protocol } = require('electron');
+const { app, BrowserWindow } = require('electron');
 const path = require('path');
+const fs = require('fs');
 
-const PROJECT_NAME = 'AimDisplay';                 // nom du dossier dans dist/
+const APP_DIR_NAME = 'AimDisplay'; // nom dans dist/
 const isDev = !app.isPackaged;
-const shouldOpenDevtools = process.env.ELECTRON_OPEN_DEVTOOLS === '1';
+const openDevtools = process.env.ELECTRON_OPEN_DEVTOOLS === '0';
 
-// --- Icône fenêtre (dev : SVG du projet, prod : fichiers packagés) ------------
-function getWindowIcon() {
-  if (isDev) {
-    // pendant le dev on peut viser directement ton SVG
-    return path.join(__dirname, '..', 'src', 'assets', 'img', 'logo.svg');
-  }
-  // en prod, vise des icônes copiées par electron-builder dans resources/
-  if (process.platform === 'win32') {
-    return path.join(process.resourcesPath, 'icons', 'icon.ico');
-  }
-  if (process.platform === 'darwin') {
-    return path.join(process.resourcesPath, 'icons', 'icon.icns');
-  }
-  return path.join(process.resourcesPath, 'icons', 'icon.png'); // linux
+// Icône
+function getIcon() {
+  if (isDev) return path.join(__dirname, '..', 'src', 'assets', 'img', 'logo.png'); // ton PNG/SVG en dev
+  if (process.platform === 'win32') return path.join(process.resourcesPath, 'icons', 'icon.ico');
+  if (process.platform === 'darwin') return path.join(process.resourcesPath, 'icons', 'icon.icns');
+  return path.join(process.resourcesPath, 'icons', 'icon.png');
 }
 
-// --- Résolution du répertoire dist (dev/prod) ---------------------------------
-function getDistDir() {
-  // En dev, main.js est dans ./electron → dist est à ../dist/<app>/browser
-  if (isDev) return path.join(__dirname, '..', 'dist', PROJECT_NAME, 'browser');
-  // En prod, main.js est dans resources/app → dist est à ./dist/<app>/browser
-  return path.join(__dirname, 'dist', PROJECT_NAME, 'browser');
+// Où se trouve index.html
+function resolveIndexHtml() {
+  const devPath = path.join(__dirname, '..', 'dist', APP_DIR_NAME, 'browser', 'index.html');
+  const prodPath = path.join(__dirname, 'dist', APP_DIR_NAME, 'browser', 'index.html'); // quand packagé
+  return fs.existsSync(devPath) ? devPath : prodPath;
 }
 
-// --- En prod, on sert via un protocole app:// pour respecter <base href="/"> ---
-protocol.registerSchemesAsPrivileged([
-  { scheme: 'app', privileges: { secure: true, standard: true } },
-]);
-
-function registerAppProtocol(baseDir) {
-  protocol.registerFileProtocol('app', (request, callback) => {
-    try {
-      const url = new URL(request.url);              // ex: app://index.html ou app:///assets/...
-      // normalise et rejoint le chemin demandé dans dist/
-      const target = path.normalize(path.join(baseDir, url.pathname));
-      callback({ path: target });
-    } catch (e) {
-      console.error('Protocol error:', e);
-      callback({ error: -6 }); // net::ERR_FILE_NOT_FOUND
-    }
-  });
-}
-
-// --- Fenêtre ------------------------------------------------------------------
 function createWindow() {
   const win = new BrowserWindow({
-    width: 1200,
+    width: 1280,
     height: 800,
-    icon: getWindowIcon(),
+    icon: getIcon(),
     webPreferences: {
       contextIsolation: true,
       nodeIntegration: false,
       sandbox: true,
-      // si tu as un preload: path.join(__dirname, 'preload.js'),
+      preload: path.join(__dirname, 'preload.js'),
     },
   });
 
+  // Petits logs utiles si ça reste blanc
+  win.webContents.on('did-fail-load', (e, code, desc, url) => {
+    console.error('did-fail-load', code, desc, url);
+  });
+  win.webContents.on('console-message', (e, level, msg) => {
+    console.log('[renderer]', msg);
+  });
+
   if (isDev) {
-    // Dev : serveur Angular
     win.loadURL('http://localhost:4200');
-    if (shouldOpenDevtools) win.webContents.openDevTools({ mode: 'detach' });
+    if (openDevtools) win.webContents.openDevTools({ mode: 'detach' });
   } else {
-    // Prod : fichiers statiques dist/ servis via app://
-    const distDir = getDistDir();
-    registerAppProtocol(distDir);
-    // Charge index via schéma app:// ; <base href="/"> fonctionne
-    win.loadURL('app://index.html');
+    const index = resolveIndexHtml(); // baseHref "./" => OK avec loadFile
+    win.loadFile(index);
   }
 
-  // Menu minimal
   win.removeMenu();
 }
 
-// Pour l’icône barre des tâches Windows
 app.setAppUserModelId('com.aimdisplay.app');
-
 app.whenReady().then(createWindow);
-
-app.on('window-all-closed', () => {
-  if (process.platform !== 'darwin') app.quit();
-});
-
-app.on('activate', () => {
-  if (BrowserWindow.getAllWindows().length === 0) createWindow();
-});
+app.on('window-all-closed', () => { if (process.platform !== 'darwin') app.quit(); });
+app.on('activate', () => { if (BrowserWindow.getAllWindows().length === 0) createWindow(); });
