@@ -1,54 +1,47 @@
 // electron/main.js
-const { app, BrowserWindow, ipcMain, shell } = require('electron');
+const { app, BrowserWindow, ipcMain, shell, Menu } = require('electron');
 const path = require('path');
 const fs = require('fs');
 
 const SCHEME = 'aimdisplay';
-const APP_DIR_NAME = 'AimDisplay'; // le dossier Angular dans dist/
+const APP_ID = 'com.example.aimdisplay'; // aligne avec build.appId dans package.json
+const APP_DIR_NAME = 'AimDisplay'; // nom du dossier Angular dans dist/
 const isDev = !app.isPackaged;
-const shouldOpenDevtools = process.env.ELECTRON_OPEN_DEVTOOLS !== '0';
+const shouldOpenDevtools = isDev && process.env.ELECTRON_OPEN_DEVTOOLS === '1';
 
 let win = null;
 let pendingDeepLink = null;
 
-// ————— util —————
+// ---------- utils ----------
 function sendDeepLink(url) {
   if (!url) return;
   if (win && win.webContents) {
+    if (win.isMinimized()) win.restore();
+    win.focus();
     win.webContents.send('deeplink', url);
   } else {
     pendingDeepLink = url;
   }
 }
 
-// ————— single instance + réception deeplink (Windows/Linux) —————
-const gotLock = app.requestSingleInstanceLock();
-if (!gotLock) app.quit();
+function resolveIndexFile() {
+  // Essaie plusieurs emplacements possibles pour Angular (browser/legacy)
+  const candidates = [
+    path.join(__dirname, '..', 'dist', APP_DIR_NAME, 'browser', 'index.html'),
+    path.join(__dirname, '..', 'dist', APP_DIR_NAME, 'index.html'),
+    path.join(process.resourcesPath, 'dist', APP_DIR_NAME, 'browser', 'index.html'),
+    path.join(process.resourcesPath, 'dist', APP_DIR_NAME, 'index.html'),
+  ];
+  return candidates.find(fs.existsSync);
+}
 
-app.on('second-instance', (_e, argv) => {
-  const urlArg = argv.find(a => typeof a === 'string' && a.startsWith(`${SCHEME}://`));
-  if (urlArg) sendDeepLink(urlArg);
-  if (win) {
-    if (win.isMinimized()) win.restore();
-    win.focus();
-  }
-});
-
-// ————— macOS : ouverture via protocole —————
-app.on('open-url', (event, url) => {
-  event.preventDefault();
-  if (url?.startsWith(`${SCHEME}://`)) sendDeepLink(url);
-});
-
-// ————— API pour le renderer —————
-ipcMain.handle('getInitialDeepLink', () => pendingDeepLink);
-
-// ————— fenêtre —————
+// ---------- window ----------
 function createWindow() {
   win = new BrowserWindow({
     width: 1280,
     height: 800,
     show: false,
+    autoHideMenuBar: true, // cache la barre de menu
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
       contextIsolation: true,
@@ -57,7 +50,29 @@ function createWindow() {
     },
   });
 
-  // Ouvre les liens http(s) à l’extérieur (et ne crée pas de fenêtre blanche)
+  // Supprime le menu (Windows/Linux) et évite l’apparition avec Alt
+  win.setMenuBarVisibility(false);
+  if (process.platform !== 'darwin') win.removeMenu();
+
+  // Charger l'app
+  if (isDev) {
+    // Adapte si tu utilises un port différent en dev
+    win.loadURL('http://localhost:4200').catch(console.error);
+  } else {
+    const indexFile = resolveIndexFile();
+    if (!indexFile) {
+      console.error('[electron] index.html introuvable dans dist/');
+    } else {
+      win.loadFile(indexFile).catch(console.error);
+    }
+  }
+
+  win.once('ready-to-show', () => {
+    win.show();
+    if (shouldOpenDevtools) win.webContents.openDevTools({ mode: 'detach' });
+  });
+
+  // Ouvre les liens http(s) à l’extérieur (évite nouvelles fenêtres blanches)
   win.webContents.setWindowOpenHandler(({ url }) => {
     if (/^https?:\/\//i.test(url)) {
       shell.openExternal(url);
@@ -66,41 +81,58 @@ function createWindow() {
     return { action: 'allow' };
   });
   win.webContents.on('will-navigate', (e, url) => {
-    // bloque les navigations externes
     if (/^https?:\/\//i.test(url)) {
       e.preventDefault();
       shell.openExternal(url);
     }
   });
-
-  win.once('ready-to-show', () => win.show());
-
-  win.webContents.on('did-finish-load', () => {
-    if (shouldOpenDevtools && isDev) win.webContents.openDevTools({ mode: 'detach' });
-    if (pendingDeepLink) {
-      sendDeepLink(pendingDeepLink);
-      pendingDeepLink = null;
-    }
-  });
-
-  if (isDev) {
-    win.loadURL('http://localhost:4200');
-  } else {
-    const p1 = path.join(__dirname, '..', 'dist', APP_DIR_NAME, 'browser', 'index.html');
-    const p2 = path.join(__dirname, 'dist', APP_DIR_NAME, 'browser', 'index.html');
-    win.loadFile(fs.existsSync(p1) ? p1 : p2);
-  }
 }
 
-// ————— ready —————
+// ---------- single instance & deep links ----------
+const gotLock = app.requestSingleInstanceLock();
+if (!gotLock) {
+  app.quit();
+} else {
+  app.on('second-instance', (_event, argv) => {
+    // Windows/Linux : l’URL du protocole arrive dans argv
+    const urlArg = argv.find(a => typeof a === 'string' && a.startsWith(`${SCHEME}://`));
+    if (urlArg) sendDeepLink(urlArg);
+    if (win) {
+      if (win.isMinimized()) win.restore();
+      win.focus();
+    }
+  });
+}
+
+// macOS : deep link quand l’app est fermée
+app.on('open-url', (event, url) => {
+  event.preventDefault();
+  sendDeepLink(url);
+});
+
+// Renderer demande le deeplink initial (si l’app a été lancée par lien)
+ipcMain.handle('getInitialDeepLink', () => {
+  const u = pendingDeepLink;
+  pendingDeepLink = null;
+  return u;
+});
+
+// ---------- ready ----------
 app.whenReady().then(() => {
-  // Nettoie une éventuelle entrée précédente et enregistre le protocole
-  try { app.removeAsDefaultProtocolClient(SCHEME); } catch {}
-  if (isDev && process.platform === 'win32') {
-    app.setAsDefaultProtocolClient(SCHEME, process.execPath, [path.resolve(process.argv[1])]);
-  } else {
-    app.setAsDefaultProtocolClient(SCHEME);
+  // Supprime le menu global (toutes fenêtres)
+  Menu.setApplicationMenu(null);
+
+  // Nécessaire sur Windows pour un enregistrement propre du protocole
+  if (process.platform === 'win32') {
+    app.setAppUserModelId(APP_ID);
   }
+
+  // Enregistre le protocole (dev et prod)
+  try { app.removeAsDefaultProtocolClient(SCHEME); } catch {}
+  const ok = isDev && process.platform === 'win32'
+    ? app.setAsDefaultProtocolClient(SCHEME, process.execPath, [path.resolve(process.argv[1] || '')])
+    : app.setAsDefaultProtocolClient(SCHEME);
+  console.log('[protocol]', SCHEME, ok ? 'registered' : 'failed');
 
   createWindow();
 
