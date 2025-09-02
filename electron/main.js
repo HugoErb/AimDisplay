@@ -1,121 +1,110 @@
 // electron/main.js
-const { app, BrowserWindow, ipcMain } = require('electron');
+const { app, BrowserWindow, ipcMain, shell } = require('electron');
 const path = require('path');
 const fs = require('fs');
 
 const SCHEME = 'aimdisplay';
-const APP_DIR_NAME = 'AimDisplay';              // nom de ton dossier dist
+const APP_DIR_NAME = 'AimDisplay'; // le dossier Angular dans dist/
 const isDev = !app.isPackaged;
-const shouldOpenDevtools = process.env.ELECTRON_OPEN_DEVTOOLS === '1';
+const shouldOpenDevtools = process.env.ELECTRON_OPEN_DEVTOOLS !== '0';
 
-let mainWin = null;
+let win = null;
 let pendingDeepLink = null;
 
-// -------- Utils
-function getIcon() {
-  if (isDev) return path.join(__dirname, '..', 'src', 'assets', 'img', 'logo.png');
-  if (process.platform === 'win32') return path.join(process.resourcesPath, 'icons', 'logo.ico');
-  if (process.platform === 'darwin') return path.join(process.resourcesPath, 'icons', 'logo.icns');
-  return path.join(process.resourcesPath, 'icons', 'logo.png');
-}
-
-function resolveIndexHtml() {
-  // Angular 17+ (builder) -> dist/<app>/browser/index.html
-  const devPath  = path.join(__dirname, '..', 'dist', APP_DIR_NAME, 'browser', 'index.html');
-  const prodPath = path.join(__dirname, 'dist', APP_DIR_NAME, 'browser', 'index.html');
-  return fs.existsSync(devPath) ? devPath : prodPath;
-}
-
+// ————— util —————
 function sendDeepLink(url) {
-  // Envoie l’URL au renderer (Angular) qui fera la navigation / lecture du hash
-  if (mainWin && mainWin.webContents) {
-    mainWin.webContents.send('deeplink', url);
+  if (!url) return;
+  if (win && win.webContents) {
+    win.webContents.send('deeplink', url);
   } else {
-    // si la fenêtre n'est pas encore prête on mémorise
     pendingDeepLink = url;
   }
 }
 
-// -------- Single instance + protocole
+// ————— single instance + réception deeplink (Windows/Linux) —————
 const gotLock = app.requestSingleInstanceLock();
-if (!gotLock) {
-  app.quit();
-} else {
-  // Windows (et Linux) : l’URL est dans argv de la 2e instance
-  app.on('second-instance', (_event, argv) => {
-    const urlArg = argv.find(a => typeof a === 'string' && a.startsWith(`${SCHEME}://`));
-    if (urlArg) sendDeepLink(urlArg);
-    if (mainWin) {
-      if (mainWin.isMinimized()) mainWin.restore();
-      mainWin.focus();
+if (!gotLock) app.quit();
+
+app.on('second-instance', (_e, argv) => {
+  const urlArg = argv.find(a => typeof a === 'string' && a.startsWith(`${SCHEME}://`));
+  if (urlArg) sendDeepLink(urlArg);
+  if (win) {
+    if (win.isMinimized()) win.restore();
+    win.focus();
+  }
+});
+
+// ————— macOS : ouverture via protocole —————
+app.on('open-url', (event, url) => {
+  event.preventDefault();
+  if (url?.startsWith(`${SCHEME}://`)) sendDeepLink(url);
+});
+
+// ————— API pour le renderer —————
+ipcMain.handle('getInitialDeepLink', () => pendingDeepLink);
+
+// ————— fenêtre —————
+function createWindow() {
+  win = new BrowserWindow({
+    width: 1280,
+    height: 800,
+    show: false,
+    webPreferences: {
+      preload: path.join(__dirname, 'preload.js'),
+      contextIsolation: true,
+      nodeIntegration: false,
+      sandbox: true,
+    },
+  });
+
+  // Ouvre les liens http(s) à l’extérieur (et ne crée pas de fenêtre blanche)
+  win.webContents.setWindowOpenHandler(({ url }) => {
+    if (/^https?:\/\//i.test(url)) {
+      shell.openExternal(url);
+      return { action: 'deny' };
+    }
+    return { action: 'allow' };
+  });
+  win.webContents.on('will-navigate', (e, url) => {
+    // bloque les navigations externes
+    if (/^https?:\/\//i.test(url)) {
+      e.preventDefault();
+      shell.openExternal(url);
     }
   });
 
-  // macOS : l’URL arrive ici
-  app.on('open-url', (event, url) => {
-    event.preventDefault();
-    if (url && url.startsWith(`${SCHEME}://`)) sendDeepLink(url);
+  win.once('ready-to-show', () => win.show());
+
+  win.webContents.on('did-finish-load', () => {
+    if (shouldOpenDevtools && isDev) win.webContents.openDevTools({ mode: 'detach' });
+    if (pendingDeepLink) {
+      sendDeepLink(pendingDeepLink);
+      pendingDeepLink = null;
+    }
   });
+
+  if (isDev) {
+    win.loadURL('http://localhost:4200');
+  } else {
+    const p1 = path.join(__dirname, '..', 'dist', APP_DIR_NAME, 'browser', 'index.html');
+    const p2 = path.join(__dirname, 'dist', APP_DIR_NAME, 'browser', 'index.html');
+    win.loadFile(fs.existsSync(p1) ? p1 : p2);
+  }
 }
 
-// S’enregistrer comme handler du schéma custom
-function registerProtocol() {
-  // En dev, Electron est lancé via "electron.exe … app", il faut ces paramètres
+// ————— ready —————
+app.whenReady().then(() => {
+  // Nettoie une éventuelle entrée précédente et enregistre le protocole
+  try { app.removeAsDefaultProtocolClient(SCHEME); } catch {}
   if (isDev && process.platform === 'win32') {
     app.setAsDefaultProtocolClient(SCHEME, process.execPath, [path.resolve(process.argv[1])]);
   } else {
     app.setAsDefaultProtocolClient(SCHEME);
   }
-}
 
-// -------- Fenêtre
-function createWindow() {
-  mainWin = new BrowserWindow({
-    width: 1280,
-    height: 800,
-    icon: getIcon(),
-    webPreferences: {
-      contextIsolation: true,
-      nodeIntegration: false,
-      sandbox: true,
-      preload: path.join(__dirname, 'preload.js'),
-    },
-    show: false, // on montre quand c'est prêt
-  });
-
-  mainWin.once('ready-to-show', () => mainWin.show());
-
-  mainWin.webContents.on('did-fail-load', (_e, code, desc, url) => {
-    console.error('did-fail-load:', code, desc, url);
-  });
-  mainWin.webContents.on('console-message', (_e, level, msg) => {
-    console.log('[renderer]', msg);
-  });
-
-  if (isDev) {
-    mainWin.loadURL('http://localhost:4200');
-    if (shouldOpenDevtools) mainWin.webContents.openDevTools({ mode: 'detach' });
-  } else {
-    const indexPath = resolveIndexHtml(); // baseHref: "./" dans angular.json
-    mainWin.loadFile(indexPath);
-  }
-
-  mainWin.removeMenu();
-
-  // Si un deep-link était arrivé avant la création de la fenêtre
-  if (pendingDeepLink) {
-    sendDeepLink(pendingDeepLink);
-    pendingDeepLink = null;
-  }
-}
-
-app.setAppUserModelId('com.aimdisplay.app');
-
-app.whenReady().then(() => {
-  registerProtocol();
   createWindow();
 
-  // Windows : si l’appli est lancée via un deep-link (premier démarrage)
+  // 1er démarrage via lien (Windows)
   if (process.platform === 'win32') {
     const urlArg = process.argv.find(a => typeof a === 'string' && a.startsWith(`${SCHEME}://`));
     if (urlArg) sendDeepLink(urlArg);
