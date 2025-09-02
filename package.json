@@ -6,6 +6,7 @@
 		"name": "Hugo Eribon",
 		"url": "https://hugoeribon.fr/"
 	},
+	"description": "Une plateforme complète pour organiser, suivre, diffuser et analyser vos compétitions de tir sportif.",
 	"private": true,
 	"scripts": {
 		"ng": "ng",
