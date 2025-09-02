@@ -33,11 +33,24 @@ export class ForgotPasswordComponent {
 			this.inputLabelMap = this.commonService.getInputLabelMap(this.inputFields);
 			const areInputsValid = await this.commonService.validateInputs(this.inputLabelMap, false);
 			if (areInputsValid) {
-				await this.authService.sendPasswordResetEmail(this.email.trim(), 'http://localhost:4200/reset-password');
+				const isElectron = this.isRunningInElectron();
+				const redirectTo = isElectron ? 'aimdisplay://reset-password' : `${window.location.origin}/reset-password`;
+				console.log('redirectTo used:', redirectTo);
+				await this.authService.sendPasswordResetEmail(this.email.trim(), redirectTo);
 				this.commonService.redirectTo('login');
 			}
 		} finally {
 			this.isLoading = false;
 		}
+	}
+
+	/**
+	 * Indique si l’application s’exécute dans un contexte **Electron** (renderer).
+	 *
+	 * @returns {boolean} `true` si l’app tourne dans Electron, sinon `false`.
+	 */
+	isRunningInElectron(): boolean {
+		if ((window as any).electronAPI?.isElectron === true) return true;
+		return /\bElectron\b/i.test(navigator.userAgent);
 	}
 }
