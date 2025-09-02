@@ -35,7 +35,6 @@ export class ForgotPasswordComponent {
 			if (areInputsValid) {
 				const isElectron = this.isRunningInElectron();
 				const redirectTo = isElectron ? 'aimdisplay://reset-password' : `${window.location.origin}/reset-password`;
-				console.log('redirectTo used:', redirectTo);
 				await this.authService.sendPasswordResetEmail(this.email.trim(), redirectTo);
 				this.commonService.redirectTo('login');
 			}
