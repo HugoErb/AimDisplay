@@ -26,6 +26,14 @@
 	},
 	"build": {
 		"appId": "com.example.aimdisplay",
+		"protocols": [
+			{
+				"name": "AimDisplay Links",
+				"schemes": [
+					"aimdisplay"
+				]
+			}
+		],
 		"files": [
 			"dist/**/*",
 			"electron/**/*"

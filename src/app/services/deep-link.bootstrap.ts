@@ -1,0 +1,48 @@
+// src/app/deep-link.bootstrap.ts
+import { inject } from '@angular/core';
+import { Router } from '@angular/router';
+
+declare global {
+	interface Window {
+		deeplink?: {
+			on(cb: (url: string) => void): void;
+			getInitial(): Promise<string | null>;
+		};
+	}
+}
+
+function extractTokens(u: string) {
+	const frag = u.includes('#') ? u.slice(u.indexOf('#') + 1) : u.includes('?') ? u.slice(u.indexOf('?') + 1) : '';
+	const p = new URLSearchParams(frag);
+	return {
+		type: p.get('type'),
+		access: p.get('access_token'),
+		refresh: p.get('refresh_token') ?? undefined,
+	};
+}
+
+export function setupDeepLink(router = inject(Router)) {
+	async function handle(u: string) {
+		const { type, access, refresh } = extractTokens(u);
+		// Supabase envoie type=recovery + tokens après /verify
+		if (type === 'recovery' && access && refresh) {
+			// On passe les tokens en query pour ton composant Reset (qui les lit déjà)
+			await router.navigate(['/reset-password'], {
+				queryParams: { access_token: access, refresh_token: refresh },
+				replaceUrl: true, // évite d’exposer durablement les tokens dans l’historique
+			});
+		}
+	}
+
+	// Démarrage à froid (appli lancée par lien)
+	window.deeplink?.getInitial().then((u) => {
+		if (u) return handle(u); // Promise<void>
+		// sinon, on ne retourne rien => void
+	});
+
+	// Appli déjà ouverte (second clic)
+	window.deeplink?.on((u) => {
+		void handle(u);
+	});
+
+}

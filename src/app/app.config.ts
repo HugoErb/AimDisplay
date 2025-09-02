@@ -10,7 +10,7 @@ import Lara from '@primeng/themes/aura';
 import { definePreset } from '@primeng/themes';
 
 export function HttpLoaderFactory(http: HttpClient) {
-	return new TranslateHttpLoader(http, '.assets/i18n/', '.json');
+	return new TranslateHttpLoader(http, './assets/i18n/', '.json');
 }
 
 const LaraPreset = definePreset(Lara, {
