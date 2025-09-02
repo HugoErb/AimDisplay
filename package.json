@@ -1,7 +1,11 @@
 {
 	"name": "aim-display",
-	"version": "0.0.0",
+	"version": "1.0.0",
 	"main": "electron/main.js",
+	"author": {
+		"name": "Hugo Eribon",
+		"url": "https://hugoeribon.fr/"
+	},
 	"private": true,
 	"scripts": {
 		"ng": "ng",
@@ -30,18 +34,18 @@
 		},
 		"win": {
 			"target": "nsis",
-			"icon": "build/icons/icon.ico"
+			"icon": "electron/icons/logo.ico"
 		},
 		"mac": {
 			"category": "public.app-category.productivity",
-			"icon": "build/icons/icon.icns"
+			"icon": "electron/icons/logo.icns"
 		},
 		"linux": {
 			"target": [
 				"AppImage",
 				"deb"
 			],
-			"icon": "build/icons/icon.png"
+			"icon": "electron/icons/icon.png"
 		}
 	},
 	"dependencies": {
@@ -84,12 +88,16 @@
 		"cross-env": "^10.0.0",
 		"electron": "^37.4.0",
 		"electron-builder": "^26.0.12",
+		"electron-icon-builder": "^2.0.1",
+		"icon-gen": "^5.0.0",
 		"jasmine-core": "~5.6.0",
 		"karma": "~6.4.0",
 		"karma-chrome-launcher": "~3.2.0",
 		"karma-coverage": "~2.2.0",
 		"karma-jasmine": "~5.1.0",
 		"karma-jasmine-html-reporter": "~2.1.0",
+		"png-to-ico": "^3.0.1",
+		"sharp": "^0.34.3",
 		"typescript": "~5.7.2",
 		"wait-on": "^8.0.4"
 	}

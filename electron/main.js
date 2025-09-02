@@ -5,7 +5,7 @@ const fs = require('fs');
 
 const APP_DIR_NAME = 'AimDisplay'; // nom dans dist/
 const isDev = !app.isPackaged;
-const openDevtools = process.env.ELECTRON_OPEN_DEVTOOLS === '0';
+const openDevtools = process.env.ELECTRON_OPEN_DEVTOOLS === '1';
 
 // Icône
 function getIcon() {
