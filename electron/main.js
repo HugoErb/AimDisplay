@@ -35,6 +35,44 @@ function resolveIndexFile() {
   return candidates.find(fs.existsSync);
 }
 
+// ---------- display window (AJOUT) ----------
+function openRankingWindow(competitionId, competitionName) {
+  const route = `/ranking/${encodeURIComponent(competitionId)}/${encodeURIComponent(competitionName)}`;
+
+  const winDisplay = new BrowserWindow({
+    width: 1280,
+    height: 800,
+    show: false,
+    autoHideMenuBar: true,
+    webPreferences: {
+      preload: path.join(__dirname, 'preload.js'),
+      contextIsolation: true,
+      nodeIntegration: false,
+      sandbox: true,
+    },
+  });
+
+  // cache le menu de cette fenêtre
+  winDisplay.setMenuBarVisibility(false);
+  if (process.platform !== 'darwin') winDisplay.removeMenu();
+
+  if (isDev) {
+    // DEV : on passe la route au dev-server via ?route=...
+    winDisplay.loadURL(`http://localhost:4200/#${route}`); 
+  } else {
+    // PROD : on charge index.html avec la query ?route=...
+    const indexFile = resolveIndexFile();
+    if (!indexFile) {
+      console.error('[display] index.html introuvable');
+    } else {
+      winDisplay.loadFile(indexFile, { hash: route });
+    }
+  }
+
+  winDisplay.once('ready-to-show', () => { winDisplay.maximize(); winDisplay.show(); });
+  return winDisplay;
+}
+
 // ---------- window ----------
 function createWindow() {
   win = new BrowserWindow({
@@ -115,6 +153,11 @@ ipcMain.handle('getInitialDeepLink', () => {
   const u = pendingDeepLink;
   pendingDeepLink = null;
   return u;
+});
+
+// (AJOUT) Ouvrir la fenêtre "ranking" depuis le renderer
+ipcMain.handle('display-open-ranking', async (_evt, { competitionId, competitionName }) => {
+  openRankingWindow(competitionId, competitionName);
 });
 
 // ---------- ready ----------

@@ -7,5 +7,10 @@ contextBridge.exposeInMainWorld('deeplink', {
   getInitial: () => ipcRenderer.invoke('getInitialDeepLink'),
 });
 
+contextBridge.exposeInMainWorld('display', {
+  openRanking: (competitionId, competitionName) =>
+    ipcRenderer.invoke('display-open-ranking', { competitionId, competitionName }),
+});
+
 // (optionnel mais pratique) détecter Electron côté Angular
 contextBridge.exposeInMainWorld('electronAPI', { isElectron: true });
