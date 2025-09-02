@@ -8,6 +8,12 @@ import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Location } from '@angular/common';
 
+declare global {
+	interface Window {
+		display?: { openRanking: (competitionId: string, competitionName: string) => Promise<void> };
+	}
+}
+
 @Component({
 	selector: 'app-display',
 	standalone: true,
@@ -54,8 +60,12 @@ export class DisplayComponent {
 		const tree = this.router.createUrlTree(['/ranking', id, name]);
 		const url = this.location.prepareExternalUrl(this.router.serializeUrl(tree));
 
-		// Ouvrir dans un nouvel onglet
-		window.open(url, '_blank');
+		// Ouvrir dans un nouvel onglet / ou nouvelle fenêtre Electron
+		if (window.display?.openRanking) {
+			void window.display.openRanking(String(id), String(name)); // Electron (nouvelle BrowserWindow)
+		} else {
+			window.open(url, '_blank'); // Fallback Web
+		}
 
 		// Reset local
 		this.commonService.resetInputFields(this.inputFields);
