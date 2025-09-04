@@ -88,13 +88,12 @@ export class AuthService implements OnDestroy {
 	 * @returns {Promise<void>}  Ne retourne rien en cas de succès.
 	 */
 	async signUp(email: string, password: string, displayName: string): Promise<void> {
-		// Deep link si on est dans l’app Electron ; fallback web sinon
 		const isElectron = !!(window as any).deeplink || !!(window as any).electronAPI?.isElectron;
 		const redirectTo = isElectron
-			? 'aimdisplay://auth-callback'
-			: `${window.location.origin}/login`;
+			? 'aimdisplay://auth-callback' // deep link Electron (déjà ajouté aux Redirect URLs)
+			: `${window.location.origin}/login`; // fallback web
 
-		const { error } = await this.supabase.auth.signUp({
+		const { data, error } = await this.supabase.auth.signUp({
 			email,
 			password,
 			options: {
@@ -108,14 +107,33 @@ export class AuthService implements OnDestroy {
 			throw error;
 		}
 
+		// Cas "email déjà utilisé" (Supabase renvoie identities = [])
+		const alreadyRegistered = !!data?.user && Array.isArray((data.user as any).identities) && (data.user as any).identities.length === 0;
+
+		if (alreadyRegistered) {
+			// Renvoyer de l’e-mail de confirmation
+			try {
+				await this.supabase.auth.resend({
+					type: 'signup',
+					email,
+					options: { emailRedirectTo: redirectTo },
+				});
+			} catch {
+				/* ignore */
+			}
+
+			return;
+		}
+
+		// Flux normal (nouvel utilisateur)
 		this.commonService.showSwal(
 			'Inscription réussie !',
-			"Vérifiez votre boîte mail afin de valider votre adresse email. N'oubliez pas de vérifier vos spam !",
+			"Vérifiez votre boîte mail afin de valider votre adresse e-mail. N'oubliez pas de vérifier vos spams !",
 			'success',
 			false
 		);
 
-		// On déconnecte l'utilisateur pour qu'il doive confirmer son email
+		// On déconnecte pour forcer la validation e-mail avant 1re connexion
 		await this.supabase.auth.signOut();
 	}
 
