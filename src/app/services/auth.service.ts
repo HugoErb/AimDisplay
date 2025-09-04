@@ -88,23 +88,33 @@ export class AuthService implements OnDestroy {
 	 * @returns {Promise<void>}  Ne retourne rien en cas de succès.
 	 */
 	async signUp(email: string, password: string, displayName: string): Promise<void> {
+		// Deep link si on est dans l’app Electron ; fallback web sinon
+		const isElectron = !!(window as any).deeplink || !!(window as any).electronAPI?.isElectron;
+		const redirectTo = isElectron
+			? 'aimdisplay://auth-callback'
+			: `${window.location.origin}/login`;
+
 		const { error } = await this.supabase.auth.signUp({
 			email,
 			password,
 			options: {
 				data: { displayName },
+				emailRedirectTo: redirectTo,
 			},
 		});
+
 		if (error) {
 			this.commonService.showSwalToast(this.mapAuthError(error, 'signup'), 'error');
 			throw error;
 		}
+
 		this.commonService.showSwal(
 			'Inscription réussie !',
 			"Vérifiez votre boîte mail afin de valider votre adresse email. N'oubliez pas de vérifier vos spam !",
 			'success',
 			false
 		);
+
 		// On déconnecte l'utilisateur pour qu'il doive confirmer son email
 		await this.supabase.auth.signOut();
 	}
