@@ -4,7 +4,7 @@ import { createClient, SupabaseClient, User } from '@supabase/supabase-js';
 import { environment } from '../../environments/environment';
 import { CommonService } from '../services/common.service';
 import { ThemeService } from '../services/theme.service';
-import { AuthApiError } from '@supabase/supabase-js';
+import { isAuthApiError, AuthApiError, AuthWeakPasswordError } from '@supabase/supabase-js';
 import { Router } from '@angular/router';
 
 @Injectable({ providedIn: 'root' })
@@ -121,11 +121,9 @@ export class AuthService implements OnDestroy {
 			} catch {
 				/* ignore */
 			}
-
-			return;
 		}
 
-		// Flux normal (nouvel utilisateur)
+		// Message OK
 		this.commonService.showSwal(
 			'Inscription réussie !',
 			"Vérifiez votre boîte mail afin de valider votre adresse e-mail. N'oubliez pas de vérifier vos spams !",
@@ -483,51 +481,66 @@ export class AuthService implements OnDestroy {
 	 * @param ctx - Contexte d’utilisation : `'signin'` ou `'signup'`.
 	 * @returns Message utilisateur (fr) adapté à l’erreur et au contexte.
 	 */
-	private mapAuthError(err: any, ctx: 'signin' | 'signup'): string {
-		const status = err?.status ?? err?.code ?? null;
-		const msg = (err?.message || '').toLowerCase();
+	private mapAuthError(err: unknown, ctx: 'signin' | 'signup'): string {
+		const msg = String((err as any)?.message ?? '').toLowerCase();
+		const status = (err as any)?.status ?? null;
 
 		// Réseau / offline
 		if (msg.includes('failed to fetch') || msg.includes('network') || status === 0) {
 			return 'Problème de connexion réseau. Réessayez.';
 		}
 
-		// Classes/Status Supabase
-		if (err instanceof AuthApiError) {
-			switch (err.status) {
-				case 401:
-					if (msg.includes('invalid login')) return 'Email ou mot de passe invalide';
-					if (msg.includes('email not confirmed')) return 'Adresse email non vérifiée';
-					return 'Authentification refusée';
-				case 400:
-					if (msg.includes('password sign-in is disabled')) return 'La connexion par mot de passe est désactivée';
-					if (msg.includes('password should be')) return 'Mot de passe trop faible';
-					if (msg.includes('invalid email')) return 'Adresse email invalide';
-					return 'Requête invalide';
-				case 403:
-					if (msg.includes('banned')) return 'Compte bloqué';
-					if (msg.includes('signups not allowed')) return 'Les inscriptions sont désactivées';
-					return 'Accès refusé';
-				case 409:
-					if (ctx === 'signup' && msg.includes('already')) return 'Email déjà utilisé';
-					return 'Conflit de données';
-				case 422:
-					if (msg.includes('invalid email')) return 'Adresse email invalide';
-					return 'Données invalides';
-				case 429:
+		// --- Voie principale : codes d'erreur officiels
+		if (isAuthApiError(err)) {
+			const e = err as AuthApiError;
+			switch (e.code) {
+				case 'invalid_credentials': // mauvais email/mot de passe
+					return 'Email ou mot de passe invalide';
+				case 'email_not_confirmed': // email non vérifié
+					return 'Adresse e-mail non vérifiée';
+				case 'email_address_invalid':
+				case 'validation_failed': // format email invalide / champs invalides
+					return 'Adresse e-mail invalide';
+				case 'weak_password': {
+					// mot de passe trop faible
+					if (err instanceof AuthWeakPasswordError) {
+						const reasons = (err as any).weak_password?.reasons ?? (err as any).reasons ?? [];
+						if (Array.isArray(reasons) && reasons.includes('length')) return 'Mot de passe trop court';
+						if (Array.isArray(reasons) && reasons.includes('characters')) return 'Mot de passe trop faible';
+						if (Array.isArray(reasons) && reasons.includes('pwned')) return 'Mot de passe compromis (trop courant)';
+					}
+					return 'Mot de passe trop faible';
+				}
+				case 'email_provider_disabled':
+				case 'signup_disabled':
+					return 'Les inscriptions par e-mail sont désactivées';
+				case 'over_request_rate_limit':
+				case 'over_email_send_rate_limit':
 					return 'Trop de tentatives. Réessayez dans quelques minutes.';
+				case 'user_banned':
+					return 'Compte bloqué';
+				case 'reauthentication_needed':
+					return 'Veuillez vous reconnecter pour effectuer cette action.';
+				case 'user_already_exists':
+				case 'email_exists': // peut arriver sur quelques flux admin
+					return ctx === 'signup' ? 'Email déjà utilisé' : 'Conflit de données';
 				default:
-					if (err.status >= 500) return 'Erreur serveur. Réessayez plus tard.';
+					if (typeof e.status === 'number') {
+						if (e.status >= 500) return 'Erreur serveur. Réessayez plus tard.';
+						if (e.status === 403) return 'Accès refusé';
+						if (e.status === 422) return 'Données invalides';
+						if (e.status === 401) return 'Authentification refusée';
+					}
 			}
 		}
 
-		// Autres mots-clés
-		if (msg.includes('mfa required')) return 'Vérification à deux facteurs requise';
-		if (msg.includes('email not confirmed')) return 'Adresse email non vérifiée';
-		if (ctx === 'signin' && msg.includes('invalid login')) return 'Email ou mot de passe invalide';
-		if (ctx === 'signup' && msg.includes('already')) return 'Email déjà utilisé';
+		// --- Fallback (anciens messages en clair que l’on rencontre encore parfois)
+		if (msg.includes('invalid login')) return 'Email ou mot de passe invalide';
+		if (msg.includes('not confirmed')) return 'Adresse e-mail non vérifiée';
+		if (msg.includes('password sign-in is disabled')) return 'La connexion par mot de passe est désactivée';
+		if (msg.includes('rate limit')) return 'Trop de tentatives. Réessayez dans quelques minutes.';
 
-		// Fallback
+		// Dernier recours
 		return ctx === 'signin' ? 'Échec de connexion' : "Échec de l'inscription";
 	}
 }
