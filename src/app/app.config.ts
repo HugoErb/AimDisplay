@@ -8,6 +8,8 @@ import { routes } from './app.routes';
 import { providePrimeNG } from 'primeng/config';
 import Lara from '@primeng/themes/aura';
 import { definePreset } from '@primeng/themes';
+import { provideAppInitializer } from '@angular/core';
+import { setupDeepLink } from './services/deep-link.bootstrap';
 
 export function HttpLoaderFactory(http: HttpClient) {
 	return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -53,5 +55,6 @@ export const appConfig: ApplicationConfig = {
 				},
 			})
 		),
+		provideAppInitializer(() => setupDeepLink()),
 	],
 };
