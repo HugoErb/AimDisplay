@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { InputTextModule } from 'primeng/inputtext';
 import { CommonService } from '../services/common.service';
 import { AuthService } from '../services/auth.service';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
 	selector: 'app-login',
@@ -13,7 +14,7 @@ import { AuthService } from '../services/auth.service';
 	schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class LoginComponent {
-	constructor(protected commonService: CommonService, protected authService: AuthService) {}
+	constructor(protected commonService: CommonService, protected authService: AuthService, private route: ActivatedRoute, private router: Router) {}
 
 	@ViewChildren('inputField', { read: ElementRef }) inputFields!: QueryList<ElementRef>;
 	public inputLabelMap = new Map<string, string>();
@@ -21,6 +22,20 @@ export class LoginComponent {
 	email: string = '';
 	password: string = '';
 	isLoading: boolean = false;
+
+	ngOnInit() {
+		this.route.queryParamMap.subscribe((q) => {
+			if (q.get('verified') === '1') {
+				this.commonService.showSwal(
+					'Adresse e-mail validée',
+					'Votre adresse e-mail a bien été confirmée. Vous pouvez dès à présent vous connecter.',
+					'success',
+					false
+				);
+				this.router.navigate([], { queryParams: {}, replaceUrl: true });
+			}
+		});
+	}
 
 	/**
 	 * Permet de se connecter à partir des données récoltées dans les champs du formulaire.

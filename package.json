@@ -43,7 +43,8 @@
 		},
 		"win": {
 			"target": "nsis",
-			"icon": "electron/icons/logo.ico"
+			"icon": "electron/icons/logo.ico",
+			"artifactName": "aim-display-Setup-${version}.${ext}"
 		},
 		"mac": {
 			"category": "public.app-category.productivity",

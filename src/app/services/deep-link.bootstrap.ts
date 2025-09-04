@@ -24,25 +24,32 @@ function extractTokens(u: string) {
 export function setupDeepLink(router = inject(Router)) {
 	async function handle(u: string) {
 		const { type, access, refresh } = extractTokens(u);
-		// Supabase envoie type=recovery + tokens après /verify
+
+		// Email confirmation
+		if (type === 'signup') {
+			await router.navigate(['/login'], { queryParams: { verified: 1 }, replaceUrl: true });
+			return;
+		}
+
+		// Reset password (réception des tokens)
 		if (type === 'recovery' && access && refresh) {
-			// On passe les tokens en query pour ton composant Reset (qui les lit déjà)
 			await router.navigate(['/reset-password'], {
 				queryParams: { access_token: access, refresh_token: refresh },
-				replaceUrl: true, // évite d’exposer durablement les tokens dans l’historique
+				replaceUrl: true,
 			});
+			return;
 		}
 	}
 
 	// Démarrage à froid (appli lancée par lien)
 	window.deeplink?.getInitial().then((u) => {
-		if (u) return handle(u); // Promise<void>
-		// sinon, on ne retourne rien => void
+		if (u) {
+			void handle(u);
+		}
 	});
 
 	// Appli déjà ouverte (second clic)
 	window.deeplink?.on((u) => {
 		void handle(u);
 	});
-
 }
