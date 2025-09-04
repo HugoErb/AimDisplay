@@ -1,5 +1,6 @@
 {
 	"name": "aim-display",
+	"productName": "Aim Display",
 	"version": "1.0.0",
 	"main": "electron/main.js",
 	"author": {
@@ -62,6 +63,9 @@
 				"deb"
 			],
 			"icon": "electron/icons/icon.png"
+		},
+		"nsis": {
+			"shortcutName": "Aim Display"
 		}
 	},
 	"dependencies": {
