@@ -94,7 +94,8 @@ export class CommonService {
 			.trim()
 			.toLowerCase()
 			.normalize('NFD')
-			.replace(/[\u0300-\u036f]/g, ''); // retire les accents
+			.replace(/[\u0300-\u036f]/g, '') // accents
+			.replace(/\s+/g, ''); // supprime les espaces
 
 		const sixSeriesCategories = ['senior', 'dame', 'minime', 'cadet', 'junior'];
 

@@ -149,7 +149,13 @@ export class CreationShooterComponent {
 	 * @param group - Le groupe de saisie auquel appartient la catégorie sélectionnée
 	 */
 	onCategorySelected(selectedShooterCategory: any, group: CategoryGroup): void {
-		group.hasSixSeries = this.commonService.hasSixSeriesCategory(selectedShooterCategory);
+        const rawName =
+			selectedShooterCategory?.value?.name ?? // event PrimeNG
+			selectedShooterCategory?.name ?? // objet direct { name: ... }
+			selectedShooterCategory ?? // string directe
+			'';
+
+		group.hasSixSeries = this.commonService.hasSixSeriesCategory(rawName);
 	}
 
 	/**
