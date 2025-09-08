@@ -58,7 +58,7 @@ export class ShooterPDFGenerator {
 
 	private isSixSeriesRow(r: Shooter): boolean {
 		const cat = this.norm(r.categoryName);
-		const byCategory = cat.startsWith('dame') || cat.startsWith('senior');
+		const byCategory = this.commonService.hasSixSeriesCategory(cat);
 		const hasS56 = r.scoreSerie5 != null || r.scoreSerie6 != null;
 		return byCategory || !!hasS56;
 	}

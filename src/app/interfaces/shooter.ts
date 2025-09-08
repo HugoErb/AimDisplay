@@ -18,4 +18,4 @@ export interface Shooter {
 	userId: string;
 }
 
-export type RankedShooter = Shooter & { rank: number; isSeniorOrDame: boolean };
+export type RankedShooter = Shooter & { rank: number; hasSixSeries: boolean };
