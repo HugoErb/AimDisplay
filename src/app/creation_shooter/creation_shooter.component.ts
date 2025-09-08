@@ -119,7 +119,7 @@ export class CreationShooterComponent {
 			scoreSerie4: null,
 			scoreSerie5: null,
 			scoreSerie6: null,
-			isSeniorOrDame: false,
+			hasSixSeries: false,
 			_open: true, // visible par défaut (édition)
 			...partial,
 		};
@@ -139,8 +139,8 @@ export class CreationShooterComponent {
 	}
 
 	/**
-	 * Détermine si la catégorie sélectionnée correspond à un tireur de type "Dame" ou "Sénior"
-	 * et met à jour dynamiquement le champ `isSeniorOrDame` dans le groupe de catégories.
+	 * Détermine si la catégorie sélectionnée correspond à une catégorie à six séries
+	 * et met à jour dynamiquement le champ `hasSixSeries` dans le groupe de catégories.
 	 *
 	 * Cette méthode est appelée lors de la sélection d'une catégorie via l'autocomplétion.
 	 * Elle permet de conditionner l'affichage des séries 5 et 6 uniquement pour ces catégories.
@@ -149,20 +149,7 @@ export class CreationShooterComponent {
 	 * @param group - Le groupe de saisie auquel appartient la catégorie sélectionnée
 	 */
 	onCategorySelected(selectedShooterCategory: any, group: CategoryGroup): void {
-		const rawName =
-			selectedShooterCategory?.value?.name ?? // event PrimeNG
-			selectedShooterCategory?.name ?? // objet direct { name: ... }
-			selectedShooterCategory ?? // string directe
-			'';
-
-		const normalizedName = String(rawName)
-			.trim()
-			.toLowerCase()
-			.normalize('NFD')
-			.replace(/[\u0300-\u036f]/g, ''); // retire les accents
-
-		const pattern = /\b(dame|senior)\b/;
-		group.isSeniorOrDame = pattern.test(normalizedName);
+		group.hasSixSeries = this.commonService.hasSixSeriesCategory(selectedShooterCategory);
 	}
 
 	/**
@@ -187,7 +174,7 @@ export class CreationShooterComponent {
 			const competitionName =
 				typeof this.shooterCompetitionName === 'string' ? this.shooterCompetitionName : this.shooterCompetitionName?.name ?? '';
 			const competitionId = this.getIdFromSelection(this.shooterCompetitionName, this.competitions);
-            const clubId = this.getIdFromSelection(this.shooterClubName, this.clubs);
+			const clubId = this.getIdFromSelection(this.shooterClubName, this.clubs);
 
 			// Vérification anti-doublon pour CHAQUE groupe demandé
 			for (const group of this.categoryGroups) {
@@ -268,8 +255,8 @@ export class CreationShooterComponent {
 					categoryGroup.scoreSerie2 != null ? categoryGroup.scoreSerie2 : null,
 					categoryGroup.scoreSerie3 != null ? categoryGroup.scoreSerie3 : null,
 					categoryGroup.scoreSerie4 != null ? categoryGroup.scoreSerie4 : null,
-					categoryGroup.isSeniorOrDame ? (categoryGroup.scoreSerie5 != null ? categoryGroup.scoreSerie5 : null) : null,
-					categoryGroup.isSeniorOrDame ? (categoryGroup.scoreSerie6 != null ? categoryGroup.scoreSerie6 : null) : null,
+					categoryGroup.hasSixSeries ? (categoryGroup.scoreSerie5 != null ? categoryGroup.scoreSerie5 : null) : null,
+					categoryGroup.hasSixSeries ? (categoryGroup.scoreSerie6 != null ? categoryGroup.scoreSerie6 : null) : null,
 				];
 
 				await this.supabase.createShooter({
@@ -300,7 +287,7 @@ export class CreationShooterComponent {
 					scoreSerie4: null,
 					scoreSerie5: null,
 					scoreSerie6: null,
-					isSeniorOrDame: false,
+					hasSixSeries: false,
 					_open: true,
 				},
 			];
@@ -332,7 +319,7 @@ export class CreationShooterComponent {
 		const weaponObj = findByName(shooter.weapon, this.weapons);
 		const categoryObj = findByName(shooter.categoryName, this.shooterCategories);
 
-		const isSeniorOrDame = /\b(Dame|Sénior)\b/i.test(shooter.categoryName || '');
+		const hasSixSeries = this.commonService.hasSixSeriesCategory(shooter.categoryName);
 
 		this.categoryGroups = [
 			{
@@ -345,12 +332,12 @@ export class CreationShooterComponent {
 				scoreSerie4: shooter.scoreSerie4 ?? null,
 				scoreSerie5: shooter.scoreSerie5 ?? null,
 				scoreSerie6: shooter.scoreSerie6 ?? null,
-				isSeniorOrDame,
+				hasSixSeries,
 				_open: false,
 			},
 		];
 
-		// Affichage série 5/6 si Dame/Senior
+		// Affichage série 5/6
 		this.onCategorySelected({ value: this.categoryGroups[0].shooterCategory }, this.categoryGroups[0]);
 	}
 
@@ -396,9 +383,9 @@ export class CreationShooterComponent {
 				throw new Error('Veuillez sélectionner une distance, une arme et une catégorie valides.');
 			}
 
-			// Détermine si la catégorie est "Dame" ou "Sénior" (on accepte Senior/Sénior)
+			// Détermine si la catégorie à 6 séries
 			const selectedCategoryName = typeof group.shooterCategory === 'object' ? group.shooterCategory?.name ?? '' : group.shooterCategory ?? '';
-			const isSeniorOrDame = /\b(Dame|S[ée]nior)\b/i.test(selectedCategoryName);
+			const hasSixSeries = this.commonService.hasSixSeriesCategory(selectedCategoryName);
 
 			// Séries → nombre ou null (jamais 0 par défaut)
 			const toNullableNumber = (v: any): number | null => (typeof v === 'number' && isFinite(v) ? v : null);
@@ -407,8 +394,8 @@ export class CreationShooterComponent {
 			const serie2Score = toNullableNumber(group.scoreSerie2);
 			const serie3Score = toNullableNumber(group.scoreSerie3);
 			const serie4Score = toNullableNumber(group.scoreSerie4);
-			const serie5Score = isSeniorOrDame ? toNullableNumber(group.scoreSerie5) : null;
-			const serie6Score = isSeniorOrDame ? toNullableNumber(group.scoreSerie6) : null;
+			const serie5Score = hasSixSeries ? toNullableNumber(group.scoreSerie5) : null;
+			const serie6Score = hasSixSeries ? toNullableNumber(group.scoreSerie6) : null;
 
 			// Appel service (implémente updateShooterById côté Supabase : mapping colonnes BDD)
 			await this.supabase.updateShooterById(this.editingShooter.id, {

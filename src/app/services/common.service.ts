@@ -84,21 +84,21 @@ export class CommonService {
 	}
 
 	/**
-	 * Renvoie un message d'erreur correspondant au code d'erreur fourni.
+	 * Détermine si un libellé correspond à une catégorie à 6 séries.
 	 *
-	 * @param {string} errorCode - Le code d'erreur retourné par le service d'authentification.
-	 * @returns {string} - Le message d'erreur correspondant.
+	 * @param {string} categoryName - Libellé de la catégorie (ex. "Senior 1", "Dame 2").
+	 * @returns {boolean} `true` si la catégorie est à 6 séries., sinon `false`.
 	 */
-	getErrorMessage(errorCode: string): string {
-		const errorMessages: { [key: string]: string } = {
-			'auth/wrong-password': 'Le mot de passe actuel est incorrect.',
-			'auth/weak-password': 'Le nouveau mot de passe est trop faible.',
-			'auth/requires-recent-login': 'Cette opération nécessite une connexion récente. Veuillez vous reconnecter et réessayer.',
-			'auth/invalid-email': "L'adresse email n'est pas valide.",
-			'auth/user-not-found': 'Aucun utilisateur trouvé avec cette adresse email.',
-		};
+	hasSixSeriesCategory(categoryName: string): boolean {
+		const normalizedName = String(categoryName)
+			.trim()
+			.toLowerCase()
+			.normalize('NFD')
+			.replace(/[\u0300-\u036f]/g, ''); // retire les accents
 
-		return errorMessages[errorCode] || 'Une erreur est survenue. Veuillez réessayer.';
+		const sixSeriesCategories = ['senior', 'dame', 'minime', 'cadet', 'junior'];
+
+		return sixSeriesCategories.some((cat) => normalizedName?.includes(cat));
 	}
 
 	/**

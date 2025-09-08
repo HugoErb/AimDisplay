@@ -47,7 +47,7 @@ export class CompetitionPDFGenerator {
 			// 2) Construit le contenu (une carte par groupe)
 			const content: Content[] = [];
 			groups.forEach((g, idx) => {
-				const useSix = this.isSixSeriesCategory(g.category); // 4 ou 6 séries selon catégorie
+				const useSix = this.commonService.hasSixSeriesCategory(g.category); // 4 ou 6 séries selon catégorie
 				const ordered = [...g.shooters].sort((a, b) => this.compareShooters(a, b, useSix)); // départage
 
 				const title = `${g.distance} • ${g.category} • ${g.weapon}`;
@@ -125,18 +125,6 @@ export class CompetitionPDFGenerator {
 		}
 	}
 
-	/** true si la catégorie doit afficher 6 séries (Dame ou Sénior) */
-	private isSixSeriesCategory(category: string): boolean {
-		if (!category) return false;
-		const c = category
-			.normalize('NFD') // retire les accents
-			.replace(/[\u0300-\u036f]/g, '')
-			.toLowerCase()
-			.trim();
-		// ex: "dame", "dame 1", "senior", "senior 2", "sénior 3", etc.
-		return c.startsWith('dame') || c.startsWith('senior');
-	}
-
 	/**
 	 * Construit un bloc "carte de classement" : bandeau bleu + tableau des tireurs.
 	 *
@@ -145,7 +133,7 @@ export class CompetitionPDFGenerator {
 	 * - Le BANDEAU seul est non-cassable (unbreakable) pour éviter qu'il reste orphelin.
 	 * - Le TABLEAU est cassable (pas d'unbreakable global), ce qui supprime la
 	 *   page blanche finale quand le tableau dépasse une page.
-	 * - Détection automatique 4/6 séries selon la catégorie (Dame/Sénior → 6).
+	 * - Détection automatique 4/6 séries selon la catégorie.
 	 * - `keepWithHeaderRows: 1` évite qu'un header soit imprimé en bas de page sans ligne dessous.
 	 *
 	 * @param title  Titre à afficher dans le bandeau (ex. "25 m • Sénior • Pistolet").
@@ -153,7 +141,7 @@ export class CompetitionPDFGenerator {
 	 * @return       Un noeud pdfMake à pousser dans `content`.
 	 */
 	private buildGroupCard(title: string, rows: Shooter[]): Content {
-		const showSix = this.isSixSeriesCategory(rows[0]?.categoryName ?? '');
+		const showSix = this.commonService.hasSixSeriesCategory(rows[0]?.categoryName ?? '');
 
 		// En-têtes dynamiques
 		const headerRow: Cell[] = [
@@ -388,7 +376,7 @@ export class CompetitionPDFGenerator {
 		const avgPerShooter = uniqueShooters ? totalRevenue / uniqueShooters : 0;
 
 		// ---- stats de scores séparées 4 séries / 6 séries
-		const is6 = (s: Shooter) => this.isSixSeriesCategory(s.categoryName ?? '');
+		const is6 = (s: Shooter) => this.commonService.hasSixSeriesCategory(s.categoryName ?? '');
 		const shooters6 = shooters.filter(is6);
 		const shooters4 = shooters.filter((s) => !is6(s));
 		const scoreStats = (arr: Shooter[]) => {

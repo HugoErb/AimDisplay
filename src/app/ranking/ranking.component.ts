@@ -156,10 +156,10 @@ export class RankingComponent implements OnInit, OnDestroy {
 		for (const [key, list] of buckets) {
 			const [distance, weapon, category] = key.split('|||');
 
-			// Enrichissement : ajoute isSeniorOrDame et rang par défaut
+			// Enrichissement : ajoute hasSixSeries et rang par défaut
 			const enriched: RankedShooter[] = list.map((s) => ({
 				...s,
-				isSeniorOrDame: this.isSeniorOrDameCategory(s.categoryName),
+				hasSixSeries: this.commonService.hasSixSeriesCategory(s.categoryName),
 				rank: 0,
 			}));
 
@@ -169,9 +169,9 @@ export class RankingComponent implements OnInit, OnDestroy {
 				const byTotal = this.toNum(b.totalScore) - this.toNum(a.totalScore);
 				if (byTotal !== 0) return byTotal;
 
-				// dernière série (S4 pour Senior/Dame, sinon S6)
-				const lastA = a.isSeniorOrDame ? this.serieScore(a, 4) : this.serieScore(a, 6);
-				const lastB = b.isSeniorOrDame ? this.serieScore(b, 4) : this.serieScore(b, 6);
+				// dernière série (S4 ou S6)
+				const lastA = a.hasSixSeries ? this.serieScore(a, 4) : this.serieScore(a, 6);
+				const lastB = b.hasSixSeries ? this.serieScore(b, 4) : this.serieScore(b, 6);
 				if (lastB !== lastA) return lastB - lastA;
 
 				// S3, S2, S1
@@ -580,30 +580,6 @@ export class RankingComponent implements OnInit, OnDestroy {
 	 */
 	private cmpAlpha(a?: string, b?: string): number {
 		return (a ?? '').localeCompare(b ?? '', 'fr', { sensitivity: 'base' });
-	}
-
-	/**
-	 * Normalise une chaîne en minuscules et sans accents.
-	 *
-	 * @param {string | null | undefined} [s] - Chaîne à normaliser.
-	 * @returns {string} Chaîne normalisée (minuscule, sans accents).
-	 */
-	private normalize(s?: string | null): string {
-		return (s ?? '')
-			.toLowerCase()
-			.normalize('NFD')
-			.replace(/[\u0300-\u036f]/g, '');
-	}
-
-	/**
-	 * Détermine si un libellé correspond à une catégorie Senior ou Dame.
-	 *
-	 * @param {string} categoryName - Libellé de la catégorie (ex. "Senior 1", "Dame 2").
-	 * @returns {boolean} `true` si la catégorie est Senior/Dame, sinon `false`.
-	 */
-	private isSeniorOrDameCategory(categoryName: string): boolean {
-		const n = this.normalize(categoryName);
-		return /\b(senior|dame)\s*(1|2|3)?\b/.test(n);
 	}
 
 	/**
