@@ -181,6 +181,30 @@ ipcMain.handle("display-open-ranking", async (_evt, { competitionId, competition
 	openRankingWindow(competitionId, competitionName);
 });
 
+// IPC : déclenchement depuis Angular
+ipcMain.handle("updater:check", async () => {
+	autoUpdater.autoDownload = true;
+	autoUpdater.checkForUpdates();
+});
+
+// Événements -> renvoyés au renderer Splash
+autoUpdater.on("update-available", () => {
+	BrowserWindow.getAllWindows()[0]?.webContents.send("updater:status", "available");
+});
+autoUpdater.on("download-progress", (p) => {
+	BrowserWindow.getAllWindows()[0]?.webContents.send("updater:progress", Math.round(p.percent || 0));
+});
+autoUpdater.on("update-not-available", () => {
+	BrowserWindow.getAllWindows()[0]?.webContents.send("updater:status", "none");
+});
+autoUpdater.on("update-downloaded", () => {
+	BrowserWindow.getAllWindows()[0]?.webContents.send("updater:status", "downloaded");
+	autoUpdater.quitAndInstall();
+});
+autoUpdater.on("error", () => {
+	BrowserWindow.getAllWindows()[0]?.webContents.send("updater:status", "error");
+});
+
 // ---------- ready ----------
 app.whenReady().then(() => {
 	// Supprime le menu global (toutes fenêtres)
@@ -202,7 +226,7 @@ app.whenReady().then(() => {
 	console.log("[protocol]", SCHEME, ok ? "registered" : "failed");
 
 	createWindow();
-    
+
 	// check MAJ au lancement (prod uniquement)
 	if (!isDev) {
 		autoUpdater.logger = log;
