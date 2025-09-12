@@ -37,22 +37,6 @@ function resolveIndexFile() {
 	return candidates.find(fs.existsSync);
 }
 
-// ---------- Mise à jour de l'application ----------
-// listeners updater (installation immédiate)
-autoUpdater.on("update-downloaded", () => {
-	try {
-		// installe tout de suite et redémarre
-		autoUpdater.quitAndInstall(false, true);
-	} catch (e) {
-		console.error("[updater] quitAndInstall failed", e);
-		app.quit();
-	}
-});
-
-autoUpdater.on("error", (err) => {
-	console.error("[updater] error", err);
-});
-
 // ---------- display window ----------
 function openRankingWindow(competitionId, competitionName) {
 	const route = `/ranking/${encodeURIComponent(competitionId)}/${encodeURIComponent(competitionName)}`;
@@ -109,13 +93,17 @@ function createWindow() {
 		},
 	});
 
+    win.once("ready-to-show", () => {
+		win.maximize(); // ← ouvre directement maximisé
+		win.show();
+	});
+
 	// Supprime le menu (Windows/Linux) et évite l’apparition avec Alt
 	win.setMenuBarVisibility(false);
 	if (process.platform !== "darwin") win.removeMenu();
 
 	// Charger l'app
 	if (isDev) {
-		// Adapte si tu utilises un port différent en dev
 		win.loadURL("http://localhost:4200").catch(console.error);
 	} else {
 		const indexFile = resolveIndexFile();
@@ -125,6 +113,12 @@ function createWindow() {
 			win.loadFile(indexFile).catch(console.error);
 		}
 	}
+
+    win.webContents.once("did-finish-load", () => {
+		if (isDev) {
+			win.webContents.send("updater:status", "none"); // débloque le splash en dev
+		}
+	});
 
 	win.once("ready-to-show", () => {
 		win.show();
@@ -185,24 +179,6 @@ ipcMain.handle("display-open-ranking", async (_evt, { competitionId, competition
 ipcMain.handle("updater:check", async () => {
 	autoUpdater.autoDownload = true;
 	autoUpdater.checkForUpdates();
-});
-
-// Événements -> renvoyés au renderer Splash
-autoUpdater.on("update-available", () => {
-	BrowserWindow.getAllWindows()[0]?.webContents.send("updater:status", "available");
-});
-autoUpdater.on("download-progress", (p) => {
-	BrowserWindow.getAllWindows()[0]?.webContents.send("updater:progress", Math.round(p.percent || 0));
-});
-autoUpdater.on("update-not-available", () => {
-	BrowserWindow.getAllWindows()[0]?.webContents.send("updater:status", "none");
-});
-autoUpdater.on("update-downloaded", () => {
-	BrowserWindow.getAllWindows()[0]?.webContents.send("updater:status", "downloaded");
-	autoUpdater.quitAndInstall();
-});
-autoUpdater.on("error", () => {
-	BrowserWindow.getAllWindows()[0]?.webContents.send("updater:status", "error");
 });
 
 // ---------- ready ----------
