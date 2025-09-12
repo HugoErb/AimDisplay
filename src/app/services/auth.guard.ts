@@ -16,6 +16,7 @@ export class AuthGuard implements CanActivate, CanActivateChild {
 	 * @returns Promesse résolue avec `true` si autorisé, ou un `UrlTree` de redirection.
 	 */
 	async canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Promise<boolean | UrlTree> {
+		if (state.url === '/splash-screen') return true; // ne jamais bloquer le splash
 		return this.checkAccess(state.url);
 	}
 
