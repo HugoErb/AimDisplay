@@ -17,12 +17,15 @@ import { BaseLayoutComponent } from './components/base-layout/base-layout.compon
 import { GenererPDFComponent } from './generer_pdf/generer_pdf.component';
 import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
 import { ResetPasswordComponent } from './reset-password/reset-password.component';
+import { SplashScreenComponent } from './splash_screen/splash_screen';
 
 export const routes: Routes = [
-	// Redirection initiale vers login
-	{ path: '', redirectTo: 'login', pathMatch: 'full' },
+	// Redirection initiale vers splash screen
+	{ path: '', pathMatch: 'full', redirectTo: 'splash' },
+	{ path: '**', redirectTo: 'splash' },
 
 	// Pages publiques (sans authentification)
+	{ path: 'splash-screen', component: SplashScreenComponent },
 	{ path: 'login', component: LoginComponent },
 	{ path: 'register', component: RegisterComponent },
 	{ path: 'forgot-password', component: ForgotPasswordComponent },
