@@ -54,7 +54,7 @@ export class SplashScreenComponent implements OnInit {
 		if (!(this.updateDone && this.sessionDone)) return;
 
 		const elapsed = Date.now() - this.bootStart;
-		const wait = Math.max(0, 2500 - elapsed); // 2.5s minimum
+		const wait = Math.max(0, 2000 - elapsed); // 2.0s minimum
 
 		setTimeout(() => {
 			if (this.navigated) return;
