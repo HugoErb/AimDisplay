@@ -216,6 +216,11 @@ app.whenReady().then(() => {
 		// URL du dossier qui contient latest.yml + .exe + .blockmap
 		autoUpdater.setFeedURL({ provider: "generic", url: "https://hugoeribon.fr/assets/aim-display/" });
 
+		// redémarre et installe dès que le DL est fini
+		autoUpdater.on("update-downloaded", () => {
+			autoUpdater.quitAndInstall();
+		});
+
 		// lance la vérification/téléchargement
 		autoUpdater.checkForUpdates().catch((err) => console.error("[updater] check error", err));
 	}
