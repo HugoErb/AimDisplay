@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
 import { SupabaseService } from '../services/supabase.service';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { CommonService } from './../services/common.service';
@@ -10,7 +9,6 @@ import { CommonService } from './../services/common.service';
 	schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class SplashScreenComponent implements OnInit {
-	// ⚠️ bootStep supprimé
 	private updateDone = false;
 	private sessionDone = false;
 	private isLogged = false;
@@ -19,7 +17,7 @@ export class SplashScreenComponent implements OnInit {
 	private bootStart = 0;
 	private navigated = false;
 
-	constructor(private router: Router, private supabase: SupabaseService, protected commonService: CommonService) {}
+	constructor(private supabase: SupabaseService, protected commonService: CommonService) {}
 
 	async ngOnInit() {
 		this.bootStart = Date.now();

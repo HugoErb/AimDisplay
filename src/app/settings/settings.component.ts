@@ -15,6 +15,13 @@ import { AuthService } from '../services/auth.service';
 // Modals
 type ModalKey = 'renameClub' | 'changePassword';
 
+declare global {
+	interface Window {
+		appInfo?: { getVersion: () => Promise<string> };
+	}
+}
+
+
 @Component({
 	selector: 'app-settings',
 	standalone: true,
@@ -27,6 +34,7 @@ export class SettingsComponent {
 
 	userParamsName: string = 'userParamsAimDisplay';
 	darkMode: boolean = false;
+	version = '';
 
 	// Modals
 	modals: Record<ModalKey, boolean> = {
@@ -129,6 +137,7 @@ export class SettingsComponent {
 		this.avatarUrl = await this.authService.getSignedAvatarUrl();
 		const userParams: UserParams = JSON.parse(localStorage.getItem(this.userParamsName)!);
 		this.darkMode = this.themeService.getTheme() === 'dark';
+        this.version = (await window.appInfo?.getVersion?.()) ?? 'dev';
 	}
 
 	async onAvatarFileSelected(event: Event): Promise<void> {
