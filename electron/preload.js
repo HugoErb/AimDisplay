@@ -16,5 +16,9 @@ contextBridge.exposeInMainWorld('display', {
     ipcRenderer.invoke('display-open-ranking', { competitionId, competitionName }),
 });
 
+contextBridge.exposeInMainWorld("appInfo", {
+	getVersion: () => ipcRenderer.invoke("app:getVersion"),
+});
+
 // (optionnel mais pratique) détecter Electron côté Angular
 contextBridge.exposeInMainWorld('electronAPI', { isElectron: true });

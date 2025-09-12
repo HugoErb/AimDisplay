@@ -181,6 +181,8 @@ ipcMain.handle("updater:check", async () => {
 	autoUpdater.checkForUpdates();
 });
 
+ipcMain.handle("app:getVersion", () => app.getVersion());
+
 // ---------- ready ----------
 app.whenReady().then(() => {
 	// Supprime le menu global (toutes fenêtres)
