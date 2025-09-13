@@ -93,7 +93,7 @@ function createWindow() {
 		},
 	});
 
-    win.once("ready-to-show", () => {
+	win.once("ready-to-show", () => {
 		win.maximize(); // ← ouvre directement maximisé
 		win.show();
 	});
@@ -114,7 +114,7 @@ function createWindow() {
 		}
 	}
 
-    win.webContents.once("did-finish-load", () => {
+	win.webContents.once("did-finish-load", () => {
 		if (isDev) {
 			win.webContents.send("updater:status", "none"); // débloque le splash en dev
 		}
@@ -175,10 +175,52 @@ ipcMain.handle("display-open-ranking", async (_evt, { competitionId, competition
 	openRankingWindow(competitionId, competitionName);
 });
 
-// IPC : déclenchement depuis Angular
+let updateAvailable = false;
+let updateDownloaded = false;
+let installing = false;
+
+autoUpdater.on("update-available", () => {
+	updateAvailable = true;
+});
+autoUpdater.on("update-not-available", () => {
+	updateAvailable = false;
+	updateDownloaded = false;
+});
+autoUpdater.on("update-downloaded", () => {
+	updateDownloaded = true;
+});
+autoUpdater.on("error", (e) => console.error("[updater] error:", e));
+
 ipcMain.handle("updater:check", async () => {
-	autoUpdater.autoDownload = true;
-	autoUpdater.checkForUpdates();
+	if (isDev) return { status: "skip" };
+	updateAvailable = false;
+	updateDownloaded = false;
+	try {
+		// renvoie vite ; le téléchargement continue en fond si MAJ
+		await autoUpdater.checkForUpdates();
+		return { status: updateAvailable ? "available" : "none" };
+	} catch {
+		return { status: "error" };
+	}
+});
+
+ipcMain.handle("updater:applyNow", async () => {
+	if (isDev) return "noop";
+	if (!updateAvailable) return "none";
+
+	// si pas encore téléchargée, on attend ici
+	if (!updateDownloaded) {
+		await new Promise((resolve, reject) => {
+			autoUpdater.once("update-downloaded", resolve);
+			autoUpdater.once("error", reject);
+		});
+	}
+
+	if (!installing) {
+		installing = true;
+		autoUpdater.quitAndInstall(); // redémarre et installe une seule fois
+	}
+	return "restarting";
 });
 
 ipcMain.handle("app:getVersion", () => app.getVersion());
@@ -209,20 +251,9 @@ app.whenReady().then(() => {
 	if (!isDev) {
 		autoUpdater.logger = log;
 		autoUpdater.logger.transports.file.level = "info";
-
-		autoUpdater.autoDownload = true; // télécharge automatiquement
-		autoUpdater.autoInstallOnAppQuit = false; // on installe tout de suite (pas à la fermeture)
-
-		// URL du dossier qui contient latest.yml + .exe + .blockmap
+		autoUpdater.autoDownload = true;
+		autoUpdater.autoInstallOnAppQuit = false; // on contrôle le moment d'installation
 		autoUpdater.setFeedURL({ provider: "generic", url: "https://hugoeribon.fr/assets/aim-display/" });
-
-		// redémarre et installe dès que le DL est fini
-		autoUpdater.on("update-downloaded", () => {
-			autoUpdater.quitAndInstall();
-		});
-
-		// lance la vérification/téléchargement
-		autoUpdater.checkForUpdates().catch((err) => console.error("[updater] check error", err));
 	}
 
 	// 1er démarrage via lien (Windows)
