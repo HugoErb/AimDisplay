@@ -13,7 +13,7 @@ export class SplashScreenComponent implements OnInit {
 	private sessionDone = false;
 	private isLogged = false;
 
-	// ➕ chrono pour forcer 2.5s mini
+	// chrono pour forcer 2.5s mini
 	private bootStart = 0;
 	private navigated = false;
 
@@ -22,30 +22,24 @@ export class SplashScreenComponent implements OnInit {
 	async ngOnInit() {
 		this.bootStart = Date.now();
 
+		// 1) Check update (retourne vite, download en arrière-plan s'il y a une MAJ)
 		const api: any = (window as any).deeplink;
-
-		// 1) Vérifier les mises à jour (synchrone + timeout filet de sécu)
 		try {
-			if (api?.checkForUpdates) {
-				await this.withTimeout(Promise.resolve(api.checkForUpdates()), 10000);
-			}
-		} catch {
-			// on ignore l'erreur updater
-		} finally {
-			this.updateDone = true;
-		}
+			await api?.checkForUpdates?.();
+		} catch {}
 
-		// 2) Vérifier la session
+		// 2) Session
 		try {
 			const { data } = await (this.supabase as any).supabase.auth.getSession();
 			this.isLogged = !!data?.session;
 		} catch {
 			this.isLogged = false;
 		} finally {
+			this.updateDone = true;
 			this.sessionDone = true;
 		}
 
-		// 3) Router avec durée minimale de 2.5s
+		// 3) Finir (2,5 s min)
 		this.tryFinish();
 	}
 
@@ -54,31 +48,17 @@ export class SplashScreenComponent implements OnInit {
 		if (!(this.updateDone && this.sessionDone)) return;
 
 		const elapsed = Date.now() - this.bootStart;
-		const wait = Math.max(0, 2000 - elapsed); // 2.0s minimum
+		const wait = Math.max(0, 2500 - elapsed);
 
-		setTimeout(() => {
-			if (this.navigated) return;
-			this.navigated = true;
+		setTimeout(async () => {
+			// 1) tenter d'appliquer MAJ maintenant (si dispo, l'app redémarre ici)
+			const api: any = (window as any).deeplink;
+			const res = await api?.applyUpdateNow?.();
+			if (res === 'restarting') return;
 
+			// 2) sinon on redirige
 			const target = this.isLogged ? 'home' : 'login';
 			this.commonService.redirectTo(target);
 		}, wait);
-	}
-
-	// Filet de sécurité pour ne jamais rester coincé sur l’updater
-	private withTimeout<T>(p: Promise<T>, ms = 10000): Promise<T | undefined> {
-		return new Promise((resolve) => {
-			const t = setTimeout(() => resolve(undefined), ms);
-			p.then(
-				(v) => {
-					clearTimeout(t);
-					resolve(v);
-				},
-				() => {
-					clearTimeout(t);
-					resolve(undefined);
-				}
-			);
-		});
 	}
 }
