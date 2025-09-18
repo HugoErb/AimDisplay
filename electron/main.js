@@ -27,7 +27,6 @@ function sendDeepLink(url) {
 }
 
 function resolveIndexFile() {
-	// Essaie plusieurs emplacements possibles pour Angular (browser/legacy)
 	const candidates = [
 		path.join(__dirname, "..", "dist", APP_DIR_NAME, "browser", "index.html"),
 		path.join(__dirname, "..", "dist", APP_DIR_NAME, "index.html"),
