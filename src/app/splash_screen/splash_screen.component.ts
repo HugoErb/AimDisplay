@@ -9,11 +9,12 @@ import { CommonService } from './../services/common.service';
 	schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class SplashScreenComponent implements OnInit {
+	// Délai d'affichage minimal en millisecondes
+	private static readonly MIN_SPLASH_DELAY = 2000;
+
 	private updateDone = false;
 	private sessionDone = false;
 	private isLogged = false;
-
-	// chrono pour forcer 2.5s mini
 	private bootStart = 0;
 	private navigated = false;
 
@@ -57,16 +58,21 @@ export class SplashScreenComponent implements OnInit {
 			this.sessionDone = true;
 		}
 
-		// 3) Tenter de finir (respectera le délai de 2.5s)
+		// 3) Tenter de finir (respectera le délai minimal)
 		this.tryFinish();
 	}
 
+	/**
+	 * Tente de finaliser l'affichage du Splash Screen.
+	 * Vérifie que toutes les tâches (updates, session) sont terminées et que le délai
+	 * minimal a été respecté avant de rediriger ou d'appliquer une mise à jour.
+	 */
 	private tryFinish() {
 		if (this.navigated) return;
 		if (!(this.updateDone && this.sessionDone)) return;
 
 		const elapsed = Date.now() - this.bootStart;
-		const wait = Math.max(0, 2500 - elapsed);
+		const wait = Math.max(0, SplashScreenComponent.MIN_SPLASH_DELAY - elapsed);
 
 		setTimeout(async () => {
 			// 1) tenter d'appliquer MAJ maintenant (si dispo, l'app redémarre ici)
