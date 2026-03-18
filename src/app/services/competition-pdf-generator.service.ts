@@ -14,10 +14,13 @@ type Cell = { text: string; style?: string; alignment?: 'left' | 'right' | 'cent
 
 @Injectable({ providedIn: 'root' })
 export class CompetitionPDFGenerator {
-	constructor(private supabase: SupabaseService, private commonService: CommonService) {}
+	constructor(
+		private readonly supabase: SupabaseService,
+		private readonly commonService: CommonService,
+	) {}
 
 	// Palette
-	private theme = {
+	private readonly theme = {
 		primary: '#2563EB',
 		surface: '#FFFFFF',
 		border: '#E5E7EB',
@@ -47,27 +50,21 @@ export class CompetitionPDFGenerator {
 			// 2) Construit le contenu (une carte par groupe)
 			const content: Content[] = [];
 			groups.forEach((g, idx) => {
-				const useSix = this.commonService.hasSixSeriesCategory(g.category); // 4 ou 6 séries selon catégorie
-				const ordered = [...g.shooters].sort((a, b) => this.compareShooters(a, b, useSix)); // départage
-
+				const useSix = this.commonService.hasSixSeriesCategory(g.category);
+				const ordered = [...g.shooters].sort((a, b) => this.compareShooters(a, b, useSix));
 				const title = `${g.distance} • ${g.category} • ${g.weapon}`;
-				const card = this.buildGroupCard(title, ordered); // ⚠️ signature à 2 arguments conservée
-				if (!card) return; // au cas où buildGroupCard retourne null si pas de lignes
+				const card = this.buildGroupCard(title, ordered);
+				if (!card) return;
 
-				// Saut de page entre cartes, mais pas après la dernière (évite une page finale vide)
-				if (idx < groups.length - 1) (card as any).pageBreak = 'after';
+				if (idx > 0) (card as any).pageBreak = 'before';
 				content.push(card);
 			});
 
-			// ➜ Ajouter la page "Statistiques" en toute fin si demandé
+			// Ajouter la page stats si demandé
 			if (showStats) {
-				const statsPage = await this.buildStatsPage(competitionId, shooters);
-				if (statsPage) {
-					if (content.length > 0) {
-						this.removeTrailingPageBreaks(content[content.length - 1]); // nettoie 'after' enfouis
-						(statsPage as any).pageBreak = 'before'; // stats commence sur une nouvelle page
-					}
-					content.push(statsPage);
+				const statsPages = await this.buildStatsPage(competitionId, shooters);
+				if (statsPages?.length) {
+					content.push(...statsPages);
 				}
 			}
 
@@ -186,7 +183,7 @@ export class CompetitionPDFGenerator {
 		});
 
 		return {
-			margin: [40, 0, 40, 12],
+			margin: [30, 0, 30, 12],
 			stack: [
 				// Bandeau (non-cassable) — OK s'il reste seul en bas d'une page
 				{
@@ -217,7 +214,7 @@ export class CompetitionPDFGenerator {
 					table: {
 						headerRows: 1,
 						keepWithHeaderRows: 1,
-						dontBreakRows: true, // empêche la petite “ligne” au break
+						dontBreakRows: true,
 						widths,
 						body,
 					},
@@ -301,12 +298,11 @@ export class CompetitionPDFGenerator {
 	}
 
 	/** Construit la page finale "Statistiques" (ajoutée en dernière page). */
-	private async buildStatsPage(competitionId: number, shooters: Shooter[]): Promise<Content> {
+	private async buildStatsPage(competitionId: number, shooters: Shooter[]): Promise<Content[]> {
 		// ---- helpers
 		const toNum = (x: any) => (x == null || Number.isNaN(Number(x)) ? 0 : Number(x));
 		const money = (n: number) => `${n.toFixed(2)} €`;
-		const keyOfShooter = (s: any) =>
-			s.shooterId ?? `${(s.lastName || '').trim().toLowerCase()}|${(s.firstName || '').trim().toLowerCase()}`;
+		const keyOfShooter = (s: any) => s.shooterId ?? `${(s.lastName || '').trim().toLowerCase()}|${(s.firstName || '').trim().toLowerCase()}`;
 
 		// ---- infos compétition (prix)
 		let basePrice = 0,
@@ -429,8 +425,8 @@ export class CompetitionPDFGenerator {
 		const resumeTable: Content = {
 			table: {
 				headerRows: 1,
-				keepWithHeaderRows: 1,
 				dontBreakRows: true,
+                keepWithHeaderRows: 1,
 				widths: ['*', 80],
 				body: [
 					[
@@ -470,8 +466,8 @@ export class CompetitionPDFGenerator {
 		const pricingTable: Content = {
 			table: {
 				headerRows: 1,
-				keepWithHeaderRows: 1,
 				dontBreakRows: true,
+				keepWithHeaderRows: 1,
 				widths: ['*', 110],
 				body: [
 					[
@@ -495,8 +491,8 @@ export class CompetitionPDFGenerator {
 		const revenueTable: Content = {
 			table: {
 				headerRows: 1,
-				keepWithHeaderRows: 1,
 				dontBreakRows: true,
+				keepWithHeaderRows: 1,
 				widths: ['*', 120],
 				body: [
 					[
@@ -532,8 +528,8 @@ export class CompetitionPDFGenerator {
 		const topClubsTable: Content = {
 			table: {
 				headerRows: 1,
-				keepWithHeaderRows: 1,
 				dontBreakRows: true,
+				keepWithHeaderRows: 1,
 				widths: ['*', 60],
 				body: [
 					[
@@ -553,8 +549,8 @@ export class CompetitionPDFGenerator {
 		const topCategoriesTable: Content = {
 			table: {
 				headerRows: 1,
-				keepWithHeaderRows: 1,
 				dontBreakRows: true,
+				keepWithHeaderRows: 1,
 				widths: ['*', 60],
 				body: [
 					[
@@ -574,8 +570,8 @@ export class CompetitionPDFGenerator {
 		const topDistancesTable: Content = {
 			table: {
 				headerRows: 1,
-				keepWithHeaderRows: 1,
 				dontBreakRows: true,
+				keepWithHeaderRows: 1,
 				widths: ['*', 60],
 				body: [
 					[
@@ -595,8 +591,8 @@ export class CompetitionPDFGenerator {
 		const topWeaponsTable: Content = {
 			table: {
 				headerRows: 1,
-				keepWithHeaderRows: 1,
 				dontBreakRows: true,
+				keepWithHeaderRows: 1,
 				widths: ['*', 60],
 				body: [
 					[
@@ -616,9 +612,9 @@ export class CompetitionPDFGenerator {
 		const scores4Table: Content = {
 			table: {
 				headerRows: 1,
-				keepWithHeaderRows: 1,
 				dontBreakRows: true,
-				widths: ['*', 110],
+				keepWithHeaderRows: 1,
+				widths: ['*', '*'],
 				body: [
 					[
 						{ text: 'Scores sur 4 séries', style: 'th' },
@@ -649,9 +645,9 @@ export class CompetitionPDFGenerator {
 		const scores6Table: Content = {
 			table: {
 				headerRows: 1,
-				keepWithHeaderRows: 1,
 				dontBreakRows: true,
-				widths: ['*', 110],
+				keepWithHeaderRows: 1,
+				widths: ['*', '*'],
 				body: [
 					[
 						{ text: 'Scores sur 6 séries', style: 'th' },
@@ -679,38 +675,46 @@ export class CompetitionPDFGenerator {
 			margin: [0, 6, 0, 6],
 		};
 
-		return {
-			margin: [40, 0, 40, 12],
-			stack: [
-				// bandeau
+		// Bandeau — toujours en premier, sur une nouvelle page
+		const bandeau: Content = {
+			pageBreak: 'before',
+			margin: [40, 0, 40, 0],
+			table: {
+				widths: ['*'],
+				body: [
+					[
+						{
+							text: `Statistiques ${competitionName || ''}`.trim(),
+							style: 'cardTitle',
+							fillColor: this.theme.primary,
+							color: '#fff',
+							margin: [12, 8, 12, 8],
+						},
+					],
+				],
+			},
+			layout: 'noBorders',
+		};
+
+		// Colonnes — pas de margin sur le nœud parent, sinon page fantôme
+		const colonnes: Content = {
+			margin: [40, 8, 40, 0], // ← 0 au lieu de 12 en bas
+			columns: [
 				{
-					table: {
-						widths: ['*'],
-						body: [
-							[
-								{
-									text: `Statistiques ${competitionName || ''}`.trim(),
-									style: 'cardTitle',
-									fillColor: this.theme.primary,
-									color: '#fff',
-									margin: [12, 8, 12, 8],
-								},
-							],
-						],
-					},
-					layout: 'noBorders',
+					width: '*',
+					stack: [resumeTable, pricingTable, revenueTable, topDistancesTable],
+					margin: [0, 0, 8, 0], // ← gap interne remplace columnGap
+				},
+				{
+					width: '*',
+					stack: [topClubsTable, topCategoriesTable, topWeaponsTable, scores4Table, scores6Table],
 					margin: [0, 0, 0, 0],
 				},
-				// colonnes
-				{
-					columns: [
-						{ width: '*', stack: [resumeTable, pricingTable, revenueTable, topDistancesTable] }, // ← on met "Top distances" à gauche
-						{ width: '*', stack: [topClubsTable, topCategoriesTable, topWeaponsTable, scores4Table, scores6Table] },
-					],
-					columnGap: 16,
-				},
 			],
-		} as Content;
+			columnGap: 16,
+		};
+
+		return [bandeau, colonnes];
 	}
 
 	/** Supprime récursivement les pageBreak:'after' sur le dernier élément d'un bloc */
