@@ -223,7 +223,6 @@ export class ShooterPDFGenerator {
 				.replace(/\s+/g, ' ')
 				.trim();
 			pdfMake.createPdf(docDefinition).download(`${safeTitle}.pdf`);
-			this.commonService.showSwalToast('PDF généré.', 'success');
 		} catch (err: any) {
 			console.error('Erreur PDF (tireur):', err);
 			this.commonService.showSwalToast(err?.message ?? 'Erreur lors de la génération du PDF', 'error');

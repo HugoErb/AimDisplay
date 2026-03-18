@@ -84,6 +84,30 @@ export class CommonService {
 	}
 
 	/**
+	 * Affiche une fenêtre de chargement avec SweetAlert2.
+	 *
+	 * @param {string} title - Le titre de la fenêtre de chargement.
+	 * @param {string} message - Le message de la fenêtre de chargement.
+	 */
+	showSwalLoading(title: string, message: string) {
+		Swal.fire({
+			title: `<div class="text-2xl">${title}</div>`,
+			html: message,
+			allowOutsideClick: false,
+			didOpen: () => {
+				Swal.showLoading();
+			},
+		});
+	}
+
+	/**
+	 * Ferme la fenêtre SweetAlert2 actuelle.
+	 */
+	closeSwalLoading() {
+		Swal.close();
+	}
+
+	/**
 	 * Détermine si un libellé correspond à une catégorie à 6 séries.
 	 *
 	 * @param {string} categoryName - Libellé de la catégorie (ex. "Senior 1", "Dame 2").
