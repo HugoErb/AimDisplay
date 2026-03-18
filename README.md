@@ -57,8 +57,16 @@ npm run electron:dev
 Cette commande lance simultanément le serveur Angular et l'application Electron avec les outils de développement ouverts.
 
 ### Build Production
-*   **Windows** : `npm run dist:win`
+*   **Windows** :
+```bash
+npm run dist:win
+```
+*   **Mac OS** : Pas encore disponible
+*   **Linux** : Pas encore disponible
 
+## Téléchargement
+
+Le logiciel est téléchargeable sur mon site internet : [hugoeribon.fr/home](https://hugoeribon.fr/home)
 
 ---
 © 2025 Hugo Eribon.
