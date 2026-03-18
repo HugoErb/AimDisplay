@@ -27,7 +27,7 @@ export class GenererPDFComponent {
 		private supabase: SupabaseService
 	) {}
 
-	isSaving: boolean = false;
+	isLoading: boolean = false;
 
 	// Variables de création d'un club
 	@ViewChildren('inputField', { read: ElementRef }) inputFields!: QueryList<ElementRef>;
@@ -145,7 +145,8 @@ export class GenererPDFComponent {
 	 * champs de saisie ont été réinitialisés en cas de succès.
 	 */
 	async generatePDF(): Promise<void> {
-		this.isSaving = true;
+		this.isLoading = true;
+		this.commonService.showSwalLoading('Génération du PDF', 'Veuillez patienter pendant la génération du rapport...');
 		try {
 			this.inputLabelMap = this.commonService.getInputLabelMap(this.inputFields);
 
@@ -184,7 +185,9 @@ export class GenererPDFComponent {
 		} catch (e: any) {
 			this.commonService.showSwalToast(e?.message ?? 'Erreur lors de la génération du PDF', 'error');
 		} finally {
-			this.isSaving = false;
+			this.isLoading = false;
+			this.commonService.closeSwalLoading();
+			this.commonService.showSwalToast('PDF généré.', 'success');
 		}
 	}
 }
