@@ -22,24 +22,42 @@ export class SplashScreenComponent implements OnInit {
 	async ngOnInit() {
 		this.bootStart = Date.now();
 
-		// 1) Check update (retourne vite, download en arrière-plan s'il y a une MAJ)
 		const api: any = (window as any).deeplink;
-		try {
-			await api?.checkForUpdates?.();
-		} catch {}
 
-		// 2) Session
+		// Lancement en parallèle des tâches de démarrage
 		try {
-			const { data } = await (this.supabase as any).supabase.auth.getSession();
-			this.isLogged = !!data?.session;
-		} catch {
-			this.isLogged = false;
-		} finally {
+			await Promise.all([
+				// 1) Check update (non-bloquant s'il échoue ou n'existe pas)
+				(async () => {
+					try {
+						await api?.checkForUpdates?.();
+					} catch (e) {
+						console.warn('[splash] check updates failed', e);
+					} finally {
+						this.updateDone = true;
+					}
+				})(),
+
+				// 2) Récupération de la session
+				(async () => {
+					try {
+						const { data } = await this.supabase.getSession();
+						this.isLogged = !!data?.session;
+					} catch (e) {
+						console.error('[splash] session check failed', e);
+						this.isLogged = false;
+					} finally {
+						this.sessionDone = true;
+					}
+				})(),
+			]);
+		} catch (e) {
+			// Sécurité au cas où Promise.all crasherait (peu probable avec les catch internes)
 			this.updateDone = true;
 			this.sessionDone = true;
 		}
 
-		// 3) Finir (2,5 s min)
+		// 3) Tenter de finir (respectera le délai de 2.5s)
 		this.tryFinish();
 	}
 

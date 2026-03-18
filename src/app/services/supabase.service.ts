@@ -25,6 +25,13 @@ export class SupabaseService {
 		);
 	}
 
+	/**
+	 * Récupère la session actuelle.
+	 */
+	async getSession() {
+		return await this.supabase.auth.getSession();
+	}
+
 	// CREATE FUNCTIONS /////////////////////////////////////////////////////////////////////
 
 	/**
