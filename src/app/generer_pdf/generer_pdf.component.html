@@ -13,25 +13,35 @@
 		<form (ngSubmit)="generatePDF()" class="p-8 space-y-5">
 			<div class="w-full">
 				<!-- Onglets -->
-				<div class="grid grid-cols-2 w-full mb-8 bg-gray-200 dark:bg-gray-700 rounded-lg p-1">
+				<div class="relative grid grid-cols-2 w-full mb-8 bg-gray-200 dark:bg-gray-700 rounded-lg p-1">
+					<!-- Slider animé -->
+					<div
+						class="absolute top-1 bottom-1 rounded-md bg-white dark:bg-secondary-dark-bg shadow-sm transition-transform duration-300 ease-in-out"
+						[style.width]="'calc(50% - 0.5rem)'"
+						[style.left]="'0.25rem'"
+						[style.transform]="selectedTab === 'competition' ? 'translateX(0)' : 'translateX(calc(100% + 0.5rem))'"
+					></div>
+
+					<!-- Onglet Compétition -->
 					<div
 						(click)="switchTab('competition')"
-						class="rounded-md flex items-center space-x-2 justify-center py-2 px-4 font-medium cursor-pointer transition-all duration-100"
+						class="relative z-10 rounded-md flex items-center justify-center py-2 px-4 font-medium cursor-pointer transition-colors duration-300"
 						[ngClass]="{
-							'bg-white dark:bg-secondary-dark-bg dark:text-gray-300 text-prime-blue': selectedTab === 'competition',
-							'text-gray-500 dark:text-gray-400 hover:text-prime-blue hover:dark:text-gray-300': selectedTab !== 'competition'
+							'text-prime-blue dark:text-gray-300': selectedTab === 'competition',
+							'text-gray-500 dark:text-gray-400 hover:text-prime-blue hover:dark:text-gray-300': selectedTab !== 'competition',
 						}"
 					>
 						<iconify-icon icon="octicon:trophy-24" class="text-[1.2rem] mr-3"></iconify-icon>
 						<span>Rapport de compétition</span>
 					</div>
 
+					<!-- Onglet Tireur -->
 					<div
 						(click)="switchTab('tireur')"
-						class="rounded-md flex items-center space-x-2 justify-center py-2 px-4 font-medium cursor-pointer transition-all duration-100"
+						class="relative z-10 rounded-md flex items-center justify-center py-2 px-4 font-medium cursor-pointer transition-colors duration-300"
 						[ngClass]="{
-							'bg-white dark:bg-secondary-dark-bg dark:text-gray-300 text-prime-blue': selectedTab === 'tireur',
-							'text-gray-500 dark:text-gray-400 hover:text-prime-blue hover:dark:text-gray-300': selectedTab !== 'tireur'
+							'text-prime-blue dark:text-gray-300': selectedTab === 'tireur',
+							'text-gray-500 dark:text-gray-400 hover:text-prime-blue hover:dark:text-gray-300': selectedTab !== 'tireur',
 						}"
 					>
 						<iconify-icon icon="lucide:user-round" class="text-[1.2rem] mr-3"></iconify-icon>
@@ -40,151 +50,155 @@
 				</div>
 
 				<!-- Onglet Rapport de compétition -->
-				@if (selectedTab === 'competition') {
-				<div class="space-y-4">
-					<h2 class="text-lg font-semibold text-gray-900 pb-2 border-b border-gray-200 dark:border-gray-700 dark:text-gray-300">
-						Générer un rapport de compétition
-					</h2>
-					<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-						<div class="flex flex-col space-y-1">
-							<label for="selectedCompetition" class="text-sm font-medium text-gray-700 dark:text-gray-300 ml-1">Compétition *</label>
-							<p-autoComplete
-								#inputField
-								[(ngModel)]="selectedCompetition"
-								[forceSelection]="true"
-								[suggestions]="filteredCompetitions"
-								(completeMethod)="filteredCompetitions = commonService.filterByName($event.query, competitions)"
-								name="selectedCompetition"
-								inputId="selectedCompetition"
-								(onSelect)="selectedCompetition = $event.value"
-								optionLabel="name"
-								[dropdown]="true"
-								placeholder="Compétition à exporter"
-							></p-autoComplete>
+				@if (selectedTab === "competition") {
+					<div class="space-y-4">
+						<h2 class="text-lg font-semibold text-gray-900 pb-2 border-b border-gray-200 dark:border-gray-700 dark:text-gray-300">
+							Générer un rapport de compétition
+						</h2>
+						<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+							<div class="flex flex-col space-y-1">
+								<label for="selectedCompetition" class="text-sm font-medium text-gray-700 dark:text-gray-300 ml-1">
+									Compétition *
+								</label>
+								<p-autoComplete
+									#inputField
+									[(ngModel)]="selectedCompetition"
+									[forceSelection]="true"
+									[suggestions]="filteredCompetitions"
+									(completeMethod)="filteredCompetitions = commonService.filterByName($event.query, competitions)"
+									name="selectedCompetition"
+									inputId="selectedCompetition"
+									(onSelect)="selectedCompetition = $event.value"
+									optionLabel="name"
+									[dropdown]="true"
+									placeholder="Compétition à exporter"
+								></p-autoComplete>
+							</div>
+							<div class="flex flex-col space-y-1">
+								<label for="activateClubInfos" class="text-sm font-medium text-gray-700 dark:text-gray-300 ml-1">
+									Générer les statistiques de compétition (seulement pour votre club)
+								</label>
+								<p-toggleswitch
+									[(ngModel)]="activateClubInfos"
+									styleClass="inline-block origin-left scale-125 mt-[8px]"
+									name="activateClubInfos"
+								>
+									<ng-template pTemplate="handle" let-checked="checked">
+										<iconify-icon [icon]="checked ? 'mdi:check' : 'mdi:close'" [width]="14" [height]="14"></iconify-icon>
+									</ng-template>
+								</p-toggleswitch>
+							</div>
 						</div>
-						<div class="flex flex-col space-y-1">
-							<label for="activateClubInfos" class="text-sm font-medium text-gray-700 dark:text-gray-300 ml-1">
-								Générer les statistiques de compétition (seulement pour votre club)
-							</label>
-							<p-toggleswitch
-								[(ngModel)]="activateClubInfos"
-								styleClass="inline-block origin-left scale-125 mt-[8px]"
-								name="activateClubInfos"
+						<div class="bg-blue-50 dark:bg-gray-700 rounded-lg p-4 border border-blue-200 dark:border-gray-500 my-6">
+							<h3 class="font-medium text-blue-900 dark:text-gray-300 mb-2">Contenu du rapport de compétition :</h3>
+							<ul class="text-sm text-blue-800 dark:text-gray-300 space-y-1">
+								<li>• Classement général par catégorie</li>
+								<li>• Résultats détaillés des participants</li>
+							</ul>
+
+							<!-- Conteneur animé -->
+							<div
+								class="grid transition-all duration-300 ease-out"
+								[class.grid-rows-[1fr]]="activateClubInfos"
+								[class.grid-rows-[0fr]]="!activateClubInfos"
 							>
-								<ng-template pTemplate="handle" let-checked="checked">
-									<iconify-icon [icon]="checked ? 'mdi:check' : 'mdi:close'" [width]="14" [height]="14"></iconify-icon>
-								</ng-template>
-							</p-toggleswitch>
+								<div
+									class="overflow-hidden transition-opacity duration-300"
+									[class.opacity-100]="activateClubInfos"
+									[class.opacity-0]="!activateClubInfos"
+								>
+									<ul class="mt-1 text-sm text-blue-800 dark:text-gray-300 space-y-1">
+										<li>• Synthèse statistique de la compétition</li>
+										<li>• Recettes de la compétition pour votre club</li>
+										<li>• Statistiques sur les inscriptions</li>
+										<li>• Statistiques sur les scores des tireurs</li>
+									</ul>
+								</div>
+							</div>
 						</div>
 					</div>
-					<div class="bg-blue-50 dark:bg-gray-700 rounded-lg p-4 border border-blue-200 dark:border-gray-500 my-6">
-						<h3 class="font-medium text-blue-900 dark:text-gray-300 mb-2">Contenu du rapport de compétition :</h3>
-						<ul class="text-sm text-blue-800 dark:text-gray-300 space-y-1">
-							<li>• Classement général par catégorie</li>
-							<li>• Résultats détaillés des participants</li>
-						</ul>
+				}
 
-						<!-- Conteneur animé -->
+				<!-- Onglet Rapport de tireur -->
+				@if (selectedTab === "tireur") {
+					<div class="space-y-4">
+						<h2 class="text-lg font-semibold text-gray-900 pb-2 border-b border-gray-200 dark:border-gray-700 dark:text-gray-300">
+							Générer un rapport de tireur
+						</h2>
+
+						<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+							<!-- Tireur -->
+							<div class="flex flex-col space-y-1">
+								<label for="selectedShooter" class="text-sm font-medium text-gray-700 dark:text-gray-300 ml-1">Tireur *</label>
+								<p-autoComplete
+									#inputField
+									inputId="selectedShooter"
+									name="selectedShooter"
+									[(ngModel)]="selectedShooter"
+									[suggestions]="filteredShooters"
+									(completeMethod)="filteredShooters = commonService.filterByName($event.query, shooters)"
+									(onSelect)="selectedShooter = $event.value"
+									(ngModelChange)="handleShooterChange($event)"
+									[forceSelection]="true"
+									[dropdown]="true"
+									optionLabel="fullName"
+									placeholder="Nom Prénom du tireur à exporter"
+								></p-autoComplete>
+							</div>
+
+							<!-- Compétition -->
+							<div class="flex flex-col space-y-1">
+								<label for="selectedShooterCompetition" class="text-sm font-medium text-gray-700 dark:text-gray-300 ml-1">
+									Compétition du tireur
+								</label>
+								<span
+									class="block"
+									pTooltip="Sélectionnez d'abord un tireur"
+									[tooltipDisabled]="!!selectedShooter"
+									tooltipPosition="top"
+									[ngClass]="{ 'blocked-cursor': !selectedShooter }"
+								>
+									<p-autoComplete
+										inputId="selectedShooterCompetition"
+										name="selectedShooterCompetition"
+										[(ngModel)]="selectedShooterCompetition"
+										[forceSelection]="true"
+										[suggestions]="filteredCompetitions"
+										(completeMethod)="
+											filteredCompetitions = commonService.filterByName($event.query, competitionsForSelectedShooter)
+										"
+										(onSelect)="selectedShooterCompetition = $event.value"
+										[disabled]="!selectedShooter"
+										optionLabel="name"
+										[dropdown]="true"
+										placeholder="Compétition du tireur (optionnel)"
+									></p-autoComplete>
+								</span>
+							</div>
+						</div>
+
+						<!-- Contenu dynamique -->
 						<div
-							class="grid transition-all duration-300 ease-out"
-							[class.grid-rows-[1fr]]="activateClubInfos"
-							[class.grid-rows-[0fr]]="!activateClubInfos"
+							class="bg-blue-50 dark:bg-gray-700 rounded-lg p-4 border border-blue-200 dark:border-gray-500 my-6 grid grid-cols-1 md:grid-cols-2 gap-6"
 						>
-							<div
-								class="overflow-hidden transition-opacity duration-300"
-								[class.opacity-100]="activateClubInfos"
-								[class.opacity-0]="!activateClubInfos"
-							>
-								<ul class="mt-1 text-sm text-blue-800 dark:text-gray-300 space-y-1">
-									<li>• Synthèse statistique de la compétition</li>
-									<li>• Recettes de la compétition pour votre club</li>
-									<li>• Statistiques sur les inscriptions</li>
-									<li>• Statistiques sur les scores des tireurs</li>
+							<div>
+								<h3 class="font-medium text-blue-900 dark:text-gray-300 mb-2">Contenu du rapport de tireur :</h3>
+								<ul class="text-sm text-blue-800 dark:text-gray-300 space-y-1">
+									<li>• Résultats du tireur sur l'ensemble de ses compétitions enregistrées</li>
+									<li>• Statistiques diverses sur le tireur sur l'ensemble de ses compétitions enregistrées</li>
+									<li>• Conseils personnalisés à l'attention du tireur après analyse de ses résultats</li>
+								</ul>
+							</div>
+							<div>
+								<h3 class="font-medium text-blue-900 dark:text-gray-300 mb-2">Contenu du rapport de tireur par compétition :</h3>
+								<ul class="text-sm text-blue-800 dark:text-gray-300 space-y-1">
+									<li>• Résultats du tireur par catégorie, sur la compétition sélectionnée</li>
+									<li>• Statistiques diverses sur le tireur sur la compétition sélectionnée</li>
+									<li>• Conseils personnalisés à l'attention du tireur après analyse de la compétition sélectionnée</li>
 								</ul>
 							</div>
 						</div>
 					</div>
-				</div>
-				}
-
-				<!-- Onglet Rapport de tireur -->
-				@if (selectedTab === 'tireur') {
-				<div class="space-y-4">
-					<h2 class="text-lg font-semibold text-gray-900 pb-2 border-b border-gray-200 dark:border-gray-700 dark:text-gray-300">
-						Générer un rapport de tireur
-					</h2>
-
-					<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-						<!-- Tireur -->
-						<div class="flex flex-col space-y-1">
-							<label for="selectedShooter" class="text-sm font-medium text-gray-700 dark:text-gray-300 ml-1">Tireur *</label>
-							<p-autoComplete
-								#inputField
-								inputId="selectedShooter"
-								name="selectedShooter"
-								[(ngModel)]="selectedShooter"
-								[suggestions]="filteredShooters"
-								(completeMethod)="filteredShooters = commonService.filterByName($event.query, shooters)"
-								(onSelect)="selectedShooter = $event.value"
-								(ngModelChange)="handleShooterChange($event)"
-								[forceSelection]="true"
-								[dropdown]="true"
-								optionLabel="fullName"
-								placeholder="Nom Prénom du tireur à exporter"
-							></p-autoComplete>
-						</div>
-
-						<!-- Compétition -->
-						<div class="flex flex-col space-y-1">
-							<label for="selectedShooterCompetition" class="text-sm font-medium text-gray-700 dark:text-gray-300 ml-1">
-								Compétition du tireur
-							</label>
-							<span
-								class="block"
-								pTooltip="Sélectionnez d'abord un tireur"
-								[tooltipDisabled]="!!selectedShooter"
-								tooltipPosition="top"
-								[ngClass]="{ 'blocked-cursor': !selectedShooter }"
-							>
-								<p-autoComplete
-									inputId="selectedShooterCompetition"
-									name="selectedShooterCompetition"
-									[(ngModel)]="selectedShooterCompetition"
-									[forceSelection]="true"
-									[suggestions]="filteredCompetitions"
-									(completeMethod)="filteredCompetitions = commonService.filterByName($event.query, competitionsForSelectedShooter)"
-									(onSelect)="selectedShooterCompetition = $event.value"
-									[disabled]="!selectedShooter"
-									optionLabel="name"
-									[dropdown]="true"
-									placeholder="Compétition du tireur (optionnel)"
-								></p-autoComplete>
-							</span>
-						</div>
-					</div>
-
-					<!-- Contenu dynamique -->
-					<div
-						class="bg-blue-50 dark:bg-gray-700 rounded-lg p-4 border border-blue-200 dark:border-gray-500 my-6 grid grid-cols-1 md:grid-cols-2 gap-6"
-					>
-						<div>
-							<h3 class="font-medium text-blue-900 dark:text-gray-300 mb-2">Contenu du rapport de tireur :</h3>
-							<ul class="text-sm text-blue-800 dark:text-gray-300 space-y-1">
-								<li>• Résultats du tireur sur l'ensemble de ses compétitions enregistrées</li>
-								<li>• Statistiques diverses sur le tireur sur l'ensemble de ses compétitions enregistrées</li>
-								<li>• Conseils personnalisés à l'attention du tireur après analyse de ses résultats</li>
-							</ul>
-						</div>
-						<div>
-							<h3 class="font-medium text-blue-900 dark:text-gray-300 mb-2">Contenu du rapport de tireur par compétition :</h3>
-							<ul class="text-sm text-blue-800 dark:text-gray-300 space-y-1">
-								<li>• Résultats du tireur par catégorie, sur la compétition sélectionnée</li>
-								<li>• Statistiques diverses sur le tireur sur la compétition sélectionnée</li>
-								<li>• Conseils personnalisés à l'attention du tireur après analyse de la compétition sélectionnée</li>
-							</ul>
-						</div>
-					</div>
-				</div>
 				}
 			</div>
 
