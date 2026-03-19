@@ -163,12 +163,9 @@
 				<p class="text-sm font-medium text-gray-700 dark:text-gray-300 transition-all duration-500 truncate">
 					{{ authService.getUserDisplayName() || "Nom du club" }}
 				</p>
-				<p
-					class="text-sm text-gray-500 dark:text-gray-400 transition-all duration-500 truncate cursor-pointer hover:underline"
-					(click)="commonService.redirectTo('settings')"
-				>
+				<app-redirect-link target="settings" class="text-sm truncate">
 					Gérer le compte
-				</p>
+				</app-redirect-link>
 			</div>
 		</div>
 	</div>

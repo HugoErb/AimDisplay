@@ -1,315 +1,232 @@
 <div class="opacity-0 animate-appear duration-500">
-	<div class="bg-white dark:bg-secondary-dark-bg shadow-lg rounded-lg m-6">
-		<div class="bg-gradient-to-r from-prime-blue to-hover-prime-blue text-white px-8 py-6 rounded-t-lg">
-			<div class="flex items-center space-x-3">
-				<iconify-icon icon="lucide:user-round" class="text-[2rem] mr-5"></iconify-icon>
-				<div>
-					<h1 class="text-2xl font-bold">
-						{{ isEditMode ? "Modification d'un tireur" : "Création d'un nouveau tireur" }}
-					</h1>
-					<p class="text-blue-100 mt-1">
-						{{
-							isEditMode
-								? "Modifiez les informations du tireur et ses performances dans la compétition"
-								: "Renseignez les informations du nouveau tireur ainsi que ses performances dans la compétition"
-						}}
-					</p>
-				</div>
-			</div>
-		</div>
+    <div class="bg-white dark:bg-secondary-dark-bg shadow-lg rounded-lg m-6">
+        <div class="bg-gradient-to-r from-prime-blue to-hover-prime-blue text-white px-8 py-6 rounded-t-lg">
+            <div class="flex items-center space-x-3">
+                <iconify-icon icon="lucide:user-round" class="text-[2rem] mr-5"></iconify-icon>
+                <div>
+                    <h1 class="text-2xl font-bold">
+                        {{ isEditMode ? "Modification d'un tireur" : "Création d'un nouveau tireur" }}
+                    </h1>
+                    <p class="text-blue-100 mt-1">
+                        {{
+                        isEditMode
+                        ? "Modifiez les informations du tireur et ses performances dans la compétition"
+                        : "Renseignez les informations du nouveau tireur ainsi que ses performances dans la compétition"
+                        }}
+                    </p>
+                </div>
+            </div>
+        </div>
 
-		<form (ngSubmit)="onSubmitShooter()" class="p-8 space-y-10">
-			<!-- Informations personnelles -->
-			<div class="space-y-4">
-				<h2 class="text-lg font-semibold text-gray-900 pb-2 border-b border-gray-200 dark:border-gray-700 dark:text-gray-300">
-					Informations personnelles
-				</h2>
-				<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-					<div class="flex flex-col space-y-1">
-						<label for="shooterLastName" class="text-sm font-medium text-gray-700 dark:text-gray-300 ml-1">Nom *</label>
-						<input
-							type="text"
-							#inputField
-							pInputText
-							[(ngModel)]="shooterLastName"
-							name="shooterLastName"
-							id="shooterLastName"
-							placeholder="Nom du tireur"
-						/>
-					</div>
+        <form (ngSubmit)="onSubmitShooter()" class="p-8 space-y-10">
+            <!-- Informations personnelles -->
+            <div class="space-y-4">
+                <h2
+                    class="text-lg font-semibold text-gray-900 pb-2 border-b border-gray-200 dark:border-gray-700 dark:text-gray-300">
+                    Informations personnelles
+                </h2>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="flex flex-col space-y-1">
+                        <label for="shooterLastName"
+                            class="text-sm font-medium text-gray-700 dark:text-gray-300 ml-1">Nom *</label>
+                        <input type="text" #inputField pInputText [(ngModel)]="shooterLastName" name="shooterLastName"
+                            id="shooterLastName" placeholder="Nom du tireur" />
+                    </div>
 
-					<div class="flex flex-col space-y-1">
-						<label for="shooterFirstName" class="text-sm font-medium text-gray-700 dark:text-gray-300 ml-1">Prénom *</label>
-						<input
-							type="text"
-							#inputField
-							pInputText
-							[(ngModel)]="shooterFirstName"
-							name="shooterFirstName"
-							id="shooterFirstName"
-							placeholder="Prénom du tireur"
-						/>
-					</div>
+                    <div class="flex flex-col space-y-1">
+                        <label for="shooterFirstName"
+                            class="text-sm font-medium text-gray-700 dark:text-gray-300 ml-1">Prénom *</label>
+                        <input type="text" #inputField pInputText [(ngModel)]="shooterFirstName" name="shooterFirstName"
+                            id="shooterFirstName" placeholder="Prénom du tireur" />
+                    </div>
 
-					<div class="flex flex-col space-y-1">
-						<label for="shooterEmail" class="text-sm font-medium text-gray-700 dark:text-gray-300 ml-1">Adresse Email</label>
-						<input
-							type="email"
-							#inputField
-							pInputText
-							[(ngModel)]="shooterEmail"
-							name="shooterEmail"
-							id="shooterEmail"
-							placeholder="Adresse Email"
-						/>
-					</div>
-				</div>
-			</div>
+                    <div class="flex flex-col space-y-1">
+                        <label for="shooterEmail"
+                            class="text-sm font-medium text-gray-700 dark:text-gray-300 ml-1">Adresse Email</label>
+                        <input type="email" #inputField pInputText [(ngModel)]="shooterEmail" name="shooterEmail"
+                            id="shooterEmail" placeholder="Adresse Email" />
+                    </div>
+                </div>
+            </div>
 
-			<!-- Club et Competition -->
-			<div class="space-y-4">
-				<h2 class="text-lg font-semibold text-gray-900 pb-2 border-b border-gray-200 dark:border-gray-700 dark:text-gray-300">
-					Affiliation et compétition
-				</h2>
-				<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-					<div class="flex flex-col space-y-1">
-						<label for="shooterClubName" class="text-sm font-medium text-gray-700 dark:text-gray-300 ml-1">Club *</label>
-						<p-autoComplete
-							#inputField
-							[(ngModel)]="shooterClubName"
-							[forceSelection]="true"
-							[suggestions]="filteredClubs"
-							(completeMethod)="filteredClubs = commonService.filterByName($event.query, clubs)"
-							optionLabel="name"
-							name="shooterClubName"
-							id="shooterClubName"
-							[dropdown]="true"
-							placeholder="Club du tireur"
-							[appendTo]="'body'"
-						></p-autoComplete>
-					</div>
+            <!-- Club et Competition -->
+            <div class="space-y-4">
+                <h2
+                    class="text-lg font-semibold text-gray-900 pb-2 border-b border-gray-200 dark:border-gray-700 dark:text-gray-300">
+                    Affiliation et compétition
+                </h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="flex flex-col space-y-1">
+                        <label for="shooterClubName"
+                            class="text-sm font-medium text-gray-700 dark:text-gray-300 ml-1">Club *</label>
+                        <p-autoComplete #inputField [(ngModel)]="shooterClubName" [forceSelection]="true"
+                            [suggestions]="filteredClubs"
+                            (completeMethod)="filteredClubs = commonService.filterByName($event.query, clubs)"
+                            optionLabel="name" name="shooterClubName" id="shooterClubName" [dropdown]="true"
+                            placeholder="Club du tireur" [appendTo]="'body'"></p-autoComplete>
+                    </div>
 
-					<div class="flex flex-col space-y-1">
-						<label for="shooterCompetitionName" class="text-sm font-medium text-gray-700 dark:text-gray-300 ml-1">Compétition *</label>
-						<p-autoComplete
-							#inputField
-							[(ngModel)]="shooterCompetitionName"
-							[forceSelection]="true"
-							[suggestions]="filteredCompetitions"
-							(completeMethod)="filteredCompetitions = commonService.filterByName($event.query, competitions)"
-							name="shooterCompetitionName"
-							id="shooterCompetitionName"
-							optionLabel="name"
-							[dropdown]="true"
-							placeholder="Compétition du tireur"
-							[appendTo]="'body'"
-						></p-autoComplete>
-					</div>
-				</div>
-			</div>
+                    <div class="flex flex-col space-y-1">
+                        <label for="shooterCompetitionName"
+                            class="text-sm font-medium text-gray-700 dark:text-gray-300 ml-1">Compétition *</label>
+                        <p-autoComplete #inputField [(ngModel)]="shooterCompetitionName" [forceSelection]="true"
+                            [suggestions]="filteredCompetitions"
+                            (completeMethod)="filteredCompetitions = commonService.filterByName($event.query, competitions)"
+                            name="shooterCompetitionName" id="shooterCompetitionName" optionLabel="name"
+                            [dropdown]="true" placeholder="Compétition du tireur" [appendTo]="'body'"></p-autoComplete>
+                    </div>
+                </div>
+            </div>
 
-			<!-- Catégorie et scores du tireur dans la compétition -->
-			<div
-				*ngFor="let group of categoryGroups; let i = index"
-				class="grid transition-all duration-300 ease-out"
-				[ngClass]="isEditMode || group._open ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'"
-			>
-				<div
-					class="space-y-4 overflow-hidden transition-opacity duration-300"
-					[ngClass]="isEditMode || group._open ? 'opacity-100' : 'opacity-0'"
-				>
-					<h2 class="text-lg font-semibold text-gray-900 pb-2 border-b border-gray-200 dark:border-gray-700 dark:text-gray-300">
-						Catégorie et scores du tireur dans la compétition @if (i > 0) {{{ i + 1 }}}
-					</h2>
+            <!-- Catégorie et scores du tireur dans la compétition -->
+            <div *ngFor="let group of categoryGroups; let i = index" class="grid transition-all duration-300 ease-out"
+                [ngClass]="isEditMode || group._open ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'">
+                <div class="space-y-4 overflow-hidden transition-opacity duration-300"
+                    [ngClass]="isEditMode || group._open ? 'opacity-100' : 'opacity-0'">
+                    <h2
+                        class="text-lg font-semibold text-gray-900 pb-2 border-b border-gray-200 dark:border-gray-700 dark:text-gray-300">
+                        Catégorie et scores du tireur dans la compétition @if (i > 0) {{{ i + 1 }}}
+                    </h2>
 
-					<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-						<!-- Distance -->
-						<div class="flex flex-col space-y-1">
-							<label [for]="'shooterDistance_' + i" class="text-sm font-medium text-gray-700 dark:text-gray-300 ml-1">
-								Distance de tir @if (i > 0) {({{ i + 1 }})} *
-							</label>
-							<p-autoComplete
-								#inputField
-								[(ngModel)]="group.shooterDistance"
-								[forceSelection]="true"
-								[suggestions]="filteredDistances"
-								(completeMethod)="filteredDistances = commonService.filterByName($event.query, distances)"
-								[name]="'shooterDistance_' + i"
-								[inputId]="'shooterDistance_' + i"
-								optionLabel="name"
-								[dropdown]="true"
-								placeholder="Distance de tir du tireur"
-								[appendTo]="'body'"
-							></p-autoComplete>
-						</div>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <!-- Distance -->
+                        <div class="flex flex-col space-y-1">
+                            <label [for]="'shooterDistance_' + i"
+                                class="text-sm font-medium text-gray-700 dark:text-gray-300 ml-1">
+                                Distance de tir @if (i > 0) {({{ i + 1 }})} *
+                            </label>
+                            <p-autoComplete #inputField [(ngModel)]="group.shooterDistance" [forceSelection]="true"
+                                [suggestions]="filteredDistances"
+                                (completeMethod)="filteredDistances = commonService.filterByName($event.query, distances)"
+                                [name]="'shooterDistance_' + i" [inputId]="'shooterDistance_' + i" optionLabel="name"
+                                [dropdown]="true" placeholder="Distance de tir du tireur"
+                                [appendTo]="'body'"></p-autoComplete>
+                        </div>
 
-						<!-- Arme -->
-						<div class="flex flex-col space-y-1">
-							<label [for]="'shooterWeapon_' + i" class="text-sm font-medium text-gray-700 dark:text-gray-300 ml-1">
-								Type d'arme @if (i > 0) {({{ i + 1 }})} *
-							</label>
-							<p-autoComplete
-								#inputField
-								[(ngModel)]="group.shooterWeapon"
-								[forceSelection]="true"
-								[suggestions]="filteredWeapons"
-								(completeMethod)="filteredWeapons = commonService.filterByName($event.query, weapons)"
-								[name]="'shooterWeapon_' + i"
-								[inputId]="'shooterWeapon_' + i"
-								optionLabel="name"
-								[dropdown]="true"
-								placeholder="Type d'arme utilisé"
-								[appendTo]="'body'"
-							></p-autoComplete>
-						</div>
+                        <!-- Arme -->
+                        <div class="flex flex-col space-y-1">
+                            <label [for]="'shooterWeapon_' + i"
+                                class="text-sm font-medium text-gray-700 dark:text-gray-300 ml-1">
+                                Type d'arme @if (i > 0) {({{ i + 1 }})} *
+                            </label>
+                            <p-autoComplete #inputField [(ngModel)]="group.shooterWeapon" [forceSelection]="true"
+                                [suggestions]="filteredWeapons"
+                                (completeMethod)="filteredWeapons = commonService.filterByName($event.query, weapons)"
+                                [name]="'shooterWeapon_' + i" [inputId]="'shooterWeapon_' + i" optionLabel="name"
+                                [dropdown]="true" placeholder="Type d'arme utilisé"
+                                [appendTo]="'body'"></p-autoComplete>
+                        </div>
 
-						<!-- Catégorie -->
-						<div class="flex flex-col space-y-1">
-							<label [for]="'shooterCategory_' + i" class="text-sm font-medium text-gray-700 dark:text-gray-300 ml-1">
-								Catégorie @if (i > 0) {({{ i + 1 }})} *
-							</label>
-							<p-autoComplete
-								#inputField
-								[(ngModel)]="group.shooterCategory"
-								[forceSelection]="true"
-								[suggestions]="filteredShooterCategories"
-								(completeMethod)="filteredShooterCategories = commonService.filterByName($event.query, shooterCategories)"
-								(onSelect)="onCategorySelected($event, group)"
-								[name]="'shooterCategory_' + i"
-								[inputId]="'shooterCategory_' + i"
-								optionLabel="name"
-								[dropdown]="true"
-								placeholder="Catégorie du tireur"
-								[appendTo]="'body'"
-							></p-autoComplete>
-						</div>
-					</div>
+                        <!-- Catégorie -->
+                        <div class="flex flex-col space-y-1">
+                            <label [for]="'shooterCategory_' + i"
+                                class="text-sm font-medium text-gray-700 dark:text-gray-300 ml-1">
+                                Catégorie @if (i > 0) {({{ i + 1 }})} *
+                            </label>
+                            <p-autoComplete #inputField [(ngModel)]="group.shooterCategory" [forceSelection]="true"
+                                [suggestions]="filteredShooterCategories"
+                                (completeMethod)="filteredShooterCategories = commonService.filterByName($event.query, shooterCategories)"
+                                (onSelect)="onCategorySelected($event, group)" [name]="'shooterCategory_' + i"
+                                [inputId]="'shooterCategory_' + i" optionLabel="name" [dropdown]="true"
+                                placeholder="Catégorie du tireur" [appendTo]="'body'"></p-autoComplete>
+                        </div>
+                    </div>
 
-					<!-- Wrapper pour ne plus avoir de gap quand 5–6 est fermé -->
-					<div>
-						<!-- Scores 1..4 -->
-						<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-							<div *ngFor="let serie of [1, 2, 3, 4]; let s = index">
-								<label [for]="'serie' + serie + '_' + i" class="text-sm font-medium text-gray-700 dark:text-gray-300 ml-1">
-									Score série {{ serie }} @if (i > 0) {({{ i + 1 }})}
-								</label>
-								<p-inputNumber
-									#inputField
-									[(ngModel)]="group['scoreSerie' + serie]"
-									mode="decimal"
-									[minFractionDigits]="2"
-									[maxFractionDigits]="2"
-									[min]="0"
-									[max]="109"
-									[showButtons]="true"
-									[name]="'serie' + serie + '_' + i"
-									[inputId]="'serie' + serie + '_' + i"
-									placeholder="Score série {{ serie }}"
-								></p-inputNumber>
-							</div>
-						</div>
+                    <!-- Wrapper pour ne plus avoir de gap quand 5–6 est fermé -->
+                    <div>
+                        <!-- Scores 1..4 -->
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                            <div *ngFor="let serie of [1, 2, 3, 4]; let s = index">
+                                <label [for]="'serie' + serie + '_' + i"
+                                    class="text-sm font-medium text-gray-700 dark:text-gray-300 ml-1">
+                                    Score série {{ serie }} @if (i > 0) {({{ i + 1 }})}
+                                </label>
+                                <p-inputNumber #inputField [(ngModel)]="group['scoreSerie' + serie]" mode="decimal"
+                                    [minFractionDigits]="2" [maxFractionDigits]="2" [min]="0" [max]="109"
+                                    [showButtons]="true" [name]="'serie' + serie + '_' + i"
+                                    [inputId]="'serie' + serie + '_' + i"
+                                    placeholder="Score série {{ serie }}"></p-inputNumber>
+                            </div>
+                        </div>
 
-						<!-- Séries 5 & 6 : en-dehors de la grid des 1–4, avec marge seulement si ouvert -->
-						<div
-							class="transition-all duration-300 ease-out"
-							[ngClass]="group.hasSixSeries ? 'grid grid-rows-[1fr] mt-6' : 'grid grid-rows-[0fr] mt-0'"
-						>
-							<div class="overflow-hidden transition-opacity duration-300" [ngClass]="group.hasSixSeries ? 'opacity-100' : 'opacity-0'">
-								<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-									<div class="flex flex-col space-y-1">
-										<label [for]="'serie5_' + i" class="text-sm font-medium text-gray-700 dark:text-gray-300 ml-1">
-											Score série 5 @if (i > 0) {({{ i + 1 }})}
-										</label>
-										<p-inputNumber
-											#inputField
-											[(ngModel)]="group.scoreSerie5"
-											mode="decimal"
-											[minFractionDigits]="2"
-											[maxFractionDigits]="2"
-											[min]="0"
-											[max]="109"
-											[name]="'scoreSerie5_' + i"
-											[inputId]="'serie5_' + i"
-											[showButtons]="true"
-											placeholder="Score série 5"
-										></p-inputNumber>
-									</div>
+                        <!-- Séries 5 & 6 : en-dehors de la grid des 1–4, avec marge seulement si ouvert -->
+                        <div class="transition-all duration-300 ease-out"
+                            [ngClass]="group.hasSixSeries ? 'grid grid-rows-[1fr] mt-6' : 'grid grid-rows-[0fr] mt-0'">
+                            <div class="overflow-hidden transition-opacity duration-300"
+                                [ngClass]="group.hasSixSeries ? 'opacity-100' : 'opacity-0'">
+                                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                                    <div class="flex flex-col space-y-1">
+                                        <label [for]="'serie5_' + i"
+                                            class="text-sm font-medium text-gray-700 dark:text-gray-300 ml-1">
+                                            Score série 5 @if (i > 0) {({{ i + 1 }})}
+                                        </label>
+                                        <p-inputNumber #inputField [(ngModel)]="group.scoreSerie5" mode="decimal"
+                                            [minFractionDigits]="2" [maxFractionDigits]="2" [min]="0" [max]="109"
+                                            [name]="'scoreSerie5_' + i" [inputId]="'serie5_' + i" [showButtons]="true"
+                                            placeholder="Score série 5"></p-inputNumber>
+                                    </div>
 
-									<div class="flex flex-col space-y-1">
-										<label [for]="'serie6_' + i" class="text-sm font-medium text-gray-700 dark:text-gray-300 ml-1">
-											Score série 6 @if (i > 0) {({{ i + 1 }})}
-										</label>
-										<p-inputNumber
-											#inputField
-											[(ngModel)]="group.scoreSerie6"
-											mode="decimal"
-											[minFractionDigits]="2"
-											[maxFractionDigits]="2"
-											[min]="0"
-											[max]="109"
-											[name]="'scoreSerie6_' + i"
-											[inputId]="'serie6_' + i"
-											[showButtons]="true"
-											placeholder="Score série 6"
-										></p-inputNumber>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
+                                    <div class="flex flex-col space-y-1">
+                                        <label [for]="'serie6_' + i"
+                                            class="text-sm font-medium text-gray-700 dark:text-gray-300 ml-1">
+                                            Score série 6 @if (i > 0) {({{ i + 1 }})}
+                                        </label>
+                                        <p-inputNumber #inputField [(ngModel)]="group.scoreSerie6" mode="decimal"
+                                            [minFractionDigits]="2" [maxFractionDigits]="2" [min]="0" [max]="109"
+                                            [name]="'scoreSerie6_' + i" [inputId]="'serie6_' + i" [showButtons]="true"
+                                            placeholder="Score série 6"></p-inputNumber>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
-			<!-- Bouton d'ajout -->
-			@if (!isEditMode){
-			<div
-				(click)="addCategoryGroup()"
-				class="inline-flex h-12 items-center justify-center rounded-md bg-prime-blue text-white hover:bg-hover-prime-blue px-5 text-base font-medium shadow transition-colors duration-250 cursor-pointer"
-			>
-				<iconify-icon icon="si:add-fill" class="text-[1.6rem] mr-3"></iconify-icon>
-				Ajouter une catégorie supplémentaire
-			</div>
-			}
+            <!-- Bouton d'ajout -->
+            @if (!isEditMode){
+            <div (click)="addCategoryGroup()"
+                class="inline-flex h-12 items-center justify-center rounded-md bg-prime-blue text-white hover:bg-hover-prime-blue px-5 text-base font-medium shadow transition-colors duration-250 cursor-pointer">
+                <iconify-icon icon="si:add-fill" class="text-[1.6rem] mr-3"></iconify-icon>
+                Ajouter une catégorie supplémentaire
+            </div>
+            }
 
-			<!-- Information Notes -->
-			<div class="pt-6 border-t border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-400">
-				<div class="flex items-center text-sm">
-					<iconify-icon icon="lucide:info" class="text-[1rem] mr-2"></iconify-icon>
-					<p>Les champs marqués d'un astérisque (*) sont obligatoires.</p>
-				</div>
-				@if (!isEditMode){
-				<div class="flex items-center text-sm">
-					<iconify-icon icon="lucide:info" class="text-[1rem] mr-2"></iconify-icon>
-					<p>
-						Utilisez le bouton "Ajouter une catégorie supplémentaire" afin d'inscrire le tireur sur plusieurs catégories pour une même
-						compétition.
-					</p>
-				</div>
-				}
-				<div class="flex items-center text-sm">
-					<iconify-icon icon="lucide:info" class="text-[1rem] mr-2"></iconify-icon>
-					<p>
-						Les résultats des séries peuvent être laissés à zéro et renseignés ultérieurement dans l'onglet "
-						<span
-							(click)="commonService.redirectTo('modification_shooter')"
-							class="font-medium text-prime-blue cursor-pointer hover:underline"
-						>
-							Modification des tireurs
-						</span>
-						".
-					</p>
-				</div>
-				<div class="flex justify-end">
-					<button
-						class="inline-flex h-12 items-center justify-center rounded-md bg-prime-blue text-white hover:bg-hover-prime-blue px-5 text-base font-medium shadow transition-colors duration-250 cursor-pointer"
-						type="submit"
-						[disabled]="isSaving"
-					>
-						<iconify-icon icon="material-symbols-light:save-rounded" class="text-[1.5rem] mr-4"></iconify-icon>
-						Enregistrer le tireur
-					</button>
-				</div>
-			</div>
-		</form>
-	</div>
+            <!-- Information Notes -->
+            <div class="pt-6 border-t border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-400">
+                <div class="flex items-center text-sm">
+                    <iconify-icon icon="lucide:info" class="text-[1rem] mr-2"></iconify-icon>
+                    <p>Les champs marqués d'un astérisque (*) sont obligatoires.</p>
+                </div>
+                @if (!isEditMode){
+                <div class="flex items-center text-sm">
+                    <iconify-icon icon="lucide:info" class="text-[1rem] mr-2"></iconify-icon>
+                    <p>
+                        Utilisez le bouton "Ajouter une catégorie supplémentaire" afin d'inscrire le tireur sur
+                        plusieurs catégories pour une même
+                        compétition.
+                    </p>
+                </div>
+                }
+                <div class="flex items-center text-sm">
+                    <iconify-icon icon="lucide:info" class="text-[1rem] mr-2"></iconify-icon>
+                    <p>
+                        Les résultats des séries peuvent être laissés à zéro et renseignés ultérieurement dans l'onglet
+                        <app-redirect-link target="modification_shooter">
+                            Modification des tireurs
+                        </app-redirect-link>.
+                    </p>
+                </div>
+                <div class="flex justify-end">
+                    <button
+                        class="inline-flex h-12 items-center justify-center rounded-md bg-prime-blue text-white hover:bg-hover-prime-blue px-5 text-base font-medium shadow transition-colors duration-250 cursor-pointer"
+                        type="submit" [disabled]="isSaving">
+                        <iconify-icon icon="material-symbols-light:save-rounded"
+                            class="text-[1.5rem] mr-4"></iconify-icon>
+                        Enregistrer le tireur
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
 </div>

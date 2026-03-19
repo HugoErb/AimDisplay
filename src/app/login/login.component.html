@@ -36,12 +36,9 @@
 				<div class="space-y-1">
 					<div class="flex items-center justify-between">
 						<label for="password" class="text-sm font-medium text-gray-700">Mot de passe *</label>
-						<div
-							(click)="commonService.redirectTo('forgot-password')"
-							class="text-sm font-medium text-prime-blue hover:text-hover-prime-blue hover:underline cursor-pointer"
-						>
+						<app-redirect-link target="forgot-password" class="text-sm" [forceLight]="true">
 							Mot de passe oublié ?
-						</div>
+						</app-redirect-link>
 					</div>
 					<div class="relative">
 						<input
@@ -78,13 +75,9 @@
 			<div class="mt-8 flex flex-col items-center">
 				<span class="text-gray-600">Vous n'avez pas de compte ?</span>
 
-				<button
-					type="button"
-					class="font-medium text-prime-blue hover:text-hover-prime-blue hover:underline cursor-pointer"
-					(click)="commonService.redirectTo('register')"
-				>
+				<app-redirect-link target="register" [forceLight]="true">
 					Créer un compte
-				</button>
+				</app-redirect-link>
 			</div>
 		</div>
 	</div>

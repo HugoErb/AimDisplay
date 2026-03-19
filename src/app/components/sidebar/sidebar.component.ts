@@ -4,10 +4,12 @@ import { AuthService } from '../../services/auth.service';
 import { CommonService } from '../../services/common.service';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 
+import { RedirectLinkComponent } from '../redirect-link/redirect-link.component';
+
 @Component({
 	selector: 'app-sidebar',
 	standalone: true,
-	imports: [CommonModule],
+	imports: [CommonModule, RedirectLinkComponent],
 	templateUrl: './sidebar.component.html',
 	schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })

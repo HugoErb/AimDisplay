@@ -140,13 +140,9 @@
 			<div class="mt-8 flex flex-col items-center">
 				<span class="text-gray-600">Vous avez déjà un compte ?</span>
 
-				<button
-					type="button"
-					class="font-medium text-prime-blue hover:text-hover-prime-blue hover:underline cursor-pointer"
-					(click)="commonService.redirectTo('login')"
-				>
+				<app-redirect-link target="login" [forceLight]="true">
 					Se connecter
-				</button>
+				</app-redirect-link>
 			</div>
 		</div>
 	</div>

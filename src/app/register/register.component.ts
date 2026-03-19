@@ -4,11 +4,13 @@ import { FormsModule } from '@angular/forms';
 import { InputTextModule } from 'primeng/inputtext';
 import { CommonService } from '../services/common.service';
 import { AuthService } from '../services/auth.service';
+import { CommonModule } from '@angular/common';
+import { RedirectLinkComponent } from '../components/redirect-link/redirect-link.component';
 
 @Component({
 	selector: 'app-register',
 	standalone: true,
-	imports: [FormsModule, InputTextModule],
+	imports: [CommonModule, FormsModule, InputTextModule, RedirectLinkComponent],
 	templateUrl: './register.component.html',
 	schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })

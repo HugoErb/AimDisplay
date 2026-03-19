@@ -5,11 +5,12 @@ import { InputTextModule } from 'primeng/inputtext';
 import { CommonService } from '../services/common.service';
 import { AuthService } from '../services/auth.service';
 import { ActivatedRoute } from '@angular/router';
+import { RedirectLinkComponent } from '../components/redirect-link/redirect-link.component';
 
 @Component({
 	selector: 'app-reset-password',
 	standalone: true,
-	imports: [FormsModule, InputTextModule],
+	imports: [FormsModule, InputTextModule, RedirectLinkComponent],
 	templateUrl: './reset-password.component.html',
 	schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
