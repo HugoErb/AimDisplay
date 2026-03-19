@@ -1,0 +1,178 @@
+<div class="opacity-0 animate-appear transition-all duration-500 pb-10">
+    <div class="bg-white dark:bg-secondary-dark-bg transition-all duration-500 shadow-lg rounded-lg m-6">
+        <!-- Header Segment -->
+        <div class="bg-gradient-to-r from-prime-blue to-hover-prime-blue text-white px-8 py-6 rounded-t-lg">
+            <div class="flex items-center space-x-3">
+                <iconify-icon icon="carbon:help" class="text-[2.5rem] mr-5"></iconify-icon>
+                <div>
+                    <h1 class="text-2xl font-bold">Aide & Tutoriel</h1>
+                    <p class="text-blue-100 mt-1">Apprenez à utiliser Aim Display et gérez vos compétitions sereinement
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="p-8 space-y-10">
+            <!-- Welcome Section -->
+            <section class="border-b border-gray-100 dark:border-gray-700 pb-8">
+                <div class="flex items-center space-x-3 mb-4">
+                    <iconify-icon icon="lucide:sparkles" class="text-prime-blue text-2xl"></iconify-icon>
+                    <h2 class="text-xl font-semibold text-gray-800 dark:text-gray-200">Bienvenue sur Aim Display</h2>
+                </div>
+                <p class="text-gray-600 dark:text-gray-400 leading-relaxed">
+                    Aim Display est votre outil complet pour la gestion de compétitions de tir sportif.
+                    Que vous soyez un club ou un organisateur indépendant, cette section vous guidera à travers les
+                    fonctionnalités essentielles.
+                </p>
+            </section>
+
+            <!-- Help Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <!-- Creation Section -->
+                <div
+                    class="p-6 rounded-xl bg-blue-50/50 dark:bg-blue-900/10 border border-blue-100 dark:border-blue-900/30">
+                    <div class="flex items-center space-x-3 mb-4">
+                        <iconify-icon icon="lucide:plus-circle" class="text-prime-blue text-2xl"></iconify-icon>
+                        <h3 class="text-lg font-bold text-gray-800 dark:text-gray-100">Démarrage Rapide</h3>
+                    </div>
+                    <ul class="space-y-3">
+                        <li class="flex items-start space-x-3 text-sm text-gray-600 dark:text-gray-400">
+                            <span
+                                class="flex-shrink-0 w-5 h-5 bg-prime-blue text-white rounded-full flex items-center justify-center text-xs">1</span>
+                            <span><strong><a (click)="commonService.redirectTo('creation_club')"
+                                        class="text-prime-blue hover:underline cursor-pointer">Créez vos clubs</a>
+                                    :</strong> Créez tous les clubs participants à votre compétition</span>
+                        </li>
+                        <li class="flex items-start space-x-3 text-sm text-gray-600 dark:text-gray-400">
+                            <span
+                                class="flex-shrink-0 w-5 h-5 bg-prime-blue text-white rounded-full flex items-center justify-center text-xs">2</span>
+                            <span><strong><a (click)="commonService.redirectTo('creation_competition')"
+                                        class="text-prime-blue hover:underline cursor-pointer">Créez la compétition</a>
+                                    :</strong> Configurez les détails de votre événement sportif.</span>
+                        </li>
+                        <li class="flex items-start space-x-3 text-sm text-gray-600 dark:text-gray-400">
+                            <span
+                                class="flex-shrink-0 w-5 h-5 bg-prime-blue text-white rounded-full flex items-center justify-center text-xs">3</span>
+                            <span><strong><a (click)="commonService.redirectTo('creation_shooter')"
+                                        class="text-prime-blue hover:underline cursor-pointer">Créez les tireurs</a>
+                                    :</strong> Enregistrez les participants de votre compétition ainsi que leurs
+                                scores.</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Management Section -->
+                <div
+                    class="p-6 rounded-xl bg-purple-50/50 dark:bg-purple-900/10 border border-purple-100 dark:border-purple-900/30">
+                    <div class="flex items-center space-x-3 mb-4">
+                        <iconify-icon icon="lucide:monitor" class="text-purple-600 text-2xl"></iconify-icon>
+                        <h3 class="text-lg font-bold text-gray-800 dark:text-gray-100">Affichage & Rapports</h3>
+                    </div>
+                    <ul class="space-y-3">
+                        <li class="flex items-start space-x-3 text-sm text-gray-600 dark:text-gray-400">
+                            <iconify-icon icon="lucide:check-circle-2" class="text-green-500 mt-1"></iconify-icon>
+                            <span><strong><a (click)="commonService.redirectTo('display')"
+                                        class="text-purple-600 hover:underline cursor-pointer">Mode Affichage</a>
+                                    :</strong> Utilisez le mode plein écran pour projeter les résultats en
+                                direct aux participants et spectateurs de votre compétition.</span>
+                        </li>
+                        <li class="flex items-start space-x-3 text-sm text-gray-600 dark:text-gray-400">
+                            <iconify-icon icon="lucide:check-circle-2" class="text-green-500 mt-1"></iconify-icon>
+                            <span><strong><a (click)="commonService.redirectTo('generer_pdf')"
+                                        class="text-purple-600 hover:underline cursor-pointer">Exports PDF</a>
+                                    :</strong> Générez des rapports PDF détaillés par tireur ou par compétition à la fin du
+                                tournoi.</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Tutorial Section -->
+            <section class="space-y-6">
+                <div class="flex items-center space-x-3 mb-2">
+                    <iconify-icon icon="lucide:book-open" class="text-prime-blue text-2xl"></iconify-icon>
+                    <h2 class="text-xl font-semibold text-gray-800 dark:text-gray-200">Tutoriel Détaillé</h2>
+                </div>
+
+                <div class="space-y-8">
+                    <!-- Step 1 -->
+                    <div class="flex space-x-4">
+                        <div class="flex-shrink-0">
+                            <div
+                                class="w-10 h-10 rounded-full bg-prime-blue/10 flex items-center justify-center border border-prime-blue/20">
+                                <iconify-icon icon="uil:house-user" class="text-prime-blue text-xl"></iconify-icon>
+                            </div>
+                        </div>
+                        <div class="flex-1">
+                            <h4 class="font-bold text-gray-800 dark:text-gray-200">Étape 1 : Préparation des Clubs</h4>
+                            <p class="text-sm text-gray-600 dark:text-gray-400 mt-1">
+                                Avant de lancer votre compétition, enregistrez tous les clubs participants via le menu
+                                <strong><a (click)="commonService.redirectTo('creation_club')" class="text-prime-blue hover:underline cursor-pointer">Nouveau club</a></strong>.
+                                Cela vous permettra de lier rapidement chaque tireur à son club d'origine. Les clubs
+                                sont conservés dans votre base de données pour une réutilisation future.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Step 2 -->
+                    <div class="flex space-x-4">
+                        <div class="flex-shrink-0">
+                            <div
+                                class="w-10 h-10 rounded-full bg-prime-blue/10 flex items-center justify-center border border-prime-blue/20">
+                                <iconify-icon icon="octicon:trophy-24" class="text-prime-blue text-xl"></iconify-icon>
+                            </div>
+                        </div>
+                        <div class="flex-1">
+                            <h4 class="font-bold text-gray-800 dark:text-gray-200">Étape 2 : Configuration de la
+                                Compétition</h4>
+                            <p class="text-sm text-gray-600 dark:text-gray-400 mt-1">
+                                Utilisez l'onglet <strong><a (click)="commonService.redirectTo('creation_competition')" class="text-prime-blue hover:underline cursor-pointer">Nouvelle compétition</a></strong> pour définir le nom, la date et
+                                le type de tir.
+                                Assurez-vous de bien paramétrer les options spécifiques (nombre de séries, temps de tir)
+                                avant d'enregistrer.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Step 3 -->
+                    <div class="flex space-x-4">
+                        <div class="flex-shrink-0">
+                            <div
+                                class="w-10 h-10 rounded-full bg-prime-blue/10 flex items-center justify-center border border-prime-blue/20">
+                                <iconify-icon icon="lucide:user-round" class="text-prime-blue text-xl"></iconify-icon>
+                            </div>
+                        </div>
+                        <div class="flex-1">
+                            <h4 class="font-bold text-gray-800 dark:text-gray-200">Étape 3 : Inscription des Tireurs
+                            </h4>
+                            <p class="text-sm text-gray-600 dark:text-gray-400 mt-1">
+                                Une fois la compétition créée, ajoutez les tireurs dans <strong><a (click)="commonService.redirectTo('creation_shooter')" class="text-prime-blue hover:underline cursor-pointer">Nouveau tireur</a></strong>.
+                                Sélectionnez la compétition correspondante et le club du tireur.
+                                <span class="text-amber-600 dark:text-amber-500 font-medium italic">Rappel : un tireur
+                                    est enregistré spécifiquement pour une compétition donnée.</span>
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Step 4 -->
+                    <div class="flex space-x-4">
+                        <div class="flex-shrink-0">
+                            <div
+                                class="w-10 h-10 rounded-full bg-prime-blue/10 flex items-center justify-center border border-prime-blue/20">
+                                <iconify-icon icon="mdi:play" class="text-prime-blue text-xl"></iconify-icon>
+                            </div>
+                        </div>
+                        <div class="flex-1">
+                            <h4 class="font-bold text-gray-800 dark:text-gray-200">Étape 4 : Déroulement et Résultats
+                            </h4>
+                            <p class="text-sm text-gray-600 dark:text-gray-400 mt-1">
+                                Lancez le <strong><a (click)="commonService.redirectTo('display')" class="text-prime-blue hover:underline cursor-pointer">Mode Affichage</a></strong> sur un écran secondaire pour le public.
+                                Saisissez les scores au fur et à mesure. À la clôture, exportez le <strong><a (click)="commonService.redirectTo('generer_pdf')" class="text-prime-blue hover:underline cursor-pointer">Rapport
+                                    PDF</a></strong> global pour archiver le classement final.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+</div>
