@@ -131,6 +131,15 @@
 			<ul class="space-y-1 [@media(max-height:750px)]:space-y-0 cursor-pointer">
 				<li>
 					<div
+						(click)="commonService.redirectTo('help')"
+						class="flex items-center space-x-3 p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-700 text-[0.9rem]"
+					>
+						<iconify-icon icon="lucide:help-circle" class="text-[1rem]"></iconify-icon>
+						<span>Aide & Tutoriel</span>
+					</div>
+				</li>
+				<li>
+					<div
 						(click)="commonService.redirectTo('settings')"
 						class="flex items-center space-x-3 p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-700 text-[0.9rem]"
 					>

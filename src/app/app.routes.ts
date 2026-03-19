@@ -18,6 +18,7 @@ import { GenererPDFComponent } from './generer_pdf/generer_pdf.component';
 import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
 import { ResetPasswordComponent } from './reset-password/reset-password.component';
 import { SplashScreenComponent } from './splash_screen/splash_screen.component';
+import { HelpComponent } from './help/help.component';
 
 export const routes: Routes = [
 	// Pages publiques (sans authentification)
@@ -50,6 +51,7 @@ export const routes: Routes = [
 			{ path: 'display', component: DisplayComponent },
 			{ path: 'generer_pdf', component: GenererPDFComponent },
 			{ path: 'settings', component: SettingsComponent },
+			{ path: 'help', component: HelpComponent },
 		],
 	},
 
