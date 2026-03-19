@@ -11,6 +11,7 @@ import { TextareaModule } from 'primeng/textarea';
 import { TableModule } from 'primeng/table';
 import { CommonModule } from '@angular/common';
 import { AuthService } from '../services/auth.service';
+import { AppSectionHeaderComponent } from '../components/section-header/section-header.component';
 
 // Modals
 type ModalKey = 'renameClub' | 'changePassword';
@@ -25,7 +26,7 @@ declare global {
 @Component({
 	selector: 'app-settings',
 	standalone: true,
-	imports: [DropdownModule, ToggleSwitchModule, FormsModule, InputTextModule, TextareaModule, TableModule, CommonModule],
+	imports: [DropdownModule, ToggleSwitchModule, FormsModule, InputTextModule, TextareaModule, TableModule, CommonModule, AppSectionHeaderComponent],
 	templateUrl: './settings.component.html',
 	schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })

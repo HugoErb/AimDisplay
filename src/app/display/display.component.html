@@ -1,14 +1,10 @@
 <div class="opacity-0 animate-appear duration-500">
 	<div class="bg-white dark:bg-secondary-dark-bg shadow-lg rounded-lg m-6">
-		<div class="bg-gradient-to-r from-prime-blue to-hover-prime-blue text-white px-8 py-6 rounded-t-lg">
-			<div class="flex items-center space-x-3">
-				<iconify-icon icon="streamline:screen-1-remix" class="text-[1.8rem] mr-5"></iconify-icon>
-				<div>
-					<h1 class="text-2xl font-bold">Affichage du classement d'une compétition</h1>
-					<p class="text-blue-100 mt-1">Lancez l'affichage du classement en direct d'une compétition en cours</p>
-				</div>
-			</div>
-		</div>
+		<app-section-header
+			title="Affichage du classement d'une compétition"
+			subtitle="Lancez l'affichage du classement en direct d'une compétition en cours"
+			icon="streamline:screen-1-remix">
+		</app-section-header>
 
 		<form (ngSubmit)="launchDisplay()" class="p-8 space-y-10">
 			<div class="space-y-4">

@@ -7,11 +7,12 @@ import { SupabaseService } from '../services/supabase.service';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { MultiSelectModule } from 'primeng/multiselect';
+import { AppSectionHeaderComponent } from '../components/section-header/section-header.component';
 
 @Component({
 	selector: 'app-modification-shooter',
 	standalone: true,
-	imports: [TableModule, CommonModule, MultiSelectModule],
+	imports: [TableModule, CommonModule, MultiSelectModule, AppSectionHeaderComponent],
 	templateUrl: './modification_shooter.component.html',
 	schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })

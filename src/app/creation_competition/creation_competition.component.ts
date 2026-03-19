@@ -10,11 +10,13 @@ import { Competition } from '../interfaces/competition';
 import { SupabaseService } from '../services/supabase.service';
 import { ActivatedRoute } from '@angular/router';
 import { Location } from '@angular/common';
+import { AppSectionHeaderComponent } from '../components/section-header/section-header.component';
+import { InfoNoteComponent } from '../components/info-note/info-note.component';
 
 @Component({
 	selector: 'app-creation-competition',
 	standalone: true,
-	imports: [FormsModule, InputNumberModule, DatePickerModule, CommonModule, InputTextModule],
+	imports: [InputTextModule, FormsModule, InputNumberModule, DatePickerModule, CommonModule, AppSectionHeaderComponent, InfoNoteComponent],
 	templateUrl: './creation_competition.component.html',
 	schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })

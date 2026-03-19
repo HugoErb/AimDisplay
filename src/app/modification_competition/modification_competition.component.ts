@@ -8,13 +8,14 @@ import { CommonModule, CurrencyPipe } from '@angular/common';
 import { registerLocaleData } from '@angular/common';
 import localeFr from '@angular/common/locales/fr';
 import { Router } from '@angular/router';
+import { AppSectionHeaderComponent } from '../components/section-header/section-header.component';
 
 registerLocaleData(localeFr, 'fr-FR');
 
 @Component({
 	selector: 'app-modification-competition',
 	standalone: true,
-	imports: [TableModule, CommonModule, CurrencyPipe],
+	imports: [TableModule, CommonModule, CurrencyPipe, AppSectionHeaderComponent],
 	templateUrl: './modification_competition.component.html',
 	schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })

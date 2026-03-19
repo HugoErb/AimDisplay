@@ -5,11 +5,12 @@ import { ThemeService } from '../services/theme.service';
 import { CommonService } from '../services/common.service';
 
 import { RedirectLinkComponent } from '../components/redirect-link/redirect-link.component';
+import { AppSectionHeaderComponent } from '../components/section-header/section-header.component';
 
 @Component({
 	selector: 'app-help',
 	standalone: true,
-	imports: [CommonModule, RedirectLinkComponent],
+	imports: [CommonModule, RedirectLinkComponent, AppSectionHeaderComponent],
 	templateUrl: './help.component.html',
 	schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })

@@ -7,6 +7,7 @@ import { Competition } from '../interfaces/competition';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Location } from '@angular/common';
+import { AppSectionHeaderComponent } from '../components/section-header/section-header.component';
 
 declare global {
 	interface Window {
@@ -17,7 +18,7 @@ declare global {
 @Component({
 	selector: 'app-display',
 	standalone: true,
-	imports: [AutoCompleteModule, FormsModule],
+	imports: [AutoCompleteModule, FormsModule, AppSectionHeaderComponent],
 	templateUrl: './display.component.html',
 	schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
