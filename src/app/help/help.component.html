@@ -12,9 +12,9 @@
             </div>
         </div>
 
-        <div class="p-8 space-y-10">
+        <div class="p-8 space-y-6">
             <!-- Welcome Section -->
-            <section class="border-b border-gray-100 dark:border-gray-700 pb-8">
+            <section class="border-b border-gray-100 dark:border-gray-700 pb-4">
                 <div class="flex items-center space-x-3 mb-4">
                     <iconify-icon icon="lucide:sparkles" class="text-prime-blue text-2xl"></iconify-icon>
                     <h2 class="text-xl font-semibold text-gray-800 dark:text-gray-200">Bienvenue sur Aim Display</h2>
@@ -39,23 +39,23 @@
                         <li class="flex items-start space-x-3 text-sm text-gray-600 dark:text-gray-400">
                             <span
                                 class="flex-shrink-0 w-5 h-5 bg-prime-blue text-white rounded-full flex items-center justify-center text-xs">1</span>
-                            <span><strong><a (click)="commonService.redirectTo('creation_club')"
+                            <span><span class="font-bold"><a (click)="commonService.redirectTo('creation_club')"
                                         class="text-prime-blue hover:underline cursor-pointer">Créez vos clubs</a>
-                                    :</strong> Créez tous les clubs participants à votre compétition</span>
+                                    :</span> Créez tous les clubs participants à votre compétition</span>
                         </li>
                         <li class="flex items-start space-x-3 text-sm text-gray-600 dark:text-gray-400">
                             <span
                                 class="flex-shrink-0 w-5 h-5 bg-prime-blue text-white rounded-full flex items-center justify-center text-xs">2</span>
-                            <span><strong><a (click)="commonService.redirectTo('creation_competition')"
+                            <span><span class="font-bold"><a (click)="commonService.redirectTo('creation_competition')"
                                         class="text-prime-blue hover:underline cursor-pointer">Créez la compétition</a>
-                                    :</strong> Configurez les détails de votre événement sportif.</span>
+                                    :</span> Configurez les détails de votre événement sportif.</span>
                         </li>
                         <li class="flex items-start space-x-3 text-sm text-gray-600 dark:text-gray-400">
                             <span
                                 class="flex-shrink-0 w-5 h-5 bg-prime-blue text-white rounded-full flex items-center justify-center text-xs">3</span>
-                            <span><strong><a (click)="commonService.redirectTo('creation_shooter')"
+                            <span><span class="font-bold"><a (click)="commonService.redirectTo('creation_shooter')"
                                         class="text-prime-blue hover:underline cursor-pointer">Créez les tireurs</a>
-                                    :</strong> Enregistrez les participants de votre compétition ainsi que leurs
+                                    :</span> Enregistrez les participants de votre compétition ainsi que leurs
                                 scores.</span>
                         </li>
                     </ul>
@@ -71,16 +71,16 @@
                     <ul class="space-y-3">
                         <li class="flex items-start space-x-3 text-sm text-gray-600 dark:text-gray-400">
                             <iconify-icon icon="lucide:check-circle-2" class="text-green-500 mt-1"></iconify-icon>
-                            <span><strong><a (click)="commonService.redirectTo('display')"
+                            <span><span class="font-bold"><a (click)="commonService.redirectTo('display')"
                                         class="text-purple-600 hover:underline cursor-pointer">Mode Affichage</a>
-                                    :</strong> Utilisez le mode plein écran pour projeter les résultats en
+                                    :</span> Utilisez le mode plein écran pour projeter les résultats en
                                 direct aux participants et spectateurs de votre compétition.</span>
                         </li>
                         <li class="flex items-start space-x-3 text-sm text-gray-600 dark:text-gray-400">
                             <iconify-icon icon="lucide:check-circle-2" class="text-green-500 mt-1"></iconify-icon>
-                            <span><strong><a (click)="commonService.redirectTo('generer_pdf')"
+                            <span><span class="font-bold"><a (click)="commonService.redirectTo('generer_pdf')"
                                         class="text-purple-600 hover:underline cursor-pointer">Exports PDF</a>
-                                    :</strong> Générez des rapports PDF détaillés par tireur ou par compétition à la fin
+                                    :</span> Générez des rapports PDF détaillés par tireur ou par compétition à la fin
                                 du
                                 tournoi.</span>
                         </li>
@@ -182,8 +182,10 @@
                                     class="font-medium text-prime-blue cursor-pointer hover:underline">
                                     Modification des tireurs
                                 </span>.
-                                <span class="font-medium italic flex items-center mt-1 text-amber-600 dark:text-amber-500">
-                                    <iconify-icon icon="lucide:alert-triangle" class="mr-2 text-lg text-amber-600 dark:text-amber-500"></iconify-icon>
+                                <span
+                                    class="font-medium italic flex items-center mt-1 text-amber-600 dark:text-amber-500">
+                                    <iconify-icon icon="lucide:alert-triangle"
+                                        class="mr-2 text-lg text-amber-600 dark:text-amber-500"></iconify-icon>
                                     L'enregistrement d'un tireur est
                                     spécifique à une seule compétition ; si le
                                     même tireur participe à une autre compétition plus tard, il devra être créé à
@@ -216,7 +218,8 @@
                                 Conçu pour être projeté sur de grands écrans ou des moniteurs secondaires dans le stand
                                 de tir, ce mode permet aux spectateurs et aux tireurs de suivre l'évolution du
                                 classement en direct.
-                                L'interface se met à jour automatiquement et boucle sur l'ensemble des catégories et tireurs de la compétition en cours d'affichage.
+                                L'interface se met à jour automatiquement et boucle sur l'ensemble des catégories et
+                                tireurs de la compétition en cours d'affichage.
                             </p>
                         </div>
                     </div>
@@ -245,9 +248,11 @@
                                 "générer les statistiques de compétition" afin d'inclure les statistiques de la
                                 compétition dans le rapport PDF. Ces fichiers PDF vous permettront de conserver une
                                 trace de chacun des événements sportifs de votre club.
-                                <span class="font-medium italic flex items-center mt-1 text-amber-600 dark:text-amber-500">
+                                <span
+                                    class="font-medium italic flex items-center mt-1 text-amber-600 dark:text-amber-500">
                                     <iconify-icon icon="lucide:alert-triangle" class="mr-2 text-lg"></iconify-icon>
-                                    Les rapports générés avec l'option "générer les statistiques de compétition" ne doivent pas être rendus
+                                    Les rapports générés avec l'option "générer les statistiques de compétition" ne
+                                    doivent pas être rendus
                                     publics et sont destinés uniquement à un usage interne au sein de votre club.
                                 </span>
                             </p>
