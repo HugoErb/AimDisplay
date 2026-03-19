@@ -11,11 +11,12 @@ import { Competition } from '../interfaces/competition';
 import { ToggleSwitchModule } from 'primeng/toggleswitch';
 import { Shooter } from '../interfaces/shooter';
 import { TooltipModule } from 'primeng/tooltip';
+import { AppSectionHeaderComponent } from '../components/section-header/section-header.component';
 
 @Component({
 	selector: 'app-generer-pdf',
 	standalone: true,
-	imports: [AutoCompleteModule, CommonModule, FormsModule, ToggleSwitchModule, TooltipModule],
+	imports: [AutoCompleteModule, CommonModule, FormsModule, ToggleSwitchModule, TooltipModule, AppSectionHeaderComponent],
 	templateUrl: './generer_pdf.component.html',
 	schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })

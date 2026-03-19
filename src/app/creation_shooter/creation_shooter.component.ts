@@ -18,11 +18,13 @@ import { Shooter } from '../interfaces/shooter';
 import { ActivatedRoute } from '@angular/router';
 import { Location } from '@angular/common';
 import { RedirectLinkComponent } from '../components/redirect-link/redirect-link.component';
+import { AppSectionHeaderComponent } from '../components/section-header/section-header.component';
+import { InfoNoteComponent } from '../components/info-note/info-note.component';
 
 @Component({
 	selector: 'app-creation-shooter',
 	standalone: true,
-	imports: [AutoCompleteModule, FormsModule, InputNumberModule, DatePickerModule, CommonModule, InputTextModule, RedirectLinkComponent],
+	imports: [AutoCompleteModule, FormsModule, InputNumberModule, DatePickerModule, CommonModule, InputTextModule, RedirectLinkComponent, AppSectionHeaderComponent, InfoNoteComponent],
 	templateUrl: './creation_shooter.component.html',
 	schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })

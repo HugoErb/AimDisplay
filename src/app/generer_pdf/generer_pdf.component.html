@@ -1,14 +1,10 @@
 <div class="opacity-0 animate-appear duration-500">
 	<div class="bg-white dark:bg-secondary-dark-bg shadow-lg rounded-lg m-6">
-		<div class="bg-gradient-to-r from-prime-blue to-hover-prime-blue text-white px-8 py-6 rounded-t-lg">
-			<div class="flex items-center space-x-3">
-				<iconify-icon icon="mdi:paper-outline" class="text-[2.2rem] mr-5"></iconify-icon>
-				<div>
-					<h1 class="text-2xl font-bold">Génération de rapport PDF</h1>
-					<p class="text-blue-100 mt-1">Créez et téléchargez des rapports détaillés pour vos compétitions et vos tireurs</p>
-				</div>
-			</div>
-		</div>
+		<app-section-header
+			[title]="'Génération de rapport PDF'"
+			[subtitle]="'Créez et téléchargez des rapports détaillés pour vos compétitions et vos tireurs'"
+			[icon]="'mdi:paper-outline'">
+		</app-section-header>
 
 		<form (ngSubmit)="generatePDF()" class="p-8 space-y-5">
 			<div class="w-full">

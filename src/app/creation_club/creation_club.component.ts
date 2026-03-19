@@ -8,11 +8,13 @@ import { SupabaseService } from '../services/supabase.service';
 import { Club } from '../interfaces/club';
 import { ActivatedRoute } from '@angular/router';
 import { Location } from '@angular/common';
+import { AppSectionHeaderComponent } from '../components/section-header/section-header.component';
+import { InfoNoteComponent } from '../components/info-note/info-note.component';
 
 @Component({
 	selector: 'app-creation-club',
 	standalone: true,
-	imports: [CommonModule, InputTextModule, FormsModule],
+	imports: [CommonModule, InputTextModule, FormsModule, AppSectionHeaderComponent, InfoNoteComponent],
 	templateUrl: './creation_club.component.html',
 	schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })

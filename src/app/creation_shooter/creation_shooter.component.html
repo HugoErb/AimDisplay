@@ -1,22 +1,10 @@
 <div class="opacity-0 animate-appear duration-500">
     <div class="bg-white dark:bg-secondary-dark-bg shadow-lg rounded-lg m-6">
-        <div class="bg-gradient-to-r from-prime-blue to-hover-prime-blue text-white px-8 py-6 rounded-t-lg">
-            <div class="flex items-center space-x-3">
-                <iconify-icon icon="lucide:user-round" class="text-[2rem] mr-5"></iconify-icon>
-                <div>
-                    <h1 class="text-2xl font-bold">
-                        {{ isEditMode ? "Modification d'un tireur" : "Création d'un nouveau tireur" }}
-                    </h1>
-                    <p class="text-blue-100 mt-1">
-                        {{
-                        isEditMode
-                        ? "Modifiez les informations du tireur et ses performances dans la compétition"
-                        : "Renseignez les informations du nouveau tireur ainsi que ses performances dans la compétition"
-                        }}
-                    </p>
-                </div>
-            </div>
-        </div>
+        <app-section-header
+            [title]="isEditMode ? 'Modification d\'un tireur' : 'Création d\'un nouveau tireur'"
+            [subtitle]="isEditMode ? 'Modifiez les informations du tireur et ses performances dans la compétition' : 'Renseignez les informations du nouveau tireur ainsi que ses performances dans la compétition'"
+            icon="lucide:user-round">
+        		</app-section-header>
 
         <form (ngSubmit)="onSubmitShooter()" class="p-8 space-y-10">
             <!-- Informations personnelles -->
@@ -194,29 +182,20 @@
 
             <!-- Information Notes -->
             <div class="pt-6 border-t border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-400">
-                <div class="flex items-center text-sm">
-                    <iconify-icon icon="lucide:info" class="text-[1rem] mr-2"></iconify-icon>
-                    <p>Les champs marqués d'un astérisque (*) sont obligatoires.</p>
-                </div>
+                <app-info-note>Les champs marqués d'un astérisque (*) sont obligatoires.</app-info-note>
                 @if (!isEditMode){
-                <div class="flex items-center text-sm">
-                    <iconify-icon icon="lucide:info" class="text-[1rem] mr-2"></iconify-icon>
-                    <p>
-                        Utilisez le bouton "Ajouter une catégorie supplémentaire" afin d'inscrire le tireur sur
-                        plusieurs catégories pour une même
-                        compétition.
-                    </p>
-                </div>
+                <app-info-note>
+                    Utilisez le bouton "Ajouter une catégorie supplémentaire" afin d'inscrire le tireur sur
+                    plusieurs catégories pour une même
+                    compétition.
+                </app-info-note>
                 }
-                <div class="flex items-center text-sm">
-                    <iconify-icon icon="lucide:info" class="text-[1rem] mr-2"></iconify-icon>
-                    <p>
-                        Les résultats des séries peuvent être laissés à zéro et renseignés ultérieurement dans l'onglet
-                        <app-redirect-link target="modification_shooter">
-                            Modification des tireurs
-                        </app-redirect-link>.
-                    </p>
-                </div>
+                <app-info-note>
+                    Les résultats des séries peuvent être laissés à zéro et renseignés ultérieurement dans l'onglet
+                    <app-redirect-link target="modification_shooter">
+                        Modification des tireurs
+                    </app-redirect-link>.
+                </app-info-note>
                 <div class="flex justify-end">
                     <button
                         class="inline-flex h-12 items-center justify-center rounded-md bg-prime-blue text-white hover:bg-hover-prime-blue px-5 text-base font-medium shadow transition-colors duration-250 cursor-pointer"

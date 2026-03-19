@@ -5,11 +5,12 @@ import { CommonService } from '../services/common.service';
 import { Club } from '../interfaces/club';
 import { SupabaseService } from '../services/supabase.service';
 import { Router } from '@angular/router';
+import { AppSectionHeaderComponent } from '../components/section-header/section-header.component';
 
 @Component({
 	selector: 'app-modification-club',
 	standalone: true,
-	imports: [TableModule],
+	imports: [TableModule, AppSectionHeaderComponent],
 	templateUrl: './modification_club.component.html',
 	schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
