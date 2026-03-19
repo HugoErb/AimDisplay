@@ -17,11 +17,12 @@ import { Competition } from '../interfaces/competition';
 import { Shooter } from '../interfaces/shooter';
 import { ActivatedRoute } from '@angular/router';
 import { Location } from '@angular/common';
+import { RedirectLinkComponent } from '../components/redirect-link/redirect-link.component';
 
 @Component({
 	selector: 'app-creation-shooter',
 	standalone: true,
-	imports: [AutoCompleteModule, FormsModule, InputNumberModule, DatePickerModule, CommonModule, InputTextModule],
+	imports: [AutoCompleteModule, FormsModule, InputNumberModule, DatePickerModule, CommonModule, InputTextModule, RedirectLinkComponent],
 	templateUrl: './creation_shooter.component.html',
 	schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })

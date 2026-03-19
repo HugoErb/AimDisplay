@@ -61,7 +61,9 @@
 	--color-secondary-dark-bg: #232726;
 	--color-light-gray: #efefef;
 	--color-prime-blue: #3b80f6;
+	--color-prime-blue-light: #60a5fa;
 	--color-hover-prime-blue: #1e63e0;
+	--color-hover-prime-blue-light: #93c5fd;
 	--color-half-transparent: rgba(0, 0, 0, 0.5);
 
 	/* Animations */

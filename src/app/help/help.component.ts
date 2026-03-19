@@ -4,10 +4,12 @@ import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { ThemeService } from '../services/theme.service';
 import { CommonService } from '../services/common.service';
 
+import { RedirectLinkComponent } from '../components/redirect-link/redirect-link.component';
+
 @Component({
 	selector: 'app-help',
 	standalone: true,
-	imports: [CommonModule],
+	imports: [CommonModule, RedirectLinkComponent],
 	templateUrl: './help.component.html',
 	schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })

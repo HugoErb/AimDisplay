@@ -39,22 +39,19 @@
                         <li class="flex items-start space-x-3 text-sm text-gray-600 dark:text-gray-400">
                             <span
                                 class="flex-shrink-0 w-5 h-5 bg-prime-blue text-white rounded-full flex items-center justify-center text-xs">1</span>
-                            <span><span class="font-bold"><a (click)="commonService.redirectTo('creation_club')"
-                                        class="text-prime-blue hover:underline cursor-pointer">Créez vos clubs</a>
+                            <span><span class="font-bold"><app-redirect-link target="creation_club">Créez vos clubs</app-redirect-link>
                                     :</span> Créez tous les clubs participants à votre compétition</span>
                         </li>
                         <li class="flex items-start space-x-3 text-sm text-gray-600 dark:text-gray-400">
                             <span
                                 class="flex-shrink-0 w-5 h-5 bg-prime-blue text-white rounded-full flex items-center justify-center text-xs">2</span>
-                            <span><span class="font-bold"><a (click)="commonService.redirectTo('creation_competition')"
-                                        class="text-prime-blue hover:underline cursor-pointer">Créez la compétition</a>
+                            <span><span class="font-bold"><app-redirect-link target="creation_competition">Créez la compétition</app-redirect-link>
                                     :</span> Configurez les détails de votre événement sportif.</span>
                         </li>
                         <li class="flex items-start space-x-3 text-sm text-gray-600 dark:text-gray-400">
                             <span
                                 class="flex-shrink-0 w-5 h-5 bg-prime-blue text-white rounded-full flex items-center justify-center text-xs">3</span>
-                            <span><span class="font-bold"><a (click)="commonService.redirectTo('creation_shooter')"
-                                        class="text-prime-blue hover:underline cursor-pointer">Créez les tireurs</a>
+                            <span><span class="font-bold"><app-redirect-link target="creation_shooter">Créez les tireurs</app-redirect-link>
                                     :</span> Enregistrez les participants de votre compétition ainsi que leurs
                                 scores.</span>
                         </li>
@@ -72,16 +69,14 @@
                         <li class="flex items-start space-x-3 text-sm text-gray-600 dark:text-gray-400">
                             <span
                                 class="flex-shrink-0 w-5 h-5 bg-prime-blue text-white rounded-full flex items-center justify-center text-xs">4</span>
-                            <span><span class="font-bold"><a (click)="commonService.redirectTo('display')"
-                                        class="text-prime-blue hover:underline cursor-pointer">Mode Affichage</a>
+                            <span><span class="font-bold"><app-redirect-link target="display">Mode Affichage</app-redirect-link>
                                     :</span> Utilisez le mode plein écran pour projeter les résultats en
                                 direct aux participants et spectateurs de votre compétition.</span>
                         </li>
                         <li class="flex items-start space-x-3 text-sm text-gray-600 dark:text-gray-400">
                             <span
                                 class="flex-shrink-0 w-5 h-5 bg-prime-blue text-white rounded-full flex items-center justify-center text-xs">5</span>
-                            <span><span class="font-bold"><a (click)="commonService.redirectTo('generer_pdf')"
-                                        class="text-prime-blue hover:underline cursor-pointer">Exports PDF</a>
+                            <span><span class="font-bold"><app-redirect-link target="generer_pdf">Exports PDF</app-redirect-link>
                                     :</span> Générez des rapports PDF détaillés par tireur ou par compétition à la fin
                                 du
                                 tournoi.</span>
@@ -109,18 +104,13 @@
                             </div>
                         </div>
                         <div
-                            class="flex-1 bg-gray-50/50 dark:bg-gray-800/40 p-6 rounded-2xl border border-gray-100 dark:border-gray-700/50 transition-all duration-300 shadow-sm">
+                            class="flex-1 bg-gray-50/50 dark:bg-gray-800/60 p-6 rounded-2xl border border-gray-100 dark:border-gray-700 transition-all duration-300 shadow-sm">
                             <h4 class="font-bold text-gray-900 dark:text-gray-100 text-lg mb-2">Étape 1 : Création des
                                 Clubs participants</h4>
                             <div class="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
                                 Avant de pouvoir organiser une compétition, vous devez enregistrer les structures
                                 participantes dans le menu
-                                <span class="font-medium">
-                                    <a (click)="commonService.redirectTo('creation_club')"
-                                        class="text-prime-blue hover:underline cursor-pointer">
-                                        Nouveau club
-                                    </a>
-                                </span>.
+                                <app-redirect-link target="creation_club">Nouveau club</app-redirect-link>.
                                 Cette étape est cruciale car elle construit votre annuaire permanent : une fois un club
                                 créé, il reste disponible pour toutes vos futures compétitions.
                                 Vous n'aurez donc pas à le ressaisir à chaque nouvel événement.
@@ -137,17 +127,12 @@
                             </div>
                         </div>
                         <div
-                            class="flex-1 bg-gray-50/50 dark:bg-gray-800/40 p-6 rounded-2xl border border-gray-100 dark:border-gray-700/50 transition-all duration-300 shadow-sm">
+                            class="flex-1 bg-gray-50/50 dark:bg-gray-800/60 p-6 rounded-2xl border border-gray-100 dark:border-gray-700 transition-all duration-300 shadow-sm">
                             <h4 class="font-bold text-gray-900 dark:text-gray-100 text-lg mb-2">Étape 2 : Création de
                                 votre Compétition</h4>
                             <div class="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
                                 Rendez-vous dans
-                                <span class="font-medium">
-                                    <a (click)="commonService.redirectTo('creation_competition')"
-                                        class="text-prime-blue hover:underline cursor-pointer">
-                                        Nouvelle compétition
-                                    </a>
-                                </span> pour initialiser votre événement sportif.
+                                <app-redirect-link target="creation_competition">Nouvelle compétition</app-redirect-link> pour initialiser votre événement sportif.
                                 Ici, vous définissez le cadre : nom officiel, dates de l'événement et surtout les
                                 paramètres financiers (frais d'inscription de base et frais par catégorie
                                 supplémentaire).
@@ -166,17 +151,12 @@
                             </div>
                         </div>
                         <div
-                            class="flex-1 bg-gray-50/50 dark:bg-gray-800/40 p-6 rounded-2xl border border-gray-100 dark:border-gray-700/50 transition-all duration-300 shadow-sm">
+                            class="flex-1 bg-gray-50/50 dark:bg-gray-800/60 p-6 rounded-2xl border border-gray-100 dark:border-gray-700 transition-all duration-300 shadow-sm">
                             <h4 class="font-bold text-gray-900 dark:text-gray-100 text-lg mb-2">Étape 3 : Inscription
                                 des Tireurs et Saisie des Scores</h4>
                             <div class="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
                                 Dans le menu
-                                <span class="font-medium">
-                                    <a (click)="commonService.redirectTo('creation_shooter')"
-                                        class="text-prime-blue hover:underline cursor-pointer">
-                                        Nouveau tireur
-                                    </a>
-                                </span>,
+                                <app-redirect-link target="creation_shooter">Nouveau tireur</app-redirect-link>,
                                 inscrivez chaque participant en le liant à la compétition précédemment créée et à son
                                 club d'origine.
                                 C'est également sur cette page que vous saisirez les scores obtenus dans chaque série.
@@ -184,10 +164,7 @@
                                 plusieurs catégories pour une
                                 même compétition. Les résultats des séries peuvent être laissés à zéro et renseignés
                                 ultérieurement dans l'onglet
-                                <span (click)="commonService.redirectTo('modification_shooter')"
-                                    class="font-medium text-prime-blue cursor-pointer hover:underline">
-                                    Modification des tireurs
-                                </span>.
+                                <app-redirect-link target="modification_shooter">Modification des tireurs</app-redirect-link>.
                                 <div class="mt-4 flex items-start space-x-3 text-amber-700 dark:text-amber-400 font-medium italic">
                                     <iconify-icon icon="lucide:alert-triangle" class="text-xl mt-0.5 flex-shrink-0"></iconify-icon>
                                     <p class="text-sm leading-relaxed">
@@ -209,17 +186,12 @@
                             </div>
                         </div>
                         <div
-                            class="flex-1 bg-gray-50/50 dark:bg-gray-800/40 p-6 rounded-2xl border border-gray-100 dark:border-gray-700/50 transition-all duration-300 shadow-sm">
+                            class="flex-1 bg-gray-50/50 dark:bg-gray-800/60 p-6 rounded-2xl border border-gray-100 dark:border-gray-700 transition-all duration-300 shadow-sm">
                             <h4 class="font-bold text-gray-900 dark:text-gray-100 text-lg mb-2">Étape 4 : Diffusion en
                                 temps réel avec le Mode Affichage</h4>
                             <div class="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
                                 Le
-                                <span class="font-medium">
-                                    <a (click)="commonService.redirectTo('display')"
-                                        class="text-prime-blue hover:underline cursor-pointer">
-                                        Mode Affichage
-                                    </a>
-                                </span>
+                                <app-redirect-link target="display">Mode Affichage</app-redirect-link>
                                 ouvre une nouvelle fenêtre affichant le classement en temps réel. Il est
                                 recommandé de positionner cette fenêtre
                                 sur un moniteur secondaire, visible par l’ensemble des participants, afin que chacun
@@ -240,17 +212,12 @@
                             </div>
                         </div>
                         <div
-                            class="flex-1 bg-gray-50/50 dark:bg-gray-800/40 p-6 rounded-2xl border border-gray-100 dark:border-gray-700/50 transition-all duration-300 shadow-sm">
+                            class="flex-1 bg-gray-50/50 dark:bg-gray-800/60 p-6 rounded-2xl border border-gray-100 dark:border-gray-700 transition-all duration-300 shadow-sm">
                             <h4 class="font-bold text-gray-900 dark:text-gray-100 text-lg mb-2">Étape 5 : Génération de
                                 rapports PDF</h4>
                             <div class="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
                                 Une fois les derniers tirs effectués, dirigez-vous vers
-                                <span class="font-medium">
-                                    <a (click)="commonService.redirectTo('generer_pdf')"
-                                        class="text-prime-blue hover:underline cursor-pointer">
-                                        Rapport PDF
-                                    </a>
-                                </span>.
+                                <app-redirect-link target="generer_pdf">Rapport PDF</app-redirect-link>.
                                 Vous pourrez y générer des documents récapitulant les performances par tireur
                                 ou le classement général par club et catégorie. Il est possible de cocher l'option
                                 "générer les statistiques de compétition" afin d'inclure les statistiques de la
@@ -276,7 +243,7 @@
                             </div>
                         </div>
                         <div
-                            class="flex-1 bg-gray-50/50 dark:bg-gray-800/40 p-6 rounded-2xl border border-gray-100 dark:border-gray-700/50 transition-all duration-300 shadow-sm">
+                            class="flex-1 bg-gray-50/50 dark:bg-gray-800/60 p-6 rounded-2xl border border-gray-100 dark:border-gray-700 transition-all duration-300 shadow-sm">
                             <div class="flex items-center justify-between mb-2">
                                 <h4 class="font-bold text-gray-900 dark:text-gray-100 text-lg">Étape facultative :
                                     Modification des données</h4>
@@ -292,9 +259,7 @@
                                         <iconify-icon icon="lucide:check-circle-2"
                                             class="text-prime-blue text-xs"></iconify-icon>
                                         <span>
-                                            <a (click)="commonService.redirectTo('modification_club')"
-                                                class="text-prime-blue font-medium hover:underline cursor-pointer">Modification
-                                                des clubs</a>
+                                            <app-redirect-link target="modification_club">Modification des clubs</app-redirect-link>
                                             pour ajuster le nom ou les coordonnées d'une structure déjà enregistrée.
                                         </span>
                                     </li>
@@ -302,9 +267,7 @@
                                         <iconify-icon icon="lucide:check-circle-2"
                                             class="text-prime-blue text-xs"></iconify-icon>
                                         <span>
-                                            <a (click)="commonService.redirectTo('modification_competition')"
-                                                class="text-prime-blue font-medium hover:underline cursor-pointer">Modification
-                                                des compétitions</a>
+                                            <app-redirect-link target="modification_competition">Modification des compétitions</app-redirect-link>
                                             pour rectifier les dates, le nom de l'événement ou mettre à jour les tarifs
                                             d'inscription.
                                         </span>
@@ -313,9 +276,7 @@
                                         <iconify-icon icon="lucide:check-circle-2"
                                             class="text-prime-blue text-xs"></iconify-icon>
                                         <span>
-                                            <a (click)="commonService.redirectTo('modification_shooter')"
-                                                class="text-prime-blue font-medium hover:underline cursor-pointer">Modification
-                                                des tireurs</a>
+                                            <app-redirect-link target="modification_shooter">Modification des tireurs</app-redirect-link>
                                             pour rectifier entre autre le nom d'un tireur, changer sa catégorie ou
                                             saisir les résultats des séries laissés à zéro lors de son inscription.
                                         </span>
