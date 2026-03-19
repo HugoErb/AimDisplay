@@ -102,7 +102,7 @@
                         <div class="flex-shrink-0 relative z-10">
                             <div
                                 class="w-10 h-10 rounded-full bg-prime-blue text-white flex items-center justify-center shadow-lg shadow-prime-blue/20 ring-4 ring-white dark:ring-secondary-dark-bg">
-                                <iconify-icon icon="uil:house-user" class="text-xl"></iconify-icon>
+                                <iconify-icon icon="uil:house-user" class="text-2xl"></iconify-icon>
                             </div>
                         </div>
                         <div
@@ -251,7 +251,7 @@
                                         Rapport PDF
                                     </a>
                                 </span>.
-                                Vous pourrez y générer des documents officiels récapitulant les performances par tireur
+                                Vous pourrez y générer des documents récapitulant les performances par tireur
                                 ou le classement général par club et catégorie. Il est possible de cocher l'option
                                 "générer les statistiques de compétition" afin d'inclure les statistiques de la
                                 compétition dans le rapport PDF. Ces fichiers PDF vous permettront de conserver une
@@ -267,6 +267,48 @@
                                         au sein de votre club.
                                     </p>
                                 </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Optional Step -->
+                    <div class="relative flex flex-col md:flex-row gap-6 group">
+                        <div class="flex-shrink-0 relative z-10">
+                            <div
+                                class="w-10 h-10 rounded-full bg-prime-blue text-white flex items-center justify-center shadow-lg shadow-prime-blue/20 ring-4 ring-white dark:ring-secondary-dark-bg">
+                                <iconify-icon icon="lucide:edit-3" class="text-xl"></iconify-icon>
+                            </div>
+                        </div>
+                        <div
+                            class="flex-1 bg-gray-50/50 dark:bg-gray-800/40 p-6 rounded-2xl border border-gray-100 dark:border-gray-700/50 transition-all duration-300 shadow-sm">
+                            <div class="flex items-center justify-between mb-2">
+                                <h4 class="font-bold text-gray-900 dark:text-gray-100 text-lg">Étape facultative : Modification des données</h4>
+                                <span class="px-2 py-1 bg-prime-blue/10 dark:bg-prime-blue/20 text-prime-blue dark:text-prime-blue text-[10px] font-bold uppercase tracking-wider rounded-md border border-prime-blue/10">Facultatif</span>
+                            </div>
+                            <div class="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
+                                Une erreur de saisie est vite arrivée ou certaines informations peuvent évoluer durant l'événement. Pas d’inquiétude : tout ce que vous créez reste modifiable à tout moment via les menus dédiés :
+                                <ul class="mt-3 space-y-2">
+                                    <li class="flex items-center space-x-2">
+                                        <iconify-icon icon="lucide:check-circle-2" class="text-prime-blue text-xs"></iconify-icon>
+                                        <span>
+                                            <a (click)="commonService.redirectTo('modification_club')" class="text-prime-blue font-medium hover:underline cursor-pointer">Modification des clubs</a>
+                                            pour ajuster le nom ou les coordonnées d'une structure déjà enregistrée.
+                                        </span>
+                                    </li>
+                                    <li class="flex items-center space-x-2">
+                                        <iconify-icon icon="lucide:check-circle-2" class="text-prime-blue text-xs"></iconify-icon>
+                                        <span>
+                                            <a (click)="commonService.redirectTo('modification_competition')" class="text-prime-blue font-medium hover:underline cursor-pointer">Modification des compétitions</a>
+                                            pour rectifier les dates, le nom de l'événement ou mettre à jour les tarifs d'inscription.
+                                        </span>
+                                    </li>
+                                    <li class="flex items-center space-x-2">
+                                        <iconify-icon icon="lucide:check-circle-2" class="text-prime-blue text-xs"></iconify-icon>
+                                        <span>
+                                            <a (click)="commonService.redirectTo('modification_shooter')" class="text-prime-blue font-medium hover:underline cursor-pointer">Modification des tireurs</a>
+                                            pour rectifier entre autre le nom d'un tireur, changer sa catégorie ou saisir les résultats des séries laissés à zéro lors de son inscription.
+                                        </span>
+                                    </li>
+                                </ul>
                             </div>
                         </div>
                     </div>
