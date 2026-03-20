@@ -208,6 +208,48 @@ export class SupabaseService {
 		}
 	}
 
+	/**
+	 * Mappe une ligne brute de la base de données vers l'interface `Shooter`.
+	 */
+	private mapShooterRowToShooter(
+		row: any,
+		competitionById: Map<number, string>,
+		clubById: Map<number, string>,
+		distanceById: Map<number, string>,
+		weaponById: Map<number, string>,
+		categoryById: Map<number, string>
+	): Shooter {
+		const toNum = (v: any) => (typeof v === 'number' ? v : v == null ? 0 : Number(v) || 0);
+
+		const s1 = toNum(row.serie1_score);
+		const s2 = toNum(row.serie2_score);
+		const s3 = toNum(row.serie3_score);
+		const s4 = toNum(row.serie4_score);
+		const s5 = toNum(row.serie5_score);
+		const s6 = toNum(row.serie6_score);
+		const total = s1 + s2 + s3 + s4 + s5 + s6;
+
+		return {
+			id: row.id,
+			lastName: row.last_name,
+			firstName: row.first_name,
+			email: row.email,
+			competitionName: competitionById.get(row.competition_id) ?? '',
+			clubName: clubById.get(row.club_id) ?? '',
+			distance: distanceById.get(row.distance_id) ?? '',
+			weapon: weaponById.get(row.weapon_id) ?? '',
+			categoryName: categoryById.get(row.category_id) ?? '',
+			scoreSerie1: s1,
+			scoreSerie2: s2,
+			scoreSerie3: s3,
+			scoreSerie4: s4,
+			scoreSerie5: s5,
+			scoreSerie6: s6,
+			totalScore: Number(total.toFixed(2)),
+			userId: row.user_id,
+		};
+	}
+
 	// GET FUNCTIONS /////////////////////////////////////////////////////////////////////
 
 	/**
@@ -252,37 +294,9 @@ export class SupabaseService {
 		const weaponById = mapName(weapons as any[]);
 		const categoryById = mapName(categories as any[]);
 
-		const toNum = (v: any) => (v == null ? 0 : Number(v) || 0);
-
-		return rows.map((row: any): Shooter => {
-			const s1 = toNum(row.serie1_score);
-			const s2 = toNum(row.serie2_score);
-			const s3 = toNum(row.serie3_score);
-			const s4 = toNum(row.serie4_score);
-			const s5 = toNum(row.serie5_score);
-			const s6 = toNum(row.serie6_score);
-			const total = s1 + s2 + s3 + s4 + s5 + s6;
-
-			return {
-				id: row.id,
-				lastName: row.last_name,
-				firstName: row.first_name,
-				email: row.email,
-				competitionName: competitionById.get(row.competition_id) ?? '',
-				clubName: clubById.get(row.club_id) ?? '',
-				distance: distanceById.get(row.distance_id) ?? '',
-				weapon: weaponById.get(row.weapon_id) ?? '',
-				categoryName: categoryById.get(row.category_id) ?? '',
-				scoreSerie1: s1,
-				scoreSerie2: s2,
-				scoreSerie3: s3,
-				scoreSerie4: s4,
-				scoreSerie5: s5,
-				scoreSerie6: s6,
-				totalScore: Number(total.toFixed(2)),
-				userId: row.user_id,
-			};
-		});
+		return rows.map((row: any) =>
+			this.mapShooterRowToShooter(row, competitionById, clubById, distanceById, weaponById, categoryById)
+		);
 	}
 
 	/**
@@ -328,37 +342,9 @@ export class SupabaseService {
 		const weaponById = mapName(weapons as any[]);
 		const categoryById = mapName(categories as any[]);
 
-		const toNum = (v: any) => (v == null ? 0 : Number(v) || 0);
-
-		return rows.map((row: any): Shooter => {
-			const s1 = toNum(row.serie1_score);
-			const s2 = toNum(row.serie2_score);
-			const s3 = toNum(row.serie3_score);
-			const s4 = toNum(row.serie4_score);
-			const s5 = toNum(row.serie5_score);
-			const s6 = toNum(row.serie6_score);
-			const total = s1 + s2 + s3 + s4 + s5 + s6;
-
-			return {
-				id: row.id,
-				lastName: row.last_name,
-				firstName: row.first_name,
-				email: row.email,
-				competitionName: competitionById.get(row.competition_id) ?? '',
-				clubName: clubById.get(row.club_id) ?? '',
-				distance: distanceById.get(row.distance_id) ?? '',
-				weapon: weaponById.get(row.weapon_id) ?? '',
-				categoryName: categoryById.get(row.category_id) ?? '',
-				scoreSerie1: s1,
-				scoreSerie2: s2,
-				scoreSerie3: s3,
-				scoreSerie4: s4,
-				scoreSerie5: s5,
-				scoreSerie6: s6,
-				totalScore: Number(total.toFixed(2)),
-				userId: row.user_id,
-			};
-		});
+		return rows.map((row: any) =>
+			this.mapShooterRowToShooter(row, competitionById, clubById, distanceById, weaponById, categoryById)
+		);
 	}
 
 	/**
@@ -569,38 +555,9 @@ export class SupabaseService {
 		const weaponById = new Map(weapons.map((w) => [w.id, w.name]));
 		const categoryById = new Map(categories.map((k) => [k.id, k.name]));
 
-		const toNum = (v: any) => (typeof v === 'number' ? v : v == null ? 0 : Number(v) || 0);
-
-		return (rows ?? []).map((row: any): Shooter => {
-			const s1 = toNum(row.serie1_score);
-			const s2 = toNum(row.serie2_score);
-			const s3 = toNum(row.serie3_score);
-			const s4 = toNum(row.serie4_score);
-			const s5 = toNum(row.serie5_score);
-			const s6 = toNum(row.serie6_score);
-
-			const total = s1 + s2 + s3 + s4 + s5 + s6;
-
-			return {
-				id: row.id,
-				lastName: row.last_name,
-				firstName: row.first_name,
-				email: row.email,
-				competitionName: competitionById.get(row.competition_id) ?? '',
-				clubName: clubById.get(row.club_id) ?? '',
-				distance: distanceById.get(row.distance_id) ?? '',
-				weapon: weaponById.get(row.weapon_id) ?? '',
-				categoryName: categoryById.get(row.category_id) ?? '',
-				scoreSerie1: s1,
-				scoreSerie2: s2,
-				scoreSerie3: s3,
-				scoreSerie4: s4,
-				scoreSerie5: s5,
-				scoreSerie6: s6,
-				totalScore: Number(total.toFixed(2)),
-				userId: row.user_id,
-			};
-		});
+		return (rows ?? []).map((row: any) =>
+			this.mapShooterRowToShooter(row, competitionById, clubById, distanceById, weaponById, categoryById)
+		);
 	}
 
 	/**
@@ -670,7 +627,6 @@ export class SupabaseService {
 		const weaponById = new Map(weapons.map((w) => [w.id, w.name]));
 		const categoryById = new Map(categories.map((k) => [k.id, k.name]));
 
-		const toNum = (v: any) => (typeof v === 'number' ? v : v == null ? 0 : Number(v) || 0);
 		const norm = (s: string) =>
 			(s || '')
 				.normalize('NFD')
@@ -679,35 +635,9 @@ export class SupabaseService {
 				.trim();
 
 		// --- Mapping + filtre fin (exact Nom/Prénom si fournis)
-		const mapped = (rows ?? []).map((row: any): Shooter => {
-			const s1 = toNum(row.serie1_score);
-			const s2 = toNum(row.serie2_score);
-			const s3 = toNum(row.serie3_score);
-			const s4 = toNum(row.serie4_score);
-			const s5 = toNum(row.serie5_score);
-			const s6 = toNum(row.serie6_score);
-			const total = s1 + s2 + s3 + s4 + s5 + s6;
-
-			return {
-				id: row.id,
-				lastName: row.last_name,
-				firstName: row.first_name,
-				email: row.email,
-				competitionName: competitionById.get(row.competition_id) ?? '',
-				clubName: clubById.get(row.club_id) ?? '',
-				distance: distanceById.get(row.distance_id) ?? '',
-				weapon: weaponById.get(row.weapon_id) ?? '',
-				categoryName: categoryById.get(row.category_id) ?? '',
-				scoreSerie1: s1,
-				scoreSerie2: s2,
-				scoreSerie3: s3,
-				scoreSerie4: s4,
-				scoreSerie5: s5,
-				scoreSerie6: s6,
-				totalScore: Number(total.toFixed(2)),
-				userId: row.user_id,
-			};
-		});
+		const mapped = (rows ?? []).map((row: any) =>
+			this.mapShooterRowToShooter(row, competitionById, clubById, distanceById, weaponById, categoryById)
+		);
 
 		// Filtrage exact (accents/casse insensibles) si Nom/Prénom fournis
 		const hasFilter = Boolean(lastName || firstName);
@@ -743,38 +673,13 @@ export class SupabaseService {
 		const distanceById = new Map(distances.map((d) => [d.id, d.name]));
 		const weaponById = new Map(weapons.map((w) => [w.id, w.name]));
 		const categoryById = new Map(categories.map((k) => [k.id, k.name]));
-		const toNum = (v: any) => (typeof v === 'number' ? v : v == null ? 0 : Number(v) || 0);
 
 		return (rows ?? []).map((row: any) => {
-			const s1 = toNum(row.serie1_score);
-			const s2 = toNum(row.serie2_score);
-			const s3 = toNum(row.serie3_score);
-			const s4 = toNum(row.serie4_score);
-			const s5 = toNum(row.serie5_score);
-			const s6 = toNum(row.serie6_score);
-			const total = s1 + s2 + s3 + s4 + s5 + s6;
-
-			const s: Shooter & { competitionId: number } = {
-				id: row.id,
-				lastName: row.last_name,
-				firstName: row.first_name,
-				email: row.email,
-				competitionName: competitionById.get(row.competition_id) ?? '',
-				clubName: clubById.get(row.club_id) ?? '',
-				distance: distanceById.get(row.distance_id) ?? '',
-				weapon: weaponById.get(row.weapon_id) ?? '',
-				categoryName: categoryById.get(row.category_id) ?? '',
-				scoreSerie1: s1,
-				scoreSerie2: s2,
-				scoreSerie3: s3,
-				scoreSerie4: s4,
-				scoreSerie5: s5,
-				scoreSerie6: s6,
-				totalScore: Number(total.toFixed(2)),
-				userId: row.user_id,
+			const s = this.mapShooterRowToShooter(row, competitionById, clubById, distanceById, weaponById, categoryById);
+			return {
+				...s,
 				competitionId: row.competition_id, // 👈 utile pour la liste des compets par tireur
 			};
-			return s;
 		});
 	}
 
