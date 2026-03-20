@@ -1,10 +1,8 @@
 <div class="opacity-0 animate-appear transition-all duration-500 pb-10">
     <div class="bg-white dark:bg-secondary-dark-bg transition-all duration-500 shadow-lg rounded-lg m-6">
         <!-- Header Segment -->
-        <app-section-header
-            title="Aide & Tutoriel"
-            subtitle="Apprenez à utiliser Aim Display et gérez vos compétitions sereinement"
-            [icon]="icons.HELP_CARBON">
+        <app-section-header title="Aide & Tutoriel"
+            subtitle="Apprenez à utiliser Aim Display et gérez vos compétitions sereinement" [icon]="icons.HELP_CARBON">
         </app-section-header>
 
         <div class="p-8 space-y-6">
@@ -34,19 +32,22 @@
                         <li class="flex items-start space-x-3 text-sm text-gray-600 dark:text-gray-400">
                             <span
                                 class="flex-shrink-0 w-5 h-5 bg-prime-blue text-white rounded-full flex items-center justify-center text-xs">1</span>
-                            <span><span class="font-bold"><app-redirect-link target="creation_club">Créez vos clubs</app-redirect-link>
+                            <span><span class="font-bold"><app-redirect-link target="creation_club">Créez vos
+                                        clubs</app-redirect-link>
                                     :</span> Créez tous les clubs participants à votre compétition</span>
                         </li>
                         <li class="flex items-start space-x-3 text-sm text-gray-600 dark:text-gray-400">
                             <span
                                 class="flex-shrink-0 w-5 h-5 bg-prime-blue text-white rounded-full flex items-center justify-center text-xs">2</span>
-                            <span><span class="font-bold"><app-redirect-link target="creation_competition">Créez la compétition</app-redirect-link>
+                            <span><span class="font-bold"><app-redirect-link target="creation_competition">Créez la
+                                        compétition</app-redirect-link>
                                     :</span> Configurez les détails de votre événement sportif.</span>
                         </li>
                         <li class="flex items-start space-x-3 text-sm text-gray-600 dark:text-gray-400">
                             <span
                                 class="flex-shrink-0 w-5 h-5 bg-prime-blue text-white rounded-full flex items-center justify-center text-xs">3</span>
-                            <span><span class="font-bold"><app-redirect-link target="creation_shooter">Créez les tireurs</app-redirect-link>
+                            <span><span class="font-bold"><app-redirect-link target="creation_shooter">Créez les
+                                        tireurs</app-redirect-link>
                                     :</span> Enregistrez les participants de votre compétition ainsi que leurs
                                 scores.</span>
                         </li>
@@ -64,14 +65,16 @@
                         <li class="flex items-start space-x-3 text-sm text-gray-600 dark:text-gray-400">
                             <span
                                 class="flex-shrink-0 w-5 h-5 bg-prime-blue text-white rounded-full flex items-center justify-center text-xs">4</span>
-                            <span><span class="font-bold"><app-redirect-link target="display">Mode Affichage</app-redirect-link>
+                            <span><span class="font-bold"><app-redirect-link target="display">Mode
+                                        Affichage</app-redirect-link>
                                     :</span> Utilisez le mode plein écran pour projeter les résultats en
                                 direct aux participants et spectateurs de votre compétition.</span>
                         </li>
                         <li class="flex items-start space-x-3 text-sm text-gray-600 dark:text-gray-400">
                             <span
                                 class="flex-shrink-0 w-5 h-5 bg-prime-blue text-white rounded-full flex items-center justify-center text-xs">5</span>
-                            <span><span class="font-bold"><app-redirect-link target="generer_pdf">Exports PDF</app-redirect-link>
+                            <span><span class="font-bold"><app-redirect-link target="generer_pdf">Exports
+                                        PDF</app-redirect-link>
                                     :</span> Générez des rapports PDF détaillés par tireur ou par compétition à la fin
                                 du
                                 tournoi.</span>
@@ -89,7 +92,9 @@
 
                 <div class="relative space-y-12 pb-4">
                     <!-- Vertical Timeline Line -->
-                    <div class="absolute left-5 top-5 bottom-[-2rem] w-0.5 bg-gray-200 dark:bg-gray-700 hidden md:block"></div>
+                    <div
+                        class="absolute left-5 top-5 bottom-[-2rem] w-0.5 bg-gray-200 dark:bg-gray-700 hidden md:block">
+                    </div>
                     <!-- Step 1 -->
                     <div class="relative flex flex-col md:flex-row gap-6 group">
                         <div class="flex-shrink-0 relative z-10">
@@ -118,7 +123,7 @@
                         <div class="flex-shrink-0 relative z-10">
                             <div
                                 class="w-10 h-10 rounded-full bg-prime-blue text-white flex items-center justify-center shadow-lg shadow-prime-blue/20 ring-4 ring-white dark:ring-secondary-dark-bg">
-                                <iconify-icon [icon]="icons.COMPETITIONS" class="text-xl"></iconify-icon>
+                                <iconify-icon [icon]="icons.COMPETITION" class="text-xl"></iconify-icon>
                             </div>
                         </div>
                         <div
@@ -127,7 +132,8 @@
                                 votre Compétition</h4>
                             <div class="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
                                 Rendez-vous dans
-                                <app-redirect-link target="creation_competition">Nouvelle compétition</app-redirect-link> pour initialiser votre événement sportif.
+                                <app-redirect-link target="creation_competition">Nouvelle
+                                    compétition</app-redirect-link> pour initialiser votre événement sportif.
                                 Ici, vous définissez le cadre : nom officiel, dates de l'événement et surtout les
                                 paramètres financiers (frais d'inscription de base et frais par catégorie
                                 supplémentaire).
@@ -142,7 +148,7 @@
                         <div class="flex-shrink-0 relative z-10">
                             <div
                                 class="w-10 h-10 rounded-full bg-prime-blue text-white flex items-center justify-center shadow-lg shadow-prime-blue/20 ring-4 ring-white dark:ring-secondary-dark-bg">
-                                <iconify-icon [icon]="icons.COMPETITIONS" class="text-xl"></iconify-icon>
+                                <iconify-icon [icon]="icons.COMPETITION" class="text-xl"></iconify-icon>
                             </div>
                         </div>
                         <div
@@ -159,9 +165,12 @@
                                 plusieurs catégories pour une
                                 même compétition. Les résultats des séries peuvent être laissés à zéro et renseignés
                                 ultérieurement dans l'onglet
-                                <app-redirect-link target="modification_shooter">Modification des tireurs</app-redirect-link>.
-                                <div class="mt-4 flex items-start space-x-3 text-amber-700 dark:text-amber-400 font-medium italic">
-                                    <iconify-icon icon="lucide:alert-triangle" class="text-xl mt-0.5 flex-shrink-0"></iconify-icon>
+                                <app-redirect-link target="modification_shooter">Modification des
+                                    tireurs</app-redirect-link>.
+                                <div
+                                    class="mt-4 flex items-start space-x-3 text-amber-700 dark:text-amber-400 font-medium italic">
+                                    <iconify-icon icon="lucide:alert-triangle"
+                                        class="text-xl mt-0.5 flex-shrink-0"></iconify-icon>
                                     <p class="text-sm leading-relaxed">
                                         L'enregistrement d'un tireur est spécifique à une seule compétition ; si le même
                                         tireur participe à une autre compétition plus tard, il devra être créé à nouveau
@@ -218,8 +227,10 @@
                                 "générer les statistiques de compétition" afin d'inclure les statistiques de la
                                 compétition dans le rapport PDF. Ces fichiers PDF vous permettront de conserver une
                                 trace de chacun des événements sportifs de votre club.
-                                <div class="mt-4 flex items-start space-x-3 text-amber-700 dark:text-amber-400 font-medium italic">
-                                    <iconify-icon icon="lucide:alert-triangle" class="text-xl mt-0.5 flex-shrink-0"></iconify-icon>
+                                <div
+                                    class="mt-4 flex items-start space-x-3 text-amber-700 dark:text-amber-400 font-medium italic">
+                                    <iconify-icon icon="lucide:alert-triangle"
+                                        class="text-xl mt-0.5 flex-shrink-0"></iconify-icon>
                                     <p class="text-sm leading-relaxed">
                                         Les rapports générés avec l'option "générer les statistiques de compétition" ne
                                         doivent pas être rendus publics et sont destinés uniquement à un usage interne
@@ -254,7 +265,8 @@
                                         <iconify-icon [icon]="icons.CHECK_CIRCLE"
                                             class="text-prime-blue text-xs"></iconify-icon>
                                         <span>
-                                            <app-redirect-link target="modification_club">Modification des clubs</app-redirect-link>
+                                            <app-redirect-link target="modification_club">Modification des
+                                                clubs</app-redirect-link>
                                             pour ajuster le nom ou les coordonnées d'une structure déjà enregistrée.
                                         </span>
                                     </li>
@@ -262,7 +274,8 @@
                                         <iconify-icon [icon]="icons.CHECK_CIRCLE"
                                             class="text-prime-blue text-xs"></iconify-icon>
                                         <span>
-                                            <app-redirect-link target="modification_competition">Modification des compétitions</app-redirect-link>
+                                            <app-redirect-link target="modification_competition">Modification des
+                                                compétitions</app-redirect-link>
                                             pour rectifier les dates, le nom de l'événement ou mettre à jour les tarifs
                                             d'inscription.
                                         </span>
@@ -271,7 +284,8 @@
                                         <iconify-icon [icon]="icons.CHECK_CIRCLE"
                                             class="text-prime-blue text-xs"></iconify-icon>
                                         <span>
-                                            <app-redirect-link target="modification_shooter">Modification des tireurs</app-redirect-link>
+                                            <app-redirect-link target="modification_shooter">Modification des
+                                                tireurs</app-redirect-link>
                                             pour rectifier entre autre le nom d'un tireur, changer sa catégorie ou
                                             saisir les résultats des séries laissés à zéro lors de son inscription.
                                         </span>

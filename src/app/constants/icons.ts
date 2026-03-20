@@ -2,8 +2,8 @@
  * Noms d'icônes Iconify
  */
 export const APP_ICONS = {
-	COMPETITIONS: 'octicon:trophy-24',
-	CLUBS: 'uil:house-user',
+	COMPETITION: 'octicon:trophy-24',
+	CLUB: 'lucide:shield',
 	REPORTS: 'mdi:paper-outline',
 	EDIT: 'lucide:pen-line',
 	DELETE: 'formkit:trash',
@@ -13,7 +13,6 @@ export const APP_ICONS = {
 	DISPLAY: 'streamline:screen-1-remix',
 	USER: 'lucide:user-round',
 	EVENT: 'material-symbols:event-note-outline-rounded',
-	CLUB: 'uit:house-user',
 	EMAIL_SEND: 'mdi:email-send',
 	PASSWORD_RESET: 'mdi:password-reset',
 	DISCONNECT: 'fluent:plug-disconnected-24-filled',
