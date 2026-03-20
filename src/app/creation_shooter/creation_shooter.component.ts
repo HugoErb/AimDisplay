@@ -20,6 +20,7 @@ import { Location } from '@angular/common';
 import { RedirectLinkComponent } from '../components/redirect-link/redirect-link.component';
 import { AppSectionHeaderComponent } from '../components/section-header/section-header.component';
 import { InfoNoteComponent } from '../components/info-note/info-note.component';
+import { APP_ICONS } from '../constants/icons';
 
 @Component({
 	selector: 'app-creation-shooter',
@@ -29,6 +30,7 @@ import { InfoNoteComponent } from '../components/info-note/info-note.component';
 	schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class CreationShooterComponent {
+	protected readonly icons = APP_ICONS;
 	constructor(
 		protected commonService: CommonService,
 		private supabase: SupabaseService,

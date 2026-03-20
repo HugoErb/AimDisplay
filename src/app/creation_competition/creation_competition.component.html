@@ -3,7 +3,7 @@
 		<app-section-header
 			[title]="isEditMode ? 'Modification d\'une compétition' : 'Création d\'une nouvelle compétition'"
 			[subtitle]="isEditMode ? 'Mettez à jour les informations de la compétition' : 'Renseignez les informations de la nouvelle compétition'"
-			icon="material-symbols:event-note-outline-rounded">
+			[icon]="icons.EVENT">
 		</app-section-header>
 
         
@@ -108,7 +108,7 @@
 						type="submit"
 						[disabled]="isSaving"
 					>
-						<iconify-icon icon="material-symbols-light:save-rounded" class="text-[1.5rem] mr-3"></iconify-icon>
+						<iconify-icon [icon]="icons.SAVE" class="text-[1.5rem] mr-3"></iconify-icon>
 						Enregistrer la compétition
 					</button>
 				</div>

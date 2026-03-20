@@ -1,4 +1,5 @@
 import { Component, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { APP_ICONS } from '../../constants/icons';
 
 @Component({
 	selector: 'app-info-note',
@@ -14,4 +15,6 @@ import { Component, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 	],
 	schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
-export class InfoNoteComponent {}
+export class InfoNoteComponent {
+	protected readonly icons = APP_ICONS;
+}

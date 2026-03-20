@@ -3,7 +3,7 @@
 		<app-section-header
 			title="Affichage du classement d'une compétition"
 			subtitle="Lancez l'affichage du classement en direct d'une compétition en cours"
-			icon="streamline:screen-1-remix">
+			[icon]="icons.DISPLAY">
 		</app-section-header>
 
 		<form (ngSubmit)="launchDisplay()" class="p-8 space-y-10">
@@ -31,11 +31,11 @@
 			<!-- Information Notes -->
 			<div class="pt-6 border-t border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-400">
 				<div class="flex items-center text-sm">
-					<iconify-icon icon="lucide:info" class="text-[1rem] mr-2"></iconify-icon>
+					<iconify-icon [icon]="icons.INFO" class="text-[1rem] mr-2"></iconify-icon>
 					<p>Les champs marqués d'un astérisque (*) sont obligatoires.</p>
 				</div>
 				<div class="flex items-center text-sm">
-					<iconify-icon icon="lucide:info" class="text-[1rem] mr-2"></iconify-icon>
+					<iconify-icon [icon]="icons.INFO" class="text-[1rem] mr-2"></iconify-icon>
 					<p>
 						Le bouton "Lancer l'affichage" ouvrira une nouvelle fenêtre permettant d'afficher en plein écran le classement à vos
 						compétiteurs.
@@ -46,7 +46,7 @@
 						class="inline-flex h-12 items-center justify-center rounded-md bg-prime-blue text-white hover:bg-hover-prime-blue px-5 text-base font-medium shadow transition-colors duration-250 cursor-pointer"
 						type="submit"
 					>
-						<iconify-icon icon="heroicons:play" class="text-[1.5rem] mr-3"></iconify-icon>
+						<iconify-icon [icon]="icons.PLAY" class="text-[1.5rem] mr-3"></iconify-icon>
 						Lancer l'affichage
 					</button>
 				</div>

@@ -3,7 +3,7 @@
 		<app-section-header
 			title="Paramètres"
 			subtitle="Modifier les paramètres de l'application selon vos préférences"
-			icon="carbon:settings">
+			[icon]="icons.SETTINGS">
 		</app-section-header>
 
 		<div class="p-8 space-y-10">
@@ -36,7 +36,7 @@
 									(click)="fileInput.click()"
 								>
 									<iconify-icon
-										icon="lucide:pen-line"
+										[icon]="icons.EDIT"
 										class="text-[1.5rem] text-white transition-opacity duration-200"
 										[ngClass]="{ 'opacity-100': hovering, 'opacity-0': !hovering }"
 									></iconify-icon>
@@ -67,21 +67,21 @@
 								class="w-full flex items-center justify-start px-4 py-2 border border-gray-200 dark:border-gray-700 transition-all duration-500 hover:duration-250 rounded-md text-gray-700 dark:text-gray-300 hover:bg-[#ececec] dark:hover:bg-gray-600 cursor-pointer"
 								(click)="openModal('renameClub')"
 							>
-								<iconify-icon icon="lucide:pen-line" class="text-[1.3rem] mr-4"></iconify-icon>
+								<iconify-icon [icon]="icons.EDIT" class="text-[1.3rem] mr-4"></iconify-icon>
 								Modifier le nom du club
 							</div>
 							<div
 								class="w-full flex items-center justify-start px-4 py-2 border border-gray-200 dark:border-gray-700 transition-all duration-500 hover:duration-250 rounded-md text-gray-700 dark:text-gray-300 hover:bg-[#ececec] dark:hover:bg-gray-600 cursor-pointer"
 								(click)="openModal('changePassword')"
 							>
-								<iconify-icon icon="mdi:password-reset" class="text-[1.3rem] mr-4"></iconify-icon>
+								<iconify-icon [icon]="icons.PASSWORD_RESET" class="text-[1.3rem] mr-4"></iconify-icon>
 								Changer le mot de passe
 							</div>
 							<div
 								class="w-full flex items-center justify-start px-4 py-2 border border-gray-200 dark:border-gray-700 transition-all duration-500 hover:duration-250 rounded-md text-gray-700 dark:text-gray-300 hover:bg-[#ececec] dark:hover:bg-gray-600 cursor-pointer"
 								(click)="authService.signOut()"
 							>
-								<iconify-icon icon="fluent:plug-disconnected-24-filled" class="text-[1.3rem] mr-4"></iconify-icon>
+								<iconify-icon [icon]="icons.DISCONNECT" class="text-[1.3rem] mr-4"></iconify-icon>
 								Se déconnecter
 							</div>
 						</div>
@@ -207,7 +207,7 @@
 							<ul class="space-y-3 mb-6">
 								<li *ngFor="let feature of plan.features" class="flex items-start">
 									<iconify-icon
-										icon="material-symbols:check-rounded"
+										[icon]="icons.SAVE"
 										class="text-xl mr-2 text-gray-700 dark:text-gray-200"
 									></iconify-icon>
 
@@ -329,7 +329,7 @@
 
 						<div class="pt-6 border-t border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-400">
 							<div class="flex items-center text-sm">
-								<iconify-icon icon="lucide:info" class="text-[1rem] mr-2"></iconify-icon>
+								<iconify-icon [icon]="icons.INFO" class="text-[1rem] mr-2"></iconify-icon>
 								<p>Les champs marqués d'un astérisque (*) sont obligatoires.</p>
 							</div>
 							<div class="flex justify-end">
@@ -342,7 +342,7 @@
 									(click)="sendMail()"
 									disabled
 								>
-									<iconify-icon icon="mdi:email-send" class="text-[1.5rem] mr-3"></iconify-icon>
+									<iconify-icon [icon]="icons.EMAIL_SEND" class="text-[1.5rem] mr-3"></iconify-icon>
 									Envoyer le message
 								</button>
 							</div>
@@ -386,11 +386,11 @@
 			<!-- Footer du modal -->
 			<div class="pt-6 border-t border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-400">
 				<div class="flex items-center text-sm px-4 pb-2">
-					<iconify-icon icon="lucide:info" class="text-[1rem] mr-2"></iconify-icon>
+					<iconify-icon [icon]="icons.INFO" class="text-[1rem] mr-2"></iconify-icon>
 					<p>Les champs marqués d'un astérisque (*) sont obligatoires.</p>
 				</div>
 				<div class="flex items-center text-sm px-4 pb-5">
-					<iconify-icon icon="lucide:info" class="text-[1rem] mr-2"></iconify-icon>
+					<iconify-icon [icon]="icons.INFO" class="text-[1rem] mr-2"></iconify-icon>
 					<p>Votre nom de club sera mentionné dans les PDF et les e‑mails envoyés par Aim Display.</p>
 				</div>
 				<div class="flex justify-end px-4 pb-4">
@@ -445,7 +445,7 @@
 							class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-prime-blue dark:bg-gray-700 dark:text-gray-100 transition-colors duration-250"
 						/>
 						<iconify-icon
-							[attr.icon]="passwordFieldType === 'password' ? 'mynaui:eye' : 'mynaui:eye-slash'"
+							[attr.icon]="passwordFieldType === 'password' ? icons.EYE : icons.EYE_SLASH"
 							class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 cursor-pointer text-2xl"
 							(click)="passwordFieldType = commonService.togglePasswordVisibility(passwordFieldType)"
 						></iconify-icon>
@@ -467,7 +467,7 @@
 							class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-prime-blue dark:bg-gray-700 dark:text-gray-100 transition-colors duration-250"
 						/>
 						<iconify-icon
-							[attr.icon]="passwordFieldType === 'password' ? 'mynaui:eye' : 'mynaui:eye-slash'"
+							[attr.icon]="passwordFieldType === 'password' ? icons.EYE : icons.EYE_SLASH"
 							class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 cursor-pointer text-2xl"
 							(click)="passwordFieldType = commonService.togglePasswordVisibility(passwordFieldType)"
 						></iconify-icon>
@@ -492,7 +492,7 @@
 							class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-prime-blue dark:bg-gray-700 dark:text-gray-100 transition-colors duration-250"
 						/>
 						<iconify-icon
-							[attr.icon]="passwordFieldType === 'password' ? 'mynaui:eye' : 'mynaui:eye-slash'"
+							[attr.icon]="passwordFieldType === 'password' ? icons.EYE : icons.EYE_SLASH"
 							class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 cursor-pointer text-2xl"
 							(click)="passwordFieldType = commonService.togglePasswordVisibility(passwordFieldType)"
 						></iconify-icon>
@@ -503,7 +503,7 @@
 			<!-- Footer du modal -->
 			<div class="pt-6 border-t border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-400">
 				<div class="flex items-center text-sm px-4 pb-5">
-					<iconify-icon icon="lucide:info" class="text-[1rem] mr-2"></iconify-icon>
+					<iconify-icon [icon]="icons.INFO" class="text-[1rem] mr-2"></iconify-icon>
 					<p>Les champs marqués d'un astérisque (*) sont obligatoires.</p>
 				</div>
 				<div class="flex justify-end px-4 pb-4">
@@ -519,7 +519,7 @@
 						type="submit"
 						[disabled]="isLoading"
 					>
-						<iconify-icon icon="material-symbols:download-rounded" class="text-[1.5rem] mr-3"></iconify-icon>
+						<iconify-icon [icon]="icons.DOWNLOAD" class="text-[1.5rem] mr-3"></iconify-icon>
 						Enregistrer
 					</button>
 				</div>

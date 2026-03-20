@@ -12,6 +12,7 @@ import { ToggleSwitchModule } from 'primeng/toggleswitch';
 import { Shooter } from '../interfaces/shooter';
 import { TooltipModule } from 'primeng/tooltip';
 import { AppSectionHeaderComponent } from '../components/section-header/section-header.component';
+import { APP_ICONS } from '../constants/icons';
 
 @Component({
 	selector: 'app-generer-pdf',
@@ -21,6 +22,7 @@ import { AppSectionHeaderComponent } from '../components/section-header/section-
 	schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class GenererPDFComponent {
+	protected readonly icons = APP_ICONS;
 	constructor(
 		protected commonService: CommonService,
 		private competitionPDFGenerator: CompetitionPDFGenerator,

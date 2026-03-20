@@ -8,6 +8,7 @@ import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { MultiSelectModule } from 'primeng/multiselect';
 import { AppSectionHeaderComponent } from '../components/section-header/section-header.component';
+import { APP_ICONS } from '../constants/icons';
 
 @Component({
 	selector: 'app-modification-shooter',
@@ -17,6 +18,7 @@ import { AppSectionHeaderComponent } from '../components/section-header/section-
 	schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class ModificationShooterComponent {
+	protected readonly icons = APP_ICONS;
 	constructor(protected commonService: CommonService, private supabase: SupabaseService, private router: Router) {}
 
 	shooters: Shooter[] = [];

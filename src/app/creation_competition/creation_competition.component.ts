@@ -12,6 +12,7 @@ import { ActivatedRoute } from '@angular/router';
 import { Location } from '@angular/common';
 import { AppSectionHeaderComponent } from '../components/section-header/section-header.component';
 import { InfoNoteComponent } from '../components/info-note/info-note.component';
+import { APP_ICONS } from '../constants/icons';
 
 @Component({
 	selector: 'app-creation-competition',
@@ -21,6 +22,7 @@ import { InfoNoteComponent } from '../components/info-note/info-note.component';
 	schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class CreationCompetitionComponent {
+	protected readonly icons = APP_ICONS;
 	constructor(
 		protected commonService: CommonService,
 		private supabase: SupabaseService,

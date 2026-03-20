@@ -3,7 +3,7 @@
 		<app-section-header
 			[title]="isEditMode ? 'Modification d\'un club de tir' : 'Création d\'un club de tir'"
 			[subtitle]="isEditMode ? 'Mettez à jour les détails de ce club' : 'Renseignez les informations du nouveau club'"
-			icon="uit:house-user">
+			[icon]="icons.CLUB">
 		</app-section-header>
 
 		<form (ngSubmit)="submitClub()" class="p-8 space-y-10">
@@ -32,7 +32,7 @@
 						type="submit"
 						[disabled]="isSaving"
 					>
-						<iconify-icon icon="material-symbols-light:save-rounded" class="text-[1.5rem] mr-3"></iconify-icon>
+						<iconify-icon [icon]="icons.SAVE" class="text-[1.5rem] mr-3"></iconify-icon>
 						Enregistrer le club
 					</button>
 				</div>
