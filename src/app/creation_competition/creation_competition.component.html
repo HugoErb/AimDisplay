@@ -1,118 +1,88 @@
 <div class="opacity-0 animate-appear duration-500">
-	<div class="bg-white dark:bg-secondary-dark-bg shadow-lg rounded-lg m-6">
-		<app-section-header
-			[title]="isEditMode ? 'Modification d\'une compétition' : 'Création d\'une nouvelle compétition'"
-			[subtitle]="isEditMode ? 'Mettez à jour les informations de la compétition' : 'Renseignez les informations de la nouvelle compétition'"
-			[icon]="icons.EVENT">
-		</app-section-header>
+    <div class="bg-white dark:bg-secondary-dark-bg shadow-lg rounded-lg m-6">
+        <app-section-header
+            [title]="isEditMode ? 'Modification d\'une compétition' : 'Création d\'une nouvelle compétition'"
+            [subtitle]="isEditMode ? 'Mettez à jour les informations de la compétition' : 'Renseignez les informations de la nouvelle compétition'"
+            [icon]="icons.COMPETITION">
+        </app-section-header>
 
-        
-		<form (ngSubmit)="submitCompetition()" class="p-8 space-y-10">
-			<div class="space-y-4">
-				<h2 class="text-lg font-semibold text-gray-900 pb-2 border-b border-gray-200 dark:border-gray-700 dark:text-gray-300">
-					Informations de la compétition
-				</h2>
-				<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-					<div class="flex flex-col space-y-1">
-						<label for="competitionName" class="text-sm font-medium text-gray-700 dark:text-gray-300 ml-1">Nom de la compétition *</label>
-						<input
-							type="text"
-							#inputField
-							pInputText
-							[(ngModel)]="competitionName"
-							id="competitionName"
-							placeholder="Nom de la compétition"
-							name="competitionName"
-						/>
-					</div>
 
-					<div class="flex flex-col space-y-1">
-						<label for="competitionDate" class="text-sm font-medium text-gray-700 dark:text-gray-300 ml-1">
-							Dates de la compétition *
-						</label>
-						<div class="relative">
-							<p-datepicker
-								#inputField
-								[firstDayOfWeek]="1"
-								[(ngModel)]="competitionDate"
-								[showIcon]="true"
-								placeholder="Dates de la compétition"
-								dateFormat="dd/mm/yy"
-								selectionMode="range"
-								name="competitionDate"
-								id="competitionDate"
-							></p-datepicker>
-						</div>
-					</div>
-				</div>
-			</div>
+        <form (ngSubmit)="submitCompetition()" class="p-8 space-y-10">
+            <div class="space-y-4">
+                <h2
+                    class="text-lg font-semibold text-gray-900 pb-2 border-b border-gray-200 dark:border-gray-700 dark:text-gray-300">
+                    Informations de la compétition
+                </h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="flex flex-col space-y-1">
+                        <label for="competitionName"
+                            class="text-sm font-medium text-gray-700 dark:text-gray-300 ml-1">Nom de la compétition
+                            *</label>
+                        <input type="text" #inputField pInputText [(ngModel)]="competitionName" id="competitionName"
+                            placeholder="Nom de la compétition" name="competitionName" />
+                    </div>
 
-			<div class="space-y-4">
-				<h2 class="text-lg font-semibold text-gray-900 pb-2 border-b border-gray-200 dark:border-gray-700 dark:text-gray-300">
-					Configuration des prix
-				</h2>
-				<div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-					<div class="flex flex-col space-y-1">
-						<label for="prixInscription" class="text-sm font-medium text-gray-700 dark:text-gray-300 ml-1">Prix d'inscription *</label>
-						<div class="flex items-center space-x-2">
-							<p-inputNumber
-								#inputField
-								[(ngModel)]="prixInscription"
-								mode="decimal"
-								[minFractionDigits]="2"
-								[min]="0"
-								[showButtons]="true"
-								[maxFractionDigits]="2"
-								placeholder="Prix d'inscription"
-								mode="currency"
-								currency="EUR"
-								name="prixInscription"
-								id="prixInscription"
-							></p-inputNumber>
-						</div>
-					</div>
+                    <div class="flex flex-col space-y-1">
+                        <label for="competitionDate" class="text-sm font-medium text-gray-700 dark:text-gray-300 ml-1">
+                            Dates de la compétition *
+                        </label>
+                        <div class="relative">
+                            <p-datepicker #inputField [firstDayOfWeek]="1" [(ngModel)]="competitionDate"
+                                [showIcon]="true" placeholder="Dates de la compétition" dateFormat="dd/mm/yy"
+                                selectionMode="range" name="competitionDate" id="competitionDate"></p-datepicker>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
-					<div class="flex flex-col space-y-1">
-						<label for="prixCategSup" class="text-sm font-medium text-gray-700 dark:text-gray-300 ml-1">
-							Prix de catégorie supplémentaire *
-						</label>
-						<div class="flex items-center space-x-2">
-							<p-inputNumber
-								#inputField
-								[(ngModel)]="prixCategSup"
-								mode="decimal"
-								[minFractionDigits]="2"
-								[min]="0"
-								[showButtons]="true"
-								[maxFractionDigits]="2"
-								placeholder="Prix de catégorie supplémentaire"
-								mode="currency"
-								currency="EUR"
-								name="prixCategSup"
-								id="prixCategSup"
-							></p-inputNumber>
-						</div>
-					</div>
-				</div>
-			</div>
+            <div class="space-y-4">
+                <h2
+                    class="text-lg font-semibold text-gray-900 pb-2 border-b border-gray-200 dark:border-gray-700 dark:text-gray-300">
+                    Configuration des prix
+                </h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div class="flex flex-col space-y-1">
+                        <label for="prixInscription"
+                            class="text-sm font-medium text-gray-700 dark:text-gray-300 ml-1">Prix d'inscription
+                            *</label>
+                        <div class="flex items-center space-x-2">
+                            <p-inputNumber #inputField [(ngModel)]="prixInscription" mode="decimal"
+                                [minFractionDigits]="2" [min]="0" [showButtons]="true" [maxFractionDigits]="2"
+                                placeholder="Prix d'inscription" mode="currency" currency="EUR" name="prixInscription"
+                                id="prixInscription"></p-inputNumber>
+                        </div>
+                    </div>
 
-			<!-- Information Notes -->
-			<div class="pt-6 border-t border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-400">
-				<app-info-note>Les champs marqués d'un astérisque (*) sont obligatoires.</app-info-note>
-				<app-info-note>
-					Dans le champ "Dates de la compétition", sélectionnez jusqu'à 2 dates pour la date de début et la date de fin de compétition.
-				</app-info-note>
-				<div class="flex justify-end">
-					<button
-						class="inline-flex h-12 items-center justify-center rounded-md bg-prime-blue text-white hover:bg-hover-prime-blue px-5 text-base font-medium shadow transition-colors duration-250 cursor-pointer"
-						type="submit"
-						[disabled]="isSaving"
-					>
-						<iconify-icon [icon]="icons.SAVE" class="text-[1.5rem] mr-3"></iconify-icon>
-						Enregistrer la compétition
-					</button>
-				</div>
-			</div>
-		</form>
-	</div>
+                    <div class="flex flex-col space-y-1">
+                        <label for="prixCategSup" class="text-sm font-medium text-gray-700 dark:text-gray-300 ml-1">
+                            Prix de catégorie supplémentaire *
+                        </label>
+                        <div class="flex items-center space-x-2">
+                            <p-inputNumber #inputField [(ngModel)]="prixCategSup" mode="decimal" [minFractionDigits]="2"
+                                [min]="0" [showButtons]="true" [maxFractionDigits]="2"
+                                placeholder="Prix de catégorie supplémentaire" mode="currency" currency="EUR"
+                                name="prixCategSup" id="prixCategSup"></p-inputNumber>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Information Notes -->
+            <div class="pt-6 border-t border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-400">
+                <app-info-note>Les champs marqués d'un astérisque (*) sont obligatoires.</app-info-note>
+                <app-info-note>
+                    Dans le champ "Dates de la compétition", sélectionnez jusqu'à 2 dates pour la date de début et la
+                    date de fin de compétition.
+                </app-info-note>
+                <div class="flex justify-end">
+                    <button
+                        class="inline-flex h-12 items-center justify-center rounded-md bg-prime-blue text-white hover:bg-hover-prime-blue px-5 text-base font-medium shadow transition-colors duration-250 cursor-pointer"
+                        type="submit" [disabled]="isSaving">
+                        <iconify-icon [icon]="icons.CHECK" class="text-[1.5rem] mr-3"></iconify-icon>
+                        Enregistrer la compétition
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
 </div>
