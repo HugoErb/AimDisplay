@@ -9,6 +9,7 @@ import { Router } from '@angular/router';
 import { MultiSelectModule } from 'primeng/multiselect';
 import { AppSectionHeaderComponent } from '../components/section-header/section-header.component';
 import { APP_ICONS } from '../constants/icons';
+import { APP_FORMATS } from '../constants/formats';
 
 @Component({
 	selector: 'app-modification-shooter',
@@ -19,6 +20,7 @@ import { APP_ICONS } from '../constants/icons';
 })
 export class ModificationShooterComponent {
 	protected readonly icons = APP_ICONS;
+	protected readonly formats = APP_FORMATS;
 	constructor(protected commonService: CommonService, private supabase: SupabaseService, private router: Router) {}
 
 	shooters: Shooter[] = [];

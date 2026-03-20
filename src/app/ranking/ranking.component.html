@@ -75,25 +75,25 @@
 							</td>
 
 							<td class="text-center font-mono text-[1.1rem] py-3 w-30">
-								{{ shooter.scoreSerie1 == null ? "-" : (shooter.scoreSerie1 | number : "1.0-2") }}
+								{{ shooter.scoreSerie1 == null ? "-" : (shooter.scoreSerie1 | number : formats.SCORE) }}
 							</td>
 							<td class="text-center font-mono text-[1.1rem] py-3 w-30">
-								{{ shooter.scoreSerie2 == null ? "-" : (shooter.scoreSerie2 | number : "1.0-2") }}
+								{{ shooter.scoreSerie2 == null ? "-" : (shooter.scoreSerie2 | number : formats.SCORE) }}
 							</td>
 							<td class="text-center font-mono text-[1.1rem] py-3 w-30">
-								{{ shooter.scoreSerie3 == null ? "-" : (shooter.scoreSerie3 | number : "1.0-2") }}
+								{{ shooter.scoreSerie3 == null ? "-" : (shooter.scoreSerie3 | number : formats.SCORE) }}
 							</td>
 							<td class="text-center font-mono text-[1.1rem] py-3 w-30">
-								{{ shooter.scoreSerie4 == null ? "-" : (shooter.scoreSerie4 | number : "1.0-2") }}
+								{{ shooter.scoreSerie4 == null ? "-" : (shooter.scoreSerie4 | number : formats.SCORE) }}
 							</td>
 							<td class="text-center font-mono text-[1.1rem] py-3 w-30">
-								{{ shooter.hasSixSeries ? (shooter.scoreSerie5 == null ? "-" : (shooter.scoreSerie5 | number : "1.0-2")) : "—" }}
+								{{ shooter.hasSixSeries ? (shooter.scoreSerie5 == null ? "-" : (shooter.scoreSerie5 | number : formats.SCORE)) : "—" }}
 							</td>
 							<td class="text-center font-mono text-[1.1rem] py-3 w-30">
-								{{ shooter.hasSixSeries ? (shooter.scoreSerie6 == null ? "-" : (shooter.scoreSerie6 | number : "1.0-2")) : "—" }}
+								{{ shooter.hasSixSeries ? (shooter.scoreSerie6 == null ? "-" : (shooter.scoreSerie6 | number : formats.SCORE)) : "—" }}
 							</td>
 							<td class="text-center font-mono text-xl font-bold text-prime-blue bg-gradient-to-r from-blue-50 to-indigo-50 py-3">
-								{{ shooter.totalScore | number : "1.0-2" }}
+								{{ shooter.totalScore | number : formats.SCORE }}
 							</td>
 						</tr>
 					</tbody>
