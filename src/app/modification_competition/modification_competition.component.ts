@@ -10,6 +10,7 @@ import localeFr from '@angular/common/locales/fr';
 import { Router } from '@angular/router';
 import { AppSectionHeaderComponent } from '../components/section-header/section-header.component';
 import { APP_ICONS } from '../constants/icons';
+import { APP_FORMATS } from '../constants/formats';
 
 registerLocaleData(localeFr, 'fr-FR');
 
@@ -22,6 +23,7 @@ registerLocaleData(localeFr, 'fr-FR');
 })
 export class ModificationCompetitionComponent {
 	protected readonly icons = APP_ICONS;
+	protected readonly formats = APP_FORMATS;
 	constructor(protected commonService: CommonService, private supabase: SupabaseService, private router: Router) {}
 
 	competitions: Competition[] = [];

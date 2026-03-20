@@ -2,7 +2,6 @@
  * Noms d'icônes Iconify
  */
 export const APP_ICONS = {
-	// Navigation & Sidebar
 	COMPETITIONS: 'octicon:trophy-24',
 	CLUBS: 'uil:house-user',
 	REPORTS: 'mdi:paper-outline',

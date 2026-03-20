@@ -7,6 +7,7 @@ import { RankedShooter, Shooter } from '../interfaces/shooter';
 import { RankingPage } from '../interfaces/ranking-page';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { APP_ICONS } from '../constants/icons';
+import { APP_FORMATS } from '../constants/formats';
 
 @Component({
 	selector: 'app-ranking',
@@ -17,6 +18,7 @@ import { APP_ICONS } from '../constants/icons';
 })
 export class RankingComponent implements OnInit, OnDestroy {
 	protected readonly icons = APP_ICONS;
+	protected readonly formats = APP_FORMATS;
 	competitionId!: number; // Identifiant de la compétition (récupéré via l’URL)
 	competitionTitle: string = ''; // Titre de la compétition (récupéré via l’URL)
 
