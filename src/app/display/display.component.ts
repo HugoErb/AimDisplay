@@ -8,6 +8,7 @@ import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Location } from '@angular/common';
 import { AppSectionHeaderComponent } from '../components/section-header/section-header.component';
+import { APP_ICONS } from '../constants/icons';
 
 declare global {
 	interface Window {
@@ -23,6 +24,7 @@ declare global {
 	schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class DisplayComponent {
+	protected readonly icons = APP_ICONS;
 	constructor(protected commonService: CommonService, private supabase: SupabaseService, private router: Router, private location: Location) {}
 
 	@ViewChildren('inputField', { read: ElementRef }) inputFields!: QueryList<ElementRef>;

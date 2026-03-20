@@ -12,6 +12,7 @@ import { TableModule } from 'primeng/table';
 import { CommonModule } from '@angular/common';
 import { AuthService } from '../services/auth.service';
 import { AppSectionHeaderComponent } from '../components/section-header/section-header.component';
+import { APP_ICONS } from '../constants/icons';
 
 // Modals
 type ModalKey = 'renameClub' | 'changePassword';
@@ -31,6 +32,7 @@ declare global {
 	schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class SettingsComponent {
+	protected readonly icons = APP_ICONS;
 	constructor(protected commonService: CommonService, private themeService: ThemeService, protected authService: AuthService) {}
 
 	userParamsName: string = 'userParamsAimDisplay';

@@ -6,6 +6,7 @@ import { CommonService } from '../services/common.service';
 import { AuthService } from '../services/auth.service';
 import { CommonModule } from '@angular/common';
 import { RedirectLinkComponent } from '../components/redirect-link/redirect-link.component';
+import { APP_ICONS } from '../constants/icons';
 
 @Component({
 	selector: 'app-register',
@@ -15,6 +16,7 @@ import { RedirectLinkComponent } from '../components/redirect-link/redirect-link
 	schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class RegisterComponent {
+	protected readonly icons = APP_ICONS;
 	passwordFieldType: string = 'password';
 	clubName: string = '';
 	email: string = '';

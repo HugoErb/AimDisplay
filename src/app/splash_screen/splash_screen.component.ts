@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { SupabaseService } from '../services/supabase.service';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { CommonService } from './../services/common.service';
+import { APP_ICONS } from '../constants/icons';
 
 @Component({
 	selector: 'app-splash-screen',
@@ -9,6 +10,7 @@ import { CommonService } from './../services/common.service';
 	schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class SplashScreenComponent implements OnInit {
+	protected readonly icons = APP_ICONS;
 	// Délai d'affichage minimal en millisecondes
 	private static readonly MIN_SPLASH_DELAY = 2000;
 

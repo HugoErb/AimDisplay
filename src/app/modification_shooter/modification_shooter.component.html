@@ -3,7 +3,7 @@
 		<app-section-header
 			title="Modification d'un tireur"
 			subtitle="Modifiez les données des tireurs créés précédemment"
-			icon="lucide:user-round">
+			[icon]="icons.USER">
 		</app-section-header>
 		<div class="min-w-[525px] mx-auto shadow-lg">
 			<p-table
@@ -117,7 +117,7 @@
 								class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 p-1.5 pb-0 rounded-md hover:bg-gray-200 dark:hover:bg-gray-600 cursor-pointer"
 								(click)="goToEditShooter(shooter)"
 							>
-								<iconify-icon icon="lucide:pen-line" class="text-[1.2rem]"></iconify-icon>
+								<iconify-icon [icon]="icons.EDIT" class="text-[1.2rem]"></iconify-icon>
 							</div>
 						</td>
 						<td class="relative !py-4">
@@ -125,7 +125,7 @@
 								class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 p-1.5 pb-0 rounded-md hover:bg-gray-200 dark:hover:bg-gray-600 cursor-pointer"
 								(click)="confirmDeletion(shooter)"
 							>
-								<iconify-icon icon="formkit:trash" class="text-[1.2rem]"></iconify-icon>
+								<iconify-icon [icon]="icons.DELETE" class="text-[1.2rem]"></iconify-icon>
 							</div>
 						</td>
 					</tr>
@@ -136,7 +136,7 @@
 					<tr>
 						<td colspan="11">
 							<div class="flex items-center justify-center py-3" aria-live="polite">
-								<iconify-icon icon="line-md:loading-loop" class="text-[1.2rem] text-gray-500 dark:text-gray-400"></iconify-icon>
+								<iconify-icon [icon]="icons.LOADING" class="text-[1.2rem] text-gray-500 dark:text-gray-400"></iconify-icon>
 								<span class="ml-3 text-gray-500 dark:text-gray-400">Chargement des données…</span>
 							</div>
 						</td>

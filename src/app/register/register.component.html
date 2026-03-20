@@ -97,7 +97,7 @@
 							pInputText
 						/>
 						<iconify-icon
-							[attr.icon]="passwordFieldType === 'password' ? 'mynaui:eye' : 'mynaui:eye-slash'"
+							[attr.icon]="passwordFieldType === 'password' ? icons.EYE : icons.EYE_SLASH"
 							class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 cursor-pointer text-2xl"
 							(click)="passwordFieldType = commonService.togglePasswordVisibility(passwordFieldType)"
 						></iconify-icon>
@@ -119,7 +119,7 @@
 							pInputText
 						/>
 						<iconify-icon
-							[attr.icon]="passwordFieldType === 'password' ? 'mynaui:eye' : 'mynaui:eye-slash'"
+							[attr.icon]="passwordFieldType === 'password' ? icons.EYE : icons.EYE_SLASH"
 							class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 cursor-pointer text-2xl"
 							(click)="passwordFieldType = commonService.togglePasswordVisibility(passwordFieldType)"
 						></iconify-icon>
@@ -132,7 +132,7 @@
 					[disabled]="isLoading"
 				>
 					Créer un compte
-					<iconify-icon icon="tabler:arrow-right" class="text-[1.5rem] ml-2"></iconify-icon>
+					<iconify-icon [icon]="icons.ARROW_RIGHT" class="text-[1.5rem] ml-2"></iconify-icon>
 				</button>
 			</form>
 

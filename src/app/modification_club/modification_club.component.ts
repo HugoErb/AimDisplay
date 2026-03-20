@@ -6,6 +6,7 @@ import { Club } from '../interfaces/club';
 import { SupabaseService } from '../services/supabase.service';
 import { Router } from '@angular/router';
 import { AppSectionHeaderComponent } from '../components/section-header/section-header.component';
+import { APP_ICONS } from '../constants/icons';
 
 @Component({
 	selector: 'app-modification-club',
@@ -15,6 +16,7 @@ import { AppSectionHeaderComponent } from '../components/section-header/section-
 	schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class ModificationClubComponent {
+	protected readonly icons = APP_ICONS;
 	constructor(protected commonService: CommonService, private supabase: SupabaseService, private router: Router) {}
 
 	clubs: Club[] = [];

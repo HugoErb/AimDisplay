@@ -7,6 +7,7 @@ import { CommonService } from '../services/common.service';
 import { AuthService } from '../services/auth.service';
 
 import { RedirectLinkComponent } from '../components/redirect-link/redirect-link.component';
+import { APP_ICONS } from '../constants/icons';
 
 @Component({
 	selector: 'app-forgot-password',
@@ -16,6 +17,7 @@ import { RedirectLinkComponent } from '../components/redirect-link/redirect-link
 	schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class ForgotPasswordComponent {
+	protected readonly icons = APP_ICONS;
 	@ViewChildren('inputField', { read: ElementRef }) inputFields!: QueryList<ElementRef>;
 	public inputLabelMap = new Map<string, string>();
 	passwordFieldType: string = 'password';

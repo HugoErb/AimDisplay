@@ -6,6 +6,7 @@ import { SupabaseService } from '../services/supabase.service';
 import { RankedShooter, Shooter } from '../interfaces/shooter';
 import { RankingPage } from '../interfaces/ranking-page';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { APP_ICONS } from '../constants/icons';
 
 @Component({
 	selector: 'app-ranking',
@@ -15,6 +16,7 @@ import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 	schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class RankingComponent implements OnInit, OnDestroy {
+	protected readonly icons = APP_ICONS;
 	competitionId!: number; // Identifiant de la compétition (récupéré via l’URL)
 	competitionTitle: string = ''; // Titre de la compétition (récupéré via l’URL)
 

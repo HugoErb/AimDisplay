@@ -9,6 +9,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 
 import { RedirectLinkComponent } from '../components/redirect-link/redirect-link.component';
 
+import { APP_ICONS } from '../constants/icons';
+
 @Component({
 	selector: 'app-login',
 	standalone: true,
@@ -17,6 +19,7 @@ import { RedirectLinkComponent } from '../components/redirect-link/redirect-link
 	schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class LoginComponent {
+	protected readonly icons = APP_ICONS;
 	constructor(protected commonService: CommonService, protected authService: AuthService, private route: ActivatedRoute, private router: Router) {}
 
 	@ViewChildren('inputField', { read: ElementRef }) inputFields!: QueryList<ElementRef>;

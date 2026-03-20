@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../../services/auth.service';
 import { CommonService } from '../../services/common.service';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { APP_ICONS } from '../../constants/icons';
 
 import { RedirectLinkComponent } from '../redirect-link/redirect-link.component';
 
@@ -14,6 +15,7 @@ import { RedirectLinkComponent } from '../redirect-link/redirect-link.component'
 	schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class SidebarComponent implements OnInit {
+	protected readonly icons = APP_ICONS;
 	avatarUrl$!: ReturnType<AuthService['avatarUrl$']['subscribe']> extends never ? any : typeof this.authService.avatarUrl$;
 
 	constructor(protected commonService: CommonService, protected authService: AuthService) {
