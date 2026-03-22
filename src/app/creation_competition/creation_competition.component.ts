@@ -12,12 +12,13 @@ import { ActivatedRoute } from '@angular/router';
 import { Location } from '@angular/common';
 import { AppSectionHeaderComponent } from '../components/section-header/section-header.component';
 import { InfoNoteComponent } from '../components/info-note/info-note.component';
+import { AppButtonComponent } from '../components/button/button.component';
 import { APP_ICONS } from '../constants/icons';
 
 @Component({
 	selector: 'app-creation-competition',
 	standalone: true,
-	imports: [InputTextModule, FormsModule, InputNumberModule, DatePickerModule, CommonModule, AppSectionHeaderComponent, InfoNoteComponent],
+	imports: [InputTextModule, FormsModule, InputNumberModule, DatePickerModule, CommonModule, AppSectionHeaderComponent, InfoNoteComponent, AppButtonComponent],
 	templateUrl: './creation_competition.component.html',
 	schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
