@@ -1,0 +1,18 @@
+<button [type]="type" [class.w-full]="fullWidth" class="inline-flex h-12 items-center justify-center rounded-md bg-prime-blue text-white hover:bg-hover-prime-blue px-5 text-base font-medium shadow transition-colors duration-250 cursor-pointer">
+	<!-- Icône à gauche -->
+	<iconify-icon
+		*ngIf="icon && iconPosition === 'left'"
+		[icon]="icon"
+		class="text-[1.5rem] mr-3"
+	></iconify-icon>
+
+	<!-- Contenu projeté (texte) -->
+	<ng-content></ng-content>
+
+	<!-- Icône à droite -->
+	<iconify-icon
+		*ngIf="icon && iconPosition === 'right'"
+		[icon]="icon"
+		class="text-[1.5rem] ml-2"
+	></iconify-icon>
+</button>

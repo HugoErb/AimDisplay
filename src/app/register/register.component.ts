@@ -6,12 +6,13 @@ import { CommonService } from '../services/common.service';
 import { AuthService } from '../services/auth.service';
 import { CommonModule } from '@angular/common';
 import { RedirectLinkComponent } from '../components/redirect-link/redirect-link.component';
+import { AppButtonComponent } from '../components/button/button.component';
 import { APP_ICONS } from '../constants/icons';
 
 @Component({
 	selector: 'app-register',
 	standalone: true,
-	imports: [CommonModule, FormsModule, InputTextModule, RedirectLinkComponent],
+	imports: [CommonModule, FormsModule, InputTextModule, RedirectLinkComponent, AppButtonComponent],
 	templateUrl: './register.component.html',
 	schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })

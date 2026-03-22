@@ -126,14 +126,14 @@
 					</div>
 				</div>
 
-				<button
-					class="w-full inline-flex h-12 items-center justify-center rounded-md bg-prime-blue text-white hover:bg-hover-prime-blue px-5 text-base font-medium shadow transition-colors duration-250 cursor-pointer"
+				<app-button
+					[fullWidth]="true"
 					type="submit"
+					[icon]="icons.ARROW_RIGHT"
 					[disabled]="isLoading"
 				>
 					Créer un compte
-					<iconify-icon [icon]="icons.ARROW_RIGHT" class="text-[1.5rem] ml-2"></iconify-icon>
-				</button>
+				</app-button>
 			</form>
 
 			<!-- Lien vers connexion -->
