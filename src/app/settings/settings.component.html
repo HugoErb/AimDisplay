@@ -327,7 +327,7 @@
 							></textarea>
 						</div>
 
-						<div class="pt-6 border-t border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-400">
+						<div class="pt-6 border-t border-gray-200 dark:border-gray-700 transition-colors duration-500 text-gray-600 dark:text-gray-400">
 							<div class="flex items-center text-sm">
 								<iconify-icon [icon]="icons.INFO" class="text-[1rem] mr-2"></iconify-icon>
 								<p>Les champs marqués d'un astérisque (*) sont obligatoires.</p>
@@ -367,7 +367,7 @@
 
 		<!-- Corps du modal, avec border en haut et en bas -->
 		<form (ngSubmit)="saveNewClubName()">
-			<div class="p-6 border-t border-b border-gray-200 dark:border-gray-700 space-y-2">
+			<div class="p-6 border-t border-b border-gray-200 dark:border-gray-700 transition-colors duration-500 space-y-2">
 				<label for="newClubName" class="block text-sm font-medium text-gray-700 dark:text-gray-300 transition-all duration-500 mb-1">
 					Nom du club *
 				</label>
@@ -423,7 +423,7 @@
 
 		<!-- Corps du modal, avec border en haut et en bas -->
 		<form (ngSubmit)="saveNewPassword()">
-			<div class="p-6 border-t border-b border-gray-200 dark:border-gray-700 space-y-5">
+			<div class="p-6 border-t border-b border-gray-200 dark:border-gray-700 transition-colors duration-500 space-y-5">
 				<div>
 					<label for="currentPassword" class="block text-sm font-medium text-gray-700 dark:text-gray-300 transition-all duration-500 mb-1">
 						Ancien mot de passe *
@@ -496,7 +496,7 @@
 			</div>
 
 			<!-- Footer du modal -->
-			<div class="pt-6 border-t border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-400">
+			<div class="pt-6 border-t border-gray-200 dark:border-gray-700 transition-colors duration-500 text-gray-600 dark:text-gray-400">
 				<div class="flex items-center text-sm px-4 pb-5">
 					<iconify-icon [icon]="icons.INFO" class="text-[1rem] mr-2"></iconify-icon>
 					<p>Les champs marqués d'un astérisque (*) sont obligatoires.</p>
