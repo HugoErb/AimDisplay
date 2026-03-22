@@ -150,9 +150,17 @@
 	/* Dark mode des inputs PrimeNG sauf sur login/register/mdp oublié */
 	:where(.dark)
 		:is(.p-inputtext, .p-autocomplete-input, .p-inputnumber-input, .p-datepicker-input, textarea):not(.ng-trigger *):not(.no-connect-root *) {
-		background-color: var(--color-main-dark-bg) !important;
-		border: 1px #374151 solid !important; /* gray-700 */
-		color: #d1d5db !important;
+		background-color: rgba(255, 255, 255, 0.05) !important;
+		border: 1px solid #6b7280 !important; /* gray-500 pour plus de contraste */
+		color: #ffffff !important; /* blanc pur */
+	}
+	
+	/* Focus des inputs PrimeNG en dark mode */
+	:where(.dark)
+		:is(.p-inputtext, .p-autocomplete-input, .p-inputnumber-input, .p-datepicker-input, textarea):not(.ng-trigger *):not(.no-connect-root *):focus {
+		border-color: var(--color-prime-blue) !important;
+		box-shadow: 0 0 0 1px var(--color-prime-blue) !important; /* Anneau net et pro */
+		background-color: rgba(255, 255, 255, 0.08) !important;
 	}
 
 	/* Dark mode des boutons sur la droite des inputs PrimeNG */
@@ -190,9 +198,12 @@
 	.p-dropdown-trigger,
 	.p-inputnumber-button {
 		background-color: var(--color-prime-blue) !important;
+		border: 1px solid var(--color-prime-blue) !important;
 		color: white !important;
 		width: 45px !important;
-		transition: background-color 0.2s ease;
+		border-top-left-radius: 0 !important;
+		border-bottom-left-radius: 0 !important;
+		transition: background-color 0.2s ease, border-color 0.2s ease;
 	}
 
 	/* Harmonisation des styles des hover des boutons des inputs PrimeNG */
@@ -201,6 +212,7 @@
 	.p-dropdown-trigger:hover,
 	.p-inputnumber-button:hover {
 		background-color: var(--color-hover-prime-blue) !important;
+		border-color: var(--color-hover-prime-blue) !important;
 		color: white !important;
 	}
 
