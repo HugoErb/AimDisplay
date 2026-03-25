@@ -11,11 +11,16 @@
 			<div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
 				<!-- Profile Section -->
 				<div class="border border-gray-200 dark:border-gray-700 transition-all duration-500 rounded-lg">
-					<div
-						class="p-4 border-b border-gray-200 dark:border-gray-700 transition-all duration-500 bg-gradient-to-r from-prime-blue to-hover-prime-blue rounded-t-lg"
-					>
-						<h2 class="text-lg font-semibold text-white transition-all duration-500">Gestion du compte</h2>
-						<p class="text-sm text-blue-100 transition-all duration-500">Gérez vos informations personnelles et votre sécurité</p>
+					<div class="p-4 border-b border-gray-200 dark:border-gray-700 transition-all duration-500 rounded-t-lg">
+						<div class="flex items-center space-x-3">
+							<div class="w-9 h-9 bg-gradient-to-br from-prime-blue to-hover-prime-blue rounded-lg flex items-center justify-center flex-shrink-0">
+								<iconify-icon [icon]="icons.EDIT" class="text-lg text-white"></iconify-icon>
+							</div>
+							<div>
+								<h2 class="text-lg font-semibold text-gray-900 dark:text-gray-100 transition-all duration-500">Gestion du compte</h2>
+								<p class="text-sm text-gray-500 dark:text-gray-400 transition-all duration-500">Gérez vos informations personnelles et votre sécurité</p>
+							</div>
+						</div>
 					</div>
 					<div class="p-6 space-y-6">
 						<div class="flex items-center space-x-4">
@@ -90,11 +95,16 @@
 
 				<!-- Global Settings -->
 				<div class="border border-gray-200 dark:border-gray-700 transition-all duration-500 rounded-lg">
-					<div
-						class="p-4 border-b border-gray-200 dark:border-gray-700 transition-all duration-500 bg-gradient-to-r from-prime-blue to-hover-prime-blue rounded-t-lg"
-					>
-						<h2 class="text-lg font-semibold text-white transition-all duration-500">Préférences générales</h2>
-						<p class="text-sm text-blue-100 transition-all duration-500">Configurez les paramètres globaux de l'application</p>
+					<div class="p-4 border-b border-gray-200 dark:border-gray-700 transition-all duration-500 rounded-t-lg">
+						<div class="flex items-center space-x-3">
+							<div class="w-9 h-9 bg-gradient-to-br from-prime-blue to-hover-prime-blue rounded-lg flex items-center justify-center flex-shrink-0">
+								<iconify-icon [icon]="icons.SETTINGS" class="text-lg text-white"></iconify-icon>
+							</div>
+							<div>
+								<h2 class="text-lg font-semibold text-gray-900 dark:text-gray-100 transition-all duration-500">Préférences générales</h2>
+								<p class="text-sm text-gray-500 dark:text-gray-400 transition-all duration-500">Configurez les paramètres globaux de l'application</p>
+							</div>
+						</div>
 					</div>
 					<div class="p-6 space-y-6">
 						<div class="flex items-center justify-between py-2">
@@ -279,13 +289,16 @@
 
 			<!-- Contact Form -->
 			<div class="border border-gray-200 dark:border-gray-700 transition-all duration-500 rounded-lg mb-7">
-				<div
-					class="p-4 border-b border-gray-200 dark:border-gray-700 transition-all duration-500 bg-gradient-to-r from-prime-blue to-hover-prime-blue rounded-t-lg"
-				>
-					<h2 class="text-lg font-semibold text-white transition-all duration-500">Nous contacter</h2>
-					<p class="text-sm text-blue-100 transition-all duration-500">
-						Une question, un problème ou une suggestion ? Notre équipe est là pour vous aider.
-					</p>
+				<div class="p-4 border-b border-gray-200 dark:border-gray-700 transition-all duration-500 rounded-t-lg">
+					<div class="flex items-center space-x-3">
+						<div class="w-9 h-9 bg-gradient-to-br from-prime-blue to-hover-prime-blue rounded-lg flex items-center justify-center flex-shrink-0">
+							<iconify-icon [icon]="icons.EMAIL_SEND" class="text-lg text-white"></iconify-icon>
+						</div>
+						<div>
+							<h2 class="text-lg font-semibold text-gray-900 dark:text-gray-100 transition-all duration-500">Nous contacter</h2>
+							<p class="text-sm text-gray-500 dark:text-gray-400 transition-all duration-500">Une question, un problème ou une suggestion ? Notre équipe est là pour vous aider.</p>
+						</div>
+					</div>
 				</div>
 				<div class="p-6">
 					<div class="space-y-6">
@@ -360,9 +373,9 @@
 <div class="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
 	<div class="bg-white dark:bg-gray-800 min-w-150 rounded-lg shadow-lg w-full max-w-md overflow-hidden animate-appear">
 		<!-- Bandeau supérieur -->
-		<div class="p-4 bg-gradient-to-r from-prime-blue to-hover-prime-blue transition-all duration-500">
-			<h2 class="text-lg font-semibold text-white">Modifier le nom du club</h2>
-			<p class="text-sm text-blue-100">Saisissez un nouveau nom pour votre club</p>
+		<div class="p-5 border-b border-gray-200 dark:border-gray-700 transition-all duration-500">
+			<h2 class="text-lg font-semibold text-gray-900 dark:text-gray-100">Modifier le nom du club</h2>
+			<p class="text-sm text-gray-500 dark:text-gray-400 mt-1">Saisissez un nouveau nom pour votre club</p>
 		</div>
 
 		<!-- Corps du modal, avec border en haut et en bas -->
@@ -416,9 +429,9 @@
 <div class="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
 	<div class="bg-white dark:bg-gray-800 min-w-150 rounded-lg shadow-lg w-full max-w-md overflow-hidden animate-appear">
 		<!-- Bandeau supérieur -->
-		<div class="p-4 bg-gradient-to-r from-prime-blue to-hover-prime-blue transition-all duration-500">
-			<h2 class="text-lg font-semibold text-white">Modifier votre mot de passe</h2>
-			<p class="text-sm text-blue-100">Saisissez un nouveau mot de passe pour votre compte Aim Display</p>
+		<div class="p-5 border-b border-gray-200 dark:border-gray-700 transition-all duration-500">
+			<h2 class="text-lg font-semibold text-gray-900 dark:text-gray-100">Modifier votre mot de passe</h2>
+			<p class="text-sm text-gray-500 dark:text-gray-400 mt-1">Saisissez un nouveau mot de passe pour votre compte Aim Display</p>
 		</div>
 
 		<!-- Corps du modal, avec border en haut et en bas -->
