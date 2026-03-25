@@ -9,12 +9,7 @@
 
         <form (ngSubmit)="submitCompetition()" class="p-8 space-y-10">
             <div class="space-y-4">
-                <div class="flex items-center gap-2">
-                    <div class="w-1 h-5 bg-prime-blue rounded-full"></div>
-                    <h2 class="text-[1.05rem] font-semibold text-gray-900 dark:text-gray-100">
-                        Informations de la compétition
-                    </h2>
-                </div>
+                <app-section-subtitle>Informations de la compétition</app-section-subtitle>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div class="flex flex-col space-y-1">
                         <label for="competitionName"
@@ -38,12 +33,7 @@
             </div>
 
             <div class="space-y-4">
-                <div class="flex items-center gap-2">
-                    <div class="w-1 h-5 bg-prime-blue rounded-full"></div>
-                    <h2 class="text-[1.05rem] font-semibold text-gray-900 dark:text-gray-100">
-                        Configuration des prix
-                    </h2>
-                </div>
+                <app-section-subtitle>Configuration des prix</app-section-subtitle>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
                     <div class="flex flex-col space-y-1">
                         <label for="prixInscription"

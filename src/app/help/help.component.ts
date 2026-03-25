@@ -6,12 +6,13 @@ import { CommonService } from '../services/common.service';
 
 import { RedirectLinkComponent } from '../components/redirect-link/redirect-link.component';
 import { AppSectionHeaderComponent } from '../components/section-header/section-header.component';
+import { AppSectionSubtitleComponent } from '../components/section-subtitle/section-subtitle.component';
 import { APP_ICONS } from '../constants/icons';
 
 @Component({
 	selector: 'app-help',
 	standalone: true,
-	imports: [CommonModule, RedirectLinkComponent, AppSectionHeaderComponent],
+	imports: [CommonModule, RedirectLinkComponent, AppSectionHeaderComponent, AppSectionSubtitleComponent],
 	templateUrl: './help.component.html',
 	schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })

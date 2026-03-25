@@ -8,6 +8,7 @@ import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Location } from '@angular/common';
 import { AppSectionHeaderComponent } from '../components/section-header/section-header.component';
+import { AppSectionSubtitleComponent } from '../components/section-subtitle/section-subtitle.component';
 import { AppButtonComponent } from '../components/button/button.component';
 import { APP_ICONS } from '../constants/icons';
 
@@ -20,7 +21,7 @@ declare global {
 @Component({
 	selector: 'app-display',
 	standalone: true,
-	imports: [AutoCompleteModule, FormsModule, AppSectionHeaderComponent, AppButtonComponent],
+	imports: [AutoCompleteModule, FormsModule, AppSectionHeaderComponent, AppSectionSubtitleComponent, AppButtonComponent],
 	templateUrl: './display.component.html',
 	schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
