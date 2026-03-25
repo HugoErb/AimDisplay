@@ -310,6 +310,17 @@
 		scrollbar-color: #9ca3af transparent; /* gris + fond transparent */
 	}
 
+	/* Zébrage des lignes de tableau */
+	/* On cible td (et non tr) car PrimeNG stylee déjà les td avec !important en dark mode.
+	   On applique la même stratégie en light mode pour éviter toute surprise de spécificité. */
+	.p-datatable tbody tr:nth-child(even) td {
+		background-color: rgba(249, 250, 251, 0.5) !important; /* gray-50/50 */
+	}
+	/* Doit apparaître après la règle globale dark td ci-dessus pour gagner via l'ordre de cascade */
+	:where(.dark) .p-datatable tbody tr:nth-child(even) td {
+		background-color: rgba(255, 255, 255, 0.02) !important;
+	}
+
 	/* Couleur du bouton de confirmation des sweet alert */
 	.custom-prime-button {
 		background-color: var(--color-prime-blue) !important;

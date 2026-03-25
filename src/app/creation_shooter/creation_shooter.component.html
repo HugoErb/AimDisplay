@@ -9,10 +9,12 @@
         <form (ngSubmit)="onSubmitShooter()" class="p-8 space-y-10">
             <!-- Informations personnelles -->
             <div class="space-y-4">
-                <h2
-                    class="text-lg font-semibold text-gray-900 pb-2 border-b border-gray-200 dark:border-gray-700 dark:text-gray-300">
-                    Informations personnelles
-                </h2>
+                <div class="flex items-center gap-2">
+                    <div class="w-1 h-5 bg-prime-blue rounded-full"></div>
+                    <h2 class="text-[1.05rem] font-semibold text-gray-900 dark:text-gray-100">
+                        Informations personnelles
+                    </h2>
+                </div>
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                     <div class="flex flex-col space-y-1">
                         <label for="shooterLastName"
@@ -39,10 +41,12 @@
 
             <!-- Club et Competition -->
             <div class="space-y-4">
-                <h2
-                    class="text-lg font-semibold text-gray-900 pb-2 border-b border-gray-200 dark:border-gray-700 dark:text-gray-300">
-                    Affiliation et compétition
-                </h2>
+                <div class="flex items-center gap-2">
+                    <div class="w-1 h-5 bg-prime-blue rounded-full"></div>
+                    <h2 class="text-[1.05rem] font-semibold text-gray-900 dark:text-gray-100">
+                        Affiliation et compétition
+                    </h2>
+                </div>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div class="flex flex-col space-y-1">
                         <label for="shooterClubName"
@@ -71,10 +75,12 @@
                 [ngClass]="isEditMode || group._open ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'">
                 <div class="space-y-4 overflow-hidden transition-opacity duration-300"
                     [ngClass]="isEditMode || group._open ? 'opacity-100' : 'opacity-0'">
-                    <h2
-                        class="text-lg font-semibold text-gray-900 pb-2 border-b border-gray-200 dark:border-gray-700 dark:text-gray-300">
-                        Catégorie et scores du tireur dans la compétition @if (i > 0) {{{ i + 1 }}}
-                    </h2>
+                    <div class="flex items-center gap-2">
+                        <div class="w-1 h-5 bg-prime-blue rounded-full"></div>
+                        <h2 class="text-[1.05rem] font-semibold text-gray-900 dark:text-gray-100">
+                            Catégorie et scores du tireur dans la compétition @if (i > 0) {{{ i + 1 }}}
+                        </h2>
+                    </div>
 
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                         <!-- Distance -->
