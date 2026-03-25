@@ -66,12 +66,14 @@ Aucun changement de tokens. On conserve intégralement :
 │─────────────────────────────────────── (bleu) ───│
 ```
 
-- Fond : `bg-white dark:bg-secondary-dark-bg`
+- Fond : `bg-white dark:bg-secondary-dark-bg transition-colors duration-500`
+- Coins haut : `rounded-t-xl` (pour correspondre au card wrapper `rounded-xl`)
 - Icône dans un carré : `w-10 h-10 bg-gradient-to-br from-prime-blue to-indigo-600 rounded-xl flex items-center justify-center`
+- Taille de l'icône : `text-xl` (~20px) pour tenir dans le carré 40x40 sans déborder
 - Icône couleur : `text-white` (le carré gradient reste visible en light ET dark)
-- Titre : `text-xl font-bold text-gray-900 dark:text-gray-100`
-- Sous-titre : `text-sm text-gray-500 dark:text-gray-400 mt-1`
-- Bordure basse : `border-b-2 border-prime-blue dark:border-gray-700`
+- Titre : `text-xl font-bold text-gray-900 dark:text-gray-100 transition-colors duration-500`
+- Sous-titre : `text-sm text-gray-500 dark:text-gray-400 mt-1 transition-colors duration-500`
+- Bordure basse : `border-b-2 border-prime-blue dark:border-gray-700 transition-colors duration-500`
 - Padding : `px-8 py-5`
 - Suppression du `<div>` gradient overlay et de la logique `dark:opacity-0`
 
@@ -117,22 +119,23 @@ Changements :
 
 **Avant** : `class="!bg-gray-100 hover:dark:!bg-gray-700 hover:!bg-gray-200"` avec texte `text-prime-blue dark:text-gray-300`
 
-**Après** : `class="!bg-transparent dark:!bg-transparent"` avec texte `text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider`
+**Après** : `class="!bg-transparent dark:!bg-transparent hover:!bg-gray-50 hover:dark:!bg-gray-700/50"` avec texte `text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider`
 
-Changements dans `styles.css` :
-- Suppression du fond gris sur les `th`
+Changements dans les templates HTML :
+- Suppression du fond gris statique sur les `th`
+- Hover subtil conservé pour les colonnes triables (feedback visuel PrimeNG)
 - Headers en texte gris uppercase discret
 - Bordure basse subtile uniquement
 
 #### Corps
 
-Ajout zébrage via CSS global :
+Ajout zébrage via CSS global. **Attention** : la règle dark existante `:where(.dark) .p-datatable tr { background-color: var(--color-secondary-dark-bg) !important; }` utilise `!important` — la règle de zébrage dark doit aussi utiliser `!important` pour la surcharger :
 ```css
 .p-datatable tbody tr:nth-child(even) {
     background-color: rgba(249, 250, 251, 0.5); /* gray-50/50 */
 }
 :where(.dark) .p-datatable tbody tr:nth-child(even) {
-    background-color: rgba(255, 255, 255, 0.02);
+    background-color: rgba(255, 255, 255, 0.02) !important;
 }
 ```
 
@@ -181,7 +184,7 @@ Le reste (logo, sous-titre, footer) reste identique.
 **Avant** : bandeau gradient bleu en haut du modal
 
 **Après** :
-- Fond header : `bg-white dark:bg-gray-800`
+- Fond header : `bg-white dark:bg-gray-800` (note : le container modal est déjà `dark:bg-gray-800`, donc le header hérite naturellement — c'est intentionnellement différent de `dark:bg-secondary-dark-bg` des cards de page)
 - Titre : `text-lg font-semibold text-gray-900 dark:text-gray-100`
 - Sous-titre : `text-sm text-gray-500 dark:text-gray-400`
 - Bordure basse : `border-b-2 border-prime-blue dark:border-gray-700`
@@ -189,7 +192,9 @@ Le reste (logo, sous-titre, footer) reste identique.
 
 ### 7. Page Help
 
-Seul le section header change (passage au style B). Le reste de la page (cartes bleues, timeline, contenu) est déjà cohérent avec le nouveau design et ne nécessite aucune modification.
+- Section header : passage au style B
+- Le heading "Tutoriel Détaillé" (ligne ~88 de `help.component.html`) utilise l'ancien pattern `<h2>` avec `border-b` : il doit aussi recevoir le traitement accent vertical bleu comme les titres de section des formulaires (section 3)
+- Le reste de la page (cartes bleues, timeline, contenu) est déjà cohérent avec le nouveau design et ne nécessite aucune modification.
 
 ### 8. Page Generer PDF
 
@@ -206,9 +211,10 @@ Seul le section header change (passage au style B). Le reste de la page (cartes 
 
 ## Récapitulatif des changements CSS globaux (styles.css)
 
-1. **Ajout** : zébrage des lignes de tableau (`.p-datatable tbody tr:nth-child(even)`)
+1. **Ajout** : zébrage des lignes de tableau (`.p-datatable tbody tr:nth-child(even)`) avec `!important` en dark mode pour surcharger la règle existante
 2. **Aucune suppression** de styles existants relatifs aux inputs PrimeNG, dark mode, etc.
 3. Les overrides `!bg-gray-100` sur les `th` seront retirés directement dans les templates HTML, pas dans styles.css
+4. **Suppression** du `shadow-lg` intérieur sur les wrappers `<div class="min-w-[525px] mx-auto shadow-lg">` des pages modification_* (doublon avec le `shadow-sm` du card wrapper extérieur)
 
 ## Contraintes
 
