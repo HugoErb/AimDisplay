@@ -8,12 +8,7 @@
 
 		<form (ngSubmit)="launchDisplay()" class="p-8 space-y-10">
 			<div class="space-y-4">
-				<div class="flex items-center gap-2">
-					<div class="w-1 h-5 bg-prime-blue rounded-full"></div>
-					<h2 class="text-[1.05rem] font-semibold text-gray-900 dark:text-gray-100">
-						Affichage d'une compétition
-					</h2>
-				</div>
+				<app-section-subtitle>Affichage d'une compétition</app-section-subtitle>
 				<div class="flex flex-col space-y-1 w-1/2">
 					<label for="selectedCompetition" class="text-sm font-medium text-gray-700 dark:text-gray-300 ml-1">Compétition *</label>
 					<p-autoComplete

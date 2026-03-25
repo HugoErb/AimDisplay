@@ -9,6 +9,7 @@ import { Club } from '../interfaces/club';
 import { ActivatedRoute } from '@angular/router';
 import { Location } from '@angular/common';
 import { AppSectionHeaderComponent } from '../components/section-header/section-header.component';
+import { AppSectionSubtitleComponent } from '../components/section-subtitle/section-subtitle.component';
 import { InfoNoteComponent } from '../components/info-note/info-note.component';
 import { AppButtonComponent } from '../components/button/button.component';
 import { APP_ICONS } from '../constants/icons';
@@ -16,7 +17,7 @@ import { APP_ICONS } from '../constants/icons';
 @Component({
 	selector: 'app-creation-club',
 	standalone: true,
-	imports: [CommonModule, InputTextModule, FormsModule, AppSectionHeaderComponent, InfoNoteComponent, AppButtonComponent],
+	imports: [CommonModule, InputTextModule, FormsModule, AppSectionHeaderComponent, AppSectionSubtitleComponent, InfoNoteComponent, AppButtonComponent],
 	templateUrl: './creation_club.component.html',
 	schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })

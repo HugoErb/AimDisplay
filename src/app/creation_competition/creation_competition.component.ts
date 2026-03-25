@@ -11,6 +11,7 @@ import { SupabaseService } from '../services/supabase.service';
 import { ActivatedRoute } from '@angular/router';
 import { Location } from '@angular/common';
 import { AppSectionHeaderComponent } from '../components/section-header/section-header.component';
+import { AppSectionSubtitleComponent } from '../components/section-subtitle/section-subtitle.component';
 import { InfoNoteComponent } from '../components/info-note/info-note.component';
 import { AppButtonComponent } from '../components/button/button.component';
 import { APP_ICONS } from '../constants/icons';
@@ -18,7 +19,7 @@ import { APP_ICONS } from '../constants/icons';
 @Component({
 	selector: 'app-creation-competition',
 	standalone: true,
-	imports: [InputTextModule, FormsModule, InputNumberModule, DatePickerModule, CommonModule, AppSectionHeaderComponent, InfoNoteComponent, AppButtonComponent],
+	imports: [InputTextModule, FormsModule, InputNumberModule, DatePickerModule, CommonModule, AppSectionHeaderComponent, AppSectionSubtitleComponent, InfoNoteComponent, AppButtonComponent],
 	templateUrl: './creation_competition.component.html',
 	schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
