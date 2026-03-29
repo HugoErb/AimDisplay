@@ -1,0 +1,6 @@
+<span
+	(click)="redirectTo()"
+	class="font-medium cursor-pointer transition-colors duration-200 text-prime-blue hover:text-hover-prime-blue hover:underline"
+	[ngClass]="!forceLight ? 'dark:text-prime-blue-light dark:hover:text-hover-prime-blue-light' : ''">
+	<ng-content></ng-content>
+</span>
