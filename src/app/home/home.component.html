@@ -1,26 +1,92 @@
-<div class="h-full flex flex-col items-center justify-center relative text-center">
-	<!-- Bloc logo + titre -->
-	<div class="flex items-center gap-6 mb-5">
-		<!-- Logo -->
-		<img src="assets/img/logo.svg" alt="Logo" class="h-36 w-36 animate-appear" />
+<div class="h-full flex flex-col items-center justify-center px-6 relative">
 
-		<!-- Titre -->
-		<div class="text-left">
-			<h3 class="text-5xl font-bold md:text-7xl text-gray-900 dark:text-gray-100 animate-appear opacity-0 transition-colors duration-500">
-				Aim
-				<br />
-				Display
+	<!-- Hero -->
+	<div class="flex flex-col items-center text-center mb-10">
+		<div class="flex items-center gap-6 mb-4">
+			<img src="assets/img/logo.svg" alt="Logo" class="h-28 w-28 animate-appear" />
+			<h3 class="text-5xl font-bold md:text-7xl text-prime-blue animate-appear opacity-0 transition-colors duration-500 text-left">
+				Aim<br />Display
 			</h3>
 		</div>
+		<p class="text-gray-500 dark:text-gray-400 text-xl max-w-xl animate-appear opacity-0 transition-colors duration-500 animation-delay-100">
+			Entrez, stockez et affichez vos données de compétition de tir de manière simple et efficace.
+		</p>
 	</div>
 
-	<!-- Sous-titre en dessous -->
-	<p class="text-gray-500 dark:text-gray-400 text-xl max-w-xl animate-appear opacity-0 transition-colors duration-500 animation-delay-100 pb-15">
-		Entrez, stockez et affichez vos données de compétition de tir de manière simple et efficace !
-	</p>
+	<!-- Cartes -->
+	<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 max-w-3xl w-full animate-appear opacity-0 animation-delay-200 mb-14">
+
+		<div (click)="commonService.redirectTo('creation_competition')"
+			class="group bg-white dark:bg-secondary-dark-bg rounded-xl px-5 py-4 border border-gray-200 dark:border-gray-700 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 cursor-pointer flex items-center space-x-4">
+			<div class="w-12 h-12 bg-gradient-to-br bg-prime-blue rounded-xl flex items-center justify-center flex-shrink-0">
+				<iconify-icon icon="octicon:trophy-24" class="text-[1.6rem] text-white"></iconify-icon>
+			</div>
+			<div>
+				<p class="font-bold text-gray-900 dark:text-gray-100 transition-colors duration-500">Compétitions</p>
+				<p class="text-sm text-gray-500 dark:text-gray-400 mt-1 transition-colors duration-500">Créez vos évenements sportifs</p>
+			</div>
+		</div>
+
+		<div (click)="commonService.redirectTo('creation_club')"
+			class="group bg-white dark:bg-secondary-dark-bg rounded-xl px-5 py-4 border border-gray-200 dark:border-gray-700 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 cursor-pointer flex items-center space-x-4">
+			<div class="w-12 h-12 bg-gradient-to-br bg-prime-blue rounded-xl flex items-center justify-center flex-shrink-0">
+				<iconify-icon icon="lucide:shield" class="text-[1.6rem] text-white"></iconify-icon>
+			</div>
+			<div>
+				<p class="font-bold text-gray-900 dark:text-gray-100 transition-colors duration-500">Clubs</p>
+				<p class="text-sm text-gray-500 dark:text-gray-400 mt-1 transition-colors duration-500">Créez les clubs participants</p>
+			</div>
+		</div>
+
+		<div (click)="commonService.redirectTo('creation_shooter')"
+			class="group bg-white dark:bg-secondary-dark-bg rounded-xl px-5 py-4 border border-gray-200 dark:border-gray-700 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 cursor-pointer flex items-center space-x-4">
+			<div class="w-12 h-12 bg-gradient-to-br bg-prime-blue rounded-xl flex items-center justify-center flex-shrink-0">
+				<iconify-icon icon="lucide:user-round" class="text-[1.6rem] text-white"></iconify-icon>
+			</div>
+			<div>
+				<p class="font-bold text-gray-900 dark:text-gray-100 transition-colors duration-500">Tireurs</p>
+				<p class="text-sm text-gray-500 dark:text-gray-400 mt-1 transition-colors duration-500">Inscrivez vos tireurs à vos compétitions</p>
+			</div>
+		</div>
+
+		<div (click)="commonService.redirectTo('display')"
+			class="group bg-white dark:bg-secondary-dark-bg rounded-xl px-5 py-4 border border-gray-200 dark:border-gray-700 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 cursor-pointer flex items-center space-x-4">
+			<div class="w-12 h-12 bg-gradient-to-br bg-prime-blue rounded-xl flex items-center justify-center flex-shrink-0">
+				<iconify-icon icon="streamline:screen-1-remix" class="text-[1.6rem] text-white"></iconify-icon>
+			</div>
+			<div>
+				<p class="font-bold text-gray-900 dark:text-gray-100 transition-colors duration-500">Affichage</p>
+				<p class="text-sm text-gray-500 dark:text-gray-400 mt-1 transition-colors duration-500">Les classements en direct live</p>
+			</div>
+		</div>
+
+		<div (click)="commonService.redirectTo('generer_pdf')"
+			class="group bg-white dark:bg-secondary-dark-bg rounded-xl px-5 py-4 border border-gray-200 dark:border-gray-700 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 cursor-pointer flex items-center space-x-4">
+			<div class="w-12 h-12 bg-gradient-to-br bg-prime-blue  rounded-xl flex items-center justify-center flex-shrink-0">
+				<iconify-icon icon="mdi:paper-outline" class="text-[1.6rem] text-white"></iconify-icon>
+			</div>
+			<div>
+				<p class="font-bold text-gray-900 dark:text-gray-100 transition-colors duration-500">Rapports PDF</p>
+				<p class="text-sm text-gray-500 dark:text-gray-400 mt-1 transition-colors duration-500">Générer des rapports statistiques en PDF</p>
+			</div>
+		</div>
+
+		<div (click)="commonService.redirectTo('modification_shooter')"
+			class="group bg-white dark:bg-secondary-dark-bg rounded-xl px-5 py-4 border border-gray-200 dark:border-gray-700 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 cursor-pointer flex items-center space-x-4">
+			<div class="w-12 h-12 bg-gradient-to-br bg-prime-blue rounded-xl flex items-center justify-center flex-shrink-0">
+				<iconify-icon icon="lucide:pen-line" class="text-[1.6rem] text-white"></iconify-icon>
+			</div>
+			<div>
+				<p class="font-bold text-gray-900 dark:text-gray-100 transition-colors duration-500">Modification</p>
+				<p class="text-sm text-gray-500 dark:text-gray-400 mt-1 transition-colors duration-500">Modifier les données enregistrées</p>
+			</div>
+		</div>
+
+	</div>
 
 	<!-- Footer -->
-	<footer class="text-gray-800 dark:text-gray-300 absolute bottom-[15px] left-1/2 transform -translate-x-1/2 w-full text-center">
+	<footer class="text-gray-800 dark:text-gray-300 absolute bottom-[15px] left-1/2 transform -translate-x-1/2 w-full text-center transition-colors duration-500">
 		© 2025 par Hugo Eribon. Tous droits réservés.
 	</footer>
+
 </div>

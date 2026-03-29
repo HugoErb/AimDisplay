@@ -75,6 +75,7 @@
 	--animation-delay-100: 100ms;
 	--animation-delay-150: 150ms;
 	--animation-delay-200: 200ms;
+	--animation-delay-300: 300ms;
 
 	/* Transform origin et scale */
 	--transform-origin-center: center;
@@ -121,6 +122,9 @@
 	}
 	.animation-delay-200 {
 		animation-delay: var(--animation-delay-200);
+	}
+	.animation-delay-300 {
+		animation-delay: var(--animation-delay-300);
 	}
 
 	.w-110 {
