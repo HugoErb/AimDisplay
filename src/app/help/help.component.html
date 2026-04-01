@@ -22,37 +22,22 @@
             <!-- Help Grid -->
             <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
                 <!-- Creation Section -->
-                <div
-                    class="p-6 rounded-xl bg-blue-50/50 dark:bg-main-dark-bg border border-blue-100 dark:border-gray-700 shadow-sm transition-all duration-300">
-                    <div class="flex items-center space-x-3 mb-4">
-                        <iconify-icon [icon]="icons.ADD" class="text-prime-blue text-2xl"></iconify-icon>
-                        <h3 class="text-lg font-bold text-gray-800 dark:text-gray-100">Démarrage Rapide</h3>
-                    </div>
+                <app-info-card title="Démarrage Rapide" [icon]="icons.ADD">
                     <ul class="space-y-3">
                         <li class="flex items-start space-x-3 text-sm text-gray-600 dark:text-gray-400">
-                            <span
-                                class="flex-shrink-0 w-5 h-5 bg-prime-blue text-white rounded-full flex items-center justify-center text-xs">1</span>
-                            <span><span class="font-bold"><app-redirect-link target="creation_club">Créez vos
-                                        clubs</app-redirect-link>
-                                    :</span> Créez tous les clubs participants à votre compétition</span>
+                            <span class="flex-shrink-0 w-5 h-5 bg-prime-blue text-white rounded-full flex items-center justify-center text-xs">1</span>
+                            <span><span class="font-bold"><app-redirect-link target="creation_club">Créez vos clubs</app-redirect-link> :</span> Créez tous les clubs participants à votre compétition</span>
                         </li>
                         <li class="flex items-start space-x-3 text-sm text-gray-600 dark:text-gray-400">
-                            <span
-                                class="flex-shrink-0 w-5 h-5 bg-prime-blue text-white rounded-full flex items-center justify-center text-xs">2</span>
-                            <span><span class="font-bold"><app-redirect-link target="creation_competition">Créez la
-                                        compétition</app-redirect-link>
-                                    :</span> Configurez les détails de votre événement sportif.</span>
+                            <span class="flex-shrink-0 w-5 h-5 bg-prime-blue text-white rounded-full flex items-center justify-center text-xs">2</span>
+                            <span><span class="font-bold"><app-redirect-link target="creation_competition">Créez la compétition</app-redirect-link> :</span> Configurez les détails de votre événement sportif.</span>
                         </li>
                         <li class="flex items-start space-x-3 text-sm text-gray-600 dark:text-gray-400">
-                            <span
-                                class="flex-shrink-0 w-5 h-5 bg-prime-blue text-white rounded-full flex items-center justify-center text-xs">3</span>
-                            <span><span class="font-bold"><app-redirect-link target="creation_shooter">Créez les
-                                        tireurs</app-redirect-link>
-                                    :</span> Enregistrez les participants de votre compétition ainsi que leurs
-                                scores.</span>
+                            <span class="flex-shrink-0 w-5 h-5 bg-prime-blue text-white rounded-full flex items-center justify-center text-xs">3</span>
+                            <span><span class="font-bold"><app-redirect-link target="creation_shooter">Créez les tireurs</app-redirect-link> :</span> Enregistrez les participants de votre compétition ainsi que leurs scores.</span>
                         </li>
                     </ul>
-                </div>
+                </app-info-card>
 
                 <!-- Management Section -->
                 <div
