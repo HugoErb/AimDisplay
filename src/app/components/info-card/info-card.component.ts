@@ -6,6 +6,7 @@ import { CommonModule } from '@angular/common';
 	standalone: true,
 	imports: [CommonModule],
 	templateUrl: './info-card.component.html',
+	styles: [`:host { display: block; height: 100%; }`],
 	schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class InfoCardComponent {
