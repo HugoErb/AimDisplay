@@ -46,6 +46,9 @@ export class AuthService implements OnDestroy {
 
 				if (session?.user) {
 					this.ensureLocalStorageDefaults();
+					if (event === 'SIGNED_IN' || event === 'INITIAL_SESSION') {
+						this.refreshAvatarUrl();
+					}
 					if (this.router.url.startsWith('/login')) {
 						this.commonService.redirectTo('home');
 					}
@@ -458,6 +461,13 @@ export class AuthService implements OnDestroy {
 	async refreshAvatarUrl(): Promise<void> {
 		const url = await this.getSignedAvatarUrl(); // ta méthode actuelle
 		this.avatarUrlSubject.next(url ? this.addCacheBust(url) : undefined);
+	}
+
+	/**
+	 * Retourne l'URL d'avatar actuellement en cache (sans requête réseau).
+	 */
+	getCurrentAvatarUrl(): string | undefined {
+		return this.avatarUrlSubject.value;
 	}
 
 	/**
