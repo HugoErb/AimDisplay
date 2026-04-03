@@ -32,6 +32,10 @@ export class SupabaseService {
 		return await this.supabase.auth.getSession();
 	}
 
+	async getUser() {
+		return await this.supabase.auth.getUser();
+	}
+
 	// CREATE FUNCTIONS /////////////////////////////////////////////////////////////////////
 
 	/**
