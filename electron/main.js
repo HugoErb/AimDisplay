@@ -5,9 +5,6 @@ const fs = require("fs");
 const { autoUpdater } = require("electron-updater");
 const log = require("electron-log");
 
-// Désactive l'overlay scrollbar native Windows pour permettre le style CSS custom
-app.commandLine.appendSwitch("disable-features", "OverlayScrollbar");
-
 const SCHEME = "aimdisplay";
 const APP_ID = "com.example.aimdisplay"; // aligne avec build.appId dans package.json
 const APP_DIR_NAME = "AimDisplay"; // nom du dossier Angular dans dist/
@@ -117,7 +114,7 @@ function createWindow() {
 	}
 
 	win.webContents.once("did-finish-load", () => {
-if (isDev) {
+		if (isDev) {
 			win.webContents.send("updater:status", "none"); // débloque le splash en dev
 		}
 	});

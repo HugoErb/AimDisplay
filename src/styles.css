@@ -1,4 +1,3 @@
-@import "overlayscrollbars/styles/overlayscrollbars.css";
 @import "tailwindcss";
 @custom-variant dark (&:where(.dark, .dark *));
 
@@ -148,11 +147,7 @@
 	.p-datepicker,
 	textarea {
 		width: 100% !important;
-		transition:
-			background-color 500ms ease,
-			border-color 500ms ease,
-			color 500ms ease,
-			box-shadow 500ms ease !important;
+		transition: background-color 500ms ease, border-color 500ms ease, color 500ms ease, box-shadow 500ms ease !important;
 		font-size: 0.925rem !important;
 	}
 
@@ -163,12 +158,10 @@
 		border: 1px solid #6b7280 !important;
 		color: #ffffff !important;
 	}
-
+	
 	/* Focus des inputs PrimeNG en dark mode */
 	:where(.dark)
-		:is(.p-inputtext, .p-autocomplete-input, .p-inputnumber-input, .p-datepicker-input, textarea):not(.ng-trigger *):not(
-			.no-connect-root *
-		):focus {
+		:is(.p-inputtext, .p-autocomplete-input, .p-inputnumber-input, .p-datepicker-input, textarea):not(.ng-trigger *):not(.no-connect-root *):focus {
 		border-color: var(--color-prime-blue) !important;
 		box-shadow: 0 0 0 1px var(--color-prime-blue) !important; /* Anneau net et pro */
 		background-color: rgba(255, 255, 255, 0.08) !important;
@@ -214,9 +207,7 @@
 		width: 45px !important;
 		border-top-left-radius: 0 !important;
 		border-bottom-left-radius: 0 !important;
-		transition:
-			background-color 0.2s ease,
-			border-color 0.2s ease;
+		transition: background-color 0.2s ease, border-color 0.2s ease;
 	}
 
 	/* Harmonisation des styles des hover des boutons des inputs PrimeNG */
@@ -279,9 +270,7 @@
 	.dark .p-paginator .p-ripple:hover {
 		color: #1f2937 !important;
 		background-color: var(--color-light-gray) !important;
-		transition:
-			background-color 0.3s ease,
-			color 0.3s ease;
+		transition: background-color 0.3s ease, color 0.3s ease;
 	}
 
 	/* Style de la page sélectionnée du paginator en dark mode */
@@ -343,30 +332,8 @@
 		border: none !important;
 	}
 
-	/* Scrollbar native pour les éléments secondaires (sidebar, dropdowns, etc.) */
-	*::-webkit-scrollbar {
-		width: 6px;
-		height: 6px;
-		background: var(--color-main-bg);
-	}
-	*::-webkit-scrollbar-track {
-		background: var(--color-main-bg);
-	}
-	*::-webkit-scrollbar-thumb {
-		background-color: var(--color-prime-blue);
-		border-radius: 9999px;
-	}
-	.dark *::-webkit-scrollbar,
-	.dark::-webkit-scrollbar {
-		background: var(--color-main-dark-bg);
-	}
-	.dark *::-webkit-scrollbar-track,
-	.dark::-webkit-scrollbar-track {
-		background: var(--color-main-dark-bg);
-	}
-	.dark *::-webkit-scrollbar-thumb,
-	.dark::-webkit-scrollbar-thumb {
-		background-color: var(--color-prime-blue-light);
+	html {
+		scrollbar-width: thin;
 	}
 
 	/* Animations de la page de ranking */
@@ -403,29 +370,4 @@
 	.blocked-cursor .p-autocomplete-dropdown {
 		cursor: not-allowed !important;
 	}
-}
-
-/* Thème custom OverlayScrollbars — hors layer pour surcharger le CSS de base */
-.os-theme-custom {
-	--os-handle-bg: var(--color-prime-blue);
-	--os-handle-bg-hover: var(--color-hover-prime-blue);
-	--os-handle-bg-active: var(--color-hover-prime-blue);
-	--os-handle-border-radius: 9999px;
-	--os-size: 6px;
-	--os-padding-perpendicular: 0px;
-	--os-padding-axis: 0px;
-	--os-track-bg: transparent;
-	--os-track-bg-hover: transparent;
-	--os-track-bg-active: transparent;
-	--os-handle-perpendicular-size: 100%;
-	--os-handle-perpendicular-size-hover: 100%;
-	--os-handle-perpendicular-size-active: 100%;
-}
-.os-theme-custom.os-scrollbar-vertical .os-scrollbar-handle,
-.os-theme-custom.os-scrollbar-horizontal .os-scrollbar-handle {
-	transition:
-		background-color 500ms ease,
-		opacity 0.15s,
-		width 0.15s,
-		height 0.15s !important;
 }
