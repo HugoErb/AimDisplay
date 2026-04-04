@@ -15,10 +15,21 @@
 	</div>
 
 	<!-- Sous-titre en dessous -->
-	<p class="text-gray-500 text-xl max-w-xl animate-appear opacity-0 transition-colors duration-500 animation-delay-100">Chargement en cours...</p>
-	<div class="flex items-center justify-center py-3 animate-appear opacity-0 transition-colors duration-500 animation-delay-100" aria-live="polite">
-		<iconify-icon [icon]="icons.LOADING" class="text-[2.8rem] text-gray-500"></iconify-icon>
-	</div>
+	@if (errorMessage) {
+		<p class="text-gray-500 text-xl max-w-xl animate-appear opacity-0 transition-colors duration-500 animation-delay-100">{{ errorMessage }}</p>
+		<div class="flex flex-col items-center justify-center py-3 gap-4 animate-appear opacity-0 transition-colors duration-500 animation-delay-100" aria-live="polite">
+			<button
+				(click)="retry()"
+				class="px-5 py-2 rounded-lg text-sm font-medium bg-prime-blue text-white hover:bg-hover-prime-blue transition-colors duration-200 cursor-pointer">
+				Réessayer
+			</button>
+		</div>
+	} @else {
+		<p class="text-gray-500 text-xl max-w-xl animate-appear opacity-0 transition-colors duration-500 animation-delay-100">Chargement en cours...</p>
+		<div class="flex items-center justify-center py-3 animate-appear opacity-0 transition-colors duration-500 animation-delay-100" aria-live="polite">
+			<iconify-icon [icon]="icons.LOADING" class="text-[2.8rem] text-gray-500"></iconify-icon>
+		</div>
+	}
 
 	<!-- Footer inside the same container -->
 	<footer class="text-gray-800 absolute bottom-[15px] left-0 w-full text-center">

@@ -3,6 +3,7 @@ import { SupabaseService } from '../services/supabase.service';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { CommonService } from './../services/common.service';
 import { APP_ICONS } from '../constants/icons';
+import { environment } from '../../environments/environment';
 
 @Component({
 	selector: 'app-splash-screen',
@@ -13,6 +14,9 @@ export class SplashScreenComponent implements OnInit {
 	protected readonly icons = APP_ICONS;
 	// Délai d'affichage minimal en millisecondes
 	private static readonly MIN_SPLASH_DELAY = 2000;
+	private static readonly CONNECTIVITY_TIMEOUT = 5000;
+
+	protected errorMessage: string | null = null;
 
 	private updateDone = false;
 	private sessionDone = false;
@@ -25,12 +29,19 @@ export class SplashScreenComponent implements OnInit {
 	async ngOnInit() {
 		this.bootStart = Date.now();
 
+		// 1) Vérification connexion internet avant tout
+		const isOnline = await this.checkConnectivity();
+		if (!isOnline) {
+			this.errorMessage = 'Aucune connexion internet. Vérifiez votre réseau et réessayez.';
+			return;
+		}
+
 		const api: any = (window as any).deeplink;
 
 		// Lancement en parallèle des tâches de démarrage
 		try {
 			await Promise.all([
-				// 1) Check update (non-bloquant s'il échoue ou n'existe pas)
+				// 2) Check update (non-bloquant s'il échoue ou n'existe pas)
 				(async () => {
 					try {
 						await api?.checkForUpdates?.();
@@ -41,14 +52,16 @@ export class SplashScreenComponent implements OnInit {
 					}
 				})(),
 
-				// 2) Récupération de la session
+				// 3) Récupération de la session
 				(async () => {
 					try {
-						const { data } = await this.supabase.getSession();
+						const { data, error } = await this.supabase.getSession();
+						if (error) throw error;
 						this.isLogged = !!data?.session;
 					} catch (e) {
 						console.error('[splash] session check failed', e);
 						this.isLogged = false;
+						this.errorMessage = 'Impossible de vérifier votre session.';
 					} finally {
 						this.sessionDone = true;
 					}
@@ -60,8 +73,38 @@ export class SplashScreenComponent implements OnInit {
 			this.sessionDone = true;
 		}
 
-		// 3) Tenter de finir (respectera le délai minimal)
+		// 4) Tenter de finir (respectera le délai minimal)
 		this.tryFinish();
+	}
+
+	/**
+	 * Vérifie la connectivité réseau en tentant de joindre le serveur Supabase.
+	 */
+	private async checkConnectivity(): Promise<boolean> {
+		try {
+			const controller = new AbortController();
+			const timeoutId = setTimeout(
+				() => controller.abort(),
+				SplashScreenComponent.CONNECTIVITY_TIMEOUT
+			);
+			await fetch(environment.supabase.url, { method: 'HEAD', signal: controller.signal, mode: 'no-cors' });
+			clearTimeout(timeoutId);
+			return true;
+		} catch {
+			return false;
+		}
+	}
+
+	/**
+	 * Réinitialise l'état et relance la séquence de démarrage.
+	 */
+	protected async retry() {
+		this.errorMessage = null;
+		this.updateDone = false;
+		this.sessionDone = false;
+		this.isLogged = false;
+		this.navigated = false;
+		await this.ngOnInit();
 	}
 
 	/**
