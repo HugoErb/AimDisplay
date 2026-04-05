@@ -17,11 +17,13 @@ export class AppComponent {
 	constructor(private config: PrimeNG, private translateService: TranslateService, private router: Router, private ngZone: NgZone) {}
 
 	ngOnInit() {
-		OverlayScrollbars(document.body, {
-			scrollbars: {
-				theme: 'os-theme-custom',
-				autoHide: 'never',
-			},
+		this.ngZone.runOutsideAngular(() => {
+			OverlayScrollbars(document.body, {
+				scrollbars: {
+					theme: 'os-theme-custom',
+					autoHide: 'never',
+				},
+			});
 		});
 
 		// i18n

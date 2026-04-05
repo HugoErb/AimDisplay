@@ -369,6 +369,14 @@
 		background-color: var(--color-prime-blue-light);
 	}
 
+	/* Pas de scrollbar custom dans les overlays PrimeNG (dropdowns, autocomplete, etc.) */
+	.p-overlay *::-webkit-scrollbar {
+		display: none;
+	}
+	.p-overlay * {
+		scrollbar-width: none;
+	}
+
 	/* Animations de la page de ranking */
 	@keyframes swipeRightIn {
 		0% {
