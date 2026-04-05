@@ -1,5 +1,5 @@
 import { Routes } from '@angular/router';
-import { AuthGuard } from './services/auth.guard';
+import { authGuard, authGuardChild } from './services/auth.guard';
 
 import { HomeComponent } from './home/home.component';
 import { CreationShooterComponent } from './creation_shooter/creation_shooter.component';
@@ -30,13 +30,13 @@ export const routes: Routes = [
 	{ path: 'reset-password', component: ResetPasswordComponent },
 
 	// Route "ranking" protégée, Sans BaseLayout
-	{ path: 'ranking/:competitionId/:competitionName', component: RankingComponent, canActivate: [AuthGuard] },
+	{ path: 'ranking/:competitionId/:competitionName', component: RankingComponent, canActivate: [authGuard] },
 
 	// Toutes les autres routes protégées sous le layout
 	{
 		path: '',
 		component: BaseLayoutComponent,
-		canActivateChild: [AuthGuard],
+		canActivateChild: [authGuardChild],
 		children: [
 			{ path: 'home', component: HomeComponent },
 			{ path: 'creation_shooter', component: CreationShooterComponent },
