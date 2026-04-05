@@ -2,7 +2,7 @@ import { Component, ElementRef, QueryList, ViewChildren } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { DatePickerModule } from 'primeng/datepicker';
-import { CommonModule } from '@angular/common';
+
 import { InputTextModule } from 'primeng/inputtext';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { CommonService } from '../services/common.service';
@@ -19,7 +19,7 @@ import { APP_ICONS } from '../constants/icons';
 @Component({
 	selector: 'app-creation-competition',
 	standalone: true,
-	imports: [InputTextModule, FormsModule, InputNumberModule, DatePickerModule, CommonModule, AppSectionHeaderComponent, AppSectionSubtitleComponent, InfoNoteComponent, AppButtonComponent],
+	imports: [InputTextModule, FormsModule, InputNumberModule, DatePickerModule, AppSectionHeaderComponent, AppSectionSubtitleComponent, InfoNoteComponent, AppButtonComponent],
 	templateUrl: './creation_competition.component.html',
 	schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })

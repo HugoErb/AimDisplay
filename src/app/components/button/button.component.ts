@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 
 /**
  * AppButtonComponent – wrapper de style pour les boutons "Prime".
@@ -18,7 +18,7 @@ import { CommonModule } from '@angular/common';
 @Component({
 	selector: 'app-button',
 	standalone: true,
-	imports: [CommonModule],
+	imports: [],
 	templateUrl: './button.component.html',
 	schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
