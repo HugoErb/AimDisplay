@@ -1,10 +1,10 @@
 import { Component, Input, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 
 @Component({
 	selector: 'app-info-card',
 	standalone: true,
-	imports: [CommonModule],
+	imports: [],
 	templateUrl: './info-card.component.html',
 	styles: [`:host { display: block; height: 100%; }`],
 	schemas: [CUSTOM_ELEMENTS_SCHEMA],

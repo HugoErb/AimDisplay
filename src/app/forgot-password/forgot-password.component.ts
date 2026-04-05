@@ -1,6 +1,6 @@
 import { Component, ElementRef, QueryList, ViewChildren } from '@angular/core';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { FormsModule } from '@angular/forms';
 import { InputTextModule } from 'primeng/inputtext';
 import { CommonService } from '../services/common.service';
@@ -13,7 +13,7 @@ import { APP_ICONS } from '../constants/icons';
 @Component({
 	selector: 'app-forgot-password',
 	standalone: true,
-	imports: [CommonModule, FormsModule, InputTextModule, RedirectLinkComponent, AppButtonComponent],
+	imports: [FormsModule, InputTextModule, RedirectLinkComponent, AppButtonComponent],
 	templateUrl: './forgot-password.component.html',
 	schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })

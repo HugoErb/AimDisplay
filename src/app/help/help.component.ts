@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { ThemeService } from '../services/theme.service';
 import { CommonService } from '../services/common.service';
@@ -13,7 +13,7 @@ import { APP_ICONS } from '../constants/icons';
 @Component({
 	selector: 'app-help',
 	standalone: true,
-	imports: [CommonModule, RedirectLinkComponent, AppSectionHeaderComponent, AppSectionSubtitleComponent, InfoCardComponent],
+	imports: [RedirectLinkComponent, AppSectionHeaderComponent, AppSectionSubtitleComponent, InfoCardComponent],
 	templateUrl: './help.component.html',
 	schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })

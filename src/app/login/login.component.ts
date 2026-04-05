@@ -1,6 +1,6 @@
 import { Component, CUSTOM_ELEMENTS_SCHEMA, DestroyRef, ElementRef, inject, QueryList, ViewChildren } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { CommonModule } from '@angular/common';
+
 import { FormsModule } from '@angular/forms';
 import { InputTextModule } from 'primeng/inputtext';
 import { CommonService } from '../services/common.service';
@@ -14,7 +14,7 @@ import { APP_ICONS } from '../constants/icons';
 @Component({
 	selector: 'app-login',
 	standalone: true,
-	imports: [CommonModule, FormsModule, InputTextModule, RedirectLinkComponent, AppButtonComponent],
+	imports: [FormsModule, InputTextModule, RedirectLinkComponent, AppButtonComponent],
 	templateUrl: './login.component.html',
 	schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
