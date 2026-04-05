@@ -1,5 +1,5 @@
-import { Component, ElementRef, QueryList, ViewChildren } from '@angular/core';
-import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { Component, CUSTOM_ELEMENTS_SCHEMA, DestroyRef, ElementRef, inject, QueryList, ViewChildren } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { InputTextModule } from 'primeng/inputtext';
@@ -20,6 +20,8 @@ import { APP_ICONS } from '../constants/icons';
 })
 export class LoginComponent {
 	protected readonly icons = APP_ICONS;
+	private readonly destroyRef = inject(DestroyRef);
+
 	constructor(protected commonService: CommonService, protected authService: AuthService, private route: ActivatedRoute, private router: Router) {}
 
 	@ViewChildren('inputField', { read: ElementRef }) inputFields!: QueryList<ElementRef>;
@@ -30,7 +32,7 @@ export class LoginComponent {
 	isLoading: boolean = false;
 
 	ngOnInit() {
-		this.route.queryParamMap.subscribe((q) => {
+		this.route.queryParamMap.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((q) => {
 			if (q.get('verified') === '1') {
 				this.commonService.showSwal(
 					'Adresse e-mail validée',

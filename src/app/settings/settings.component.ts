@@ -4,7 +4,6 @@ import { DropdownModule } from 'primeng/dropdown';
 import { ToggleSwitchModule } from 'primeng/toggleswitch';
 import { InputTextModule } from 'primeng/inputtext';
 import { CommonService } from './../services/common.service';
-import { UserParams } from '../interfaces/user-params';
 import { ThemeService } from '../services/theme.service';
 import { TextareaModule } from 'primeng/textarea';
 import { TableModule } from 'primeng/table';
@@ -138,7 +137,6 @@ export class SettingsComponent {
 
 	async ngOnInit() {
 		this.avatarUrl = this.authService.getCurrentAvatarUrl();
-		const userParams: UserParams = JSON.parse(localStorage.getItem(this.userParamsName)!);
 		this.darkMode = this.themeService.getTheme() === 'dark';
         this.version = (await window.appInfo?.getVersion?.()) ?? 'dev';
 	}

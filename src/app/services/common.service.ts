@@ -12,6 +12,10 @@ export class CommonService {
 
 	private darkMode = signal<boolean>(false);
 
+	private escapeHtml(s: string): string {
+		return s.replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;').replaceAll('"', '&quot;');
+	}
+
 	// Liste blanche des domaines populaires considérés comme fiables
 	private trustedEmailDomains = new Set([
 		'gmail.com',
@@ -45,7 +49,7 @@ export class CommonService {
 			position: 'top-end',
 			toast: true,
 			icon: icon,
-			title: `<div class="text-xl">${message}</div>`,
+			title: `<div class="text-xl">${this.escapeHtml(message)}</div>`,
 			showConfirmButton: false,
 			width: 'auto',
 			timer: 3000,
@@ -70,7 +74,7 @@ export class CommonService {
 	): Promise<SweetAlertResult<any>> {
 		return Swal.fire({
 			icon: icon,
-			title: `<div class="text-2xl">${title}</div>`,
+			title: `<div class="text-2xl">${this.escapeHtml(title)}</div>`,
 			html: `${message}`,
 			showCancelButton: showCancelButton,
 			showConfirmButton: true,
@@ -91,7 +95,7 @@ export class CommonService {
 	 */
 	showSwalLoading(title: string, message: string) {
 		Swal.fire({
-			title: `<div class="text-2xl">${title}</div>`,
+			title: `<div class="text-2xl">${this.escapeHtml(title)}</div>`,
 			html: message,
 			allowOutsideClick: false,
 			didOpen: () => {
@@ -306,7 +310,7 @@ export class CommonService {
 	 * @returns {Promise<boolean>} Retourne `true` si toutes les validations sont passées, sinon `false`.
 	 */
 	async validateInputs(inputLabelMap: Map<string, string>, checkMail: boolean): Promise<boolean> {
-		const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+		const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
 		let passwordValue: string | null = null;
 

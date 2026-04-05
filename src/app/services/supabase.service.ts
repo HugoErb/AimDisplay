@@ -1,6 +1,5 @@
 import { Injectable, NgZone } from '@angular/core';
-import { createClient, SupabaseClient } from '@supabase/supabase-js';
-import { environment } from '../../environments/environment';
+import { SupabaseClient } from '@supabase/supabase-js';
 import { Club } from '../interfaces/club';
 import { ShooterCategory } from '../interfaces/shooter-category';
 import { Weapon } from '../interfaces/weapon';
@@ -8,21 +7,89 @@ import { Distance } from '../interfaces/distance';
 import { CommonService } from '../services/common.service';
 import { Competition } from '../interfaces/competition';
 import { Shooter } from '../interfaces/shooter';
+import { AuthService } from './auth.service';
 
 @Injectable({ providedIn: 'root' })
 export class SupabaseService {
 	private supabase: SupabaseClient;
 
-	constructor(private zone: NgZone, private commonService: CommonService) {
-		this.supabase = this.zone.runOutsideAngular(() =>
-			createClient(environment.supabase.url, environment.supabase.anonKey, {
-				auth: {
-					autoRefreshToken: true,
-					persistSession: true,
-					detectSessionInUrl: true,
-				},
-			})
-		);
+	private refCache: {
+		userId?: string;
+		loadedAt?: number;
+		competitionById?: Map<number, string>;
+		clubById?: Map<number, string>;
+		distanceById?: Map<number, string>;
+		weaponById?: Map<number, string>;
+		categoryById?: Map<number, string>;
+	} = {};
+
+	constructor(private zone: NgZone, private commonService: CommonService, private authService: AuthService) {
+		this.supabase = this.authService.getClient();
+	}
+
+	/** Invalide le cache des référentiels (ex. après une modification de clubs/compétitions). */
+	invalidateRefCache(): void {
+		this.refCache = {};
+	}
+
+	/** Échappe les caractères spéciaux LIKE (% et _) pour éviter les wildcards involontaires. */
+	private escapeLike(s: string): string {
+		return s.replaceAll('%', String.raw`\%`).replaceAll('_', String.raw`\_`);
+	}
+
+	/** Retourne les maps id→libellé des 5 référentiels, avec cache de 5 minutes par utilisateur. */
+	private async getRefMaps(userId: string): Promise<{
+		competitionById: Map<number, string>;
+		clubById: Map<number, string>;
+		distanceById: Map<number, string>;
+		weaponById: Map<number, string>;
+		categoryById: Map<number, string>;
+	}> {
+		const TTL = 5 * 60 * 1000;
+		const now = Date.now();
+		if (
+			this.refCache.userId === userId &&
+			this.refCache.loadedAt !== undefined &&
+			now - this.refCache.loadedAt < TTL &&
+			this.refCache.competitionById
+		) {
+			return {
+				competitionById: this.refCache.competitionById,
+				clubById: this.refCache.clubById!,
+				distanceById: this.refCache.distanceById!,
+				weaponById: this.refCache.weaponById!,
+				categoryById: this.refCache.categoryById!,
+			};
+		}
+
+		const mapLabel = <T extends { id: number; name?: string; label?: string }>(arr?: T[] | null) =>
+			new Map((arr ?? []).map((x) => [x.id, (x as any).name ?? (x as any).label ?? '']));
+
+		const [{ data: competitions }, { data: clubs }, { data: distances }, { data: weapons }, { data: categories }] = await Promise.all([
+			this.supabase.from('competitions').select('id, name').eq('user_id', userId),
+			this.supabase.from('clubs').select('id, name').eq('user_id', userId),
+			this.supabase.from('distances').select('id, label'),
+			this.supabase.from('weapons').select('id, label'),
+			this.supabase.from('categories').select('id, label'),
+		]);
+
+		this.refCache = {
+			userId,
+			loadedAt: now,
+			competitionById: mapLabel(competitions as any[]),
+			clubById: mapLabel(clubs as any[]),
+			distanceById: mapLabel(distances as any[]),
+			weaponById: mapLabel(weapons as any[]),
+			categoryById: mapLabel(categories as any[]),
+		};
+
+		return {
+			competitionById: this.refCache.competitionById!,
+			clubById: this.refCache.clubById!,
+			distanceById: this.refCache.distanceById!,
+			weaponById: this.refCache.weaponById!,
+			categoryById: this.refCache.categoryById!,
+		};
 	}
 
 	/**
@@ -160,6 +227,7 @@ export class SupabaseService {
 
 			if (error) throw new Error(`Erreur lors de la création de la compétition: ${error.message}`);
 
+			this.invalidateRefCache();
 			this.zone.run(() => this.commonService.showSwalToast('Nouvelle compétition créée !'));
 			return data!;
 		} catch (e: any) {
@@ -202,6 +270,7 @@ export class SupabaseService {
 
 			if (error) throw new Error(`Erreur lors de la création du club: ${error.message}`);
 
+			this.invalidateRefCache();
 			this.zone.run(() => this.commonService.showSwalToast('Nouveau club créé !'));
 
 			return data!;
@@ -280,23 +349,8 @@ export class SupabaseService {
 		const rows = shooterRows ?? [];
 		if (!rows.length) return [];
 
-		// Référentiels
-		const [{ data: competitions }, { data: clubs }, { data: distances }, { data: weapons }, { data: categories }] = await Promise.all([
-			this.supabase.from('competitions').select('id, name'),
-			this.supabase.from('clubs').select('id, name'),
-			this.supabase.from('distances').select('id, label'),
-			this.supabase.from('weapons').select('id, label'),
-			this.supabase.from('categories').select('id, label'),
-		]);
-
-		const mapName = <T extends { id: number; name?: string; label?: string }>(arr?: T[] | null) =>
-			new Map((arr ?? []).map((x) => [x.id, (x as any).name ?? (x as any).label ?? '']));
-
-		const competitionById = mapName(competitions as any[]);
-		const clubById = mapName(clubs as any[]);
-		const distanceById = mapName(distances as any[]);
-		const weaponById = mapName(weapons as any[]);
-		const categoryById = mapName(categories as any[]);
+		// Référentiels (mis en cache)
+		const { competitionById, clubById, distanceById, weaponById, categoryById } = await this.getRefMaps(currentUser.id);
 
 		return rows.map((row: any) =>
 			this.mapShooterRowToShooter(row, competitionById, clubById, distanceById, weaponById, categoryById)
@@ -328,23 +382,8 @@ export class SupabaseService {
 		const rows = shooterRows ?? [];
 		if (!rows.length) return [];
 
-		// Référentiels
-		const [{ data: competitions }, { data: clubs }, { data: distances }, { data: weapons }, { data: categories }] = await Promise.all([
-			this.supabase.from('competitions').select('id, name'),
-			this.supabase.from('clubs').select('id, name'),
-			this.supabase.from('distances').select('id, label'),
-			this.supabase.from('weapons').select('id, label'),
-			this.supabase.from('categories').select('id, label'),
-		]);
-
-		const mapName = <T extends { id: number; name?: string; label?: string }>(arr?: T[] | null) =>
-			new Map((arr ?? []).map((x) => [x.id, (x as any).name ?? (x as any).label ?? '']));
-
-		const competitionById = mapName(competitions as any[]);
-		const clubById = mapName(clubs as any[]);
-		const distanceById = mapName(distances as any[]);
-		const weaponById = mapName(weapons as any[]);
-		const categoryById = mapName(categories as any[]);
+		// Référentiels (mis en cache)
+		const { competitionById, clubById, distanceById, weaponById, categoryById } = await this.getRefMaps(currentUser.id);
 
 		return rows.map((row: any) =>
 			this.mapShooterRowToShooter(row, competitionById, clubById, distanceById, weaponById, categoryById)
@@ -397,8 +436,8 @@ export class SupabaseService {
 			.eq('category_id', params.categoryId)
 			.eq('distance_id', params.distanceId)
 			.eq('weapon_id', params.weaponId)
-			.ilike('last_name', last)
-			.ilike('first_name', first);
+			.ilike('last_name', this.escapeLike(last))
+			.ilike('first_name', this.escapeLike(first));
 
 		if (errCount) throw new Error(`Erreur lors du comptage des doublons: ${errCount.message}`);
 		const n = countMatches ?? 0;
@@ -419,8 +458,8 @@ export class SupabaseService {
 			.eq('category_id', params.categoryId)
 			.eq('distance_id', params.distanceId)
 			.eq('weapon_id', params.weaponId)
-			.ilike('last_name', last)
-			.ilike('first_name', first);
+			.ilike('last_name', this.escapeLike(last))
+			.ilike('first_name', this.escapeLike(first));
 
 		if (errSelf) throw new Error(`Erreur lors de la vérification de la ligne courante: ${errSelf.message}`);
 
@@ -544,20 +583,8 @@ export class SupabaseService {
 
 		if (error) throw new Error(`Erreur lors de la récupération des tireurs: ${error.message}`);
 
-		// Référentiels pour libellés
-		const [clubs, competitions, distances, weapons, categories] = await Promise.all([
-			this.getClubs(),
-			this.getCompetitions(),
-			this.getDistances(),
-			this.getWeapons(),
-			this.getCategories(),
-		]);
-
-		const clubById = new Map(clubs.map((c) => [c.id, c.name]));
-		const competitionById = new Map(competitions.map((c) => [c.id, c.name]));
-		const distanceById = new Map(distances.map((d) => [d.id, d.name]));
-		const weaponById = new Map(weapons.map((w) => [w.id, w.name]));
-		const categoryById = new Map(categories.map((k) => [k.id, k.name]));
+		// Référentiels (mis en cache)
+		const { competitionById, clubById, distanceById, weaponById, categoryById } = await this.getRefMaps(user.id);
 
 		return (rows ?? []).map((row: any) =>
 			this.mapShooterRowToShooter(row, competitionById, clubById, distanceById, weaponById, categoryById)
@@ -607,8 +634,8 @@ export class SupabaseService {
 		let query = this.supabase.from('shooters').select('*').eq('user_id', user.id);
 
 		// On applique un filtrage large côté SQL ; on affinera côté JS avec normalisation
-		if (lastName) query = query.ilike('last_name', `%${lastName}%`);
-		if (firstName) query = query.ilike('first_name', `%${firstName}%`);
+		if (lastName) query = query.ilike('last_name', `%${this.escapeLike(lastName)}%`);
+		if (firstName) query = query.ilike('first_name', `%${this.escapeLike(firstName)}%`);
 
 		// Ordre stable
 		query = query.order('competition_id', { ascending: true }).order('id', { ascending: true });
@@ -616,20 +643,8 @@ export class SupabaseService {
 		const { data: rows, error } = await query;
 		if (error) throw new Error(`Erreur lors de la récupération des résultats du tireur: ${error.message}`);
 
-		// --- Référentiels pour libellés (même logique que l'autre méthode)
-		const [clubs, competitions, distances, weapons, categories] = await Promise.all([
-			this.getClubs(),
-			this.getCompetitions(),
-			this.getDistances(),
-			this.getWeapons(),
-			this.getCategories(),
-		]);
-
-		const clubById = new Map(clubs.map((c) => [c.id, c.name]));
-		const competitionById = new Map(competitions.map((c) => [c.id, c.name]));
-		const distanceById = new Map(distances.map((d) => [d.id, d.name]));
-		const weaponById = new Map(weapons.map((w) => [w.id, w.name]));
-		const categoryById = new Map(categories.map((k) => [k.id, k.name]));
+		// --- Référentiels (mis en cache)
+		const { competitionById, clubById, distanceById, weaponById, categoryById } = await this.getRefMaps(user.id);
 
 		const norm = (s: string) =>
 			(s || '')
@@ -664,19 +679,8 @@ export class SupabaseService {
 
 		if (error) throw new Error(`Erreur lors de la récupération des tireurs: ${error.message}`);
 
-		const [clubs, competitions, distances, weapons, categories] = await Promise.all([
-			this.getClubs(),
-			this.getCompetitions(),
-			this.getDistances(),
-			this.getWeapons(),
-			this.getCategories(),
-		]);
-
-		const clubById = new Map(clubs.map((c) => [c.id, c.name]));
-		const competitionById = new Map(competitions.map((c) => [c.id, c.name]));
-		const distanceById = new Map(distances.map((d) => [d.id, d.name]));
-		const weaponById = new Map(weapons.map((w) => [w.id, w.name]));
-		const categoryById = new Map(categories.map((k) => [k.id, k.name]));
+		// Référentiels (mis en cache)
+		const { competitionById, clubById, distanceById, weaponById, categoryById } = await this.getRefMaps(user.id);
 
 		return (rows ?? []).map((row: any) => {
 			const s = this.mapShooterRowToShooter(row, competitionById, clubById, distanceById, weaponById, categoryById);
@@ -702,12 +706,13 @@ export class SupabaseService {
 			const currentUser = authUserData?.user;
 			if (!currentUser) throw new Error('Aucun utilisateur connecté.');
 
-			const { data, error } = await this.supabase.from('clubs').delete().eq('id', clubId).select('id').limit(1);
+			const { data, error } = await this.supabase.from('clubs').delete().eq('id', clubId).eq('user_id', currentUser.id).select('id').limit(1);
 
 			if (error) throw new Error(error.message);
 
 			const deleted = Array.isArray(data) && data.length > 0;
 
+			if (deleted) this.invalidateRefCache();
 			this.commonService.showSwalToast(
 				deleted ? 'Club supprimé !' : 'Aucun club supprimé (non trouvé ou déjà supprimé).',
 				deleted ? 'success' : 'info'
@@ -730,12 +735,13 @@ export class SupabaseService {
 			const currentUser = authUserData?.user;
 			if (!currentUser) throw new Error('Aucun utilisateur connecté.');
 
-			const { data, error } = await this.supabase.from('competitions').delete().eq('id', competitionId).select('id').limit(1);
+			const { data, error } = await this.supabase.from('competitions').delete().eq('id', competitionId).eq('user_id', currentUser.id).select('id').limit(1);
 
 			if (error) throw new Error(error.message);
 
 			const deleted = Array.isArray(data) && data.length > 0;
 
+			if (deleted) this.invalidateRefCache();
 			this.commonService.showSwalToast(
 				deleted ? 'Competition supprimée !' : 'Aucune competition supprimée (non trouvé ou déjà supprimé).',
 				deleted ? 'success' : 'info'
@@ -758,7 +764,7 @@ export class SupabaseService {
 			const currentUser = authUserData?.user;
 			if (!currentUser) throw new Error('Aucun utilisateur connecté.');
 
-			const { data, error } = await this.supabase.from('shooters').delete().eq('id', shooterId).select('id').limit(1);
+			const { data, error } = await this.supabase.from('shooters').delete().eq('id', shooterId).eq('user_id', currentUser.id).select('id').limit(1);
 
 			if (error) throw new Error(error.message);
 
@@ -904,6 +910,7 @@ export class SupabaseService {
 			if (error) throw new Error(`Erreur lors de la mise à jour du club: ${error.message}`);
 			if (!data) throw new Error('Club introuvable ou non autorisé.');
 
+			this.invalidateRefCache();
 			this.zone.run(() => this.commonService.showSwalToast('Club mis à jour !', 'success'));
 			return data!;
 		} catch (e: any) {
@@ -980,6 +987,7 @@ export class SupabaseService {
 			if (error) throw new Error(`Erreur lors de la mise à jour de la compétition: ${error.message}`);
 			if (!data) throw new Error('Compétition introuvable ou non autorisée.');
 
+			this.invalidateRefCache();
 			this.zone.run(() => this.commonService.showSwalToast('Compétition mise à jour !', 'success'));
 			return data!;
 		} catch (e: any) {

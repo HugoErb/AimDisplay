@@ -10,6 +10,10 @@ import { Router } from '@angular/router';
 @Injectable({ providedIn: 'root' })
 export class AuthService implements OnDestroy {
 	private supabase: SupabaseClient;
+
+	getClient(): SupabaseClient {
+		return this.supabase;
+	}
 	private userSubject = new BehaviorSubject<User | null>(null);
 	readonly user$ = this.userSubject.asObservable();
 	readonly isLoading = new BehaviorSubject<boolean>(true);

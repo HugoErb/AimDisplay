@@ -63,7 +63,12 @@
 					</thead>
 					<tbody>
 						<tr *ngFor="let shooter of classementData; let last = last" class="border-gray-200" [class.border-b]="!last">
-							<td class="text-center py-3" [innerHTML]="getPositionBadge(shooter.rank)"></td>
+							<td class="text-center py-3">
+								<span class="px-2 py-1 rounded-full text-sm font-medium transition-colors duration-150"
+									[ngClass]="getRankClass(shooter.rank)">
+									{{ getRankLabel(shooter.rank) }}
+								</span>
+							</td>
 
 							<td class="text-gray-900 text-base py-3">
 								<span class="font-bold">{{ shooter.lastName }}</span>
