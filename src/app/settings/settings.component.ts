@@ -1,6 +1,5 @@
 import { Component, ElementRef, QueryList, ViewChildren, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { DropdownModule } from 'primeng/dropdown';
 import { ToggleSwitchModule } from 'primeng/toggleswitch';
 import { InputTextModule } from 'primeng/inputtext';
 import { CommonService } from './../services/common.service';
@@ -26,7 +25,7 @@ declare global {
 @Component({
 	selector: 'app-settings',
 	standalone: true,
-	imports: [DropdownModule, ToggleSwitchModule, FormsModule, InputTextModule, TextareaModule, TableModule, CommonModule, AppSectionHeaderComponent, AppButtonComponent],
+	imports: [ToggleSwitchModule, FormsModule, InputTextModule, TextareaModule, TableModule, CommonModule, AppSectionHeaderComponent, AppButtonComponent],
 	templateUrl: './settings.component.html',
 	schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
