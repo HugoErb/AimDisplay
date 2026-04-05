@@ -323,7 +323,7 @@
 	}
 	/* Doit apparaître après la règle globale dark td ci-dessus pour gagner via l'ordre de cascade */
 	:where(.dark) .p-datatable tbody tr:nth-child(even) td {
-		background-color: rgba(255, 255, 255, 0.02) !important;
+		background-color: rgba(0, 0, 0, 0.1) !important;
 	}
 
 	/* Couleur du bouton de confirmation des sweet alert */
