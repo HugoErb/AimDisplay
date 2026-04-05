@@ -1,3 +1,4 @@
+@import "overlayscrollbars/styles/overlayscrollbars.css";
 @import "tailwindcss";
 @custom-variant dark (&:where(.dark, .dark *));
 
@@ -336,6 +337,14 @@
 		scrollbar-width: thin;
 	}
 
+	/* Pas de scrollbar custom dans les overlays PrimeNG (dropdowns, autocomplete, etc.) */
+	.p-overlay *::-webkit-scrollbar {
+		display: none;
+	}
+	.p-overlay * {
+		scrollbar-width: none;
+	}
+
 	/* Animations de la page de ranking */
 	@keyframes swipeRightIn {
 		0% {
@@ -370,4 +379,29 @@
 	.blocked-cursor .p-autocomplete-dropdown {
 		cursor: not-allowed !important;
 	}
+}
+
+/* Thème custom OverlayScrollbars — hors layer pour surcharger le CSS de base */
+.os-theme-custom {
+	--os-handle-bg: var(--color-prime-blue);
+	--os-handle-bg-hover: var(--color-hover-prime-blue);
+	--os-handle-bg-active: var(--color-hover-prime-blue);
+	--os-handle-border-radius: 9999px;
+	--os-size: 6px;
+	--os-padding-perpendicular: 0px;
+	--os-padding-axis: 0px;
+	--os-track-bg: transparent;
+	--os-track-bg-hover: transparent;
+	--os-track-bg-active: transparent;
+	--os-handle-perpendicular-size: 100%;
+	--os-handle-perpendicular-size-hover: 100%;
+	--os-handle-perpendicular-size-active: 100%;
+}
+.os-theme-custom.os-scrollbar-vertical .os-scrollbar-handle,
+.os-theme-custom.os-scrollbar-horizontal .os-scrollbar-handle {
+	transition:
+		background-color 500ms ease,
+		opacity 0.15s,
+		width 0.15s,
+		height 0.15s !important;
 }

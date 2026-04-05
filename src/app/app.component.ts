@@ -2,6 +2,7 @@ import { Component, NgZone } from '@angular/core';
 import { Router, RouterOutlet } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { PrimeNG } from 'primeng/config';
+import { OverlayScrollbars } from 'overlayscrollbars';
 
 @Component({
 	selector: 'app-root',
@@ -16,6 +17,15 @@ export class AppComponent {
 	constructor(private config: PrimeNG, private translateService: TranslateService, private router: Router, private ngZone: NgZone) {}
 
 	ngOnInit() {
+		this.ngZone.runOutsideAngular(() => {
+			OverlayScrollbars(document.body, {
+				scrollbars: {
+					theme: 'os-theme-custom',
+					autoHide: 'never',
+				},
+			});
+		});
+
 		// i18n
 		this.translateService.addLangs(['fr']);
 		this.translateService.setDefaultLang('fr');
