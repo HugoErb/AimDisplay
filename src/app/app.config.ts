@@ -1,19 +1,14 @@
-import { ApplicationConfig, importProvidersFrom } from '@angular/core';
+import { ApplicationConfig, provideAppInitializer } from '@angular/core';
 import { provideAnimations } from '@angular/platform-browser/animations';
 import { provideRouter, withHashLocation } from '@angular/router';
-import { HttpClient, provideHttpClient } from '@angular/common/http';
-import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
-import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+import { provideHttpClient } from '@angular/common/http';
+import { provideTranslateService } from '@ngx-translate/core';
+import { provideTranslateHttpLoader } from '@ngx-translate/http-loader';
 import { routes } from './app.routes';
 import { providePrimeNG } from 'primeng/config';
 import Lara from '@primeng/themes/aura';
 import { definePreset } from '@primeng/themes';
-import { provideAppInitializer } from '@angular/core';
 import { setupDeepLink } from './services/deep-link.bootstrap';
-
-export function HttpLoaderFactory(http: HttpClient) {
-	return new TranslateHttpLoader(http, './assets/i18n/', '.json');
-}
 
 const LaraPreset = definePreset(Lara, {
 	semantic: {
@@ -46,15 +41,8 @@ export const appConfig: ApplicationConfig = {
 				},
 			},
 		}),
-		importProvidersFrom(
-			TranslateModule.forRoot({
-				loader: {
-					provide: TranslateLoader,
-					useFactory: HttpLoaderFactory,
-					deps: [HttpClient],
-				},
-			})
-		),
+		provideTranslateService({}),
+		...provideTranslateHttpLoader(),
 		provideAppInitializer(() => setupDeepLink()),
 	],
 };
