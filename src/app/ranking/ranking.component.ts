@@ -232,29 +232,17 @@ export class RankingComponent implements OnInit, OnDestroy {
 	 * @param {number} position - Position dans le classement (1 pour premier, 2 pour deuxième, etc.).
 	 * @returns {string} HTML d’un <span> stylé (classes Tailwind) affichant le rang correspondant.
 	 */
-	getPositionBadge(position: number): string {
-		let bgClass = '';
-		let text = '';
-
+	getRankClass(position: number): string {
 		switch (position) {
-			case 1:
-				bgClass = 'bg-yellow-500 text-white';
-				text = '1er';
-				break;
-			case 2:
-				bgClass = 'bg-gray-400 text-white';
-				text = '2ème';
-				break;
-			case 3:
-				bgClass = 'bg-amber-600 text-white';
-				text = '3ème';
-				break;
-			default:
-				bgClass = 'border border-gray-400 text-gray-700';
-				text = `${position}ème`;
+			case 1: return 'bg-yellow-500 text-white';
+			case 2: return 'bg-gray-400 text-white';
+			case 3: return 'bg-amber-600 text-white';
+			default: return 'border border-gray-400 text-gray-700';
 		}
+	}
 
-		return `<span class="px-2 py-1 rounded-full text-sm font-medium transition-colors duration-150 ${bgClass}">${text}</span>`;
+	getRankLabel(position: number): string {
+		return position === 1 ? '1er' : `${position}ème`;
 	}
 
 	/**

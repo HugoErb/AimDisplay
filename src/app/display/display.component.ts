@@ -69,7 +69,8 @@ export class DisplayComponent {
 		if (window.display?.openRanking) {
 			void window.display.openRanking(String(id), String(name)); // Electron (nouvelle BrowserWindow)
 		} else {
-			window.open(url, '_blank'); // Fallback Web
+			const w = window.open(url, '_blank'); // Fallback Web
+			if (w) w.opener = null;
 		}
 
 		// Reset local
