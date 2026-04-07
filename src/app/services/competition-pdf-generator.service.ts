@@ -50,8 +50,9 @@ export class CompetitionPDFGenerator {
 			// 2) Construit le contenu (une carte par groupe)
 			const content: Content[] = [];
 			groups.forEach((g, idx) => {
-				const useSix = this.commonService.hasSixSeriesCategory(g.category);
-				const ordered = [...g.shooters].sort((a, b) => this.compareShooters(a, b, useSix));
+				const useEight = this.commonService.hasEightSeriesWeapon(g.weapon);
+				const useSix = !useEight && this.commonService.hasSixSeriesCategory(g.category);
+				const ordered = [...g.shooters].sort((a, b) => this.compareShooters(a, b, useSix, useEight));
 				const title = `${g.distance} • ${g.category} • ${g.weapon}`;
 				const card = this.buildGroupCard(title, ordered);
 				if (!card) return;
@@ -137,7 +138,8 @@ export class CompetitionPDFGenerator {
 	 * @return       Un noeud pdfMake à pousser dans `content`.
 	 */
 	private buildGroupCard(title: string, rows: Shooter[]): Content {
-		const showSix = this.commonService.hasSixSeriesCategory(rows[0]?.categoryName ?? '');
+		const showEight = this.commonService.hasEightSeriesWeapon(rows[0]?.weapon ?? '');
+		const showSix = !showEight && this.commonService.hasSixSeriesCategory(rows[0]?.categoryName ?? '');
 
 		// En-têtes dynamiques
 		const headerRow: Cell[] = [
@@ -150,15 +152,23 @@ export class CompetitionPDFGenerator {
 			{ text: 'S3', style: 'th', alignment: 'right' },
 			{ text: 'S4', style: 'th', alignment: 'right' },
 		];
-		if (showSix) {
+		if (showSix || showEight) {
 			headerRow.push({ text: 'S5', style: 'th', alignment: 'right' }, { text: 'S6', style: 'th', alignment: 'right' });
+		}
+		if (showEight) {
+			headerRow.push({ text: 'S7', style: 'th', alignment: 'right' }, { text: 'S8', style: 'th', alignment: 'right' });
 		}
 		headerRow.push({ text: 'Total', style: 'th', alignment: 'right' });
 
 		// Largeurs adaptées
-		const widths = showSix
-			? [35, '*', '*', '*', 40, 40, 40, 40, 40, 40, 60] // avec S5/S6
-			: [35, '*', '*', '*', 45, 45, 45, 45, 60]; // sans S5/S6
+		let widths: (string | number)[];
+		if (showEight) {
+			widths = [35, '*', '*', '*', 32, 32, 32, 32, 32, 32, 32, 32, 50]; // avec S5-S8
+		} else if (showSix) {
+			widths = [35, '*', '*', '*', 40, 40, 40, 40, 40, 40, 60]; // avec S5/S6
+		} else {
+			widths = [35, '*', '*', '*', 45, 45, 45, 45, 60]; // S1-S4 seulement
+		}
 
 		const body: Cell[][] = [headerRow];
 		const v = (n: any) => (n == null || Number.isNaN(Number(n)) ? '' : Number(n).toFixed(2));
@@ -174,8 +184,11 @@ export class CompetitionPDFGenerator {
 				{ text: v(s.scoreSerie3), style: 'td', alignment: 'right' },
 				{ text: v(s.scoreSerie4), style: 'td', alignment: 'right' },
 			];
-			if (showSix) {
+			if (showSix || showEight) {
 				base.push({ text: v(s.scoreSerie5), style: 'td', alignment: 'right' }, { text: v(s.scoreSerie6), style: 'td', alignment: 'right' });
+			}
+			if (showEight) {
+				base.push({ text: v(s.scoreSerie7), style: 'td', alignment: 'right' }, { text: v(s.scoreSerie8), style: 'td', alignment: 'right' });
 			}
 			base.push({ text: v(s.totalScore), style: 'td', alignment: 'right' });
 			body.push(base);
@@ -269,22 +282,23 @@ export class CompetitionPDFGenerator {
 		return groups;
 	}
 
-	/** Transforme un tireur en tableau de séries (4 ou 6 selon la catégorie) */
-	private seriesOf(s: any, useSix: boolean): number[] {
+	/** Transforme un tireur en tableau de séries (4, 6 ou 8 selon arme/catégorie) */
+	private seriesOf(s: any, useSix: boolean, useEight = false): number[] {
 		const toNum = (x: any) => (x == null || Number.isNaN(Number(x)) ? 0 : Number(x));
 		const base = [toNum(s.scoreSerie1), toNum(s.scoreSerie2), toNum(s.scoreSerie3), toNum(s.scoreSerie4)];
+		if (useEight) return [...base, toNum(s.scoreSerie5), toNum(s.scoreSerie6), toNum(s.scoreSerie7), toNum(s.scoreSerie8)];
 		return useSix ? [...base, toNum(s.scoreSerie5), toNum(s.scoreSerie6)] : base;
 	}
 
 	/** Tri: total desc → dernière série desc → ... → première série desc → Nom/Prénom asc */
-	private compareShooters(a: any, b: any, useSix: boolean): number {
+	private compareShooters(a: any, b: any, useSix: boolean, useEight = false): number {
 		// 1) Total
 		const byTotal = (b?.totalScore ?? 0) - (a?.totalScore ?? 0);
 		if (byTotal !== 0) return byTotal;
 
 		// 2) Séries de la fin vers le début
-		const sa = this.seriesOf(a, useSix);
-		const sb = this.seriesOf(b, useSix);
+		const sa = this.seriesOf(a, useSix, useEight);
+		const sb = this.seriesOf(b, useSix, useEight);
 		for (let i = sa.length - 1; i >= 0; i--) {
 			const diff = (sb[i] ?? 0) - (sa[i] ?? 0); // desc
 			if (diff !== 0) return diff;
@@ -370,10 +384,12 @@ export class CompetitionPDFGenerator {
 		const avgPerEntry = entries ? totalRevenue / entries : 0;
 		const avgPerShooter = uniqueShooters ? totalRevenue / uniqueShooters : 0;
 
-		// ---- stats de scores séparées 4 séries / 6 séries
-		const is6 = (s: Shooter) => this.commonService.hasSixSeriesCategory(s.categoryName ?? '');
+		// ---- stats de scores séparées 4 / 6 / 8 séries
+		const is8 = (s: Shooter) => this.commonService.hasEightSeriesWeapon(s.weapon ?? '');
+		const is6 = (s: Shooter) => !is8(s) && this.commonService.hasSixSeriesCategory(s.categoryName ?? '');
+		const shooters8 = shooters.filter(is8);
 		const shooters6 = shooters.filter(is6);
-		const shooters4 = shooters.filter((s) => !is6(s));
+		const shooters4 = shooters.filter((s) => !is8(s) && !is6(s));
 		const scoreStats = (arr: Shooter[]) => {
 			const vals = arr.map((s) => toNum((s as any).totalScore)).filter((n) => n > 0);
 			const avg = vals.length ? vals.reduce((a, b) => a + b, 0) / vals.length : 0;
@@ -401,6 +417,7 @@ export class CompetitionPDFGenerator {
 		};
 		const stats4 = scoreStats(shooters4);
 		const stats6 = scoreStats(shooters6);
+		const stats8 = scoreStats(shooters8);
 
 		// ---- layout commun
 		const statsLayout: any = {
@@ -674,6 +691,39 @@ export class CompetitionPDFGenerator {
 			margin: [0, 6, 0, 6],
 		};
 
+		const scores8Table: Content = {
+			table: {
+				headerRows: 1,
+				dontBreakRows: true,
+				keepWithHeaderRows: 1,
+				widths: ['*', '*'],
+				body: [
+					[
+						{ text: 'Scores sur 8 séries', style: 'th' },
+						{ text: '', style: 'th' },
+					],
+					[
+						{ text: 'Participants', style: 'td' },
+						{ text: String(stats8.count), style: 'td', alignment: 'right' },
+					],
+					[
+						{ text: 'Moyenne', style: 'td' },
+						{ text: stats8.count ? stats8.avg.toFixed(2) : '—', style: 'td', alignment: 'right' },
+					],
+					[
+						{ text: 'Médiane', style: 'td' },
+						{ text: stats8.count ? stats8.median.toFixed(2) : '—', style: 'td', alignment: 'right' },
+					],
+					[
+						{ text: 'Meilleur score', style: 'td' },
+						{ text: stats8.bestText, style: 'td', alignment: 'right' },
+					],
+				],
+			},
+			layout: statsLayout,
+			margin: [0, 6, 0, 6],
+		};
+
 		// Bandeau — toujours en premier, sur une nouvelle page
 		const bandeau: Content = {
 			pageBreak: 'before',
@@ -706,7 +756,7 @@ export class CompetitionPDFGenerator {
 				},
 				{
 					width: '*',
-					stack: [topClubsTable, topCategoriesTable, topWeaponsTable, scores4Table, scores6Table],
+					stack: [topClubsTable, topCategoriesTable, topWeaponsTable, scores4Table, scores6Table, scores8Table],
 					margin: [0, 0, 0, 0],
 				},
 			],

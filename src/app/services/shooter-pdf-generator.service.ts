@@ -56,7 +56,12 @@ export class ShooterPDFGenerator {
 		return Number.isFinite(v) ? v.toFixed(2) : '—';
 	};
 
+	private isEightSeriesRow(r: Shooter): boolean {
+		return this.commonService.hasEightSeriesWeapon(r.weapon ?? '');
+	}
+
 	private isSixSeriesRow(r: Shooter): boolean {
+		if (this.isEightSeriesRow(r)) return false;
 		const cat = this.norm(r.categoryName);
 		const byCategory = this.commonService.hasSixSeriesCategory(cat);
 		const hasS56 = r.scoreSerie5 != null || r.scoreSerie6 != null;
@@ -83,6 +88,14 @@ export class ShooterPDFGenerator {
 		const toNum = (v: any) => (v == null || Number.isNaN(Number(v)) ? 0 : Number(v));
 		return (
 			toNum(r.scoreSerie1) + toNum(r.scoreSerie2) + toNum(r.scoreSerie3) + toNum(r.scoreSerie4) + toNum(r.scoreSerie5) + toNum(r.scoreSerie6)
+		);
+	}
+
+	private total8(r: Shooter): number {
+		const toNum = (v: any) => (v == null || Number.isNaN(Number(v)) ? 0 : Number(v));
+		return (
+			toNum(r.scoreSerie1) + toNum(r.scoreSerie2) + toNum(r.scoreSerie3) + toNum(r.scoreSerie4) +
+			toNum(r.scoreSerie5) + toNum(r.scoreSerie6) + toNum(r.scoreSerie7) + toNum(r.scoreSerie8)
 		);
 	}
 
@@ -134,15 +147,18 @@ export class ShooterPDFGenerator {
 
 			const headerSubtitle = competitionId ? `Compétition : ${rows[0]?.competitionName || ''}` : '';
 
+			const group8 = rows.filter((r) => this.isEightSeriesRow(r));
 			const group6 = rows.filter((r) => this.isSixSeriesRow(r));
-			const group4 = rows.filter((r) => !this.isSixSeriesRow(r));
+			const group4 = rows.filter((r) => !this.isEightSeriesRow(r) && !this.isSixSeriesRow(r));
 
 			const totalsAll = rows.map((r) => r.totalScore);
 			const totals4 = group4.map((r) => this.total4(r));
 			const totals6 = group6.map((r) => this.total6(r));
+			const totals8 = group8.map((r) => this.total8(r));
 			const statsAll = this.basicStats(totalsAll as number[]);
 			const stats4 = this.basicStats(totals4);
 			const stats6 = this.basicStats(totals6);
+			const stats8 = this.basicStats(totals8);
 
 			// 3) Contenu
 			const content: Content[] = [];
@@ -150,13 +166,14 @@ export class ShooterPDFGenerator {
 
 			content.push({
 				margin: [40, 0, 40, 16],
-				columns: [this.buildSummaryBlock(rows, statsAll), this.buildScoresMiniBlock(stats4, stats6)],
+				columns: [this.buildSummaryBlock(rows, statsAll), this.buildScoresMiniBlock(stats4, stats6, stats8)],
 				columnGap: 16,
 			});
 
-			// Résultats 4 / 6 séries
-			const fourTable = this.buildResultsTable('Résultats — 4 séries', group4, false);
-			const sixTable = this.buildResultsTable('Résultats — 6 séries', group6, true);
+			// Résultats 4 / 6 / 8 séries
+			const fourTable = this.buildResultsTable('Résultats — 4 séries', group4, 4);
+			const sixTable = this.buildResultsTable('Résultats — 6 séries', group6, 6);
+			const eightTable = this.buildResultsTable('Résultats — 8 séries', group8, 8);
 
 			// forcer un saut de page AVANT le premier tableau réellement présent
 			let breakInserted = false;
@@ -169,6 +186,11 @@ export class ShooterPDFGenerator {
 			if (sixTable) {
 				if (!breakInserted) (sixTable as any).pageBreak = 'before';
 				content.push(sixTable);
+				breakInserted = true;
+			}
+			if (eightTable) {
+				if (!breakInserted) (eightTable as any).pageBreak = 'before';
+				content.push(eightTable);
 			}
 
 			// 4) Doc landscape + styles avec en-têtes “aérés”
@@ -303,7 +325,7 @@ export class ShooterPDFGenerator {
 		};
 	}
 
-	private buildScoresMiniBlock(stats4: any, stats6: any): Content {
+	private buildScoresMiniBlock(stats4: any, stats6: any, stats8: any): Content {
 		const block = (title: string, st: any): Content => ({
 			margin: [0, 0, 0, 10],
 			table: {
@@ -340,17 +362,26 @@ export class ShooterPDFGenerator {
 
 		return {
 			margin: [8, 0, 0, 12],
-			stack: [block('Scores en compétition (4 séries)', stats4), block('Scores en compétition (6 séries)', stats6)],
+			stack: [
+				block('Scores en compétition (4 séries)', stats4),
+				block('Scores en compétition (6 séries)', stats6),
+				block('Scores en compétition (8 séries)', stats8),
+			],
 		};
 	}
 
-	private buildResultsTable(title: string, rows: Shooter[], six: boolean): Content | null {
+	private buildResultsTable(title: string, rows: Shooter[], seriesCount: 4 | 6 | 8): Content | null {
 		if (!rows.length) return null;
 
 		const n = (x: any) => (x == null || Number.isNaN(Number(x)) ? '' : Number(x));
-		const widths = six
-			? [120, '*', '*', '*', 40, 40, 40, 40, 40, 40, 60] // 6 séries
-			: [120, '*', '*', '*', 45, 45, 45, 45, 60]; // 4 séries
+		let widths: (string | number)[];
+		if (seriesCount === 8) {
+			widths = [110, '*', '*', '*', 35, 35, 35, 35, 35, 35, 35, 35, 50]; // 8 séries
+		} else if (seriesCount === 6) {
+			widths = [120, '*', '*', '*', 40, 40, 40, 40, 40, 40, 60]; // 6 séries
+		} else {
+			widths = [120, '*', '*', '*', 45, 45, 45, 45, 60]; // 4 séries
+		}
 
 		const headerRow: Cell[] = [
 			{ text: 'Compétition', style: 'th' },
@@ -362,7 +393,8 @@ export class ShooterPDFGenerator {
 			{ text: 'S3', style: 'th', alignment: 'right' },
 			{ text: 'S4', style: 'th', alignment: 'right' },
 		];
-		if (six) headerRow.push({ text: 'S5', style: 'th', alignment: 'right' }, { text: 'S6', style: 'th', alignment: 'right' });
+		if (seriesCount >= 6) headerRow.push({ text: 'S5', style: 'th', alignment: 'right' }, { text: 'S6', style: 'th', alignment: 'right' });
+		if (seriesCount === 8) headerRow.push({ text: 'S7', style: 'th', alignment: 'right' }, { text: 'S8', style: 'th', alignment: 'right' });
 		headerRow.push({ text: 'Total', style: 'th', alignment: 'right' });
 
 		const body: any[] = [headerRow];
@@ -377,8 +409,11 @@ export class ShooterPDFGenerator {
 				{ text: n(r.scoreSerie3), alignment: 'right' },
 				{ text: n(r.scoreSerie4), alignment: 'right' },
 			];
-			if (six) {
+			if (seriesCount >= 6) {
 				base.push({ text: n(r.scoreSerie5), alignment: 'right' }, { text: n(r.scoreSerie6), alignment: 'right' });
+			}
+			if (seriesCount === 8) {
+				base.push({ text: n(r.scoreSerie7), alignment: 'right' }, { text: n(r.scoreSerie8), alignment: 'right' });
 			}
 			base.push({ text: n(r.totalScore), alignment: 'right' });
 			body.push(base);

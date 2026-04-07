@@ -57,7 +57,7 @@
               <th class="text-center font-bold text-gray-800 py-3 text-sm">Classement</th>
               <th class="text-left font-bold text-gray-800 text-sm">Tireur</th>
               <th class="text-left font-bold text-gray-800 text-sm">Club</th>
-              @for (i of [1, 2, 3, 4, 5, 6]; track i) {
+              @for (i of getSeriesColumns(); track i) {
                 <th class="text-center font-bold text-gray-800 text-sm">S{{ i }}</th>
               }
               <th class="text-center font-bold text-blue-800 bg-blue-100 text-sm">TOTAL</th>
@@ -79,24 +79,11 @@
                 <td class="text-left py-3">
                   {{ shooter.clubName || "—" }}
                 </td>
-                <td class="text-center font-mono text-[1.1rem] py-3 w-30">
-                  {{ shooter.scoreSerie1 == null ? "-" : (shooter.scoreSerie1 | number : formats.SCORE) }}
-                </td>
-                <td class="text-center font-mono text-[1.1rem] py-3 w-30">
-                  {{ shooter.scoreSerie2 == null ? "-" : (shooter.scoreSerie2 | number : formats.SCORE) }}
-                </td>
-                <td class="text-center font-mono text-[1.1rem] py-3 w-30">
-                  {{ shooter.scoreSerie3 == null ? "-" : (shooter.scoreSerie3 | number : formats.SCORE) }}
-                </td>
-                <td class="text-center font-mono text-[1.1rem] py-3 w-30">
-                  {{ shooter.scoreSerie4 == null ? "-" : (shooter.scoreSerie4 | number : formats.SCORE) }}
-                </td>
-                <td class="text-center font-mono text-[1.1rem] py-3 w-30">
-                  {{ shooter.hasSixSeries ? (shooter.scoreSerie5 == null ? "-" : (shooter.scoreSerie5 | number : formats.SCORE)) : "—" }}
-                </td>
-                <td class="text-center font-mono text-[1.1rem] py-3 w-30">
-                  {{ shooter.hasSixSeries ? (shooter.scoreSerie6 == null ? "-" : (shooter.scoreSerie6 | number : formats.SCORE)) : "—" }}
-                </td>
+                @for (i of getSeriesColumns(); track i) {
+                  <td class="text-center font-mono text-[1.1rem] py-3 w-30">
+                    {{ getRawSerieScore(shooter, i) == null ? "-" : (getRawSerieScore(shooter, i) | number : formats.SCORE) }}
+                  </td>
+                }
                 <td class="text-center font-mono text-xl font-bold text-prime-blue bg-gradient-to-r from-blue-50 to-indigo-50 py-3">
                   {{ shooter.totalScore | number : formats.SCORE }}
                 </td>

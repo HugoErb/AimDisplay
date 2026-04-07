@@ -121,7 +121,7 @@ export class SupabaseService {
 		distanceId: number;
 		weaponId: number;
 		categoryId: number;
-		seriesScores?: Array<number | null>; // Scores de la série [1..6]
+		seriesScores?: Array<number | null>; // Scores de la série [1..8]
 	}) {
 		try {
 			const { data: authUserData, error: authUserError } = await this.supabase.auth.getUser();
@@ -154,6 +154,8 @@ export class SupabaseService {
 			const serie4ScoreValue = getNumericOrNull(allSeriesScores[3]);
 			const serie5ScoreValue = getNumericOrNull(allSeriesScores[4]);
 			const serie6ScoreValue = getNumericOrNull(allSeriesScores[5]);
+			const serie7ScoreValue = getNumericOrNull(allSeriesScores[6]);
+			const serie8ScoreValue = getNumericOrNull(allSeriesScores[7]);
 
 			const { data: insertedShooter, error: insertError } = await this.supabase
 				.from('shooters')
@@ -172,6 +174,8 @@ export class SupabaseService {
 					serie4_score: serie4ScoreValue,
 					serie5_score: serie5ScoreValue,
 					serie6_score: serie6ScoreValue,
+					serie7_score: serie7ScoreValue,
+					serie8_score: serie8ScoreValue,
 					user_id: currentUser.id,
 				})
 				.select('*')
@@ -300,7 +304,9 @@ export class SupabaseService {
 		const s4 = toNum(row.serie4_score);
 		const s5 = toNum(row.serie5_score);
 		const s6 = toNum(row.serie6_score);
-		const total = s1 + s2 + s3 + s4 + s5 + s6;
+		const s7 = toNum(row.serie7_score);
+		const s8 = toNum(row.serie8_score);
+		const total = s1 + s2 + s3 + s4 + s5 + s6 + s7 + s8;
 
 		return {
 			id: row.id,
@@ -318,6 +324,8 @@ export class SupabaseService {
 			scoreSerie4: s4,
 			scoreSerie5: s5,
 			scoreSerie6: s6,
+			scoreSerie7: s7,
+			scoreSerie8: s8,
 			totalScore: Number(total.toFixed(2)),
 			userId: row.user_id,
 		};
@@ -805,6 +813,8 @@ export class SupabaseService {
 			serie4Score?: number | null;
 			serie5Score?: number | null;
 			serie6Score?: number | null;
+			serie7Score?: number | null;
+			serie8Score?: number | null;
 		}
 	): Promise<{
 		id: number;
@@ -822,6 +832,8 @@ export class SupabaseService {
 		serie4_score: number | null;
 		serie5_score: number | null;
 		serie6_score: number | null;
+		serie7_score: number | null;
+		serie8_score: number | null;
 		user_id: string;
 		created_at?: string;
 		updated_at?: string;
@@ -858,6 +870,8 @@ export class SupabaseService {
 				serie4_score: payload.serie4Score ?? null,
 				serie5_score: payload.serie5Score ?? null,
 				serie6_score: payload.serie6Score ?? null,
+				serie7_score: payload.serie7Score ?? null,
+				serie8_score: payload.serie8Score ?? null,
 			};
 
 			const { data, error } = await this.supabase
