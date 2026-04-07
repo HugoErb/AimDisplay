@@ -126,7 +126,10 @@ export class CreationShooterComponent {
 			scoreSerie4: null,
 			scoreSerie5: null,
 			scoreSerie6: null,
+			scoreSerie7: null,
+			scoreSerie8: null,
 			hasSixSeries: false,
+			hasEightSeries: false,
 			_open: true, // visible par défaut (édition)
 			...partial,
 		};
@@ -166,9 +169,25 @@ export class CreationShooterComponent {
 	}
 
 	/**
-	 * Soumet le formulaire du tireur automatiquement entre création et édition selon l’état courant.
+	 * Détermine si l'arme sélectionnée correspond à une arme à huit séries ("Pistolet Spéciale")
+	 * et met à jour dynamiquement le champ `hasEightSeries` dans le groupe de catégories.
 	 *
-	 * @returns {Promise<void>} Promesse résolue lorsque l’opération (création ou mise à jour) est terminée.
+	 * @param selectedWeapon - L'événement déclenché par la sélection de l'arme
+	 * @param group - Le groupe de saisie auquel appartient l'arme sélectionnée
+	 */
+	onWeaponSelected(selectedWeapon: any, group: CategoryGroup): void {
+		const rawName =
+			selectedWeapon?.value?.name ??
+			selectedWeapon?.name ??
+			selectedWeapon ??
+			'';
+		group.hasEightSeries = this.commonService.hasEightSeriesWeapon(rawName);
+	}
+
+	/**
+	 * Soumet le formulaire du tireur automatiquement entre création et édition selon l'état courant.
+	 *
+	 * @returns {Promise<void>} Promesse résolue lorsque l'opération (création ou mise à jour) est terminée.
 	 */
 	async onSubmitShooter(): Promise<void> {
 		try {
@@ -268,8 +287,10 @@ export class CreationShooterComponent {
 					categoryGroup.scoreSerie2 != null ? categoryGroup.scoreSerie2 : null,
 					categoryGroup.scoreSerie3 != null ? categoryGroup.scoreSerie3 : null,
 					categoryGroup.scoreSerie4 != null ? categoryGroup.scoreSerie4 : null,
-					categoryGroup.hasSixSeries ? (categoryGroup.scoreSerie5 != null ? categoryGroup.scoreSerie5 : null) : null,
-					categoryGroup.hasSixSeries ? (categoryGroup.scoreSerie6 != null ? categoryGroup.scoreSerie6 : null) : null,
+					(categoryGroup.hasSixSeries || categoryGroup.hasEightSeries) ? (categoryGroup.scoreSerie5 != null ? categoryGroup.scoreSerie5 : null) : null,
+					(categoryGroup.hasSixSeries || categoryGroup.hasEightSeries) ? (categoryGroup.scoreSerie6 != null ? categoryGroup.scoreSerie6 : null) : null,
+					categoryGroup.hasEightSeries ? (categoryGroup.scoreSerie7 != null ? categoryGroup.scoreSerie7 : null) : null,
+					categoryGroup.hasEightSeries ? (categoryGroup.scoreSerie8 != null ? categoryGroup.scoreSerie8 : null) : null,
 				];
 
 				await this.supabase.createShooter({
@@ -300,7 +321,10 @@ export class CreationShooterComponent {
 					scoreSerie4: null,
 					scoreSerie5: null,
 					scoreSerie6: null,
+					scoreSerie7: null,
+					scoreSerie8: null,
 					hasSixSeries: false,
+					hasEightSeries: false,
 					_open: true,
 				},
 			];
@@ -312,7 +336,7 @@ export class CreationShooterComponent {
 	}
 
 	/**
-	 * Pré-remplit le formulaire d’édition à partir d’un objet `Shooter`.
+	 * Pré-remplit le formulaire d'édition à partir d'un objet `Shooter`.
 	 *
 	 * @param shooter  Tireur source (provenant de la BDD) dont on souhaite éditer les informations.
 	 */
@@ -321,7 +345,7 @@ export class CreationShooterComponent {
 		this.shooterFirstName = shooter.firstName ?? '';
 		this.shooterEmail = shooter.email ?? '';
 
-		// AutoComplete : on tente de retrouver l’objet par son nom (sinon on met le string)
+		// AutoComplete : on tente de retrouver l'objet par son nom (sinon on met le string)
 		const findByName = <T extends { id: number; name: string }>(name: string, list: T[]): T | string =>
 			list?.find((x) => x.name === name) ?? (name || '');
 
@@ -332,7 +356,8 @@ export class CreationShooterComponent {
 		const weaponObj = findByName(shooter.weapon, this.weapons);
 		const categoryObj = findByName(shooter.categoryName, this.shooterCategories);
 
-		const hasSixSeries = this.commonService.hasSixSeriesCategory(shooter.categoryName);
+		const hasEightSeries = this.commonService.hasEightSeriesWeapon(shooter.weapon ?? '');
+		const hasSixSeries = !hasEightSeries && this.commonService.hasSixSeriesCategory(shooter.categoryName);
 
 		this.categoryGroups = [
 			{
@@ -345,7 +370,10 @@ export class CreationShooterComponent {
 				scoreSerie4: shooter.scoreSerie4 ?? null,
 				scoreSerie5: shooter.scoreSerie5 ?? null,
 				scoreSerie6: shooter.scoreSerie6 ?? null,
+				scoreSerie7: shooter.scoreSerie7 ?? null,
+				scoreSerie8: shooter.scoreSerie8 ?? null,
 				hasSixSeries,
+				hasEightSeries,
 				_open: false,
 			},
 		];
@@ -384,7 +412,7 @@ export class CreationShooterComponent {
 				throw new Error('Veuillez sélectionner un club et une compétition valides.');
 			}
 
-			// En édition on ne modifie qu’un seul groupe (la 1ère entrée)
+			// En édition on ne modifie qu'un seul groupe (la 1ère entrée)
 			const group = this.categoryGroups?.[0];
 			if (!group) throw new Error('Aucun groupe catégorie disponible pour la modification.');
 
@@ -396,9 +424,11 @@ export class CreationShooterComponent {
 				throw new Error('Veuillez sélectionner une distance, une arme et une catégorie valides.');
 			}
 
-			// Détermine si la catégorie à 6 séries
+			// Détermine si la catégorie est à 6 ou 8 séries
 			const selectedCategoryName = typeof group.shooterCategory === 'object' ? group.shooterCategory?.name ?? '' : group.shooterCategory ?? '';
-			const hasSixSeries = this.commonService.hasSixSeriesCategory(selectedCategoryName);
+			const selectedWeaponName = typeof group.shooterWeapon === 'object' ? group.shooterWeapon?.name ?? '' : group.shooterWeapon ?? '';
+			const hasEightSeries = this.commonService.hasEightSeriesWeapon(selectedWeaponName);
+			const hasSixSeries = !hasEightSeries && this.commonService.hasSixSeriesCategory(selectedCategoryName);
 
 			// Séries → nombre ou null (jamais 0 par défaut)
 			const toNullableNumber = (v: any): number | null => (typeof v === 'number' && isFinite(v) ? v : null);
@@ -407,8 +437,10 @@ export class CreationShooterComponent {
 			const serie2Score = toNullableNumber(group.scoreSerie2);
 			const serie3Score = toNullableNumber(group.scoreSerie3);
 			const serie4Score = toNullableNumber(group.scoreSerie4);
-			const serie5Score = hasSixSeries ? toNullableNumber(group.scoreSerie5) : null;
-			const serie6Score = hasSixSeries ? toNullableNumber(group.scoreSerie6) : null;
+			const serie5Score = (hasSixSeries || hasEightSeries) ? toNullableNumber(group.scoreSerie5) : null;
+			const serie6Score = (hasSixSeries || hasEightSeries) ? toNullableNumber(group.scoreSerie6) : null;
+			const serie7Score = hasEightSeries ? toNullableNumber(group.scoreSerie7) : null;
+			const serie8Score = hasEightSeries ? toNullableNumber(group.scoreSerie8) : null;
 
 			// Appel service (implémente updateShooterById côté Supabase : mapping colonnes BDD)
 			await this.supabase.updateShooterById(this.editingShooter.id, {
@@ -426,6 +458,8 @@ export class CreationShooterComponent {
 				serie4Score,
 				serie5Score,
 				serie6Score,
+				serie7Score,
+				serie8Score,
 			});
 
 			// Redirection
@@ -436,11 +470,11 @@ export class CreationShooterComponent {
 	}
 
 	/**
-	 * Extrait l’`id` d’une sélection issue d’un composant (ex. `p-autoComplete`).
+	 * Extrait l'`id` d'une sélection issue d'un composant (ex. `p-autoComplete`).
 	 *
 	 * @param selection Valeur renvoyée par le champ (objet sélectionné, libellé string, ou rien).
-	 * @param list      Liste de référence permettant, si besoin, de retrouver l’objet à partir du `name`.
-	 * @returns         L’identifiant numérique si trouvé, sinon `undefined`.
+	 * @param list      Liste de référence permettant, si besoin, de retrouver l'objet à partir du `name`.
+	 * @returns         L'identifiant numérique si trouvé, sinon `undefined`.
 	 */
 	private getIdFromSelection<T extends { id: number; name: string }>(selection: any, list: T[]): number | undefined {
 		if (!selection) return undefined;

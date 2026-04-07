@@ -160,28 +160,35 @@ export class RankingComponent implements OnInit, OnDestroy {
 		for (const [key, list] of buckets) {
 			const [distance, weapon, category] = key.split('|||');
 
-			// Enrichissement : ajoute hasSixSeries et rang par défaut
-			const enriched: RankedShooter[] = list.map((s) => ({
-				...s,
-				hasSixSeries: this.commonService.hasSixSeriesCategory(s.categoryName),
-				rank: 0,
-			}));
+			// Enrichissement : ajoute hasSixSeries, hasEightSeries et rang par défaut
+			const enriched: RankedShooter[] = list.map((s) => {
+				const hasEightSeries = this.commonService.hasEightSeriesWeapon(s.weapon ?? '');
+				return {
+					...s,
+					hasEightSeries,
+					hasSixSeries: !hasEightSeries && this.commonService.hasSixSeriesCategory(s.categoryName),
+					rank: 0,
+				};
+			});
 
-			// Tri avec tie-breakers (total, dernière série, S3..S1, alpha, id)
+			// Tri avec tie-breakers (total, dernière série, séries intermédiaires, alpha, id)
 			enriched.sort((a, b) => {
 				// total
 				const byTotal = this.toNum(b.totalScore) - this.toNum(a.totalScore);
 				if (byTotal !== 0) return byTotal;
 
-				// dernière série (S4 ou S6)
-				const lastA = a.hasSixSeries ? this.serieScore(a, 4) : this.serieScore(a, 6);
-				const lastB = b.hasSixSeries ? this.serieScore(b, 4) : this.serieScore(b, 6);
+				// dernière série : S8 pour 8 séries, S6 pour 6 séries, S4 pour 4 séries
+				let lastIdx: 4 | 6 | 8 = 4;
+				if (a.hasEightSeries) lastIdx = 8;
+				else if (a.hasSixSeries) lastIdx = 6;
+				const lastA = this.serieScore(a, lastIdx as 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8);
+				const lastB = this.serieScore(b, lastIdx as 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8);
 				if (lastB !== lastA) return lastB - lastA;
 
-				// S3, S2, S1
-				for (let i = 3 as 3 | 2 | 1; i >= 1; i = (i - 1) as 3 | 2 | 1) {
-					const ai = this.serieScore(a, i);
-					const bi = this.serieScore(b, i);
+				// Séries intermédiaires en descendant jusqu'à S1
+				for (let i = lastIdx - 1; i >= 1; i--) {
+					const ai = this.serieScore(a, i as 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8);
+					const bi = this.serieScore(b, i as 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8);
 					if (bi !== ai) return bi - ai;
 				}
 
@@ -581,7 +588,7 @@ export class RankingComponent implements OnInit, OnDestroy {
 	 * @param {1|2|3|4|5|6} idx - Numéro de série à lire (S1 à S6).
 	 * @returns {number} Score numérique de la série, ou 0 si absent/invalide.
 	 */
-	private serieScore(s: Shooter, idx: 1 | 2 | 3 | 4 | 5 | 6): number {
+	private serieScore(s: Shooter, idx: 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8): number {
 		const map: Record<number, number | null | undefined> = {
 			1: s.scoreSerie1,
 			2: s.scoreSerie2,
@@ -589,8 +596,30 @@ export class RankingComponent implements OnInit, OnDestroy {
 			4: s.scoreSerie4,
 			5: s.scoreSerie5,
 			6: s.scoreSerie6,
+			7: s.scoreSerie7,
+			8: s.scoreSerie8,
 		};
 		return this.toNum(map[idx]);
+	}
+
+	/**
+	 * Retourne les indices de colonnes de séries à afficher selon la catégorie de la page courante.
+	 * S1-S4 pour 4 séries, S1-S6 pour 6 séries, S1-S8 pour 8 séries (Pistolet Spécial).
+	 */
+	getSeriesColumns(): number[] {
+		const first = this.classementData?.[0];
+		if (!first) return [1, 2, 3, 4, 5, 6];
+		if (first.hasEightSeries) return [1, 2, 3, 4, 5, 6, 7, 8];
+		if (first.hasSixSeries) return [1, 2, 3, 4, 5, 6];
+		return [1, 2, 3, 4];
+	}
+
+	/**
+	 * Retourne le score brut (null si absent) pour la colonne de série demandée.
+	 */
+	getRawSerieScore(s: Shooter, idx: number): number | null {
+		const v = (s as unknown as Record<string, unknown>)['scoreSerie' + idx];
+		return typeof v === 'number' && Number.isFinite(v) ? v : null;
 	}
 
 	// ──────────────────────────────────────────────────────────────────────────────

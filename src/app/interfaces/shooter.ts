@@ -14,8 +14,10 @@ export interface Shooter {
 	scoreSerie4: number;
 	scoreSerie5: number;
 	scoreSerie6: number;
+	scoreSerie7: number;
+	scoreSerie8: number;
 	totalScore: number;
 	userId: string;
 }
 
-export type RankedShooter = Shooter & { rank: number; hasSixSeries: boolean };
+export type RankedShooter = Shooter & { rank: number; hasSixSeries: boolean; hasEightSeries: boolean };

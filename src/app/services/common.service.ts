@@ -131,6 +131,22 @@ export class CommonService {
 	}
 
 	/**
+	 * Détermine si un nom d'arme correspond à l'arme "Pistolet Spéciale" (8 séries).
+	 *
+	 * @param {string} weaponName - Libellé de l'arme.
+	 * @returns {boolean} `true` si l'arme est à 8 séries, sinon `false`.
+	 */
+	hasEightSeriesWeapon(weaponName: string): boolean {
+		const n = String(weaponName)
+			.trim()
+			.toLowerCase()
+			.normalize('NFD')
+			.replaceAll(/[\u0300-\u036f]/g, '')
+			.replaceAll(/\s+/g, '');
+		return n.includes('pistoletspecial');
+	}
+
+	/**
 	 * Renvoie l'état actuel du dark mode.
 	 * @returns {boolean} L'état actuel du dark mode.
 	 */
