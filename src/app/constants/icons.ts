@@ -18,7 +18,7 @@ export const APP_ICONS = {
 	EYE_SLASH: 'mynaui:eye-slash',
 	ARROW_RIGHT: 'tabler:arrow-right',
 	LOADING: 'line-md:loading-loop',
-	INFO: 'lucide:info',
+	INFO: 'material-symbols:info-outline-rounded',
 	HELP: 'lucide:help-circle',
 	SETTINGS: 'majesticons:settings-cog-line',
 	SPARKLES: 'lucide:sparkles',
