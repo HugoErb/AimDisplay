@@ -12,8 +12,7 @@ export interface CategoryGroup {
 	scoreSerie8: number | null;
 	hasSixSeries: boolean;
 	hasEightSeries: boolean;
-	_open: boolean; // uniquement pour l’animation
 
-	// autorise l'accès dynamique avec une string
+	// autorise l’accès dynamique avec une string
 	[key: string]: any;
 }

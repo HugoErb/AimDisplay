@@ -1,11 +1,36 @@
-import { Component, ElementRef, QueryList, ViewChildren } from '@angular/core';
+import { Component, ElementRef, CUSTOM_ELEMENTS_SCHEMA, QueryList, ViewChildren } from '@angular/core';
+import { trigger, transition, style, animate } from '@angular/animations';
+
+const pageEnterAnimation = trigger('pageEnter', [
+	transition(':enter', [
+		style({ transform: 'translateY(-50px)', opacity: 0 }),
+		animate('500ms ease', style({ transform: 'translateY(0)', opacity: 1 })),
+	]),
+]);
+
+const groupEnterAnimation = trigger('groupEnter', [
+	transition('void => on', [
+		style({ height: '0', opacity: 0, overflow: 'hidden', marginTop: '0' }),
+		animate('300ms ease-out', style({ height: '*', opacity: 1, overflow: 'hidden', marginTop: '*' })),
+	]),
+]);
+
+const seriesAnimation = trigger('seriesExpand', [
+	transition(':enter', [
+		style({ height: '0', opacity: 0, overflow: 'hidden', marginTop: '0' }),
+		animate('300ms ease-out', style({ height: '*', opacity: 1, overflow: 'hidden', marginTop: '*' })),
+	]),
+	transition(':leave', [
+		style({ overflow: 'hidden' }),
+		animate('250ms ease-in', style({ height: '0', opacity: 0, marginTop: '0' })),
+	]),
+]);
 import { AutoCompleteModule } from 'primeng/autocomplete';
 import { FormsModule } from '@angular/forms';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { DatePickerModule } from 'primeng/datepicker';
 import { CommonModule } from '@angular/common';
 import { InputTextModule } from 'primeng/inputtext';
-import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { CommonService } from '../services/common.service';
 import { CategoryGroup } from '../interfaces/category-group';
 import { SupabaseService } from '../services/supabase.service';
@@ -30,6 +55,7 @@ import { APP_ICONS } from '../constants/icons';
 	imports: [AutoCompleteModule, FormsModule, InputNumberModule, DatePickerModule, CommonModule, InputTextModule, RedirectLinkComponent, AppSectionHeaderComponent, AppSectionSubtitleComponent, InfoNoteComponent, AppButtonComponent],
 	templateUrl: './creation_shooter.component.html',
 	schemas: [CUSTOM_ELEMENTS_SCHEMA],
+	animations: [pageEnterAnimation, groupEnterAnimation, seriesAnimation],
 })
 export class CreationShooterComponent {
 	protected readonly icons = APP_ICONS;
@@ -41,6 +67,11 @@ export class CreationShooterComponent {
 	) {}
 
 	isSaving: boolean = false;
+	private readonly animatedGroups = new Set<CategoryGroup>();
+
+	shouldAnimate(group: CategoryGroup): string {
+		return this.animatedGroups.has(group) ? 'on' : 'off';
+	}
 
 	// Variables de récupération des champs du formulaire
 	@ViewChildren('inputField', { read: ElementRef }) inputFields!: QueryList<ElementRef>;
@@ -130,7 +161,6 @@ export class CreationShooterComponent {
 			scoreSerie8: null,
 			hasSixSeries: false,
 			hasEightSeries: false,
-			_open: true, // visible par défaut (édition)
 			...partial,
 		};
 	}
@@ -142,10 +172,10 @@ export class CreationShooterComponent {
 	 * supplémentaire à l'interface via le bouton d'ajout.
 	 */
 	addCategoryGroup(): void {
-		if (this.isEditMode) return; // pas d'ajout en édition
-		const newGroup = this.createCategoryGroup({ _open: false });
+		if (this.isEditMode) return;
+		const newGroup = this.createCategoryGroup();
+		this.animatedGroups.add(newGroup);
 		this.categoryGroups.push(newGroup);
-		setTimeout(() => (newGroup._open = true)); // 0fr -> 1fr + fade-in
 	}
 
 	/**
@@ -310,24 +340,8 @@ export class CreationShooterComponent {
 			this.commonService.resetInputFields(this.inputFields);
 			this.shooterCompetitionName = '';
 			this.shooterClubName = '';
-			this.categoryGroups = [
-				{
-					shooterDistance: '',
-					shooterWeapon: '',
-					shooterCategory: '',
-					scoreSerie1: null,
-					scoreSerie2: null,
-					scoreSerie3: null,
-					scoreSerie4: null,
-					scoreSerie5: null,
-					scoreSerie6: null,
-					scoreSerie7: null,
-					scoreSerie8: null,
-					hasSixSeries: false,
-					hasEightSeries: false,
-					_open: true,
-				},
-			];
+			this.animatedGroups.clear();
+			this.categoryGroups = [this.createCategoryGroup()];
 
 			this.commonService.showSwalToast('Tireur créé avec succès.');
 		} catch (e: any) {
@@ -374,7 +388,6 @@ export class CreationShooterComponent {
 				scoreSerie8: shooter.scoreSerie8 ?? null,
 				hasSixSeries,
 				hasEightSeries,
-				_open: false,
 			},
 		];
 
