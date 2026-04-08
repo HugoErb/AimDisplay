@@ -154,15 +154,15 @@
 
 	/* Dark mode des inputs PrimeNG sauf sur login/register/mdp oublié */
 	:where(.dark)
-		:is(.p-inputtext, .p-autocomplete-input, .p-inputnumber-input, .p-datepicker-input, textarea):not(.ng-trigger *):not(.no-connect-root *) {
+		:is(.p-inputtext, .p-autocomplete-input, .p-inputnumber-input, .p-datepicker-input, textarea):not(.no-connect-root *) {
 		background-color: rgba(255, 255, 255, 0.05) !important;
 		border: 1px solid #6b7280 !important;
 		color: #ffffff !important;
 	}
-	
+
 	/* Focus des inputs PrimeNG en dark mode */
 	:where(.dark)
-		:is(.p-inputtext, .p-autocomplete-input, .p-inputnumber-input, .p-datepicker-input, textarea):not(.ng-trigger *):not(.no-connect-root *):focus {
+		:is(.p-inputtext, .p-autocomplete-input, .p-inputnumber-input, .p-datepicker-input, textarea):not(.no-connect-root *):focus {
 		border-color: var(--color-prime-blue) !important;
 		box-shadow: 0 0 0 1px var(--color-prime-blue) !important; /* Anneau net et pro */
 		background-color: rgba(255, 255, 255, 0.08) !important;
