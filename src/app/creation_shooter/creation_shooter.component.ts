@@ -1,5 +1,27 @@
 import { Component, ElementRef, CUSTOM_ELEMENTS_SCHEMA, QueryList, ViewChildren } from '@angular/core';
 import { trigger, transition, style, animate } from '@angular/animations';
+import { AutoCompleteModule } from 'primeng/autocomplete';
+import { FormsModule } from '@angular/forms';
+import { InputNumberModule } from 'primeng/inputnumber';
+import { DatePickerModule } from 'primeng/datepicker';
+import { CommonModule, Location } from '@angular/common';
+import { InputTextModule } from 'primeng/inputtext';
+import { ActivatedRoute } from '@angular/router';
+import { CommonService } from '../services/common.service';
+import { SupabaseService } from '../services/supabase.service';
+import { CategoryGroup } from '../interfaces/category-group';
+import { Club } from '../interfaces/club';
+import { ShooterCategory } from '../interfaces/shooter-category';
+import { Weapon } from '../interfaces/weapon';
+import { Distance } from '../interfaces/distance';
+import { Competition } from '../interfaces/competition';
+import { Shooter } from '../interfaces/shooter';
+import { RedirectLinkComponent } from '../components/redirect-link/redirect-link.component';
+import { AppSectionHeaderComponent } from '../components/section-header/section-header.component';
+import { AppSectionSubtitleComponent } from '../components/section-subtitle/section-subtitle.component';
+import { InfoNoteComponent } from '../components/info-note/info-note.component';
+import { AppButtonComponent } from '../components/button/button.component';
+import { APP_ICONS } from '../constants/icons';
 
 const pageEnterAnimation = trigger('pageEnter', [
 	transition(':enter', [
@@ -25,29 +47,6 @@ const seriesAnimation = trigger('seriesExpand', [
 		animate('250ms ease-in', style({ height: '0', opacity: 0, marginTop: '0' })),
 	]),
 ]);
-import { AutoCompleteModule } from 'primeng/autocomplete';
-import { FormsModule } from '@angular/forms';
-import { InputNumberModule } from 'primeng/inputnumber';
-import { DatePickerModule } from 'primeng/datepicker';
-import { CommonModule } from '@angular/common';
-import { InputTextModule } from 'primeng/inputtext';
-import { CommonService } from '../services/common.service';
-import { CategoryGroup } from '../interfaces/category-group';
-import { SupabaseService } from '../services/supabase.service';
-import { Club } from '../interfaces/club';
-import { ShooterCategory } from '../interfaces/shooter-category';
-import { Weapon } from '../interfaces/weapon';
-import { Distance } from '../interfaces/distance';
-import { Competition } from '../interfaces/competition';
-import { Shooter } from '../interfaces/shooter';
-import { ActivatedRoute } from '@angular/router';
-import { Location } from '@angular/common';
-import { RedirectLinkComponent } from '../components/redirect-link/redirect-link.component';
-import { AppSectionHeaderComponent } from '../components/section-header/section-header.component';
-import { AppSectionSubtitleComponent } from '../components/section-subtitle/section-subtitle.component';
-import { InfoNoteComponent } from '../components/info-note/info-note.component';
-import { AppButtonComponent } from '../components/button/button.component';
-import { APP_ICONS } from '../constants/icons';
 
 @Component({
 	selector: 'app-creation-shooter',
