@@ -1,4 +1,4 @@
-<div class="opacity-0 animate-appear duration-500">
+<div @pageEnter>
   <div class="bg-white dark:bg-secondary-dark-bg shadow-lg rounded-lg m-6">
     <app-section-header
       [title]="isEditMode ? 'Modification d\'un tireur' : 'Création d\'un nouveau tireur'"
@@ -62,10 +62,7 @@
 
             <!-- Catégorie et scores du tireur dans la compétition -->
             @for (group of categoryGroups; track group; let i = $index) {
-              <div class="grid transition-all duration-300 ease-out"
-                [ngClass]="isEditMode || group._open ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'">
-                <div class="space-y-4 overflow-hidden transition-opacity duration-300"
-                  [ngClass]="isEditMode || group._open ? 'opacity-100' : 'opacity-0'">
+              <div [@groupEnter]="shouldAnimate(group)" class="space-y-4">
                   <app-section-subtitle>Catégorie et scores du tireur dans la compétition @if (i > 0) {{{ i + 1 }}}</app-section-subtitle>
                   <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                     <!-- Distance -->
@@ -109,77 +106,69 @@
                       placeholder="Catégorie du tireur" [appendTo]="'body'"></p-autoComplete>
                     </div>
                   </div>
-                  <!-- Wrapper pour ne plus avoir de gap quand 5–6 est fermé -->
-                  <div>
-                    <!-- Scores 1..4 -->
-                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                      @for (serie of [1, 2, 3, 4]; track serie; let s = $index) {
-                        <div>
-                          <label [for]="'serie' + serie + '_' + i"
+                  <!-- Scores 1..4 -->
+                  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                    @for (serie of [1, 2, 3, 4]; track serie) {
+                      <div class="flex flex-col space-y-1">
+                        <label [for]="'serie' + serie + '_' + i"
+                          class="text-sm font-medium text-gray-700 dark:text-gray-300 ml-1">
+                          Score série {{ serie }} @if (i > 0) {({{ i + 1 }})}
+                        </label>
+                        <p-inputNumber #inputField [(ngModel)]="group['scoreSerie' + serie]" mode="decimal"
+                          [minFractionDigits]="2" [maxFractionDigits]="2" [min]="0" [max]="109"
+                          [showButtons]="true" [name]="'serie' + serie + '_' + i"
+                          [inputId]="'serie' + serie + '_' + i"
+                        placeholder="Score série {{ serie }}"></p-inputNumber>
+                      </div>
+                    }
+                  </div>
+                  <!-- Séries 5–8 -->
+                  @if (group.hasSixSeries || group.hasEightSeries) {
+                    <div @seriesExpand class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mt-6">
+                      <div class="flex flex-col space-y-1">
+                        <label [for]="'serie5_' + i"
+                          class="text-sm font-medium text-gray-700 dark:text-gray-300 ml-1">
+                          Score série 5 @if (i > 0) {({{ i + 1 }})}
+                        </label>
+                        <p-inputNumber #inputField [(ngModel)]="group.scoreSerie5" mode="decimal"
+                          [minFractionDigits]="2" [maxFractionDigits]="2" [min]="0" [max]="109"
+                          [name]="'scoreSerie5_' + i" [inputId]="'serie5_' + i" [showButtons]="true"
+                        placeholder="Score série 5"></p-inputNumber>
+                      </div>
+                      <div class="flex flex-col space-y-1">
+                        <label [for]="'serie6_' + i"
+                          class="text-sm font-medium text-gray-700 dark:text-gray-300 ml-1">
+                          Score série 6 @if (i > 0) {({{ i + 1 }})}
+                        </label>
+                        <p-inputNumber #inputField [(ngModel)]="group.scoreSerie6" mode="decimal"
+                          [minFractionDigits]="2" [maxFractionDigits]="2" [min]="0" [max]="109"
+                          [name]="'scoreSerie6_' + i" [inputId]="'serie6_' + i" [showButtons]="true"
+                        placeholder="Score série 6"></p-inputNumber>
+                      </div>
+                      @if (group.hasEightSeries) {
+                        <div class="flex flex-col space-y-1">
+                          <label [for]="'serie7_' + i"
                             class="text-sm font-medium text-gray-700 dark:text-gray-300 ml-1">
-                            Score série {{ serie }} @if (i > 0) {({{ i + 1 }})}
+                            Score série 7 @if (i > 0) {({{ i + 1 }})}
                           </label>
-                          <p-inputNumber #inputField [(ngModel)]="group['scoreSerie' + serie]" mode="decimal"
+                          <p-inputNumber #inputField [(ngModel)]="group.scoreSerie7" mode="decimal"
                             [minFractionDigits]="2" [maxFractionDigits]="2" [min]="0" [max]="109"
-                            [showButtons]="true" [name]="'serie' + serie + '_' + i"
-                            [inputId]="'serie' + serie + '_' + i"
-                          placeholder="Score série {{ serie }}"></p-inputNumber>
+                            [name]="'scoreSerie7_' + i" [inputId]="'serie7_' + i" [showButtons]="true"
+                          placeholder="Score série 7"></p-inputNumber>
+                        </div>
+                        <div class="flex flex-col space-y-1">
+                          <label [for]="'serie8_' + i"
+                            class="text-sm font-medium text-gray-700 dark:text-gray-300 ml-1">
+                            Score série 8 @if (i > 0) {({{ i + 1 }})}
+                          </label>
+                          <p-inputNumber #inputField [(ngModel)]="group.scoreSerie8" mode="decimal"
+                            [minFractionDigits]="2" [maxFractionDigits]="2" [min]="0" [max]="109"
+                            [name]="'scoreSerie8_' + i" [inputId]="'serie8_' + i" [showButtons]="true"
+                          placeholder="Score série 8"></p-inputNumber>
                         </div>
                       }
                     </div>
-                    <!-- Séries 5–8 : affichées selon le nombre de séries -->
-                    <div class="transition-all duration-300 ease-out"
-                      [ngClass]="(group.hasSixSeries || group.hasEightSeries) ? 'grid grid-rows-[1fr] mt-6' : 'grid grid-rows-[0fr] mt-0'">
-                      <div class="overflow-hidden transition-opacity duration-300"
-                        [ngClass]="(group.hasSixSeries || group.hasEightSeries) ? 'opacity-100' : 'opacity-0'">
-                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                          <div class="flex flex-col space-y-1">
-                            <label [for]="'serie5_' + i"
-                              class="text-sm font-medium text-gray-700 dark:text-gray-300 ml-1">
-                              Score série 5 @if (i > 0) {({{ i + 1 }})}
-                            </label>
-                            <p-inputNumber #inputField [(ngModel)]="group.scoreSerie5" mode="decimal"
-                              [minFractionDigits]="2" [maxFractionDigits]="2" [min]="0" [max]="109"
-                              [name]="'scoreSerie5_' + i" [inputId]="'serie5_' + i" [showButtons]="true"
-                            placeholder="Score série 5"></p-inputNumber>
-                          </div>
-                          <div class="flex flex-col space-y-1">
-                            <label [for]="'serie6_' + i"
-                              class="text-sm font-medium text-gray-700 dark:text-gray-300 ml-1">
-                              Score série 6 @if (i > 0) {({{ i + 1 }})}
-                            </label>
-                            <p-inputNumber #inputField [(ngModel)]="group.scoreSerie6" mode="decimal"
-                              [minFractionDigits]="2" [maxFractionDigits]="2" [min]="0" [max]="109"
-                              [name]="'scoreSerie6_' + i" [inputId]="'serie6_' + i" [showButtons]="true"
-                            placeholder="Score série 6"></p-inputNumber>
-                          </div>
-                          @if (group.hasEightSeries) {
-                            <div class="flex flex-col space-y-1">
-                              <label [for]="'serie7_' + i"
-                                class="text-sm font-medium text-gray-700 dark:text-gray-300 ml-1">
-                                Score série 7 @if (i > 0) {({{ i + 1 }})}
-                              </label>
-                              <p-inputNumber #inputField [(ngModel)]="group.scoreSerie7" mode="decimal"
-                                [minFractionDigits]="2" [maxFractionDigits]="2" [min]="0" [max]="109"
-                                [name]="'scoreSerie7_' + i" [inputId]="'serie7_' + i" [showButtons]="true"
-                              placeholder="Score série 7"></p-inputNumber>
-                            </div>
-                            <div class="flex flex-col space-y-1">
-                              <label [for]="'serie8_' + i"
-                                class="text-sm font-medium text-gray-700 dark:text-gray-300 ml-1">
-                                Score série 8 @if (i > 0) {({{ i + 1 }})}
-                              </label>
-                              <p-inputNumber #inputField [(ngModel)]="group.scoreSerie8" mode="decimal"
-                                [minFractionDigits]="2" [maxFractionDigits]="2" [min]="0" [max]="109"
-                                [name]="'scoreSerie8_' + i" [inputId]="'serie8_' + i" [showButtons]="true"
-                              placeholder="Score série 8"></p-inputNumber>
-                            </div>
-                          }
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+                  }
               </div>
             }
 
