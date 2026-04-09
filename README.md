@@ -1,6 +1,6 @@
-# AimDisplay
+# Aim Display
 
-AimDisplay offre des fonctionnalités pour saisir, stocker et visualiser les données relatives aux compétitions de tir sportif. Cela inclut les scores des participants, les classements, les statistiques de performance et d'autres informations. Son interface est intuitive et adaptée aux besoins spécifiques des organisateurs et participants de compétitions de tir sportif.
+Aim Display offre des fonctionnalités pour saisir, stocker et visualiser les données relatives aux compétitions de tir sportif. Cela inclut les scores des participants, les classements, les statistiques de performance et d'autres informations. Son interface est intuitive et adaptée aux besoins spécifiques des organisateurs et participants de compétitions de tir sportif.
 
 ## Fonctionnalités principales
 
@@ -18,7 +18,7 @@ Un accueil centralisé offrant une vue d'ensemble et un accès rapide aux diffé
 
 ### Gestion des Tireurs & Scores
 *   **Inscription simplifiée** : Enregistrement des tireurs par compétition, club, catégorie, arme et distance.
-*   **Saisie des scores** : Interface dédiée pour saisir les scores des 6 séries réglementaires.
+*   **Saisie des scores** : Interface dédiée pour saisir les scores (jusqu'à 8 séries selon l'arme utilisée, ex : Pistolet Spécial).
 *   **Calcul automatique** : Calcul en temps réel du score total avec gestion des scores nuls ou non renseignés.
 *   **Gestion des doublons** : Vérifie si un tireur est déjà inscrit dans une même configuration pour éviter les erreurs.
 
@@ -26,18 +26,21 @@ Un accueil centralisé offrant une vue d'ensemble et un accès rapide aux diffé
 *   **Interface dédiée** : Vue plein écran optimisée pour la diffusion des résultats en direct lors des événements.
 *   **Filtrage** : Tri et recherche facilités par compétition.
 
+### Authentification & Compte
+*   **Accès sécurisé** : Connexion, inscription et réinitialisation de mot de passe intégrées.
+*   **Emails transactionnels** : Templates email personnalisés pour la vérification d'adresse, la réinitialisation de mot de passe et les alertes de changement de mot de passe.
+*   **Isolation des données** : Chaque compte accède uniquement à ses propres données.
+
 ### Export PDF
 *   **Générateur de rapports** : Créez des fichiers PDF professionnels pour les résultats d'une compétition complète ou pour un tireur spécifique.
 *   **Mise en page** : Documents formatés pour l'impression et l'archivage.
 
 ## Stack Technique
 
-*   **Frontend** : [Angular 19](https://angular.dev/)
+*   **Langages** : TypeScript, HTML
+*   **Frontend** : [Angular 21](https://angular.dev/) + [TailwindCSS 4](https://tailwindcss.com/)
 *   **Desktop** : [Electron](https://www.electronjs.org/)
 *   **Backend & Auth** : [Supabase](https://supabase.com/)
-*   **UI Components** : [PrimeNG](https://primeng.org/)
-*   **Styling** : [TailwindCSS 4](https://tailwindcss.com/)
-*   **Iconographie** : [Iconify](https://iconify.design/)
 
 ## Installation et Développement
 
@@ -69,4 +72,4 @@ npm run dist:win
 Le logiciel est téléchargeable sur mon site internet : [hugoeribon.fr/home](https://hugoeribon.fr/home)
 
 ---
-© 2025 Hugo Eribon.
+© 2026 Hugo Eribon.
