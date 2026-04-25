@@ -747,6 +747,33 @@ export class RankingComponent implements OnInit, OnDestroy {
 	 * @param {MouseEvent} _e - Événement souris provenant du listener `document:mousemove`.
 	 * @returns {void} Ne retourne rien.
 	 */
+	@HostListener('window:keydown', ['$event'])
+	onKeyDown(event: KeyboardEvent): void {
+		if (!this.pages?.length) return;
+		if (event.key === 'ArrowRight') {
+			this.stopRotation();
+			void this.advanceOrRefresh();
+		} else if (event.key === 'ArrowLeft') {
+			this.stopRotation();
+			void this.goBack();
+		}
+	}
+
+	private async goBack(): Promise<void> {
+		if (this.destroyed) return;
+
+		const prevIndex = this.currentIndex > 0 ? this.currentIndex - 1 : this.pages.length - 1;
+		const isGroupChange = this.pages[prevIndex].pageCountInGroup !== this.pages[this.currentIndex].pageCountInGroup
+			|| this.pages[prevIndex].weapon !== this.pages[this.currentIndex].weapon
+			|| this.pages[prevIndex].distance !== this.pages[this.currentIndex].distance
+			|| this.pages[prevIndex].category !== this.pages[this.currentIndex].category;
+
+		await this.playExitAnimations(isGroupChange);
+		this.showPage(prevIndex);
+		this.playEnterAnimations(isGroupChange);
+		this.scheduleNextTick();
+	}
+
 	@HostListener('document:mousemove', ['$event'])
 	onGlobalMouseMove(_e: MouseEvent) {
 		// dès qu'on bouge la souris n'importe où, on montre le bouton et on relance le timer
