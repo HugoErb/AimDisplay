@@ -198,7 +198,7 @@ export class CreationShooterComponent {
 	}
 
 	/**
-	 * Détermine si l'arme sélectionnée correspond à une arme à huit séries ("Pistolet Spéciale")
+	 * Détermine si l'arme sélectionnée correspond à une arme à huit séries (ex. "P25")
 	 * et met à jour dynamiquement le champ `hasEightSeries` dans le groupe de catégories.
 	 *
 	 * @param selectedWeapon - L'événement déclenché par la sélection de l'arme

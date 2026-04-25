@@ -604,7 +604,7 @@ export class RankingComponent implements OnInit, OnDestroy {
 
 	/**
 	 * Retourne les indices de colonnes de séries à afficher selon la catégorie de la page courante.
-	 * S1-S4 pour 4 séries, S1-S6 pour 6 séries, S1-S8 pour 8 séries (Pistolet Spécial).
+	 * S1-S4 pour 4 séries, S1-S6 pour 6 séries, S1-S8 pour 8 séries (P25).
 	 */
 	getSeriesColumns(): number[] {
 		const first = this.classementData?.[0];
