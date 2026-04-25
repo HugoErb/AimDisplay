@@ -131,7 +131,7 @@ export class CommonService {
 	}
 
 	/**
-	 * Détermine si un nom d'arme correspond à l'arme "Pistolet Spéciale" (8 séries).
+	 * Détermine si un nom d'arme correspond à l'arme "P25" (8 séries).
 	 *
 	 * @param {string} weaponName - Libellé de l'arme.
 	 * @returns {boolean} `true` si l'arme est à 8 séries, sinon `false`.
@@ -143,7 +143,7 @@ export class CommonService {
 			.normalize('NFD')
 			.replaceAll(/[\u0300-\u036f]/g, '')
 			.replaceAll(/\s+/g, '');
-		return n.includes('pistoletspecial');
+		return n.includes('p25');
 	}
 
 	/**

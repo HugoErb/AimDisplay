@@ -18,7 +18,7 @@ Un accueil centralisé offrant une vue d'ensemble et un accès rapide aux diffé
 
 ### Gestion des Tireurs & Scores
 *   **Inscription simplifiée** : Enregistrement des tireurs par compétition, club, catégorie, arme et distance.
-*   **Saisie des scores** : Interface dédiée pour saisir les scores (jusqu'à 8 séries selon l'arme utilisée, ex : Pistolet Spécial).
+*   **Saisie des scores** : Interface dédiée pour saisir les scores (jusqu'à 8 séries selon l'arme utilisée, ex : P25).
 *   **Calcul automatique** : Calcul en temps réel du score total avec gestion des scores nuls ou non renseignés.
 *   **Gestion des doublons** : Vérifie si un tireur est déjà inscrit dans une même configuration pour éviter les erreurs.
 
