@@ -46,4 +46,5 @@ Thumbs.db
 
 .agents/
 .superpowers/
-docs/superpowers
+docs/
+sql-schema/maj_sql_schema_file.txt
