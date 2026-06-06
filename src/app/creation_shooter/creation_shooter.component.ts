@@ -481,13 +481,6 @@ export class CreationShooterComponent {
 		}
 	}
 
-	/**
-	 * Extrait l'`id` d'une sélection issue d'un composant (ex. `p-autoComplete`).
-	 *
-	 * @param selection Valeur renvoyée par le champ (objet sélectionné, libellé string, ou rien).
-	 * @param list      Liste de référence permettant, si besoin, de retrouver l'objet à partir du `name`.
-	 * @returns         L'identifiant numérique si trouvé, sinon `undefined`.
-	 */
 	getSeriesTotal(group: CategoryGroup): number {
 		const seriesCount = group.hasEightSeries ? 8 : group.hasSixSeries ? 6 : 4;
 		let total = 0;
@@ -500,6 +493,13 @@ export class CreationShooterComponent {
 		return Number(total.toFixed(2));
 	}
 
+	/**
+	 * Extrait l'`id` d'une sélection issue d'un composant (ex. `p-autoComplete`).
+	 *
+	 * @param selection Valeur renvoyée par le champ (objet sélectionné, libellé string, ou rien).
+	 * @param list      Liste de référence permettant, si besoin, de retrouver l'objet à partir du `name`.
+	 * @returns         L'identifiant numérique si trouvé, sinon `undefined`.
+	 */
 	private getIdFromSelection<T extends { id: number; name: string }>(selection: any, list: T[]): number | undefined {
 		if (!selection) return undefined;
 		if (typeof selection === 'object' && 'id' in selection) return selection.id as number;
