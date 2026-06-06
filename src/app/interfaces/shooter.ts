@@ -8,6 +8,8 @@ export interface Shooter {
 	distance: string;
 	weapon: string;
 	categoryName: string;
+	displayCategoryName: string;
+	paraClassification: string | null;
 	scoreSerie1: number;
 	scoreSerie2: number;
 	scoreSerie3: number;

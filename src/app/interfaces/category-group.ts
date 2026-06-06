@@ -12,6 +12,7 @@ export interface CategoryGroup {
 	scoreSerie8: number | null;
 	hasSixSeries: boolean;
 	hasEightSeries: boolean;
+	paraClassification?: string | null;
 
 	// autorise l’accès dynamique avec une string
 	[key: string]: any;

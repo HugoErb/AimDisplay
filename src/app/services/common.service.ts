@@ -146,6 +146,12 @@ export class CommonService {
 		return n.includes('p25');
 	}
 
+	getDisplayCategoryName(categoryName: string, paraClassification?: string | null): string {
+		const category = (categoryName ?? '').trim();
+		const classification = (paraClassification ?? '').trim();
+		return classification ? `${category} - ${classification}` : category;
+	}
+
 	/**
 	 * Renvoie l'état actuel du dark mode.
 	 * @returns {boolean} L'état actuel du dark mode.

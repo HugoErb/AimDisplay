@@ -16,6 +16,7 @@ import { Weapon } from '../interfaces/weapon';
 import { Distance } from '../interfaces/distance';
 import { Competition } from '../interfaces/competition';
 import { Shooter } from '../interfaces/shooter';
+import { ParaClassification } from '../interfaces/para-classification';
 import { RedirectLinkComponent } from '../components/redirect-link/redirect-link.component';
 import { AppSectionHeaderComponent } from '../components/section-header/section-header.component';
 import { AppSectionSubtitleComponent } from '../components/section-subtitle/section-subtitle.component';
@@ -82,7 +83,9 @@ export class CreationShooterComponent {
 	shooterEmail: string = '';
 	shooterCompetitionName: string | Competition = '';
 	shooterClubName: string | Club = '';
+	shooterParaClassification: ParaClassification | null = null;
 	categoryGroups: CategoryGroup[] = [this.createCategoryGroup()];
+	paraClassificationOptions: ParaClassification[] = [];
 
 	// Variables de récupération des données depuis la BDD
 	competitions: Competition[] = [];
@@ -97,6 +100,7 @@ export class CreationShooterComponent {
 	filteredWeapons: Weapon[] = [];
 	filteredDistances: Distance[] = [];
 	filteredShooterCategories: ShooterCategory[] = [];
+	filteredParaClassificationOptions: ParaClassification[] = [];
 
 	// Variables de modification d'un tireur
 	isEditMode = false;
@@ -104,12 +108,13 @@ export class CreationShooterComponent {
 
 	async ngOnInit(): Promise<void> {
 		try {
-			const [distances, weapons, categories, clubs, competitions] = await Promise.all([
+			const [distances, weapons, categories, clubs, competitions, paraClassifications] = await Promise.all([
 				this.supabase.getDistances(),
 				this.supabase.getWeapons(),
 				this.supabase.getCategories(),
 				this.supabase.getClubs(),
 				this.supabase.getCompetitions(),
+				this.supabase.getParaClassifications(),
 			]);
 
 			this.distances = distances;
@@ -117,6 +122,8 @@ export class CreationShooterComponent {
 			this.shooterCategories = categories;
 			this.clubs = clubs;
 			this.competitions = competitions;
+			this.paraClassificationOptions = paraClassifications;
+			this.shooterParaClassification = this.getDefaultParaClassification();
 
 			const idParam = this.route.snapshot.paramMap.get('id');
 			const isEditRequested = idParam !== null;
@@ -247,6 +254,7 @@ export class CreationShooterComponent {
 					categoryId: group.shooterCategory?.id,
 					distanceId: group.shooterDistance?.id,
 					weaponId: group.shooterWeapon?.id,
+					paraClassification: this.getNullableParaClassification(),
 					currentId: this.isEditMode ? this.editingShooter?.id : undefined,
 				});
 
@@ -331,6 +339,7 @@ export class CreationShooterComponent {
 					distanceId,
 					weaponId,
 					categoryId,
+					paraClassification: this.getNullableParaClassification(),
 					seriesScores,
 				});
 			}
@@ -339,6 +348,7 @@ export class CreationShooterComponent {
 			this.commonService.resetInputFields(this.inputFields);
 			this.shooterCompetitionName = '';
 			this.shooterClubName = '';
+			this.shooterParaClassification = this.getDefaultParaClassification();
 			this.animatedGroups.clear();
 			this.categoryGroups = [this.createCategoryGroup()];
 
@@ -357,6 +367,8 @@ export class CreationShooterComponent {
 		this.shooterLastName = shooter.lastName ?? '';
 		this.shooterFirstName = shooter.firstName ?? '';
 		this.shooterEmail = shooter.email ?? '';
+		this.shooterParaClassification =
+			this.paraClassificationOptions.find((option) => option.value === (shooter.paraClassification ?? null)) ?? this.getDefaultParaClassification();
 
 		// AutoComplete : on tente de retrouver l'objet par son nom (sinon on met le string)
 		const findByName = <T extends { id: number; name: string }>(name: string, list: T[]): T | string =>
@@ -464,6 +476,7 @@ export class CreationShooterComponent {
 				distanceId,
 				weaponId,
 				categoryId,
+				paraClassification: this.getNullableParaClassification(),
 				serie1Score,
 				serie2Score,
 				serie3Score,
@@ -505,5 +518,24 @@ export class CreationShooterComponent {
 		if (typeof selection === 'object' && 'id' in selection) return selection.id as number;
 		if (typeof selection === 'string') return list.find((item) => item.name === selection)?.id;
 		return undefined;
+	}
+
+	private getNullableParaClassification(): string | null {
+		const selection = this.shooterParaClassification as ParaClassification | string | null;
+		if (!selection) return null;
+
+		if (typeof selection === 'string') {
+			const match = this.paraClassificationOptions.find((option) => option.label === selection || option.value === selection);
+			return match?.value ?? null;
+		}
+
+		if (selection.value !== undefined) return selection.value;
+
+		const match = this.paraClassificationOptions.find((option) => option.label === selection.label);
+		return match?.value ?? null;
+	}
+
+	private getDefaultParaClassification(): ParaClassification | null {
+		return this.paraClassificationOptions.find((option) => option.value === null) ?? null;
 	}
 }

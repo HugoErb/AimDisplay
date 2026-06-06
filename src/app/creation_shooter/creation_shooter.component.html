@@ -37,7 +37,7 @@
             <!-- Club et Competition -->
             <div class="space-y-4">
               <app-section-subtitle>Affiliation et compétition</app-section-subtitle>
-              <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <div class="flex flex-col space-y-1">
                   <label for="shooterClubName"
                   class="text-sm font-medium text-gray-700 dark:text-gray-300 ml-1">Club *</label>
@@ -56,6 +56,16 @@
                     (completeMethod)="filteredCompetitions = commonService.filterByName($event.query, competitions)"
                     name="shooterCompetitionName" id="shooterCompetitionName" optionLabel="name"
                   [dropdown]="true" placeholder="Compétition du tireur" [appendTo]="'body'"></p-autoComplete>
+                </div>
+
+                <div class="flex flex-col space-y-1">
+                  <label for="shooterParaClassification"
+                  class="text-sm font-medium text-gray-700 dark:text-gray-300 ml-1">Classification Para-tir *</label>
+                  <p-autoComplete #inputField [(ngModel)]="shooterParaClassification" [forceSelection]="true"
+                    [suggestions]="filteredParaClassificationOptions"
+                    (completeMethod)="filteredParaClassificationOptions = commonService.filterByName($event.query, paraClassificationOptions, 'label')"
+                    optionLabel="label" name="shooterParaClassification" id="shooterParaClassification"
+                    [dropdown]="true" placeholder="Classification Para-tir" [appendTo]="'body'"></p-autoComplete>
                 </div>
               </div>
             </div>
