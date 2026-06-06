@@ -488,6 +488,18 @@ export class CreationShooterComponent {
 	 * @param list      Liste de référence permettant, si besoin, de retrouver l'objet à partir du `name`.
 	 * @returns         L'identifiant numérique si trouvé, sinon `undefined`.
 	 */
+	getSeriesTotal(group: CategoryGroup): number {
+		const seriesCount = group.hasEightSeries ? 8 : group.hasSixSeries ? 6 : 4;
+		let total = 0;
+
+		for (let serie = 1; serie <= seriesCount; serie++) {
+			const score = group['scoreSerie' + serie];
+			total += typeof score === 'number' && isFinite(score) ? score : 0;
+		}
+
+		return Number(total.toFixed(2));
+	}
+
 	private getIdFromSelection<T extends { id: number; name: string }>(selection: any, list: T[]): number | undefined {
 		if (!selection) return undefined;
 		if (typeof selection === 'object' && 'id' in selection) return selection.id as number;
