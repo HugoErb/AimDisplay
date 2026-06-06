@@ -325,7 +325,7 @@ export class CompetitionPDFGenerator {
 			const comps: any[] = await (this.supabase as any).getCompetitions?.();
 			const comp = Array.isArray(comps) ? comps.find((c) => c?.id === competitionId) : null;
 			basePrice = toNum(comp?.price ?? comp?.basePrice ?? comp?.tarif ?? 0);
-			extraCatPrice = toNum(comp?.extraCategoryPrice ?? comp?.extraPrice ?? comp?.tarifSupp ?? 0);
+			extraCatPrice = toNum(comp?.supCategoryPrice ?? comp?.extraCategoryPrice ?? comp?.extraPrice ?? comp?.tarifSupp ?? 0);
 			competitionName = comp?.name ?? comp?.title ?? '';
 		} catch {
 			/* valeurs par défaut à 0 si échec */
