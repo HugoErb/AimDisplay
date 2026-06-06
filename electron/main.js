@@ -1,5 +1,5 @@
 // electron/main.js
-const { app, BrowserWindow, ipcMain, shell, Menu } = require("electron");
+const { app, BrowserWindow, ipcMain, shell, Menu, dialog } = require("electron");
 const path = require("path");
 const fs = require("fs");
 const { autoUpdater } = require("electron-updater");
@@ -172,6 +172,26 @@ ipcMain.handle("getInitialDeepLink", () => {
 // Ouvrir la fenêtre "ranking" depuis le renderer
 ipcMain.handle("display-open-ranking", async (_evt, { competitionId, competitionName }) => {
 	openRankingWindow(competitionId, competitionName);
+});
+
+ipcMain.handle("pdf:save", async (_evt, { fileName, data }) => {
+	const result = await dialog.showSaveDialog(win, {
+		title: "Enregistrer le PDF",
+		defaultPath: fileName,
+		filters: [{ name: "PDF", extensions: ["pdf"] }],
+	});
+
+	if (result.canceled || !result.filePath) return null;
+
+	const buffer = Buffer.isBuffer(data) ? data : Buffer.from(data);
+	await fs.promises.writeFile(result.filePath, buffer);
+	return result.filePath;
+});
+
+ipcMain.handle("pdf:showItemInFolder", async (_evt, filePath) => {
+	if (typeof filePath === "string" && filePath.trim()) {
+		shell.showItemInFolder(filePath);
+	}
 });
 
 let updateAvailable = false;

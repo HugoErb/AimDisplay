@@ -22,4 +22,8 @@ contextBridge.exposeInMainWorld("appInfo", {
 });
 
 // (optionnel mais pratique) détecter Electron côté Angular
-contextBridge.exposeInMainWorld('electronAPI', { isElectron: true });
+contextBridge.exposeInMainWorld('electronAPI', {
+	isElectron: true,
+	savePdf: (fileName, data) => ipcRenderer.invoke('pdf:save', { fileName, data }),
+	showItemInFolder: (filePath) => ipcRenderer.invoke('pdf:showItemInFolder', filePath),
+});
