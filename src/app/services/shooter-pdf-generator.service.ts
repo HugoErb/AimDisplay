@@ -102,7 +102,7 @@ export class ShooterPDFGenerator {
 	async generateShooterReport(
 		shooterKey: Shooter | { firstName?: string; lastName?: string; fullName?: string } | string,
 		competitionId?: number
-	): Promise<void> {
+	): Promise<string | null> {
 		try {
 			// 1) Déduire Nom/Prénom pour affichage
 			let firstName = '';
@@ -135,7 +135,7 @@ export class ShooterPDFGenerator {
 			}
 			if (!rows.length) {
 				this.commonService.showSwalToast('Aucun résultat trouvé pour ce tireur.', 'info');
-				return;
+				return null;
 			}
 
 			// Tri lisible
@@ -244,11 +244,23 @@ export class ShooterPDFGenerator {
 				.replace(/[\\/:*?"<>|]/g, ' ')
 				.replace(/\s+/g, ' ')
 				.trim();
-			pdfMake.createPdf(docDefinition).download(`${safeTitle}.pdf`);
+			return await this.savePdf(docDefinition, `${safeTitle}.pdf`);
 		} catch (err: any) {
 			console.error('Erreur PDF (tireur):', err);
 			this.commonService.showSwalToast(err?.message ?? 'Erreur lors de la génération du PDF', 'error');
 		}
+		return null;
+	}
+
+	private async savePdf(docDefinition: TDocumentDefinitions, fileName: string): Promise<string | null> {
+		const electronApi = window.electronAPI;
+		if (!electronApi?.savePdf) {
+			throw new Error("La sauvegarde PDF nécessite l'application Electron.");
+		}
+
+		const blob = await (pdfMake.createPdf(docDefinition) as any).getBlob();
+		const data = await blob.arrayBuffer();
+		return electronApi.savePdf(fileName, data);
 	}
 
 	// --- Blocs visuels -------------------------------------------------

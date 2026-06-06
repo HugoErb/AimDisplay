@@ -16,6 +16,7 @@ import { AppSectionSubtitleComponent } from '../components/section-subtitle/sect
 import { AppButtonComponent } from '../components/button/button.component';
 import { InfoCardComponent } from '../components/info-card/info-card.component';
 import { APP_ICONS } from '../constants/icons';
+import Swal from 'sweetalert2';
 
 @Component({
 	selector: 'app-generer-pdf',
@@ -152,6 +153,7 @@ export class GenererPDFComponent {
 	 */
 	async generatePDF(): Promise<void> {
 		this.isLoading = true;
+		let savedPdfPath: string | null = null;
 		this.commonService.showSwalLoading('Génération du PDF', 'Veuillez patienter pendant la génération du rapport...');
 		try {
 			this.inputLabelMap = this.commonService.getInputLabelMap(this.inputFields);
@@ -163,11 +165,13 @@ export class GenererPDFComponent {
 						this.commonService.showSwalToast('Veuillez sélectionner une compétition.', 'error');
 						return;
 					}
-					await this.competitionPDFGenerator.generateCompetitionReport(this.selectedCompetition.id, this.activateClubInfos);
+					savedPdfPath = await this.competitionPDFGenerator.generateCompetitionReport(this.selectedCompetition.id, this.activateClubInfos);
 
 					// reset champs "competition"
-					this.commonService.resetInputFields(this.inputFields);
-					this.selectedCompetition = null;
+					if (savedPdfPath) {
+						this.commonService.resetInputFields(this.inputFields);
+						this.selectedCompetition = null;
+					}
 				}
 
 				// Génération de PDF : rapport de tireur
@@ -180,12 +184,14 @@ export class GenererPDFComponent {
 					const shooterKey = this.selectedShooter;
 					const competitionId = this.selectedShooterCompetition?.id ?? undefined;
 
-					await this.shooterPDFGenerator.generateShooterReport(shooterKey, competitionId);
+					savedPdfPath = await this.shooterPDFGenerator.generateShooterReport(shooterKey, competitionId);
 
 					// reset champs "tireur"
-					this.commonService.resetInputFields(this.inputFields);
-					this.selectedShooter = null;
-					this.selectedShooterCompetition = null;
+					if (savedPdfPath) {
+						this.commonService.resetInputFields(this.inputFields);
+						this.selectedShooter = null;
+						this.selectedShooterCompetition = null;
+					}
 				}
 			}
 		} catch (e: any) {
@@ -193,7 +199,29 @@ export class GenererPDFComponent {
 		} finally {
 			this.isLoading = false;
 			this.commonService.closeSwalLoading();
-			this.commonService.showSwalToast('PDF généré.', 'success');
+		}
+
+		if (savedPdfPath) {
+			await this.showPdfGeneratedDialog(savedPdfPath);
+		}
+	}
+
+	private async showPdfGeneratedDialog(filePath: string): Promise<void> {
+		const result = await Swal.fire({
+			icon: 'success',
+			title: '<div class="text-2xl">PDF généré</div>',
+			text: 'Le PDF a bien été enregistré.',
+			showCancelButton: true,
+			confirmButtonText: 'Ouvrir le dossier',
+			cancelButtonText: 'Fermer',
+			reverseButtons: true,
+			customClass: {
+				confirmButton: 'swal2-confirm custom-prime-button',
+			},
+		});
+
+		if (result.isConfirmed) {
+			await window.electronAPI?.showItemInFolder?.(filePath);
 		}
 	}
 }

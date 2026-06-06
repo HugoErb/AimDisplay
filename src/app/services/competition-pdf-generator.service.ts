@@ -27,17 +27,17 @@ export class CompetitionPDFGenerator {
 		textMuted: '#6B7280',
 	};
 
-	async generateCompetitionReport(competitionId: number, showStats: boolean): Promise<void> {
+	async generateCompetitionReport(competitionId: number, showStats: boolean): Promise<string | null> {
 		try {
 			if (!competitionId) {
 				this.commonService.showSwalToast('Veuillez sélectionner une compétition.', 'error');
-				return;
+				return null;
 			}
 
 			const shooters: Shooter[] = await this.supabase.getShootersByCompetition(competitionId);
 			if (!shooters.length) {
 				this.commonService.showSwalToast('Aucun tireur trouvé pour cette compétition.', 'error');
-				return;
+				return null;
 			}
 
 			const competitionTitle = (shooters[0]?.competitionName ?? '').toString().trim() || 'Compétition';
@@ -115,11 +115,23 @@ export class CompetitionPDFGenerator {
 				.replace(/[\\/:*?"<>|]/g, ' ')
 				.replace(/\s+/g, ' ')
 				.trim();
-			pdfMake.createPdf(docDefinition).download(`Classement ${safeTitle}.pdf`);
+			return await this.savePdf(docDefinition, `Classement ${safeTitle}.pdf`);
 		} catch (err: any) {
 			console.error('Erreur PDF:', err);
 			this.commonService.showSwalToast(err?.message ?? 'Erreur lors de la génération du PDF', 'error');
 		}
+		return null;
+	}
+
+	private async savePdf(docDefinition: TDocumentDefinitions, fileName: string): Promise<string | null> {
+		const electronApi = window.electronAPI;
+		if (!electronApi?.savePdf) {
+			throw new Error("La sauvegarde PDF nécessite l'application Electron.");
+		}
+
+		const blob = await (pdfMake.createPdf(docDefinition) as any).getBlob();
+		const data = await blob.arrayBuffer();
+		return electronApi.savePdf(fileName, data);
 	}
 
 	/**
