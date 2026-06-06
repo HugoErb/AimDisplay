@@ -8,6 +8,7 @@ import { CommonService } from '../services/common.service';
 import { Competition } from '../interfaces/competition';
 import { Shooter } from '../interfaces/shooter';
 import { AuthService } from './auth.service';
+import { ParaClassification } from '../interfaces/para-classification';
 
 @Injectable({ providedIn: 'root' })
 export class SupabaseService {
@@ -35,6 +36,11 @@ export class SupabaseService {
 	/** Échappe les caractères spéciaux LIKE (% et _) pour éviter les wildcards involontaires. */
 	private escapeLike(s: string): string {
 		return s.replaceAll('%', String.raw`\%`).replaceAll('_', String.raw`\_`);
+	}
+
+	private applyParaClassificationFilter(query: any, paraClassification?: string | null): any {
+		const value = paraClassification?.trim() || null;
+		return value ? query.eq('para_classification', value) : query.is('para_classification', null);
 	}
 
 	/** Retourne les maps id→libellé des 5 référentiels, avec cache de 5 minutes par utilisateur. */
@@ -121,6 +127,7 @@ export class SupabaseService {
 		distanceId: number;
 		weaponId: number;
 		categoryId: number;
+		paraClassification?: string | null;
 		seriesScores?: Array<number | null>; // Scores de la série [1..8]
 	}) {
 		try {
@@ -168,6 +175,7 @@ export class SupabaseService {
 					distance_id: distanceId,
 					weapon_id: weaponId,
 					category_id: categoryId,
+					para_classification: payload.paraClassification ?? null,
 					serie1_score: serie1ScoreValue,
 					serie2_score: serie2ScoreValue,
 					serie3_score: serie3ScoreValue,
@@ -307,6 +315,8 @@ export class SupabaseService {
 		const s7 = toNum(row.serie7_score);
 		const s8 = toNum(row.serie8_score);
 		const total = s1 + s2 + s3 + s4 + s5 + s6 + s7 + s8;
+		const categoryName = categoryById.get(row.category_id) ?? '';
+		const paraClassification = row.para_classification ?? null;
 
 		return {
 			id: row.id,
@@ -317,7 +327,9 @@ export class SupabaseService {
 			clubName: clubById.get(row.club_id) ?? '',
 			distance: distanceById.get(row.distance_id) ?? '',
 			weapon: weaponById.get(row.weapon_id) ?? '',
-			categoryName: categoryById.get(row.category_id) ?? '',
+			categoryName,
+			displayCategoryName: this.commonService.getDisplayCategoryName(categoryName, paraClassification),
+			paraClassification,
 			scoreSerie1: s1,
 			scoreSerie2: s2,
 			scoreSerie3: s3,
@@ -423,6 +435,7 @@ export class SupabaseService {
 		categoryId: number;
 		distanceId: number;
 		weaponId: number;
+		paraClassification?: string | null;
 		currentId?: number; // id du tireur en édition
 	}): Promise<boolean> {
 		const { data: userData, error: userError } = await this.supabase.auth.getUser();
@@ -435,7 +448,7 @@ export class SupabaseService {
 		if (!last || !first) return false;
 
 		// 1) Compter toutes les lignes qui matchent les critères cibles (sans exclure l'id courant)
-		const { count: countMatches, error: errCount } = await this.supabase
+		let countQuery = this.supabase
 			.from('shooters')
 			.select('id', { head: true, count: 'exact' })
 			.eq('user_id', user.id)
@@ -446,6 +459,8 @@ export class SupabaseService {
 			.eq('weapon_id', params.weaponId)
 			.ilike('last_name', this.escapeLike(last))
 			.ilike('first_name', this.escapeLike(first));
+		countQuery = this.applyParaClassificationFilter(countQuery, params.paraClassification);
+		const { count: countMatches, error: errCount } = await countQuery;
 
 		if (errCount) throw new Error(`Erreur lors du comptage des doublons: ${errCount.message}`);
 		const n = countMatches ?? 0;
@@ -456,7 +471,7 @@ export class SupabaseService {
 		}
 
 		// 3) Édition → savoir si la ligne courante fait DÉJÀ partie du lot en BDD
-		const { count: selfMatches, error: errSelf } = await this.supabase
+		let selfQuery = this.supabase
 			.from('shooters')
 			.select('id', { head: true, count: 'exact' })
 			.eq('id', params.currentId)
@@ -468,6 +483,8 @@ export class SupabaseService {
 			.eq('weapon_id', params.weaponId)
 			.ilike('last_name', this.escapeLike(last))
 			.ilike('first_name', this.escapeLike(first));
+		selfQuery = this.applyParaClassificationFilter(selfQuery, params.paraClassification);
+		const { count: selfMatches, error: errSelf } = await selfQuery;
 
 		if (errSelf) throw new Error(`Erreur lors de la vérification de la ligne courante: ${errSelf.message}`);
 
@@ -569,6 +586,20 @@ export class SupabaseService {
 			id: c.id,
 			name: c.label,
 		})) as ShooterCategory[];
+	}
+
+	async getParaClassifications(): Promise<ParaClassification[]> {
+		const { data, error } = await this.supabase
+			.from('para_classifications')
+			.select('id,label,value,sort_order')
+			.order('sort_order', { ascending: true });
+		if (error) throw error;
+		return (data ?? []).map((row: any) => ({
+			id: row.id,
+			label: row.label,
+			value: row.value,
+			sortOrder: row.sort_order,
+		})) as ParaClassification[];
 	}
 
 	/**
@@ -807,6 +838,7 @@ export class SupabaseService {
 			distanceId: number;
 			weaponId: number;
 			categoryId: number;
+			paraClassification?: string | null;
 			serie1Score?: number | null;
 			serie2Score?: number | null;
 			serie3Score?: number | null;
@@ -826,6 +858,7 @@ export class SupabaseService {
 		distance_id: number;
 		weapon_id: number;
 		category_id: number;
+		para_classification: string | null;
 		serie1_score: number | null;
 		serie2_score: number | null;
 		serie3_score: number | null;
@@ -862,6 +895,7 @@ export class SupabaseService {
 				distance_id: payload.distanceId,
 				weapon_id: payload.weaponId,
 				category_id: payload.categoryId,
+				para_classification: payload.paraClassification ?? null,
 
 				// Les séries peuvent être NULL si non renseignées
 				serie1_score: payload.serie1Score ?? null,

@@ -147,7 +147,7 @@ export class RankingComponent implements OnInit, OnDestroy {
 	 */
 	private buildPagesFromShooters(shooters: Shooter[]): RankingPage[] {
 		// Regroupement par triplet discipline
-		const keyOf = (s: Shooter) => `${s.distance}|||${s.weapon}|||${s.categoryName}`;
+		const keyOf = (s: Shooter) => `${s.distance}|||${s.weapon}|||${s.displayCategoryName || s.categoryName}`;
 		const buckets = new Map<string, Shooter[]>();
 		for (const s of shooters ?? []) {
 			const k = keyOf(s);

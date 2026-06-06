@@ -402,7 +402,7 @@ export class ShooterPDFGenerator {
 			const base: any[] = [
 				{ text: r.competitionName ?? '', style: 'tdWrap' },
 				{ text: r.distance ?? '', style: 'tdWrap' },
-				{ text: r.categoryName ?? '', style: 'tdWrap' },
+				{ text: r.displayCategoryName ?? r.categoryName ?? '', style: 'tdWrap' },
 				{ text: r.weapon ?? '', style: 'tdWrap' },
 				{ text: n(r.scoreSerie1), alignment: 'right' },
 				{ text: n(r.scoreSerie2), alignment: 'right' },

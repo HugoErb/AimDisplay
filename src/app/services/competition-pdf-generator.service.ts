@@ -257,7 +257,7 @@ export class CompetitionPDFGenerator {
 		const buckets = new Map<string, { distance: string; category: string; weapon: string; shooters: Shooter[] }>();
 		for (const s of shooters) {
 			const distance = s.distance || '—';
-			const category = s.categoryName || '—';
+			const category = s.displayCategoryName || s.categoryName || '—';
 			const weapon = s.weapon || '—';
 			const k = keyOf(distance, category, weapon);
 			if (!buckets.has(k)) buckets.set(k, { distance, category, weapon, shooters: [] });
@@ -354,7 +354,7 @@ export class CompetitionPDFGenerator {
 
 		const categoriesMap = new Map<string, number>();
 		shooters.forEach((s) => {
-			const c = (s.categoryName || '').trim();
+			const c = (s.displayCategoryName || s.categoryName || '').trim();
 			if (c) categoriesMap.set(c, (categoriesMap.get(c) || 0) + 1);
 		});
 		const catCount = categoriesMap.size;
