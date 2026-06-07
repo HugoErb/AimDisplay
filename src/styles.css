@@ -309,6 +309,12 @@
 		transition: all;
 	}
 
+	/* Les champs des filtres de tableaux gardent le style clair */
+	.p-datatable-filter-overlay :is(.p-inputtext, .p-inputnumber-input, .p-datepicker-input) {
+		color: #111827 !important; /* gray-900 */
+		caret-color: #111827 !important;
+	}
+
 	/* Style de la barre de défilement horizontale des tableaux */
 	.p-datatable-table-container {
 		scrollbar-width: thin;
