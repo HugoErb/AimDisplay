@@ -5,6 +5,7 @@ import { CommonService } from '../services/common.service';
 import { Shooter } from '../interfaces/shooter';
 import { SupabaseService } from '../services/supabase.service';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { MultiSelectModule } from 'primeng/multiselect';
 import { AppSectionHeaderComponent } from '../components/section-header/section-header.component';
@@ -14,7 +15,7 @@ import { APP_FORMATS } from '../constants/formats';
 @Component({
 	selector: 'app-modification-shooter',
 	standalone: true,
-	imports: [TableModule, CommonModule, MultiSelectModule, AppSectionHeaderComponent],
+	imports: [TableModule, CommonModule, FormsModule, MultiSelectModule, AppSectionHeaderComponent],
 	templateUrl: './modification_shooter.component.html',
 	schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
@@ -32,10 +33,32 @@ export class ModificationShooterComponent {
 		{ label: '50 mètres', value: '50 mètres' },
 	];
 
+	weaponOptions: { label: string; value: string }[] = [];
+	categoryOptions: { label: string; value: string }[] = [];
+	clubOptions: { label: string; value: string }[] = [];
+	competitionOptions: { label: string; value: string }[] = [];
+
 	async ngOnInit(): Promise<void> {
 		try {
 			this.isFetchingData = true;
-			this.shooters = await this.supabase.getShooters();
+			const [shooters, clubs, competitions, categories] = await Promise.all([
+				this.supabase.getShooters(),
+				this.supabase.getClubs(),
+				this.supabase.getCompetitions(),
+				this.supabase.getCategories(),
+			]);
+
+			this.shooters = shooters;
+			this.weaponOptions = this.buildFilterOptions(this.shooters.map((shooter) => shooter.weapon));
+			this.categoryOptions = categories.flatMap((category) =>
+				this.buildFilterOptions(
+					this.shooters
+						.filter((shooter) => shooter.categoryName === category.name)
+						.map((shooter) => shooter.displayCategoryName || shooter.categoryName)
+				)
+			);
+			this.clubOptions = this.buildFilterOptions(clubs.map((club) => club.name));
+			this.competitionOptions = this.buildFilterOptions(competitions.map((competition) => competition.name));
 		} catch (err) {
 			console.error('Erreur lors du chargement des données :', err);
 		} finally {
@@ -65,6 +88,13 @@ export class ModificationShooterComponent {
 		if (checked && idx === -1) next.push(val);
 		if (!checked && idx >= 0) next.splice(idx, 1);
 		filterCb(next); // applique immédiatement
+	}
+
+	private buildFilterOptions(values: Array<string | null | undefined>): { label: string; value: string }[] {
+		return [...new Set(values.map((value) => value?.trim()).filter((value): value is string => !!value))].map((value) => ({
+			label: value,
+			value,
+		}));
 	}
 
 	/**
