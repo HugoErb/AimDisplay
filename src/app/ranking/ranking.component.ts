@@ -57,6 +57,9 @@ export class RankingComponent implements OnInit, OnDestroy {
 	isFullscreen = false; // vrai si la page est en plein écran
 	showFsButton = false; // contrôle l’affichage du bouton
 	private hideFsBtnTimer: any; // timer d’auto-masquage
+	/**
+	 * Traite les changements de mode plein ecran.
+	 */
 	private fsChangeHandler = () => this.updateFullscreenState();
 	private fsPinned = false; // souris sur le bouton => pas d'auto-hide
 	private fsHideTimer: any | null = null;
@@ -67,6 +70,9 @@ export class RankingComponent implements OnInit, OnDestroy {
 	// Lifecycle
 	// ──────────────────────────────────────────────────────────────────────────────
 
+	/**
+	 * Initialise le composant.
+	 */
 	async ngOnInit(): Promise<void> {
 		const idParam = this.route.snapshot.paramMap.get('competitionId');
 		const nameParam = this.route.snapshot.paramMap.get('competitionName') ?? '';
@@ -248,6 +254,9 @@ export class RankingComponent implements OnInit, OnDestroy {
 		}
 	}
 
+	/**
+	 * Retourne le libelle de rang a afficher.
+	 */
 	getRankLabel(position: number): string {
 		return position === 1 ? '1er' : `${position}ème`;
 	}
@@ -759,6 +768,9 @@ export class RankingComponent implements OnInit, OnDestroy {
 		}
 	}
 
+	/**
+	 * Revient a l'ecran precedent.
+	 */
 	private async goBack(): Promise<void> {
 		if (this.destroyed) return;
 
@@ -774,6 +786,9 @@ export class RankingComponent implements OnInit, OnDestroy {
 		this.scheduleNextTick();
 	}
 
+	/**
+	 * Traite les mouvements globaux de souris.
+	 */
 	@HostListener('document:mousemove', ['$event'])
 	onGlobalMouseMove(_e: MouseEvent) {
 		// dès qu'on bouge la souris n'importe où, on montre le bouton et on relance le timer

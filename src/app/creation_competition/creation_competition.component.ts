@@ -46,6 +46,9 @@ export class CreationCompetitionComponent {
 	editingCompetition: Competition | null = null;
 	isEditMode = false;
 
+	/**
+	 * Initialise le composant.
+	 */
 	async ngOnInit(): Promise<void> {
 		const idParam = this.route.snapshot.paramMap.get('id');
 		const isEditRequested = idParam !== null;

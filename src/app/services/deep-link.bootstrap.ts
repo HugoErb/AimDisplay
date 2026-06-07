@@ -11,6 +11,9 @@ declare global {
 	}
 }
 
+/**
+ * Extrait les jetons depuis une URL de lien profond.
+ */
 function extractTokens(u: string) {
 	const frag = u.includes('#') ? u.slice(u.indexOf('#') + 1) : u.includes('?') ? u.slice(u.indexOf('?') + 1) : '';
 	const p = new URLSearchParams(frag);
@@ -21,7 +24,13 @@ function extractTokens(u: string) {
 	};
 }
 
+/**
+ * Configure la prise en charge des liens profonds.
+ */
 export function setupDeepLink(router = inject(Router)) {
+	/**
+	 * Traite une URL de lien profond.
+	 */
 	async function handle(u: string) {
 		const { type, access, refresh } = extractTokens(u);
 

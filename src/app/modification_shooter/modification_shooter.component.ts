@@ -38,6 +38,9 @@ export class ModificationShooterComponent {
 	clubOptions: { label: string; value: string }[] = [];
 	competitionOptions: { label: string; value: string }[] = [];
 
+	/**
+	 * Initialise le composant.
+	 */
 	async ngOnInit(): Promise<void> {
 		try {
 			this.isFetchingData = true;
@@ -66,6 +69,9 @@ export class ModificationShooterComponent {
 		}
 	}
 
+	/**
+	 * Finalise l'initialisation apres le rendu de la vue.
+	 */
 	async ngAfterViewInit() {
 		this.nbRowsPerPage = await this.commonService.getNbRowsPerPage();
 	}
@@ -82,6 +88,9 @@ export class ModificationShooterComponent {
 		this.nbRowsPerPage = await this.commonService.getNbRowsPerPage();
 	}
 
+	/**
+	 * Met a jour les filtres quand une distance est activee ou desactivee.
+	 */
 	onDistanceToggle(checked: boolean, val: string, current: string[] | null | undefined, filterCb: (v: any) => void) {
 		const next = Array.isArray(current) ? [...current] : [];
 		const idx = next.indexOf(val);
@@ -90,6 +99,9 @@ export class ModificationShooterComponent {
 		filterCb(next); // applique immédiatement
 	}
 
+	/**
+	 * Construit les options de filtre disponibles.
+	 */
 	private buildFilterOptions(values: Array<string | null | undefined>): { label: string; value: string }[] {
 		return [...new Set(values.map((value) => value?.trim()).filter((value): value is string => !!value))].map((value) => ({
 			label: value,

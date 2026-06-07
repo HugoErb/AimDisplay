@@ -44,6 +44,9 @@ export class ShooterPDFGenerator {
 		lineHeight: 1.05,
 	};
 
+	/**
+	 * Normalise une chaine pour les comparaisons.
+	 */
 	private norm = (s: string) =>
 		(s || '')
 			.normalize('NFD')
@@ -51,15 +54,24 @@ export class ShooterPDFGenerator {
 			.toLowerCase()
 			.trim();
 
+	/**
+	 * Formate une valeur numerique avec deux decimales.
+	 */
 	private fmt2 = (n: number | string | null | undefined) => {
 		const v = Number(n);
 		return Number.isFinite(v) ? v.toFixed(2) : '—';
 	};
 
+	/**
+	 * Indique si une ligne correspond a une epreuve en huit series.
+	 */
 	private isEightSeriesRow(r: Shooter): boolean {
 		return this.commonService.hasEightSeriesWeapon(r.weapon ?? '');
 	}
 
+	/**
+	 * Indique si une ligne correspond a une epreuve en six series.
+	 */
 	private isSixSeriesRow(r: Shooter): boolean {
 		if (this.isEightSeriesRow(r)) return false;
 		const cat = this.norm(r.categoryName);
@@ -68,6 +80,9 @@ export class ShooterPDFGenerator {
 		return byCategory || !!hasS56;
 	}
 
+	/**
+	 * Calcule les statistiques de base d'une liste de nombres.
+	 */
 	private basicStats(nums: number[]) {
 		const arr = nums.filter((x) => Number.isFinite(x));
 		const count = arr.length;
@@ -80,10 +95,16 @@ export class ShooterPDFGenerator {
 		return { count, avg, median, best: sorted[sorted.length - 1], worst: sorted[0] };
 	}
 
+	/**
+	 * Calcule le total des quatre premieres series.
+	 */
 	private total4(r: Shooter): number {
 		const toNum = (v: any) => (v == null || Number.isNaN(Number(v)) ? 0 : Number(v));
 		return toNum(r.scoreSerie1) + toNum(r.scoreSerie2) + toNum(r.scoreSerie3) + toNum(r.scoreSerie4);
 	}
+	/**
+	 * Calcule le total des six premieres series.
+	 */
 	private total6(r: Shooter): number {
 		const toNum = (v: any) => (v == null || Number.isNaN(Number(v)) ? 0 : Number(v));
 		return (
@@ -91,6 +112,9 @@ export class ShooterPDFGenerator {
 		);
 	}
 
+	/**
+	 * Calcule le total des huit series.
+	 */
 	private total8(r: Shooter): number {
 		const toNum = (v: any) => (v == null || Number.isNaN(Number(v)) ? 0 : Number(v));
 		return (
@@ -99,6 +123,9 @@ export class ShooterPDFGenerator {
 		);
 	}
 
+	/**
+	 * Genere le rapport PDF d'un tireur.
+	 */
 	async generateShooterReport(
 		shooterKey: Shooter | { firstName?: string; lastName?: string; fullName?: string } | string,
 		competitionId?: number
@@ -252,6 +279,9 @@ export class ShooterPDFGenerator {
 		return null;
 	}
 
+	/**
+	 * Sauvegarde un document PDF via l'API Electron disponible.
+	 */
 	private async savePdf(docDefinition: TDocumentDefinitions, fileName: string): Promise<string | null> {
 		const electronApi = window.electronAPI;
 		if (!electronApi?.savePdf) {
@@ -265,6 +295,9 @@ export class ShooterPDFGenerator {
 
 	// --- Blocs visuels -------------------------------------------------
 
+	/**
+	 * Retourne la configuration commune des tableaux PDF.
+	 */
 	private commonTableLayout = () => ({
 		hLineWidth: () => 1,
 		hLineColor: this.theme.border,
@@ -280,6 +313,9 @@ export class ShooterPDFGenerator {
 		fillColor: (row: number) => (row === 0 ? '#F3F4F6' : null),
 	});
 
+	/**
+	 * Construit le bloc de synthese du rapport tireur.
+	 */
 	private buildSummaryBlock(rows: Shooter[], allStats: ReturnType<typeof this.basicStats>): Content {
 		const competitions = new Set(rows.map((r) => r.competitionName)).size;
 		const clubs = new Set(rows.map((r) => r.clubName)).size;
@@ -337,6 +373,9 @@ export class ShooterPDFGenerator {
 		};
 	}
 
+	/**
+	 * Construit le bloc de statistiques des scores.
+	 */
 	private buildScoresMiniBlock(stats4: any, stats6: any, stats8: any): Content {
 		const block = (title: string, st: any): Content => ({
 			margin: [0, 0, 0, 10],
@@ -382,6 +421,9 @@ export class ShooterPDFGenerator {
 		};
 	}
 
+	/**
+	 * Construit le tableau des resultats du rapport tireur.
+	 */
 	private buildResultsTable(title: string, rows: Shooter[], seriesCount: 4 | 6 | 8): Content | null {
 		if (!rows.length) return null;
 

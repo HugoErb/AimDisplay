@@ -26,6 +26,9 @@ export class SplashScreenComponent implements OnInit {
 
 	constructor(private supabase: SupabaseService, protected commonService: CommonService) {}
 
+	/**
+	 * Initialise le composant.
+	 */
 	async ngOnInit() {
 		this.bootStart = Date.now();
 

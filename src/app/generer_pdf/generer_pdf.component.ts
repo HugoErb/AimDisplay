@@ -57,6 +57,9 @@ export class GenererPDFComponent {
 	competitionsByShooterKey: Record<string, Array<{ id: number; name: string }>> = {};
 	competitionsForSelectedShooter: Array<{ id: number; name: string }> = [];
 
+	/**
+	 * Initialise le composant.
+	 */
 	async ngOnInit(): Promise<void> {
 		try {
 			// 1) on charge TOUT ce qu’il faut pour les 2 onglets
@@ -123,6 +126,9 @@ export class GenererPDFComponent {
 		this.selectedTab = tab;
 	}
 
+	/**
+	 * Met a jour la selection liee au tireur choisi.
+	 */
 	handleShooterChange(shooter: Shooter | null): void {
 		this.selectedShooter = shooter || null;
 		this.selectedShooterCompetition = null;
@@ -206,6 +212,9 @@ export class GenererPDFComponent {
 		}
 	}
 
+	/**
+	 * Affiche la confirmation de generation du PDF.
+	 */
 	private async showPdfGeneratedDialog(filePath: string): Promise<void> {
 		const result = await Swal.fire({
 			icon: 'success',

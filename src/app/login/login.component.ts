@@ -31,6 +31,9 @@ export class LoginComponent {
 	password: string = '';
 	isLoading: boolean = false;
 
+	/**
+	 * Initialise le composant.
+	 */
 	ngOnInit() {
 		this.route.queryParamMap.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((q) => {
 			if (q.get('verified') === '1') {

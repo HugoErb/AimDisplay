@@ -42,6 +42,9 @@ export class CreationClubComponent {
 	editingClub: Club | null = null;
 	isEditMode = false;
 
+	/**
+	 * Initialise le composant.
+	 */
 	async ngOnInit(): Promise<void> {
 		// Est-ce qu’on est en mode édition ? (présence d’un paramètre :id)
 		const idParam = this.route.snapshot.paramMap.get('id');

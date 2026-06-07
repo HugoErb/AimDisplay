@@ -28,6 +28,9 @@ export class ResetPasswordComponent {
 
 	constructor(private route: ActivatedRoute, private router: Router, protected commonService: CommonService, protected authService: AuthService) {}
 
+	/**
+	 * Initialise le composant.
+	 */
 	async ngOnInit() {
 		// Query params
 		const qp = this.route.snapshot.queryParamMap;

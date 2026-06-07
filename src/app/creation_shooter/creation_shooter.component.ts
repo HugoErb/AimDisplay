@@ -73,6 +73,9 @@ export class CreationShooterComponent {
 	isSaving: boolean = false;
 	private readonly animatedGroups = new Set<CategoryGroup>();
 
+	/**
+	 * Indique si un groupe de categorie doit etre anime.
+	 */
 	shouldAnimate(group: CategoryGroup): string {
 		return this.animatedGroups.has(group) ? 'on' : 'off';
 	}
@@ -110,6 +113,9 @@ export class CreationShooterComponent {
 	isEditMode = false;
 	editingShooter: Shooter | null = null;
 
+	/**
+	 * Initialise le composant.
+	 */
 	async ngOnInit(): Promise<void> {
 		try {
 			const [distances, weapons, categories, clubs, competitions, paraClassifications] = await Promise.all([
@@ -188,6 +194,9 @@ export class CreationShooterComponent {
 		this.categoryGroups.push(newGroup);
 	}
 
+	/**
+	 * Supprime un groupe de categorie si la modification est autorisee.
+	 */
 	removeCategoryGroup(index: number): void {
 		if (this.isEditMode || index <= 0 || this.categoryGroups.length <= 1) return;
 		const [removedGroup] = this.categoryGroups.splice(index, 1);
@@ -504,6 +513,9 @@ export class CreationShooterComponent {
 		}
 	}
 
+	/**
+	 * Calcule le total des series renseignees pour un groupe.
+	 */
 	getSeriesTotal(group: CategoryGroup): number {
 		const seriesCount = group.hasEightSeries ? 8 : group.hasSixSeries ? 6 : 4;
 		let total = 0;
@@ -530,6 +542,9 @@ export class CreationShooterComponent {
 		return undefined;
 	}
 
+	/**
+	 * Retourne la classification para selectionnee ou null.
+	 */
 	private getNullableParaClassification(): string | null {
 		const selection = this.shooterParaClassification as ParaClassification | string | null;
 		if (!selection) return null;
@@ -545,6 +560,9 @@ export class CreationShooterComponent {
 		return match?.value ?? null;
 	}
 
+	/**
+	 * Retourne la classification para par defaut.
+	 */
 	private getDefaultParaClassification(): ParaClassification | null {
 		return this.paraClassificationOptions.find((option) => option.value === null) ?? null;
 	}

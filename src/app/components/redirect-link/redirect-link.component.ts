@@ -14,6 +14,9 @@ export class RedirectLinkComponent {
 
 	constructor(private commonService: CommonService) {}
 
+	/**
+	 * Redirige vers la route demandee.
+	 */
 	redirectTo(): void {
 		if (this.target) {
 			this.commonService.redirectTo(this.target);

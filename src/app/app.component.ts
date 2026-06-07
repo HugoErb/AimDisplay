@@ -16,6 +16,9 @@ export class AppComponent {
 
 	constructor(private config: PrimeNG, private translateService: TranslateService, private router: Router, private ngZone: NgZone) {}
 
+	/**
+	 * Initialise le composant.
+	 */
 	ngOnInit() {
 		this.ngZone.runOutsideAngular(() => {
 			OverlayScrollbars(document.body, {
@@ -47,6 +50,9 @@ export class AppComponent {
 		}
 	}
 
+	/**
+	 * Traite un lien profond recu par l'application.
+	 */
 	private handleDeepLink(url: string): void {
 		// Tokens possibles en fragment (#...) ou en query (?...)
 		const fragOrQuery = url.includes('#') ? url.substring(url.indexOf('#') + 1) : url.includes('?') ? url.substring(url.indexOf('?') + 1) : '';
@@ -67,6 +73,9 @@ export class AppComponent {
 		}
 	}
 
+	/**
+	 * Applique la langue demandee et les traductions PrimeNG.
+	 */
 	translate(lang: string) {
 		this.translateService.use(lang);
 		this.translateService.get('primeng').subscribe((res) => this.config.setTranslation(res));

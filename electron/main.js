@@ -17,6 +17,9 @@ let pendingDeepLink = null;
 const savedPdfPaths = createSavedPathRegistry();
 
 // ---------- utils ----------
+/**
+ * Envoie un lien profond a la fenetre principale ou le conserve en attente.
+ */
 function sendDeepLink(url) {
 	if (!url) return;
 	if (win && win.webContents) {
@@ -28,6 +31,9 @@ function sendDeepLink(url) {
 	}
 }
 
+/**
+ * Recherche le fichier index.html genere pour l'application Angular.
+ */
 function resolveIndexFile() {
 	const candidates = [
 		path.join(__dirname, "..", "dist", APP_DIR_NAME, "browser", "index.html"),
@@ -38,6 +44,9 @@ function resolveIndexFile() {
 	return candidates.find(fs.existsSync);
 }
 
+/**
+ * Force les liens externes a s'ouvrir hors de la fenetre Electron.
+ */
 function hardenExternalNavigation(browserWindow) {
 	const handler = createExternalNavigationHandler((url) => shell.openExternal(url));
 	browserWindow.webContents.setWindowOpenHandler(({ url }) => handler.handleWindowOpen(url));
@@ -45,6 +54,9 @@ function hardenExternalNavigation(browserWindow) {
 }
 
 // ---------- display window ----------
+/**
+ * Ouvre une fenetre dediee a l'affichage du classement.
+ */
 function openRankingWindow(competitionId, competitionName) {
 	const route = `/ranking/${encodeURIComponent(competitionId)}/${encodeURIComponent(competitionName)}`;
 
@@ -87,6 +99,9 @@ function openRankingWindow(competitionId, competitionName) {
 }
 
 // ---------- window ----------
+/**
+ * Cree et configure la fenetre principale Electron.
+ */
 function createWindow() {
 	win = new BrowserWindow({
 		width: 1280,
