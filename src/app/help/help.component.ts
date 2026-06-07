@@ -23,6 +23,9 @@ export class HelpComponent implements OnInit {
 
 	constructor(private themeService: ThemeService, protected commonService: CommonService) {}
 
+	/**
+	 * Initialise le composant.
+	 */
 	ngOnInit(): void {
 		this.darkMode = this.themeService.getTheme() === 'dark';
 	}

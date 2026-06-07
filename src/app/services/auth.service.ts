@@ -11,6 +11,9 @@ import { Router } from '@angular/router';
 export class AuthService implements OnDestroy {
 	private supabase: SupabaseClient;
 
+	/**
+	 * Retourne le client Supabase utilise par le service.
+	 */
 	getClient(): SupabaseClient {
 		return this.supabase;
 	}
@@ -66,6 +69,9 @@ export class AuthService implements OnDestroy {
 		});
 	}
 
+	/**
+	 * Nettoie les ressources du service.
+	 */
 	ngOnDestroy(): void {
 		// Nettoyer la souscription auth
 		this.authSubscription?.data.subscription.unsubscribe();
@@ -83,6 +89,9 @@ export class AuthService implements OnDestroy {
 		}
 	}
 
+	/**
+	 * Retourne la session Supabase courante.
+	 */
 	async getCurrentSession() {
 		const { data, error } = await this.supabase.auth.getSession();
 		if (error) return null;

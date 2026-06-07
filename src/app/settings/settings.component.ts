@@ -134,12 +134,18 @@ export class SettingsComponent {
 	// 	},
 	// ];
 
+	/**
+	 * Initialise le composant.
+	 */
 	async ngOnInit() {
 		this.avatarUrl = this.authService.getCurrentAvatarUrl();
 		this.darkMode = this.themeService.getTheme() === 'dark';
         this.version = (await window.appInfo?.getVersion?.()) ?? 'dev';
 	}
 
+	/**
+	 * Charge le fichier d'avatar selectionne par l'utilisateur.
+	 */
 	async onAvatarFileSelected(event: Event): Promise<void> {
 		this.isLoading = true;
 		const input = event.target as HTMLInputElement;

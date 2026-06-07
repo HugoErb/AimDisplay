@@ -15,6 +15,9 @@ export class BaseLayoutComponent {
 
 	theme: string | null = '';
 
+	/**
+	 * Initialise le composant.
+	 */
 	ngOnInit() {
 		this.themeService.getTheme();
 	}

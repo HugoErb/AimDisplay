@@ -38,6 +38,9 @@ export class SupabaseService {
 		return s.replaceAll('%', String.raw`\%`).replaceAll('_', String.raw`\_`);
 	}
 
+	/**
+	 * Applique le filtre de classification para a une requete.
+	 */
 	private applyParaClassificationFilter(query: any, paraClassification?: string | null): any {
 		const value = paraClassification?.trim() || null;
 		return value ? query.eq('para_classification', value) : query.is('para_classification', null);
@@ -105,6 +108,9 @@ export class SupabaseService {
 		return await this.supabase.auth.getSession();
 	}
 
+	/**
+	 * Retourne l'utilisateur Supabase courant.
+	 */
 	async getUser() {
 		return await this.supabase.auth.getUser();
 	}
@@ -588,6 +594,9 @@ export class SupabaseService {
 		})) as ShooterCategory[];
 	}
 
+	/**
+	 * Recupere les classifications para disponibles.
+	 */
 	async getParaClassifications(): Promise<ParaClassification[]> {
 		const { data, error } = await this.supabase
 			.from('para_classifications')

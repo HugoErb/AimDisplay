@@ -23,6 +23,9 @@ export class ModificationClubComponent {
 	nbRowsPerPage: number = 1;
 	isFetchingData: boolean = false;
 
+	/**
+	 * Initialise le composant.
+	 */
 	async ngOnInit(): Promise<void> {
 		try {
 			this.isFetchingData = true;
@@ -34,6 +37,9 @@ export class ModificationClubComponent {
 		}
 	}
 
+	/**
+	 * Finalise l'initialisation apres le rendu de la vue.
+	 */
 	async ngAfterViewInit() {
 		this.nbRowsPerPage = await this.commonService.getNbRowsPerPage();
 	}

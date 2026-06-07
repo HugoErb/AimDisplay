@@ -35,6 +35,9 @@ export class DisplayComponent {
 	competitions: any[] = [];
 	filteredCompetitions: any[] = [];
 
+	/**
+	 * Initialise le composant.
+	 */
 	async ngOnInit(): Promise<void> {
 		try {
 			this.competitions = await this.supabase.getCompetitions();

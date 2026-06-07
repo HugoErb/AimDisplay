@@ -12,6 +12,9 @@ export class CommonService {
 
 	private darkMode = signal<boolean>(false);
 
+	/**
+	 * Echappe les caracteres HTML speciaux d'une valeur.
+	 */
 	private escapeHtml(s: string): string {
 		return s.replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;').replaceAll('"', '&quot;');
 	}
@@ -146,6 +149,9 @@ export class CommonService {
 		return n.includes('p25');
 	}
 
+	/**
+	 * Retourne le nom de categorie a afficher.
+	 */
 	getDisplayCategoryName(categoryName: string, paraClassification?: string | null): string {
 		const category = (categoryName ?? '').trim();
 		const classification = (paraClassification ?? '').trim();

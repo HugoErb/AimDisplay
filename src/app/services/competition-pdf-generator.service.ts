@@ -27,6 +27,9 @@ export class CompetitionPDFGenerator {
 		textMuted: '#6B7280',
 	};
 
+	/**
+	 * Genere le rapport PDF d'une competition.
+	 */
 	async generateCompetitionReport(competitionId: number, showStats: boolean): Promise<string | null> {
 		try {
 			if (!competitionId) {
@@ -123,6 +126,9 @@ export class CompetitionPDFGenerator {
 		return null;
 	}
 
+	/**
+	 * Sauvegarde un document PDF via l'API Electron disponible.
+	 */
 	private async savePdf(docDefinition: TDocumentDefinitions, fileName: string): Promise<string | null> {
 		const electronApi = window.electronAPI;
 		if (!electronApi?.savePdf) {
