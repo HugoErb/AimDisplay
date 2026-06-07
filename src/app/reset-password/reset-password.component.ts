@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { InputTextModule } from 'primeng/inputtext';
 import { CommonService } from '../services/common.service';
 import { AuthService } from '../services/auth.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { RedirectLinkComponent } from '../components/redirect-link/redirect-link.component';
 import { AppButtonComponent } from '../components/button/button.component';
 import { APP_ICONS } from '../constants/icons';
@@ -26,7 +26,7 @@ export class ResetPasswordComponent {
 	isLoading: boolean = false;
 	tokenPresent: boolean = false;
 
-	constructor(private route: ActivatedRoute, protected commonService: CommonService, protected authService: AuthService) {}
+	constructor(private route: ActivatedRoute, private router: Router, protected commonService: CommonService, protected authService: AuthService) {}
 
 	async ngOnInit() {
 		// Query params
@@ -45,6 +45,7 @@ export class ResetPasswordComponent {
 			this.tokenPresent = true;
 			try {
 				await this.authService.setRecoverySession(access, refresh);
+				await this.router.navigate([], { queryParams: {}, replaceUrl: true });
 			} catch {
 				// laisse l’utilisateur sur place avec un message d’erreur
 			}

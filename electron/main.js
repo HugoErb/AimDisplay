@@ -4,6 +4,7 @@ const path = require("path");
 const fs = require("fs");
 const { autoUpdater } = require("electron-updater");
 const log = require("electron-log");
+const { createExternalNavigationHandler, createSavedPathRegistry } = require("./security");
 
 const SCHEME = "aimdisplay";
 const APP_ID = "com.example.aimdisplay"; // aligne avec build.appId dans package.json
@@ -13,6 +14,7 @@ const shouldOpenDevtools = isDev && process.env.ELECTRON_OPEN_DEVTOOLS === "1";
 
 let win = null;
 let pendingDeepLink = null;
+const savedPdfPaths = createSavedPathRegistry();
 
 // ---------- utils ----------
 function sendDeepLink(url) {
@@ -36,6 +38,12 @@ function resolveIndexFile() {
 	return candidates.find(fs.existsSync);
 }
 
+function hardenExternalNavigation(browserWindow) {
+	const handler = createExternalNavigationHandler((url) => shell.openExternal(url));
+	browserWindow.webContents.setWindowOpenHandler(({ url }) => handler.handleWindowOpen(url));
+	browserWindow.webContents.on("will-navigate", (event, url) => handler.handleWillNavigate(event, url));
+}
+
 // ---------- display window ----------
 function openRankingWindow(competitionId, competitionName) {
 	const route = `/ranking/${encodeURIComponent(competitionId)}/${encodeURIComponent(competitionName)}`;
@@ -56,6 +64,7 @@ function openRankingWindow(competitionId, competitionName) {
 	// cache le menu de cette fenêtre
 	winDisplay.setMenuBarVisibility(false);
 	if (process.platform !== "darwin") winDisplay.removeMenu();
+	hardenExternalNavigation(winDisplay);
 
 	if (isDev) {
 		// DEV : on passe la route au dev-server via ?route=...
@@ -125,19 +134,7 @@ function createWindow() {
 	});
 
 	// Ouvre les liens http(s) à l’extérieur (évite nouvelles fenêtres blanches)
-	win.webContents.setWindowOpenHandler(({ url }) => {
-		if (/^https?:\/\//i.test(url)) {
-			shell.openExternal(url);
-			return { action: "deny" };
-		}
-		return { action: "allow" };
-	});
-	win.webContents.on("will-navigate", (e, url) => {
-		if (/^https?:\/\//i.test(url)) {
-			e.preventDefault();
-			shell.openExternal(url);
-		}
-	});
+	hardenExternalNavigation(win);
 }
 
 // ---------- single instance & deep links ----------
@@ -185,11 +182,12 @@ ipcMain.handle("pdf:save", async (_evt, { fileName, data }) => {
 
 	const buffer = Buffer.isBuffer(data) ? data : Buffer.from(data);
 	await fs.promises.writeFile(result.filePath, buffer);
+	savedPdfPaths.add(result.filePath);
 	return result.filePath;
 });
 
 ipcMain.handle("pdf:showItemInFolder", async (_evt, filePath) => {
-	if (typeof filePath === "string" && filePath.trim()) {
+	if (savedPdfPaths.has(filePath)) {
 		shell.showItemInFolder(filePath);
 	}
 });
