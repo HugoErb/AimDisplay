@@ -193,14 +193,14 @@
             <!-- Bouton d'ajout -->
             @if (!isEditMode){
               <div (click)="addCategoryGroup()"
-                class="inline-flex h-12 items-center justify-center rounded-md bg-prime-blue text-white hover:bg-hover-prime-blue px-5 text-base font-medium shadow transition-colors duration-250 cursor-pointer">
+                class="!-mt-4 inline-flex h-12 items-center justify-center rounded-md bg-prime-blue text-white hover:bg-hover-prime-blue px-5 text-base font-medium shadow transition-colors duration-250 cursor-pointer">
                 <iconify-icon [icon]="icons.ADD" class="text-[1.6rem] mr-3"></iconify-icon>
                 Ajouter une catégorie supplémentaire
               </div>
             }
 
             <!-- Information Notes -->
-            <div class="pt-6 border-t border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-400">
+            <div class="!-mt-4 pt-3 border-t border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-400">
               <app-info-note>Les champs marqués d'un astérisque (*) sont obligatoires.</app-info-note>
               @if (!isEditMode){
                 <app-info-note>
