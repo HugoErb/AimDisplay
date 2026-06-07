@@ -36,6 +36,10 @@ const groupEnterAnimation = trigger('groupEnter', [
 		style({ height: '0', opacity: 0, overflow: 'hidden', marginTop: '0' }),
 		animate('300ms ease-out', style({ height: '*', opacity: 1, overflow: 'hidden', marginTop: '*' })),
 	]),
+	transition(':leave', [
+		style({ overflow: 'hidden' }),
+		animate('250ms ease-in', style({ height: '0', opacity: 0, marginTop: '0' })),
+	]),
 ]);
 
 const seriesAnimation = trigger('seriesExpand', [
@@ -182,6 +186,12 @@ export class CreationShooterComponent {
 		const newGroup = this.createCategoryGroup();
 		this.animatedGroups.add(newGroup);
 		this.categoryGroups.push(newGroup);
+	}
+
+	removeCategoryGroup(index: number): void {
+		if (this.isEditMode || index <= 0 || this.categoryGroups.length <= 1) return;
+		const [removedGroup] = this.categoryGroups.splice(index, 1);
+		if (removedGroup) this.animatedGroups.delete(removedGroup);
 	}
 
 	/**

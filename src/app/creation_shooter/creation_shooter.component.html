@@ -73,7 +73,17 @@
             <!-- Catégorie et scores du tireur dans la compétition -->
             @for (group of categoryGroups; track group; let i = $index) {
               <div [@groupEnter]="shouldAnimate(group)" class="space-y-4">
-                  <app-section-subtitle>Catégorie et scores du tireur dans la compétition @if (i > 0) {{{ i + 1 }}}</app-section-subtitle>
+                  <div class="flex items-center justify-start gap-2">
+                    <app-section-subtitle>Catégorie et scores du tireur dans la compétition @if (i > 0) {{{ i + 1 }}}</app-section-subtitle>
+                    @if (!isEditMode && i > 0) {
+                      <button type="button" (click)="removeCategoryGroup(i)"
+                        class="mb-3 ml-2 inline-flex h-9 w-9 cursor-pointer items-center justify-center rounded-md border border-gray-300 text-red-600 hover:bg-gray-200 dark:border-gray-600 dark:text-red-400 dark:hover:bg-gray-600 transition-colors duration-250"
+                        [attr.aria-label]="'Supprimer la catégorie supplémentaire ' + (i + 1)"
+                        [attr.title]="'Supprimer la catégorie supplémentaire ' + (i + 1)">
+                        <iconify-icon [icon]="icons.DELETE" class="text-[1.1rem]"></iconify-icon>
+                      </button>
+                    }
+                  </div>
                   <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                     <!-- Distance -->
                     <div class="flex flex-col space-y-1">
