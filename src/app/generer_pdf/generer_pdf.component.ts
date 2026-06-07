@@ -18,6 +18,9 @@ import { InfoCardComponent } from '../components/info-card/info-card.component';
 import { APP_ICONS } from '../constants/icons';
 import Swal from 'sweetalert2';
 
+type ShooterOption = Shooter & { fullName: string; name: string };
+type CompetitionOption = Competition | { id: number; name: string };
+
 @Component({
 	selector: 'app-generer-pdf',
 	standalone: true,
@@ -46,16 +49,28 @@ export class GenererPDFComponent {
 	//Variables de selection d'entité à exporter
 	selectedCompetition: Competition | null = null;
 	activateClubInfos: boolean = false;
-	selectedShooter: Shooter | null = null;
-	selectedShooterCompetition: Competition | null = null;
+	selectedShooter: ShooterOption | null = null;
+	selectedShooterCompetition: CompetitionOption | null = null;
 
 	// Variables de liste
-	competitions: any[] = [];
-	filteredCompetitions: any[] = [];
-	shooters: any[] = [];
-	filteredShooters: any[] = [];
+	competitions: Competition[] = [];
+	filteredCompetitions: CompetitionOption[] = [];
+	shooters: ShooterOption[] = [];
+	filteredShooters: ShooterOption[] = [];
 	competitionsByShooterKey: Record<string, Array<{ id: number; name: string }>> = {};
 	competitionsForSelectedShooter: Array<{ id: number; name: string }> = [];
+
+	private normalizeName(value: string = ''): string {
+		return value
+			.normalize('NFD')
+			.replace(/[\u0300-\u036f]/g, '')
+			.toLowerCase()
+			.trim();
+	}
+
+	private getShooterKey(shooter: Pick<Shooter, 'lastName' | 'firstName'>): string {
+		return `${this.normalizeName(shooter.lastName)}|${this.normalizeName(shooter.firstName)}`;
+	}
 
 	/**
 	 * Initialise le composant.
@@ -70,24 +85,19 @@ export class GenererPDFComponent {
 			]);
 
 			// 2) normalise & déduplique les tireurs (comme avant)
-			const normalize = (s: string = '') =>
-				s
-					.normalize('NFD')
-					.replace(/[\u0300-\u036f]/g, '')
-					.toLowerCase()
-					.trim();
-
-			const mappedShooters = (shootersRaw ?? []).map((s) => {
+			const mappedShooters: ShooterOption[] = (shootersRaw ?? []).map((s) => {
 				const last = (s.lastName ?? '').trim();
 				const first = (s.firstName ?? '').trim();
 				const fullName = `${last} ${first}`.replace(/\s+/g, ' ').trim();
 				return { ...s, lastName: last, firstName: first, fullName, name: fullName };
 			});
 
-			const dedup = mappedShooters.filter((shooter, idx, arr) => {
-				const key = normalize(shooter.fullName);
-				return idx === arr.findIndex((x) => normalize(x.fullName) === key);
-			});
+			const shootersByName = new Map<string, ShooterOption>();
+			for (const shooter of mappedShooters) {
+				const key = this.normalizeName(shooter.fullName);
+				if (!shootersByName.has(key)) shootersByName.set(key, shooter);
+			}
+			const dedup = Array.from(shootersByName.values());
 			dedup.sort((a, b) => a.fullName.localeCompare(b.fullName, 'fr', { sensitivity: 'base' }));
 			this.shooters = dedup;
 
@@ -95,11 +105,9 @@ export class GenererPDFComponent {
 			this.competitions = competitions ?? [];
 
 			// 4) construit la map tireur -> compétitions à partir des entries
-			const keyOf = (s: { lastName: string; firstName: string }) => `${normalize(s.lastName)}|${normalize(s.firstName)}`;
-
 			const compByKey = new Map<string, Map<number, string>>();
-			(entries ?? []).forEach((e: any) => {
-				const key = keyOf(e);
+			(entries ?? []).forEach((e) => {
+				const key = this.getShooterKey(e);
 				if (!compByKey.has(key)) compByKey.set(key, new Map<number, string>());
 				compByKey.get(key)!.set(e.competitionId, e.competitionName);
 			});
@@ -129,7 +137,7 @@ export class GenererPDFComponent {
 	/**
 	 * Met a jour la selection liee au tireur choisi.
 	 */
-	handleShooterChange(shooter: Shooter | null): void {
+	handleShooterChange(shooter: ShooterOption | null): void {
 		this.selectedShooter = shooter || null;
 		this.selectedShooterCompetition = null;
 
@@ -138,13 +146,7 @@ export class GenererPDFComponent {
 			return;
 		}
 
-		const normalize = (s: string = '') =>
-			s
-				.normalize('NFD')
-				.replace(/[\u0300-\u036f]/g, '')
-				.toLowerCase()
-				.trim();
-		const key = `${normalize(this.selectedShooter.lastName)}|${normalize(this.selectedShooter.firstName)}`;
+		const key = this.getShooterKey(this.selectedShooter);
 
 		this.competitionsForSelectedShooter = this.competitionsByShooterKey[key] || [];
 	}

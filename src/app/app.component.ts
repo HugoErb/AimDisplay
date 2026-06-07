@@ -35,7 +35,7 @@ export class AppComponent {
 		this.translate('fr');
 
 		// ----- DEEPLINK (Electron) -----
-		const api = (window as any).deeplink as { getInitial: () => Promise<string | null>; on: (cb: (u: string) => void) => void } | undefined;
+		const api = window.deeplink;
 
 		if (api) {
 			// App lancée par un lien (appli fermée)

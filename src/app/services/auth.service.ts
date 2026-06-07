@@ -104,7 +104,7 @@ export class AuthService implements OnDestroy {
 	 * @returns {Promise<void>}  Ne retourne rien en cas de succès.
 	 */
 	async signUp(email: string, password: string, displayName: string): Promise<void> {
-		const isElectron = !!(window as any).deeplink || !!(window as any).electronAPI?.isElectron;
+		const isElectron = !!window.deeplink || !!window.electronAPI?.isElectron;
 		const redirectTo = isElectron
 			? 'aimdisplay://auth-callback' // deep link Electron (déjà ajouté aux Redirect URLs)
 			: `${window.location.origin}/login`; // fallback web

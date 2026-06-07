@@ -55,7 +55,7 @@ export class ForgotPasswordComponent {
 	 * @returns {boolean} `true` si l’app tourne dans Electron, sinon `false`.
 	 */
 	isRunningInElectron(): boolean {
-		if ((window as any).electronAPI?.isElectron === true) return true;
+		if (window.electronAPI?.isElectron === true) return true;
 		return /\bElectron\b/i.test(navigator.userAgent);
 	}
 }

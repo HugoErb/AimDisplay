@@ -39,7 +39,7 @@ export class SplashScreenComponent implements OnInit {
 			return;
 		}
 
-		const api: any = (window as any).deeplink;
+		const api = window.deeplink;
 
 		// Lancement en parallèle des tâches de démarrage
 		try {
@@ -124,7 +124,7 @@ export class SplashScreenComponent implements OnInit {
 
 		setTimeout(async () => {
 			// 1) tenter d'appliquer MAJ maintenant (si dispo, l'app redémarre ici)
-			const api: any = (window as any).deeplink;
+			const api = window.deeplink;
 			const res = await api?.applyUpdateNow?.();
 			if (res === 'restarting') return;
 
