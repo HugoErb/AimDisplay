@@ -2,7 +2,7 @@
 -- PostgreSQL database dump
 --
 
-\restrict DMfaIrXQDx32lLuKJpfotprFLRb20FBMNPmNLDapfmvnZlfsgbn2DLsGELbb9Jh
+\restrict dHRyjNFV6RsKx8a2BwXBB3A8aReBu9wDKlHn5cmIUyezaTeQoaoIYyQ7fnTUTQB
 
 -- Dumped from database version 17.6
 -- Dumped by pg_dump version 18.3
@@ -512,7 +512,11 @@ CREATE POLICY "Competition: update own" ON public.competitions FOR UPDATE USING 
 -- Name: shooters Shooter: insert own; Type: POLICY; Schema: public; Owner: -
 --
 
-CREATE POLICY "Shooter: insert own" ON public.shooters FOR INSERT WITH CHECK ((user_id = auth.uid()));
+CREATE POLICY "Shooter: insert own" ON public.shooters FOR INSERT TO authenticated WITH CHECK (((user_id = auth.uid()) AND (EXISTS ( SELECT 1
+   FROM public.clubs
+  WHERE ((clubs.id = shooters.club_id) AND (clubs.user_id = auth.uid())))) AND (EXISTS ( SELECT 1
+   FROM public.competitions
+  WHERE ((competitions.id = shooters.competition_id) AND (competitions.user_id = auth.uid()))))));
 
 
 --
@@ -526,7 +530,11 @@ CREATE POLICY "Shooter: select own" ON public.shooters FOR SELECT USING ((user_i
 -- Name: shooters Shooter: update own; Type: POLICY; Schema: public; Owner: -
 --
 
-CREATE POLICY "Shooter: update own" ON public.shooters FOR UPDATE USING ((user_id = auth.uid())) WITH CHECK ((user_id = auth.uid()));
+CREATE POLICY "Shooter: update own" ON public.shooters FOR UPDATE TO authenticated USING ((user_id = auth.uid())) WITH CHECK (((user_id = auth.uid()) AND (EXISTS ( SELECT 1
+   FROM public.clubs
+  WHERE ((clubs.id = shooters.club_id) AND (clubs.user_id = auth.uid())))) AND (EXISTS ( SELECT 1
+   FROM public.competitions
+  WHERE ((competitions.id = shooters.competition_id) AND (competitions.user_id = auth.uid()))))));
 
 
 --
@@ -596,5 +604,5 @@ ALTER TABLE public.weapons ENABLE ROW LEVEL SECURITY;
 -- PostgreSQL database dump complete
 --
 
-\unrestrict DMfaIrXQDx32lLuKJpfotprFLRb20FBMNPmNLDapfmvnZlfsgbn2DLsGELbb9Jh
+\unrestrict dHRyjNFV6RsKx8a2BwXBB3A8aReBu9wDKlHn5cmIUyezaTeQoaoIYyQ7fnTUTQB
 
