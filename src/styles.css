@@ -316,6 +316,24 @@
 	}
 
 	/* Style de la barre de défilement horizontale des tableaux */
+	.p-datatable-filter-overlay .p-multiselect,
+	.p-datatable-filter-overlay .p-multiselect-overlay,
+	.p-datatable-filter-overlay .p-multiselect-list-container {
+		width: max-content !important;
+		min-width: 12rem !important;
+		max-width: min(32rem, calc(100vw - 2rem)) !important;
+	}
+	.p-datatable-filter-overlay .p-multiselect-option {
+		min-width: 0;
+		max-width: 100%;
+		align-items: flex-start;
+	}
+	.p-datatable-filter-overlay .p-multiselect-option > span {
+		min-width: 0;
+		white-space: normal;
+		overflow-wrap: anywhere;
+	}
+
 	.p-datatable-table-container {
 		scrollbar-width: thin;
 		scrollbar-color: #9ca3af transparent; /* gris + fond transparent */
