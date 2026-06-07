@@ -229,7 +229,8 @@ ipcMain.handle("updater:check", async () => {
 	updateDownloaded = false;
 	try {
 		// renvoie vite ; le téléchargement continue en fond si MAJ
-		await autoUpdater.checkForUpdates();
+		const result = await autoUpdater.checkForUpdates();
+		updateAvailable = Boolean(result?.isUpdateAvailable);
 		return { status: updateAvailable ? "available" : "none" };
 	} catch {
 		return { status: "error" };
@@ -240,19 +241,27 @@ ipcMain.handle("updater:applyNow", async () => {
 	if (isDev) return "noop";
 	if (!updateAvailable) return "none";
 
-	// si pas encore téléchargée, on attend ici
-	if (!updateDownloaded) {
-		await new Promise((resolve, reject) => {
-			autoUpdater.once("update-downloaded", resolve);
-			autoUpdater.once("error", reject);
-		});
-	}
+	try {
+		// si pas encore téléchargée, on attend ici
+		if (!updateDownloaded) {
+			await new Promise((resolve, reject) => {
+				autoUpdater.once("update-downloaded", resolve);
+				autoUpdater.once("error", reject);
+			});
+		}
 
-	if (!installing) {
-		installing = true;
-		autoUpdater.quitAndInstall(); // redémarre et installe une seule fois
+		if (!installing) {
+			installing = true;
+			autoUpdater.quitAndInstall(); // redémarre et installe une seule fois
+		}
+		return "restarting";
+	} catch (e) {
+		console.error("[updater] apply failed:", e);
+		updateAvailable = false;
+		updateDownloaded = false;
+		installing = false;
+		return "error";
 	}
-	return "restarting";
 });
 
 ipcMain.handle("app:getVersion", () => app.getVersion());
