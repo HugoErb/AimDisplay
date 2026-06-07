@@ -234,6 +234,7 @@ export class CommonService {
 		return true;
 
 		const mailData = this.createMailData(inputLabelMap);
+		void mailData;
 
 		// return new Promise((resolve, reject) => {
 		// 	this.mailService.sendMail(mailData).subscribe({

@@ -12,12 +12,6 @@ import { AppSectionSubtitleComponent } from '../components/section-subtitle/sect
 import { AppButtonComponent } from '../components/button/button.component';
 import { APP_ICONS } from '../constants/icons';
 
-declare global {
-	interface Window {
-		display?: { openRanking: (competitionId: string, competitionName: string) => Promise<void> };
-	}
-}
-
 @Component({
 	selector: 'app-display',
 	standalone: true,
@@ -32,8 +26,8 @@ export class DisplayComponent {
 	@ViewChildren('inputField', { read: ElementRef }) inputFields!: QueryList<ElementRef>;
 	public inputLabelMap = new Map<string, string>();
 	selectedCompetition: Competition | null = null;
-	competitions: any[] = [];
-	filteredCompetitions: any[] = [];
+	competitions: Competition[] = [];
+	filteredCompetitions: Competition[] = [];
 
 	/**
 	 * Initialise le composant.
@@ -55,9 +49,8 @@ export class DisplayComponent {
 	 * champs de saisie ont été réinitialisés en cas de succès.
 	 */
 	launchDisplay(): void {
-		const comp: any = this.selectedCompetition;
-		const id = comp?.id;
-		const name = (comp?.name ?? '').trim();
+		const id = this.selectedCompetition?.id;
+		const name = (this.selectedCompetition?.name ?? '').trim();
 
 		if (!id || !name) {
 			this.commonService.showSwalToast('Veuillez sélectionner une compétition.', 'error');

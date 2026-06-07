@@ -2,15 +2,6 @@
 import { inject } from '@angular/core';
 import { Router } from '@angular/router';
 
-declare global {
-	interface Window {
-		deeplink?: {
-			on(cb: (url: string) => void): void;
-			getInitial(): Promise<string | null>;
-		};
-	}
-}
-
 /**
  * Extrait les jetons depuis une URL de lien profond.
  */

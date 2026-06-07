@@ -101,7 +101,7 @@ export class CreationClubComponent {
 		const areInputsValid = await this.commonService.validateInputs(this.inputLabelMap, false);
 		if (areInputsValid) {
 			try {
-				const club = await this.supabase.createClub({
+				await this.supabase.createClub({
 					name: this.clubName,
 					city: this.clubCity,
 				});

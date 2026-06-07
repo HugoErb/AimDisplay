@@ -80,11 +80,9 @@ export class ModificationShooterComponent {
 	 * Événement déclenché lors du redimensionnement de la fenêtre.
 	 * Met à jour dynamiquement le nombre de lignes par page en fonction
 	 * de la hauteur de la fenêtre actuelle.
-	 *
-	 * @param {Event} event - L'événement de redimensionnement (resize) de la fenêtre.
 	 */
-	@HostListener('window:resize', ['$event'])
-	async onResize(event: any) {
+	@HostListener('window:resize')
+	async onResize() {
 		this.nbRowsPerPage = await this.commonService.getNbRowsPerPage();
 	}
 

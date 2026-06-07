@@ -95,32 +95,42 @@ export class ShooterPDFGenerator {
 		return { count, avg, median, best: sorted[sorted.length - 1], worst: sorted[0] };
 	}
 
+	private toNum(v: number | string | null | undefined): number {
+		return v == null || Number.isNaN(Number(v)) ? 0 : Number(v);
+	}
+
+	private totalSeries(r: Shooter, count: 4 | 6 | 8): number {
+		const scores = [
+			r.scoreSerie1,
+			r.scoreSerie2,
+			r.scoreSerie3,
+			r.scoreSerie4,
+			r.scoreSerie5,
+			r.scoreSerie6,
+			r.scoreSerie7,
+			r.scoreSerie8,
+		];
+		return scores.slice(0, count).reduce((total, score) => total + this.toNum(score), 0);
+	}
+
 	/**
 	 * Calcule le total des quatre premieres series.
 	 */
 	private total4(r: Shooter): number {
-		const toNum = (v: any) => (v == null || Number.isNaN(Number(v)) ? 0 : Number(v));
-		return toNum(r.scoreSerie1) + toNum(r.scoreSerie2) + toNum(r.scoreSerie3) + toNum(r.scoreSerie4);
+		return this.totalSeries(r, 4);
 	}
 	/**
 	 * Calcule le total des six premieres series.
 	 */
 	private total6(r: Shooter): number {
-		const toNum = (v: any) => (v == null || Number.isNaN(Number(v)) ? 0 : Number(v));
-		return (
-			toNum(r.scoreSerie1) + toNum(r.scoreSerie2) + toNum(r.scoreSerie3) + toNum(r.scoreSerie4) + toNum(r.scoreSerie5) + toNum(r.scoreSerie6)
-		);
+		return this.totalSeries(r, 6);
 	}
 
 	/**
 	 * Calcule le total des huit series.
 	 */
 	private total8(r: Shooter): number {
-		const toNum = (v: any) => (v == null || Number.isNaN(Number(v)) ? 0 : Number(v));
-		return (
-			toNum(r.scoreSerie1) + toNum(r.scoreSerie2) + toNum(r.scoreSerie3) + toNum(r.scoreSerie4) +
-			toNum(r.scoreSerie5) + toNum(r.scoreSerie6) + toNum(r.scoreSerie7) + toNum(r.scoreSerie8)
-		);
+		return this.totalSeries(r, 8);
 	}
 
 	/**

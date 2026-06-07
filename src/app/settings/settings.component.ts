@@ -15,13 +15,6 @@ import { APP_ICONS } from '../constants/icons';
 // Modals
 type ModalKey = 'renameClub' | 'changePassword';
 
-declare global {
-	interface Window {
-		appInfo?: { getVersion: () => Promise<string> };
-	}
-}
-
-
 @Component({
 	selector: 'app-settings',
 	standalone: true,
