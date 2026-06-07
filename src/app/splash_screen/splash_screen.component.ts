@@ -125,8 +125,12 @@ export class SplashScreenComponent implements OnInit {
 		setTimeout(async () => {
 			// 1) tenter d'appliquer MAJ maintenant (si dispo, l'app redémarre ici)
 			const api = window.deeplink;
-			const res = await api?.applyUpdateNow?.();
-			if (res === 'restarting') return;
+			try {
+				const res = await api?.applyUpdateNow?.();
+				if (res === 'restarting') return;
+			} catch (e) {
+				console.warn('[splash] apply update failed', e);
+			}
 
 			// 2) sinon on redirige
 			const target = this.isLogged ? 'home' : 'login';
