@@ -1,5 +1,5 @@
 // electron/main.js
-const { app, BrowserWindow, ipcMain, shell, Menu, dialog } = require("electron");
+const { app, BrowserWindow, ipcMain, shell, Menu, dialog, screen, globalShortcut } = require("electron");
 const path = require("path");
 const fs = require("fs");
 const { autoUpdater } = require("electron-updater");
@@ -15,6 +15,48 @@ const shouldOpenDevtools = isDev && process.env.ELECTRON_OPEN_DEVTOOLS === "1";
 let win = null;
 let pendingDeepLink = null;
 const savedPdfPaths = createSavedPathRegistry();
+
+function getPrimaryDisplayBounds() {
+	return screen.getPrimaryDisplay().workAreaSize;
+}
+
+async function waitForStableRender(browserWindow) {
+	if (!browserWindow || browserWindow.isDestroyed()) return;
+	await browserWindow.webContents.executeJavaScript(`
+		Promise.resolve(document.fonts?.ready).then(() => new Promise((resolve) => {
+			requestAnimationFrame(() => requestAnimationFrame(resolve));
+		}))
+	`);
+}
+
+async function captureWindowScreenshot(browserWindow) {
+	if (!browserWindow || browserWindow.isDestroyed()) return null;
+
+	await waitForStableRender(browserWindow);
+	const image = await browserWindow.webContents.capturePage();
+	const result = await dialog.showSaveDialog(browserWindow, {
+		title: "Enregistrer la capture",
+		defaultPath: `aim-display-${new Date().toISOString().replace(/[:.]/g, "-")}.png`,
+		filters: [{ name: "Image PNG", extensions: ["png"] }],
+	});
+
+	if (result.canceled || !result.filePath) return null;
+	await fs.promises.writeFile(result.filePath, image.toPNG());
+	return result.filePath;
+}
+
+function registerScreenshotShortcut() {
+	const registered = globalShortcut.register("F9", () => {
+		const targetWindow = BrowserWindow.getFocusedWindow() || win;
+		captureWindowScreenshot(targetWindow).catch((error) => {
+			console.error("[screenshot] capture failed:", error);
+		});
+	});
+
+	if (!registered) {
+		console.warn("[screenshot] raccourci F9 non enregistre");
+	}
+}
 
 // ---------- utils ----------
 /**
@@ -59,10 +101,11 @@ function hardenExternalNavigation(browserWindow) {
  */
 function openRankingWindow(competitionId, competitionName) {
 	const route = `/ranking/${encodeURIComponent(competitionId)}/${encodeURIComponent(competitionName)}`;
+	const { width, height } = getPrimaryDisplayBounds();
 
 	const winDisplay = new BrowserWindow({
-		width: 1280,
-		height: 800,
+		width,
+		height,
 		show: false,
 		autoHideMenuBar: true,
 		webPreferences: {
@@ -103,9 +146,11 @@ function openRankingWindow(competitionId, competitionName) {
  * Cree et configure la fenetre principale Electron.
  */
 function createWindow() {
+	const { width, height } = getPrimaryDisplayBounds();
+
 	win = new BrowserWindow({
-		width: 1280,
-		height: 800,
+		width,
+		height,
 		show: false,
 		autoHideMenuBar: true, // cache la barre de menu
 		webPreferences: {
@@ -287,6 +332,7 @@ app.whenReady().then(() => {
 	console.log("[protocol]", SCHEME, ok ? "registered" : "failed");
 
 	createWindow();
+	registerScreenshotShortcut();
 
 	// check MAJ au lancement (prod uniquement)
 	if (!isDev) {
@@ -306,6 +352,9 @@ app.whenReady().then(() => {
 
 app.on("window-all-closed", () => {
 	if (process.platform !== "darwin") app.quit();
+});
+app.on("will-quit", () => {
+	globalShortcut.unregisterAll();
 });
 app.on("activate", () => {
 	if (BrowserWindow.getAllWindows().length === 0) createWindow();
