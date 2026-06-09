@@ -294,7 +294,7 @@ app.whenReady().then(() => {
 		autoUpdater.logger.transports.file.level = "info";
 		autoUpdater.autoDownload = true;
 		autoUpdater.autoInstallOnAppQuit = false; // on contrôle le moment d'installation
-		autoUpdater.setFeedURL({ provider: "generic", url: "https://hugoeribon.fr/assets/aim-display/" });
+		autoUpdater.setFeedURL({ provider: "github", owner: "HugoErb", repo: "AimDisplay" });
 	}
 
 	// 1er démarrage via lien (Windows)
