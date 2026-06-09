@@ -1,7 +1,7 @@
 {
   "name": "aim-display",
   "productName": "Aim Display",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "main": "electron/main.js",
   "author": {
     "name": "Hugo Eribon",
@@ -48,8 +48,9 @@
       "artifactName": "Aim-Display-Setup-${version}.${ext}",
       "publish": [
         {
-          "provider": "generic",
-          "url": "https://hugoeribon.fr/assets/aim-display/"
+          "provider": "github",
+          "owner": "HugoErb",
+          "repo": "AimDisplay"
         }
       ]
     },
