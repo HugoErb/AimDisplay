@@ -152,37 +152,6 @@
 		font-size: 0.925rem !important;
 	}
 
-	/* Dark mode des inputs PrimeNG sauf sur login/register/mdp oublié */
-	:where(.dark)
-		:is(.p-inputtext, .p-autocomplete-input, .p-inputnumber-input, .p-datepicker-input, textarea):not(.no-connect-root *) {
-		background-color: rgba(255, 255, 255, 0.05) !important;
-		border: 1px solid #6b7280 !important;
-		color: #ffffff !important;
-	}
-
-	/* Focus des inputs PrimeNG en dark mode */
-	:where(.dark)
-		:is(.p-inputtext, .p-autocomplete-input, .p-inputnumber-input, .p-datepicker-input, textarea):not(.no-connect-root *):focus {
-		border-color: var(--color-prime-blue) !important;
-		box-shadow: 0 0 0 1px var(--color-prime-blue) !important; /* Anneau net et pro */
-		background-color: rgba(255, 255, 255, 0.08) !important;
-	}
-
-	/* Dark mode des boutons sur la droite des inputs PrimeNG */
-	:where(.dark) .p-autocomplete-dropdown,
-	:where(.dark) .p-datepicker-dropdown,
-	:where(.dark) .p-dropdown-trigger {
-		border: 1px #374151 solid !important; /* gray-700 */
-		border-left: none !important;
-	}
-
-	/* Dark mode des placeholders des inputs PrimeNG */
-	:where(.dark) .p-inputtext::placeholder,
-	:where(.dark) .p-autocomplete::placeholder,
-	:where(.dark) .p-datepicker::placeholder,
-	:where(.dark) textarea::placeholder {
-		color: #7e8594 !important;
-	}
 
 	/* Réduction de la taille des dropdown des listes déroulantes */
 	.p-overlay {
@@ -225,6 +194,101 @@
 	.p-autocomplete-dropdown,
 	.p-datepicker-dropdown {
 		width: 53px !important;
+	}
+
+	/* ===== Dark mode des inputs PrimeNG (sauf login/register/mdp oublié) =====
+	   Style "champ rempli" : fond légèrement enfoncé, bordure fine translucide,
+	   boutons intégrés au champ et anneau de focus bleu doux sur tout le groupe. */
+	.dark {
+		--field-dark-bg: #1b1e1d;
+		--field-dark-bg-hover: #1f2221;
+		--field-dark-border: rgba(255, 255, 255, 0.08);
+		--field-dark-border-hover: rgba(255, 255, 255, 0.18);
+		--field-dark-divider: rgba(255, 255, 255, 0.06);
+		--field-dark-text: #e5e7eb;
+		--field-dark-placeholder: #7d8482;
+		--field-dark-icon: #8b9290;
+		--field-dark-ring: 0 0 0 3px rgba(59, 128, 246, 0.2);
+	}
+
+	.dark :is(.p-inputtext, .p-autocomplete-input, .p-inputnumber-input, .p-datepicker-input, textarea):not(.no-connect-root *) {
+		background-color: var(--field-dark-bg) !important;
+		border: 1px solid var(--field-dark-border) !important;
+		color: var(--field-dark-text) !important;
+		box-shadow: none !important;
+	}
+
+	/* Survol : toute la zone du champ (input + bouton) réagit */
+	.dark :is(.p-autocomplete, .p-datepicker, .p-inputnumber):not(.no-connect-root *):hover :is(.p-inputtext, .p-autocomplete-dropdown, .p-datepicker-dropdown),
+	.dark :is(.p-inputtext, textarea):not(.no-connect-root *):hover {
+		border-color: var(--field-dark-border-hover) !important;
+	}
+
+	/* Focus : bordure bleue sur l'input et le bouton, anneau porté par le conteneur */
+	.dark :is(.p-inputtext, .p-autocomplete-input, .p-inputnumber-input, .p-datepicker-input, textarea):not(.no-connect-root *):focus,
+	.dark :is(.p-autocomplete, .p-datepicker):not(.no-connect-root *):focus-within :is(.p-inputtext, .p-autocomplete-dropdown, .p-datepicker-dropdown) {
+		border-color: var(--color-prime-blue) !important;
+		background-color: var(--field-dark-bg-hover) !important;
+	}
+	.dark :is(.p-inputtext, textarea):not(.no-connect-root *):focus {
+		box-shadow: var(--field-dark-ring) !important;
+	}
+	.dark :is(.p-autocomplete, .p-datepicker, .p-inputnumber):not(.no-connect-root *):focus-within {
+		border-radius: 6px;
+		box-shadow: var(--field-dark-ring);
+	}
+	.dark :is(.p-autocomplete, .p-datepicker, .p-inputnumber):not(.no-connect-root *) .p-inputtext:focus {
+		box-shadow: none !important;
+	}
+
+	/* Boutons à droite des inputs : intégrés au champ, séparés par un fin trait */
+	.dark :is(.p-autocomplete-dropdown, .p-datepicker-dropdown, .p-dropdown-trigger):not(.no-connect-root *) {
+		background-color: var(--field-dark-bg) !important;
+		border: 1px solid var(--field-dark-border) !important;
+		border-left: none !important;
+		color: var(--field-dark-icon) !important;
+	}
+	/* Le bord droit de l'input sert de séparateur discret avec le bouton, quel que soit l'état
+	   (classe doublée pour passer devant les règles hover/focus) */
+	.dark :is(.p-autocomplete, .p-datepicker):not(.no-connect-root *) .p-inputtext.p-inputtext {
+		border-right-color: var(--field-dark-divider) !important;
+	}
+	.dark .p-inputnumber-button-group {
+		border-left: 1px solid var(--field-dark-divider);
+	}
+	.dark .p-inputnumber-button:not(.no-connect-root *) {
+		background-color: transparent !important;
+		border: none !important;
+		color: var(--field-dark-icon) !important;
+	}
+	.dark :is(.p-autocomplete-dropdown, .p-datepicker-dropdown, .p-dropdown-trigger, .p-inputnumber-button):not(.no-connect-root *):hover {
+		background-color: rgba(255, 255, 255, 0.05) !important;
+		color: #ffffff !important;
+	}
+	.dark :is(.p-autocomplete, .p-datepicker, .p-inputnumber):focus-within :is(.p-autocomplete-dropdown, .p-datepicker-dropdown, .p-inputnumber-button) {
+		color: var(--color-prime-blue-light) !important;
+	}
+
+	/* Les pages login/register/mdp oublié restent claires : on neutralise les tokens dark de PrimeNG
+	   (valeurs du thème Aura clair) */
+	.dark .no-connect-root .p-inputtext {
+		background-color: #ffffff !important;
+		border-color: #cbd5e1 !important;
+		color: #334155 !important;
+	}
+	.dark .no-connect-root .p-inputtext:enabled:hover {
+		border-color: #94a3b8 !important;
+	}
+	.dark .no-connect-root .p-inputtext:enabled:focus {
+		border-color: var(--color-prime-blue) !important;
+	}
+	.dark .no-connect-root .p-inputtext::placeholder {
+		color: #64748b !important;
+	}
+
+	/* Placeholders */
+	.dark :is(.p-inputtext, textarea)::placeholder {
+		color: var(--field-dark-placeholder) !important;
 	}
 
 	/* Gestion des tableaux */
@@ -309,8 +373,8 @@
 		transition: all;
 	}
 
-	/* Les champs des filtres de tableaux gardent le style clair */
-	.p-datatable-filter-overlay :is(.p-inputtext, .p-inputnumber-input, .p-datepicker-input) {
+	/* Texte sombre dans les champs des filtres de tableaux en mode clair */
+	html:not(.dark) .p-datatable-filter-overlay :is(.p-inputtext, .p-inputnumber-input, .p-datepicker-input) {
 		color: #111827 !important; /* gray-900 */
 		caret-color: #111827 !important;
 	}
