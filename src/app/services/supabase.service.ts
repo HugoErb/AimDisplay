@@ -119,10 +119,11 @@ export class SupabaseService {
 
 	/**
 	 * Crée un tireur (une ligne par combinaison distance/arme/catégorie).
+	 * Toutes les lignes sont insérées en une seule requête : soit tout est créé, soit rien.
 	 *
-	 * @param payload Données de base + catégories/séries pour UNE combinaison.
-	 * Les scores non renseignés sont traités comme 0.
-	 * @return Le tireur créé tel qu’enregistré en base.
+	 * @param payload Données de base + une entrée par combinaison distance/arme/catégorie.
+	 * Les scores non renseignés sont enregistrés à NULL.
+	 * @return Les lignes créées telles qu’enregistrées en base.
 	 */
 	async createShooter(payload: {
 		shooterLastName: string;
@@ -130,11 +131,13 @@ export class SupabaseService {
 		shooterEmail?: string | null;
 		competitionId: number;
 		clubId: number;
-		distanceId: number;
-		weaponId: number;
-		categoryId: number;
 		paraClassification?: string | null;
-		seriesScores?: Array<number | null>; // Scores de la série [1..8]
+		entries: Array<{
+			distanceId: number;
+			weaponId: number;
+			categoryId: number;
+			seriesScores?: Array<number | null>; // Scores de la série [1..8]
+		}>;
 	}) {
 		try {
 			const { data: authUserData, error: authUserError } = await this.supabase.auth.getUser();
@@ -149,30 +152,21 @@ export class SupabaseService {
 				throw new Error('Nom et prénom obligatoires.');
 			}
 
-			const { competitionId, clubId, distanceId, weaponId, categoryId } = payload;
+			const { competitionId, clubId } = payload;
 
 			if (!competitionId) throw new Error('competition_id manquant.');
 			if (!clubId) throw new Error('club_id manquant.');
-			if (!distanceId) throw new Error('distance_id manquant.');
-			if (!weaponId) throw new Error('weapon_id manquant.');
-			if (!categoryId) throw new Error('category_id manquant.');
-
-			const allSeriesScores = payload.seriesScores ?? [];
+			if (!payload.entries?.length) throw new Error('Aucune catégorie renseignée.');
 
 			const getNumericOrNull = (value: any): number | null => (typeof value === 'number' && isFinite(value) ? value : null);
 
-			const serie1ScoreValue = getNumericOrNull(allSeriesScores[0]);
-			const serie2ScoreValue = getNumericOrNull(allSeriesScores[1]);
-			const serie3ScoreValue = getNumericOrNull(allSeriesScores[2]);
-			const serie4ScoreValue = getNumericOrNull(allSeriesScores[3]);
-			const serie5ScoreValue = getNumericOrNull(allSeriesScores[4]);
-			const serie6ScoreValue = getNumericOrNull(allSeriesScores[5]);
-			const serie7ScoreValue = getNumericOrNull(allSeriesScores[6]);
-			const serie8ScoreValue = getNumericOrNull(allSeriesScores[7]);
+			const rows = payload.entries.map(({ distanceId, weaponId, categoryId, seriesScores }) => {
+				if (!distanceId) throw new Error('distance_id manquant.');
+				if (!weaponId) throw new Error('weapon_id manquant.');
+				if (!categoryId) throw new Error('category_id manquant.');
 
-			const { data: insertedShooter, error: insertError } = await this.supabase
-				.from('shooters')
-				.insert({
+				const allSeriesScores = seriesScores ?? [];
+				return {
 					last_name: trimmedLastName,
 					first_name: trimmedFirstName,
 					email: payload.shooterEmail ?? null,
@@ -182,21 +176,22 @@ export class SupabaseService {
 					weapon_id: weaponId,
 					category_id: categoryId,
 					para_classification: payload.paraClassification ?? null,
-					serie1_score: serie1ScoreValue,
-					serie2_score: serie2ScoreValue,
-					serie3_score: serie3ScoreValue,
-					serie4_score: serie4ScoreValue,
-					serie5_score: serie5ScoreValue,
-					serie6_score: serie6ScoreValue,
-					serie7_score: serie7ScoreValue,
-					serie8_score: serie8ScoreValue,
+					serie1_score: getNumericOrNull(allSeriesScores[0]),
+					serie2_score: getNumericOrNull(allSeriesScores[1]),
+					serie3_score: getNumericOrNull(allSeriesScores[2]),
+					serie4_score: getNumericOrNull(allSeriesScores[3]),
+					serie5_score: getNumericOrNull(allSeriesScores[4]),
+					serie6_score: getNumericOrNull(allSeriesScores[5]),
+					serie7_score: getNumericOrNull(allSeriesScores[6]),
+					serie8_score: getNumericOrNull(allSeriesScores[7]),
 					user_id: currentUser.id,
-				})
-				.select('*')
-				.single();
+				};
+			});
+
+			const { data: insertedShooters, error: insertError } = await this.supabase.from('shooters').insert(rows).select('*');
 
 			if (insertError) throw new Error(insertError.message);
-			return insertedShooter;
+			return insertedShooters ?? [];
 		} catch (error: any) {
 			this.zone.run(() => this.commonService.showSwalToast(error?.message ?? 'Erreur lors de la création du tireur', 'error'));
 			throw error;
@@ -745,9 +740,9 @@ export class SupabaseService {
 	 * Supprime définitivement un club en base de données (table `clubs`) via Supabase.
 	 *
 	 * @param {number} clubId - Identifiant unique du club à supprimer.
-	 * @returns {Promise<void>} Une promesse résolue une fois la suppression effectuée.
+	 * @returns {Promise<boolean>} `true` si le club a bien été supprimé, sinon `false`.
 	 */
-	async deleteClubById(clubId: number): Promise<void> {
+	async deleteClubById(clubId: number): Promise<boolean> {
 		try {
 			const { data: authUserData, error: authUserError } = await this.supabase.auth.getUser();
 			if (authUserError) throw new Error(authUserError.message);
@@ -765,8 +760,10 @@ export class SupabaseService {
 				deleted ? 'Club supprimé !' : 'Aucun club supprimé (non trouvé ou déjà supprimé).',
 				deleted ? 'success' : 'info'
 			);
+			return deleted;
 		} catch (err: any) {
 			this.commonService.showSwalToast(err?.message ?? 'Erreur lors de la suppression du club', 'error');
+			return false;
 		}
 	}
 
@@ -774,9 +771,9 @@ export class SupabaseService {
 	 * Supprime définitivement une competition en base de données (table `competitions`) via Supabase.
 	 *
 	 * @param {number} competitionId - Identifiant unique de la competition à supprimer.
-	 * @returns {Promise<void>} Une promesse résolue une fois la suppression effectuée.
+	 * @returns {Promise<boolean>} `true` si la competition a bien été supprimée, sinon `false`.
 	 */
-	async deleteCompetitionById(competitionId: number): Promise<void> {
+	async deleteCompetitionById(competitionId: number): Promise<boolean> {
 		try {
 			const { data: authUserData, error: authUserError } = await this.supabase.auth.getUser();
 			if (authUserError) throw new Error(authUserError.message);
@@ -794,8 +791,10 @@ export class SupabaseService {
 				deleted ? 'Competition supprimée !' : 'Aucune competition supprimée (non trouvé ou déjà supprimé).',
 				deleted ? 'success' : 'info'
 			);
+			return deleted;
 		} catch (err: any) {
 			this.commonService.showSwalToast(err?.message ?? 'Erreur lors de la suppression de la competition', 'error');
+			return false;
 		}
 	}
 
@@ -803,9 +802,9 @@ export class SupabaseService {
 	 * Supprime définitivement un tireur en base de données (table `shooters`) via Supabase.
 	 *
 	 * @param {number} shooterId - Identifiant unique du tireur à supprimer.
-	 * @returns {Promise<void>} Une promesse résolue une fois la suppression effectuée.
+	 * @returns {Promise<boolean>} `true` si le tireur a bien été supprimé, sinon `false`.
 	 */
-	async deleteShooterById(shooterId: number): Promise<void> {
+	async deleteShooterById(shooterId: number): Promise<boolean> {
 		try {
 			const { data: authUserData, error: authUserError } = await this.supabase.auth.getUser();
 			if (authUserError) throw new Error(authUserError.message);
@@ -822,8 +821,10 @@ export class SupabaseService {
 				deleted ? 'Tireur supprimé !' : 'Aucun tireur supprimé (non trouvé ou déjà supprimé).',
 				deleted ? 'success' : 'info'
 			);
+			return deleted;
 		} catch (err: any) {
 			this.commonService.showSwalToast(err?.message ?? 'Erreur lors de la suppression du tireur', 'error');
+			return false;
 		}
 	}
 
@@ -993,8 +994,6 @@ export class SupabaseService {
 			endDate?: string | Date | null;
 			price?: number | null;
 			supCategoryPrice?: number | null;
-			place?: string | null;
-			clubId?: number | null;
 		}
 	): Promise<Competition> {
 		try {
@@ -1025,8 +1024,6 @@ export class SupabaseService {
 			if (payload.endDate !== undefined) updates.end_date = toYmd(payload.endDate);
 			if (payload.price !== undefined) updates.price = payload.price ?? null;
 			if (payload.supCategoryPrice !== undefined) updates.sup_category_price = payload.supCategoryPrice ?? null;
-			if (payload.place !== undefined) updates.place = payload.place?.trim() ?? null;
-			if (payload.clubId !== undefined) updates.club_id = payload.clubId ?? null;
 
 			// Au moins un champ à modifier ?
 			if (Object.keys(updates).length === 0) {

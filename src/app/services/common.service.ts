@@ -63,7 +63,7 @@ export class CommonService {
 	 * Affiche une boîte de dialogue SweetAlert2 personnalisée et renvoie le résultat.
 	 *
 	 * @param {string} title - Le titre affiché dans la boîte de dialogue.
-	 * @param {string} message - Le message HTML à afficher dans le corps de la boîte.
+	 * @param {string} message - Le message (texte brut, échappé ; les retours à la ligne sont conservés).
 	 * @param {'success' | 'error' | 'warning' | 'info' | 'question'} [icon='success'] -
 	 *        L'icône à afficher. Peut être 'success', 'error', 'warning', 'info' ou 'question'.
 	 * @param {boolean} showCancelButton - Affiche ou non le bouton Annuler.
@@ -78,7 +78,7 @@ export class CommonService {
 		return Swal.fire({
 			icon: icon,
 			title: `<div class="text-2xl">${this.escapeHtml(title)}</div>`,
-			html: `${message}`,
+			html: this.escapeHtml(message).replaceAll('\n', '<br>'),
 			showCancelButton: showCancelButton,
 			showConfirmButton: true,
 			confirmButtonText: 'Valider',
@@ -99,7 +99,7 @@ export class CommonService {
 	showSwalLoading(title: string, message: string) {
 		Swal.fire({
 			title: `<div class="text-2xl">${this.escapeHtml(title)}</div>`,
-			html: message,
+			html: this.escapeHtml(message),
 			allowOutsideClick: false,
 			didOpen: () => {
 				Swal.showLoading();
@@ -108,10 +108,14 @@ export class CommonService {
 	}
 
 	/**
-	 * Ferme la fenêtre SweetAlert2 actuelle.
+	 * Ferme la fenêtre de chargement SweetAlert2 si elle est toujours affichée.
+	 * SweetAlert2 n'affiche qu'une fenêtre à la fois : si un toast ou une alerte a remplacé
+	 * le chargement entre-temps, on ne la ferme pas pour que le message reste visible.
 	 */
 	closeSwalLoading() {
-		Swal.close();
+		if (Swal.isVisible() && Swal.isLoading()) {
+			Swal.close();
+		}
 	}
 
 	/**
@@ -309,11 +313,11 @@ export class CommonService {
 	 * Pour cela la méthode évalue si l'email n'est pas jetable et si un enregistrement MX valide est présent.
 	 *
 	 * @param {string} email L'adresse email à vérifier.
-	 * @returns {Promise<boolean>} La promesse renvoie `true` si l'email n'est pas jetable et a un enregistrement MX valide,
-	 *                             sinon `false`. Renvoie également `false` en cas d'erreur lors de la requête à l'API.
+	 * @returns {Promise<boolean | null>} La promesse renvoie `true` si l'email n'est pas jetable et a un enregistrement MX valide,
+	 *                             sinon `false`. Renvoie `null` si l'API n'a pas pu répondre (vérification impossible).
 	 */
-	async checkEmailValidity(email: string): Promise<boolean> {
-		const url = `https://api.mailcheck.ai/email/${email}`;
+	async checkEmailValidity(email: string): Promise<boolean | null> {
+		const url = `https://api.mailcheck.ai/email/${encodeURIComponent(email)}`;
 		try {
 			const response = await axios.get<EmailValidityResponse>(url);
 			// Retourne false si l'email est jetable ou si mx est false
@@ -327,7 +331,7 @@ export class CommonService {
 			} else {
 				console.error("Erreur inattendue lors de la vérification de l'email.");
 			}
-			return false;
+			return null;
 		}
 	}
 
@@ -385,6 +389,9 @@ export class CommonService {
 				}
 
 				const isEmailValid = await this.checkEmailValidity(trimmedValue);
+
+				// API indisponible : on ne bloque pas l'utilisateur (l'adresse sera confirmée par e-mail)
+				if (isEmailValid === null) continue;
 				this.emailValidationCache.set(trimmedValue, isEmailValid);
 
 				if (!isEmailValid) {

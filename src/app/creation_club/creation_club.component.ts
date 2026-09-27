@@ -53,9 +53,11 @@ export class CreationClubComponent {
 		// Si édition demandée, on valide les données passées via state
 		if (isEditRequested) {
 			const id = Number(idParam);
-			const clubFromState = history.state?.club as Club | undefined;
+			const stateClub = history.state?.club as Club | undefined;
+			// Sans state (ex. rechargement de la page), on relit le club en base
+			const clubFromState = stateClub?.id === id ? stateClub : (await this.supabase.getClubs().catch(() => [])).find((c) => c.id === id);
 
-			if (clubFromState && Number.isFinite(id) && clubFromState.id === id) {
+			if (clubFromState && Number.isFinite(id)) {
 				this.isEditMode = true;
 				this.editingClub = clubFromState;
 				this.clubName = clubFromState.name ?? '';
@@ -96,19 +98,25 @@ export class CreationClubComponent {
 	 * champs de saisie ont été réinitialisés en cas de succès.
 	 */
 	async createClub(): Promise<void> {
-		this.isSaving = false;
-		this.inputLabelMap = this.commonService.getInputLabelMap(this.inputFields);
-		const areInputsValid = await this.commonService.validateInputs(this.inputLabelMap, false);
-		if (areInputsValid) {
-			try {
-				await this.supabase.createClub({
-					name: this.clubName,
-					city: this.clubCity,
-				});
-				this.commonService.resetInputFields(this.inputFields);
-			} finally {
-				this.isSaving = false;
-			}
+		this.isSaving = true;
+		try {
+			this.inputLabelMap = this.commonService.getInputLabelMap(this.inputFields);
+			const areInputsValid = await this.commonService.validateInputs(this.inputLabelMap, false);
+			if (!areInputsValid) return;
+
+			await this.supabase.createClub({
+				name: this.clubName,
+				city: this.clubCity,
+			});
+
+			// Reset de la vue ET des modèles (sinon les anciennes valeurs seraient réutilisées)
+			this.commonService.resetInputFields(this.inputFields);
+			this.clubName = '';
+			this.clubCity = '';
+		} catch {
+			// Erreur déjà affichée par le service
+		} finally {
+			this.isSaving = false;
 		}
 	}
 

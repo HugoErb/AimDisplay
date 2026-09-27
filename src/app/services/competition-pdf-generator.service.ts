@@ -191,9 +191,16 @@ export class CompetitionPDFGenerator {
 		const body: Cell[][] = [headerRow];
 		const v = (n: any) => (n == null || Number.isNaN(Number(n)) ? '' : Number(n).toFixed(2));
 
+		// Rangs : les tireurs à égalité parfaite (total et toutes les séries) partagent le même rang
+		const ranks: number[] = [];
+		rows.forEach((s, idx) => {
+			const prev = rows[idx - 1];
+			ranks.push(prev && this.compareShooters(prev, s, showSix, showEight, false) === 0 ? ranks[idx - 1] : idx + 1);
+		});
+
 		rows.forEach((s, idx) => {
 			const base: Cell[] = [
-				{ text: String(idx + 1), style: 'td', alignment: 'center' },
+				{ text: String(ranks[idx]), style: 'td', alignment: 'center' },
 				{ text: s.lastName ?? '', style: 'td' },
 				{ text: s.firstName ?? '', style: 'td' },
 				{ text: s.clubName ?? '', style: 'td' },
@@ -308,8 +315,8 @@ export class CompetitionPDFGenerator {
 		return useSix ? [...base, toNum(s.scoreSerie5), toNum(s.scoreSerie6)] : base;
 	}
 
-	/** Tri: total desc → dernière série desc → ... → première série desc → Nom/Prénom asc */
-	private compareShooters(a: any, b: any, useSix: boolean, useEight = false): number {
+	/** Tri: total desc → dernière série desc → ... → première série desc → Nom/Prénom asc (si `byName`) */
+	private compareShooters(a: any, b: any, useSix: boolean, useEight = false, byName = true): number {
 		// 1) Total
 		const byTotal = (b?.totalScore ?? 0) - (a?.totalScore ?? 0);
 		if (byTotal !== 0) return byTotal;
@@ -321,6 +328,8 @@ export class CompetitionPDFGenerator {
 			const diff = (sb[i] ?? 0) - (sa[i] ?? 0); // desc
 			if (diff !== 0) return diff;
 		}
+
+		if (!byName) return 0;
 
 		// 3) Alphabétique (Nom puis Prénom)
 		const ln = (a.lastName || '').localeCompare(b.lastName || '', 'fr', { sensitivity: 'base' });

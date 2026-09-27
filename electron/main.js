@@ -1,6 +1,7 @@
 // electron/main.js
 const { app, BrowserWindow, ipcMain, shell, Menu, dialog } = require("electron");
 const path = require("path");
+const { pathToFileURL } = require("url");
 const fs = require("fs");
 const { autoUpdater } = require("electron-updater");
 const log = require("electron-log");
@@ -48,9 +49,20 @@ function resolveIndexFile() {
  * Force les liens externes a s'ouvrir hors de la fenetre Electron.
  */
 function hardenExternalNavigation(browserWindow) {
-	const handler = createExternalNavigationHandler((url) => shell.openExternal(url));
+	const handler = createExternalNavigationHandler((url) => shell.openExternal(url), isAppUrl);
 	browserWindow.webContents.setWindowOpenHandler(({ url }) => handler.handleWindowOpen(url));
 	browserWindow.webContents.on("will-navigate", (event, url) => handler.handleWillNavigate(event, url));
+}
+
+/**
+ * Indique si une URL appartient a l'application (dev-server en dev, index.html local en prod).
+ */
+function isAppUrl(url) {
+	if (isDev) return url.startsWith("http://localhost:4200");
+	const indexFile = resolveIndexFile();
+	if (!indexFile) return false;
+	const appUrl = pathToFileURL(indexFile).href;
+	return url === appUrl || url.startsWith(`${appUrl}#`) || url.startsWith(`${appUrl}?`);
 }
 
 // ---------- display window ----------
@@ -136,12 +148,6 @@ function createWindow() {
 			win.loadFile(indexFile).catch(console.error);
 		}
 	}
-
-	win.webContents.once("did-finish-load", () => {
-		if (isDev) {
-			win.webContents.send("updater:status", "none"); // débloque le splash en dev
-		}
-	});
 
 	win.once("ready-to-show", () => {
 		win.show();
@@ -237,17 +243,49 @@ ipcMain.handle("updater:check", async () => {
 	}
 });
 
+const UPDATE_DOWNLOAD_TIMEOUT_MS = 60_000;
+
+/**
+ * Attend la fin du telechargement de la MAJ. Resout `true` si telechargee, `false` si delai depasse,
+ * rejette en cas d'erreur. Les ecouteurs sont toujours retires.
+ */
+function waitForUpdateDownload(timeoutMs) {
+	return new Promise((resolve, reject) => {
+		const cleanup = () => {
+			clearTimeout(timer);
+			autoUpdater.removeListener("update-downloaded", onDownloaded);
+			autoUpdater.removeListener("error", onError);
+		};
+		const onDownloaded = () => {
+			cleanup();
+			resolve(true);
+		};
+		const onError = (e) => {
+			cleanup();
+			reject(e);
+		};
+		const timer = setTimeout(() => {
+			cleanup();
+			resolve(false);
+		}, timeoutMs);
+		autoUpdater.on("update-downloaded", onDownloaded);
+		autoUpdater.on("error", onError);
+	});
+}
+
 ipcMain.handle("updater:applyNow", async () => {
 	if (isDev) return "noop";
 	if (!updateAvailable) return "none";
 
 	try {
-		// si pas encore téléchargée, on attend ici
+		// si pas encore téléchargée, on attend ici (avec un délai maximal pour ne pas bloquer le démarrage)
 		if (!updateDownloaded) {
-			await new Promise((resolve, reject) => {
-				autoUpdater.once("update-downloaded", resolve);
-				autoUpdater.once("error", reject);
-			});
+			const downloaded = await waitForUpdateDownload(UPDATE_DOWNLOAD_TIMEOUT_MS);
+			if (!downloaded) {
+				// Téléchargement trop long : on laisse démarrer l'app, la MAJ s'installera à la fermeture
+				autoUpdater.autoInstallOnAppQuit = true;
+				return "timeout";
+			}
 		}
 
 		if (!installing) {

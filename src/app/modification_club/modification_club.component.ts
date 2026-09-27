@@ -92,7 +92,8 @@ export class ModificationClubComponent {
 	async deleteClub(club: Club): Promise<void> {
 		try {
 			// Suppression en BDD
-			await this.supabase.deleteClubById(club.id);
+			const deleted = await this.supabase.deleteClubById(club.id);
+			if (!deleted) return;
 
 			// Mise à jour locale du tableau (évite un appel réseau)
 			this.clubs = this.clubs.filter((c) => c.id !== club.id);

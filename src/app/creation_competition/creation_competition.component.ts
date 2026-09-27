@@ -55,9 +55,12 @@ export class CreationCompetitionComponent {
 
 		if (isEditRequested) {
 			const id = Number(idParam);
-			const competitionFromState = history.state?.competition as Competition | undefined;
+			const stateCompetition = history.state?.competition as Competition | undefined;
+			// Sans state (ex. rechargement de la page), on relit la compétition en base
+			const competitionFromState =
+				stateCompetition?.id === id ? stateCompetition : (await this.supabase.getCompetitions().catch(() => [])).find((c) => c.id === id);
 
-			if (competitionFromState && Number.isFinite(id) && competitionFromState.id === id) {
+			if (competitionFromState && Number.isFinite(id)) {
 				this.isEditMode = true;
 				this.editingCompetition = competitionFromState;
 
@@ -145,17 +148,32 @@ export class CreationCompetitionComponent {
 		try {
 			this.inputLabelMap = this.commonService.getInputLabelMap(this.inputFields);
 			const areInputsValid = await this.commonService.validateInputs(this.inputLabelMap, false);
-			if (areInputsValid) {
-				const { startISO, endISO } = this.parseDateRange(this.competitionDate);
-				await this.supabase.createCompetition({
-					name: this.competitionName,
-					startDate: startISO,
-					endDate: endISO,
-					prixInscription: this.prixInscription ?? 0,
-					prixCategSup: this.prixCategSup ?? 0,
-				});
-				this.commonService.resetInputFields(this.inputFields);
+			if (!areInputsValid) return;
+
+			let range: { startISO: string; endISO: string };
+			try {
+				range = this.parseDateRange(this.competitionDate);
+			} catch (e: any) {
+				this.commonService.showSwalToast(e?.message ?? 'Date de compétition invalide.', 'error');
+				return;
 			}
+
+			await this.supabase.createCompetition({
+				name: this.competitionName,
+				startDate: range.startISO,
+				endDate: range.endISO,
+				prixInscription: this.prixInscription ?? 0,
+				prixCategSup: this.prixCategSup ?? 0,
+			});
+
+			// Reset de la vue ET des modèles (sinon les anciennes valeurs seraient réutilisées)
+			this.commonService.resetInputFields(this.inputFields);
+			this.competitionName = '';
+			this.competitionDate = '';
+			this.prixInscription = null;
+			this.prixCategSup = null;
+		} catch {
+			// Erreur déjà affichée par le service
 		} finally {
 			this.isSaving = false;
 		}
@@ -168,6 +186,17 @@ export class CreationCompetitionComponent {
 	 * @return Objet contenant startISO et endISO au format 'YYYY-MM-DD'.
 	 */
 	private parseDateRange(input: string | Date | (Date | null)[]): { startISO: string; endISO: string } {
+		const range = this.parseDateRangeUnchecked(input);
+		if (range.startISO > range.endISO) {
+			throw new Error('La date de début doit précéder la date de fin.');
+		}
+		return range;
+	}
+
+	/**
+	 * Convertit une entrée de date en début et fin au format 'YYYY-MM-DD', sans contrôle de l'ordre.
+	 */
+	private parseDateRangeUnchecked(input: string | Date | (Date | null)[]): { startISO: string; endISO: string } {
 		if (Array.isArray(input)) {
 			const [a, b] = input;
 			if (a instanceof Date && b instanceof Date) {
@@ -213,7 +242,12 @@ export class CreationCompetitionComponent {
 		const mm = parseInt(match[2], 10);
 		let year = parseInt(match[3], 10);
 		if (match[3].length === 2) year = year >= 70 ? 1900 + year : 2000 + year;
-		return new Date(year, mm - 1, dd);
+		const date = new Date(year, mm - 1, dd);
+		// Rejette les dates inexistantes (ex. 31/02) que Date décalerait silencieusement
+		if (date.getFullYear() !== year || date.getMonth() !== mm - 1 || date.getDate() !== dd) {
+			throw new Error(`Date invalide: "${stringDate}".`);
+		}
+		return date;
 	}
 
 	/**
@@ -249,7 +283,7 @@ export class CreationCompetitionComponent {
 
 		try {
 			if (!this.editingCompetition?.id) {
-				throw new Error('Aucun club sélectionné pour la modification.');
+				throw new Error('Aucune compétition sélectionnée pour la modification.');
 			}
 
 			// Récupération de la date de début et de fin de compétition

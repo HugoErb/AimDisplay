@@ -62,8 +62,10 @@ export class LoginComponent {
 			this.inputLabelMap = this.commonService.getInputLabelMap(this.inputFields);
 			const areInputsValid = await this.commonService.validateInputs(this.inputLabelMap, false);
 			if (areInputsValid) {
+				// Calculée avant la connexion : la navigation déclenchée par l'auth peut changer l'URL courante
+				const target = this.authService.getPostLoginUrl();
 				await this.authService.signIn(this.email.trim(), this.password);
-				this.commonService.redirectTo('home');
+				await this.router.navigateByUrl(target);
 			}
 		} finally {
 			this.isLoading = false;

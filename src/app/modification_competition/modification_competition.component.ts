@@ -99,7 +99,8 @@ export class ModificationCompetitionComponent {
 	async deleteCompetition(competition: Competition): Promise<void> {
 		try {
 			// Suppression en BDD
-			await this.supabase.deleteCompetitionById(competition.id);
+			const deleted = await this.supabase.deleteCompetitionById(competition.id);
+			if (!deleted) return;
 
 			// Mise à jour locale du tableau (évite un appel réseau)
 			this.competitions = this.competitions.filter((c) => c.id !== competition.id);

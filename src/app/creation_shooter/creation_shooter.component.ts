@@ -24,6 +24,8 @@ import { InfoNoteComponent } from '../components/info-note/info-note.component';
 import { AppButtonComponent } from '../components/button/button.component';
 import { APP_ICONS } from '../constants/icons';
 
+type ResolvedCategoryGroup = { group: CategoryGroup; distanceId: number; weaponId: number; categoryId: number };
+
 const pageEnterAnimation = trigger('pageEnter', [
 	transition(':enter', [
 		style({ transform: 'translateY(-50px)', opacity: 0 }),
@@ -141,11 +143,14 @@ export class CreationShooterComponent {
 			if (isEditRequested) {
 				const id = Number(idParam);
 				const shooterFromState = history.state?.shooter as Shooter | undefined;
+				// Sans state (ex. rechargement de la page), on relit le tireur en base
+				const shooter =
+					shooterFromState?.id === id ? shooterFromState : (await this.supabase.getShooters()).find((s) => s.id === id);
 
-				if (shooterFromState && Number.isFinite(id) && shooterFromState.id === id) {
+				if (shooter && Number.isFinite(id)) {
 					this.isEditMode = true;
-					this.editingShooter = shooterFromState;
-					this.fillFormFromShooter(shooterFromState); // préremplit tous les champs
+					this.editingShooter = shooter;
+					this.fillFormFromShooter(shooter); // préremplit tous les champs
 				} else {
 					this.commonService.showSwalToast("Impossible d'ouvrir l'édition du tireur (données manquantes).", 'error');
 					this.location.back();
@@ -251,10 +256,7 @@ export class CreationShooterComponent {
 			// Validation des champs
 			this.inputLabelMap = this.commonService.getInputLabelMap(this.inputFields);
 			const areInputsValid = await this.commonService.validateInputs(this.inputLabelMap, false);
-			if (!areInputsValid) {
-				this.isSaving = false;
-				return;
-			}
+			if (!areInputsValid) return;
 
 			const last = (this.shooterLastName ?? '').trim();
 			const first = (this.shooterFirstName ?? '').trim();
@@ -263,16 +265,24 @@ export class CreationShooterComponent {
 			const competitionId = this.getIdFromSelection(this.shooterCompetitionName, this.competitions);
 			const clubId = this.getIdFromSelection(this.shooterClubName, this.clubs);
 
+			if (!competitionId || !clubId) {
+				this.commonService.showSwalToast('Veuillez sélectionner un club et une compétition valides.', 'error');
+				return;
+			}
+
+			const resolvedGroups = this.resolveCategoryGroups();
+			if (!resolvedGroups) return;
+
 			// Vérification anti-doublon pour CHAQUE groupe demandé
-			for (const group of this.categoryGroups) {
+			for (const { group, distanceId, weaponId, categoryId } of resolvedGroups) {
 				const exists = await this.supabase.existsShooterDuplicate({
 					lastName: last,
 					firstName: first,
 					clubId,
 					competitionId,
-					categoryId: group.shooterCategory?.id,
-					distanceId: group.shooterDistance?.id,
-					weaponId: group.shooterWeapon?.id,
+					categoryId,
+					distanceId,
+					weaponId,
 					paraClassification: this.getNullableParaClassification(),
 					currentId: this.isEditMode ? this.editingShooter?.id : undefined,
 				});
@@ -281,90 +291,109 @@ export class CreationShooterComponent {
 					const result = await this.commonService.showSwal(
 						'Tireur déjà inscrit',
 						`${last} ${first} est déjà inscrit(e) dans la compétition "${competitionName}" dans la catégorie ` +
-							`${group.shooterDistance?.name} - ${group.shooterWeapon?.name} - ${group.shooterCategory?.name}.` +
+							`${this.getSelectionName(group.shooterDistance)} - ${this.getSelectionName(group.shooterWeapon)} - ${this.getSelectionName(group.shooterCategory)}.` +
 							`\n\nVoulez-vous tout de même enregistrer ce nouveau tireur ?`,
 						'warning',
 						true
 					);
 
-					if (!result.isConfirmed) {
-						this.isSaving = false;
-						return;
-					}
+					if (!result.isConfirmed) return;
 				}
 			}
 
 			if (this.isEditMode) {
 				await this.updateShooter();
 			} else {
-				await this.createShooter();
+				await this.createShooter(competitionId, clubId, resolvedGroups);
 			}
 		} catch (e: any) {
-			this.commonService.showSwalToast(e?.message ?? 'Erreur lors de la validation du formuulaire du tireur', 'error');
+			this.commonService.showSwalToast(e?.message ?? 'Erreur lors de la validation du formulaire du tireur', 'error');
 		} finally {
 			this.isSaving = false;
 		}
 	}
 
 	/**
+	 * Résout les identifiants distance/arme/catégorie de chaque groupe du formulaire.
+	 * Les groupes entièrement vides sont ignorés ; un groupe partiellement rempli bloque l'enregistrement.
+	 *
+	 * @returns La liste des groupes complets, ou `null` (avec message affiché) si la saisie est invalide.
+	 */
+	private resolveCategoryGroups(): ResolvedCategoryGroup[] | null {
+		const resolved: ResolvedCategoryGroup[] = [];
+
+		for (const group of this.categoryGroups) {
+			const distanceId = this.getIdFromSelection(group.shooterDistance, this.distances);
+			const weaponId = this.getIdFromSelection(group.shooterWeapon, this.weapons);
+			const categoryId = this.getIdFromSelection(group.shooterCategory, this.shooterCategories);
+
+			const isEmpty = !group.shooterDistance && !group.shooterWeapon && !group.shooterCategory;
+			if (isEmpty) continue;
+
+			if (!distanceId || !weaponId || !categoryId) {
+				this.commonService.showSwalToast('Veuillez sélectionner une distance, une arme et une catégorie valides.', 'error');
+				return null;
+			}
+
+			resolved.push({ group, distanceId, weaponId, categoryId });
+		}
+
+		if (!resolved.length) {
+			this.commonService.showSwalToast('Veuillez renseigner au moins une catégorie.', 'error');
+			return null;
+		}
+
+		return resolved;
+	}
+
+	/**
+	 * Retourne le libellé d'une sélection d'autocomplétion (objet ou chaîne).
+	 */
+	private getSelectionName(selection: any): string {
+		return typeof selection === 'string' ? selection : selection?.name ?? '';
+	}
+
+	/**
 	 * Permet de créer un tireur à partir des données récoltées dans les champs du formulaire.
-	 * Une phase de validation des inputs est d'abord lancée, puis, si la création réussit,
+	 * Toutes les catégories sont enregistrées en une seule fois ; si la création réussit,
 	 * on réinitialise les champs de saisie.
 	 *
 	 * @returns {Promise<void>} Une promesse qui se résout une fois que la création est effectuée et que les
 	 * champs de saisie ont été réinitialisés en cas de succès.
 	 */
-	async createShooter(): Promise<void> {
+	async createShooter(competitionId: number, clubId: number, resolvedGroups: ResolvedCategoryGroup[]): Promise<void> {
 		try {
-			// Données communes (en-tête du formulaire)
-			const shooterLastName = this.shooterLastName?.trim();
-			const shooterFirstName = this.shooterFirstName?.trim();
-			const shooterEmail = (this.shooterEmail ?? '').trim() || null;
-			const competitionId = this.getIdFromSelection(this.shooterCompetitionName, this.competitions);
-			const clubId = this.getIdFromSelection(this.shooterClubName, this.clubs);
+			const entries = resolvedGroups.map(({ group, distanceId, weaponId, categoryId }) => ({
+				distanceId,
+				weaponId,
+				categoryId,
+				seriesScores: [
+					group.scoreSerie1 ?? null,
+					group.scoreSerie2 ?? null,
+					group.scoreSerie3 ?? null,
+					group.scoreSerie4 ?? null,
+					group.hasSixSeries || group.hasEightSeries ? group.scoreSerie5 ?? null : null,
+					group.hasSixSeries || group.hasEightSeries ? group.scoreSerie6 ?? null : null,
+					group.hasEightSeries ? group.scoreSerie7 ?? null : null,
+					group.hasEightSeries ? group.scoreSerie8 ?? null : null,
+				],
+			}));
 
-			if (!competitionId || !clubId) {
-				this.commonService.showSwalToast('Veuillez sélectionner un club et une compétition valides.', 'error');
-				return;
-			}
+			await this.supabase.createShooter({
+				shooterLastName: this.shooterLastName,
+				shooterFirstName: this.shooterFirstName,
+				shooterEmail: (this.shooterEmail ?? '').trim() || null,
+				competitionId,
+				clubId,
+				paraClassification: this.getNullableParaClassification(),
+				entries,
+			});
 
-			// Pour chaque catégorie remplie => une création en BDD
-			for (const categoryGroup of this.categoryGroups) {
-				const distanceId = this.getIdFromSelection(categoryGroup.shooterDistance, this.distances);
-				const weaponId = this.getIdFromSelection(categoryGroup.shooterWeapon, this.weapons);
-				const categoryId = this.getIdFromSelection(categoryGroup.shooterCategory, this.shooterCategories);
-
-				// Sauter les groupes incomplets (évite une erreur côté service)
-				if (!distanceId || !weaponId || !categoryId) continue;
-
-				// Scores des séries
-				const seriesScores: (number | null)[] = [
-					categoryGroup.scoreSerie1 != null ? categoryGroup.scoreSerie1 : null,
-					categoryGroup.scoreSerie2 != null ? categoryGroup.scoreSerie2 : null,
-					categoryGroup.scoreSerie3 != null ? categoryGroup.scoreSerie3 : null,
-					categoryGroup.scoreSerie4 != null ? categoryGroup.scoreSerie4 : null,
-					(categoryGroup.hasSixSeries || categoryGroup.hasEightSeries) ? (categoryGroup.scoreSerie5 != null ? categoryGroup.scoreSerie5 : null) : null,
-					(categoryGroup.hasSixSeries || categoryGroup.hasEightSeries) ? (categoryGroup.scoreSerie6 != null ? categoryGroup.scoreSerie6 : null) : null,
-					categoryGroup.hasEightSeries ? (categoryGroup.scoreSerie7 != null ? categoryGroup.scoreSerie7 : null) : null,
-					categoryGroup.hasEightSeries ? (categoryGroup.scoreSerie8 != null ? categoryGroup.scoreSerie8 : null) : null,
-				];
-
-				await this.supabase.createShooter({
-					shooterLastName,
-					shooterFirstName,
-					shooterEmail,
-					competitionId,
-					clubId,
-					distanceId,
-					weaponId,
-					categoryId,
-					paraClassification: this.getNullableParaClassification(),
-					seriesScores,
-				});
-			}
-
-			// Reset de tous les champs
+			// Reset de tous les champs (vue ET modèles, sinon les anciennes valeurs seraient réutilisées)
 			this.commonService.resetInputFields(this.inputFields);
+			this.shooterLastName = '';
+			this.shooterFirstName = '';
+			this.shooterEmail = '';
 			this.shooterCompetitionName = '';
 			this.shooterClubName = '';
 			this.shooterParaClassification = this.getDefaultParaClassification();
@@ -372,8 +401,8 @@ export class CreationShooterComponent {
 			this.categoryGroups = [this.createCategoryGroup()];
 
 			this.commonService.showSwalToast('Tireur créé avec succès.');
-		} catch (e: any) {
-			this.commonService.showSwalToast(e?.message ?? 'Erreur lors de la création du tireur', 'error');
+		} catch {
+			// Erreur déjà affichée par le service
 		}
 	}
 

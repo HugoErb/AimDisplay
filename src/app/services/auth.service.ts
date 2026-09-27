@@ -57,7 +57,7 @@ export class AuthService implements OnDestroy {
 						this.refreshAvatarUrl();
 					}
 					if (this.router.url.startsWith('/login')) {
-						this.commonService.redirectTo('home');
+						void this.router.navigateByUrl(this.getPostLoginUrl());
 					}
 				} else {
 					// Laisser passer /reset-password même sans session classique
@@ -87,6 +87,16 @@ export class AuthService implements OnDestroy {
 		if (!localStorage.getItem('theme')) {
 			localStorage.setItem('theme', this.themeService.getTheme());
 		}
+	}
+
+	/**
+	 * Retourne l'URL interne vers laquelle rediriger après connexion : le paramètre `redirect`
+	 * posé par le guard s'il désigne une route interne, sinon la page d'accueil.
+	 */
+	getPostLoginUrl(): string {
+		const redirect = this.router.parseUrl(this.router.url).queryParams['redirect'];
+		const isInternal = typeof redirect === 'string' && redirect.startsWith('/') && !redirect.startsWith('//') && !redirect.startsWith('/login');
+		return isInternal ? redirect : '/home';
 	}
 
 	/**
@@ -315,7 +325,7 @@ export class AuthService implements OnDestroy {
 		if (!user) throw new Error('Aucun utilisateur connecté');
 		const { error } = await this.supabase.auth.updateUser({ data: { displayName } });
 		if (error) {
-			this.commonService.showSwalToast('Échec mise à jour nom du nom de club', 'error');
+			this.commonService.showSwalToast('Échec de la mise à jour du nom de club', 'error');
 			throw error;
 		}
 		this.commonService.showSwalToast('Nom du club mis à jour !');

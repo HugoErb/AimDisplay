@@ -50,7 +50,8 @@ export class ResetPasswordComponent {
 				await this.authService.setRecoverySession(access, refresh);
 				await this.router.navigate([], { queryParams: {}, replaceUrl: true });
 			} catch {
-				// laisse l’utilisateur sur place avec un message d’erreur
+				// Lien invalide ou expiré : on masque le formulaire et on propose de renvoyer un lien
+				this.tokenPresent = false;
 			}
 		} else {
 			// NE PAS rediriger immédiatement

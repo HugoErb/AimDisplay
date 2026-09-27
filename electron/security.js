@@ -7,8 +7,9 @@ function isHttpUrl(url) {
 
 /**
  * Cree les gestionnaires de navigation externe Electron.
+ * Toute navigation hors de l'application est bloquee ; les liens http(s) sont ouverts dans le navigateur.
  */
-function createExternalNavigationHandler(openExternal) {
+function createExternalNavigationHandler(openExternal, isAppUrl = () => false) {
 	return {
 		/**
 		 * Traite les demandes d'ouverture de nouvelle fenetre.
@@ -23,8 +24,9 @@ function createExternalNavigationHandler(openExternal) {
 		 * Traite les navigations initiees dans la fenetre courante.
 		 */
 		handleWillNavigate(event, url) {
+			if (isAppUrl(url)) return;
+			event.preventDefault();
 			if (isHttpUrl(url)) {
-				event.preventDefault();
 				openExternal(url);
 			}
 		},

@@ -1,5 +1,5 @@
 // src/app/deep-link.bootstrap.ts
-import { inject } from '@angular/core';
+import { inject, NgZone } from '@angular/core';
 import { Router } from '@angular/router';
 
 /**
@@ -18,7 +18,7 @@ function extractTokens(u: string) {
 /**
  * Configure la prise en charge des liens profonds.
  */
-export function setupDeepLink(router = inject(Router)) {
+export function setupDeepLink(router = inject(Router), zone = inject(NgZone)) {
 	/**
 	 * Traite une URL de lien profond.
 	 */
@@ -41,15 +41,14 @@ export function setupDeepLink(router = inject(Router)) {
 		}
 	}
 
+	// Les callbacks IPC arrivent hors de la zone Angular : on y revient pour que l'UI se mette à jour
+	const run = (u: string) => zone.run(() => void handle(u));
+
 	// Démarrage à froid (appli lancée par lien)
 	window.deeplink?.getInitial().then((u) => {
-		if (u) {
-			void handle(u);
-		}
+		if (u) run(u);
 	});
 
 	// Appli déjà ouverte (second clic)
-	window.deeplink?.on((u) => {
-		void handle(u);
-	});
+	window.deeplink?.on(run);
 }

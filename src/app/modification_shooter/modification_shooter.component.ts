@@ -27,11 +27,7 @@ export class ModificationShooterComponent {
 	shooters: Shooter[] = [];
 	nbRowsPerPage: number = 1;
 	isFetchingData: boolean = false;
-	distanceOptions = [
-		{ label: '10 mètres', value: '10 mètres' },
-		{ label: '25 mètres', value: '25 mètres' },
-		{ label: '50 mètres', value: '50 mètres' },
-	];
+	distanceOptions: { label: string; value: string }[] = [];
 
 	weaponOptions: { label: string; value: string }[] = [];
 	categoryOptions: { label: string; value: string }[] = [];
@@ -44,14 +40,16 @@ export class ModificationShooterComponent {
 	async ngOnInit(): Promise<void> {
 		try {
 			this.isFetchingData = true;
-			const [shooters, clubs, competitions, categories] = await Promise.all([
+			const [shooters, clubs, competitions, categories, distances] = await Promise.all([
 				this.supabase.getShooters(),
 				this.supabase.getClubs(),
 				this.supabase.getCompetitions(),
 				this.supabase.getCategories(),
+				this.supabase.getDistances(),
 			]);
 
 			this.shooters = shooters;
+			this.distanceOptions = this.buildFilterOptions(distances.map((distance) => distance.name));
 			this.weaponOptions = this.buildFilterOptions(this.shooters.map((shooter) => shooter.weapon));
 			this.categoryOptions = categories.flatMap((category) =>
 				this.buildFilterOptions(
@@ -145,7 +143,8 @@ export class ModificationShooterComponent {
 	async deleteShooter(shooter: Shooter): Promise<void> {
 		try {
 			// Suppression en BDD
-			await this.supabase.deleteShooterById(shooter.id);
+			const deleted = await this.supabase.deleteShooterById(shooter.id);
+			if (!deleted) return;
 
 			// Mise à jour locale du tableau (évite un appel réseau)
 			this.shooters = this.shooters.filter((s) => s.id !== shooter.id);

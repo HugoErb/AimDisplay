@@ -140,10 +140,10 @@ export class SettingsComponent {
 	 * Charge le fichier d'avatar selectionne par l'utilisateur.
 	 */
 	async onAvatarFileSelected(event: Event): Promise<void> {
-		this.isLoading = true;
 		const input = event.target as HTMLInputElement;
 		const file = input.files?.[0];
 		if (!file) return;
+		this.isLoading = true;
 		try {
 			const url = await this.authService.uploadAvatar(file);
 			this.avatarUrl = url;
@@ -191,9 +191,13 @@ export class SettingsComponent {
 			this.inputLabelMap = this.commonService.getInputLabelMap(clubFieldList);
 			const areInputsValid = await this.commonService.validateInputs(this.inputLabelMap, true);
 			if (areInputsValid) {
-				this.authService.setUserDisplayName(this.newClubName);
-				this.newClubName = '';
-				this.closeModal('renameClub');
+				try {
+					await this.authService.setUserDisplayName(this.newClubName);
+					this.newClubName = '';
+					this.closeModal('renameClub');
+				} catch (error) {
+					console.error('Erreur lors du renommage du club :', error);
+				}
 			}
 		} finally {
 			this.isLoading = false;

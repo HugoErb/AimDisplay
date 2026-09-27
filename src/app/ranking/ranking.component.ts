@@ -38,10 +38,14 @@ export class RankingComponent implements OnInit, OnDestroy {
 	private rotationTimerId: number | undefined; // Timer de rotation (identifiant du setTimeout)
 	private destroyed = false; // Indique que le composant est détruit (empêche les ticks ultérieurs)
 	private isRefreshing = false; // Évite les rafraîchissements concurrents
+	private retryTimerId: number | undefined; // Timer de nouvelle tentative (erreur réseau ou compétition vide)
+	private hasLoadedOnce = false; // Vrai après le premier chargement réussi (pilote l'affichage des toasts)
+	private readonly RETRY_MS = 15_000; // Délai avant de retenter un chargement
 
 	// --- Pré-chargement du prochain cycle ---
 	private isPrefetching = false; // évite de lancer plusieurs précharges en //
 	private prefetchedPages: RankingPage[] | null = null; // pages reconstruites en avance
+	private prefetchedShooters: Shooter[] | null = null; // tireurs correspondant aux pages préchargées
 	private prefetchRun = 0; // id de course pour invalider les anciennes promesses
 
 	// --- Barre de progression ---
@@ -86,20 +90,6 @@ export class RankingComponent implements OnInit, OnDestroy {
 		this.competitionId = id;
 		this.competitionTitle = nameParam.trim();
 
-		const shooters = await this.supabase.getShootersByCompetitionId(this.competitionId);
-		this.allShooters = shooters;
-		this.pages = this.buildPagesFromShooters(shooters);
-
-		if (!this.pages.length) {
-			this.commonService.showSwalToast('Aucun tireur pour cette compétition.', 'info');
-			return;
-		}
-
-		// Affiche la première page de la première discipline.
-		this.showPage(0);
-		// Lance la rotation (infinie).
-		this.startRotation();
-
 		// plein écran: écoute les changements du navigateur
 		document.addEventListener('fullscreenchange', this.fsChangeHandler);
 		document.addEventListener('webkitfullscreenchange', this.fsChangeHandler as any);
@@ -107,6 +97,10 @@ export class RankingComponent implements OnInit, OnDestroy {
 		document.addEventListener('MSFullscreenChange', this.fsChangeHandler as any);
 		this.updateFullscreenState();
 		window.addEventListener('mousemove', this.onGlobalMouseMove, { passive: true });
+
+		// Premier chargement puis rotation (infinie). En cas d'erreur ou de compétition
+		// encore vide, refreshAndRestart retente automatiquement.
+		await this.refreshAndRestart();
 	}
 
 	/**
@@ -115,6 +109,7 @@ export class RankingComponent implements OnInit, OnDestroy {
 	ngOnDestroy(): void {
 		this.destroyed = true;
 		this.stopRotation();
+		clearTimeout(this.retryTimerId);
 		clearTimeout(this.hideFsBtnTimer);
 		document.removeEventListener('fullscreenchange', this.fsChangeHandler);
 		document.removeEventListener('webkitfullscreenchange', this.fsChangeHandler as any);
@@ -212,8 +207,12 @@ export class RankingComponent implements OnInit, OnDestroy {
 				return (a.id ?? 0) - (b.id ?? 0);
 			});
 
-			// Numérotation des rangs (après tie-break)
-			enriched.forEach((s, i) => (s.rank = i + 1));
+			// Numérotation des rangs (après tie-break) : les tireurs à égalité parfaite
+			// (total et toutes les séries) partagent le même rang, l'ordre alpha ne sert qu'à l'affichage
+			enriched.forEach((s, i) => {
+				const prev = enriched[i - 1];
+				s.rank = prev && this.isPerfectTie(prev, s) ? prev.rank : i + 1;
+			});
 
 			// Pagination par tranches
 			const rowsPerPage = this.getNbRowsPerPage();
@@ -237,6 +236,17 @@ export class RankingComponent implements OnInit, OnDestroy {
 		}
 
 		return pages;
+	}
+
+	/**
+	 * Indique si deux tireurs sont à égalité parfaite (total et toutes les séries identiques).
+	 */
+	private isPerfectTie(a: Shooter, b: Shooter): boolean {
+		if (this.toNum(a.totalScore) !== this.toNum(b.totalScore)) return false;
+		for (let i = 1; i <= 8; i++) {
+			if (this.serieScore(a, i as 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8) !== this.serieScore(b, i as 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8)) return false;
+		}
+		return true;
 	}
 
 	/**
@@ -307,8 +317,9 @@ export class RankingComponent implements OnInit, OnDestroy {
 		const curKey = cur ? `${cur.distance}|||${cur.weapon}|||${cur.category}` : null;
 		const curPageInGroup = cur?.pageNumberInGroup ?? 1;
 
-		// Stoppe la rotation + la barre, rebâtit les pages
+		// Stoppe la rotation + la barre, rebâtit les pages (la précharge utilisait l'ancienne pagination)
 		this.stopRotation();
+		this.invalidatePrefetch();
 		this.pages = this.buildPagesFromShooters(this.allShooters);
 
 		// Essaie de retrouver la même discipline…
@@ -396,8 +407,12 @@ export class RankingComponent implements OnInit, OnDestroy {
 			const pages = this.buildPagesFromShooters(shooters);
 			if (run !== this.prefetchRun || this.destroyed) return; // résultat obsolète
 			this.prefetchedPages = pages;
+			this.prefetchedShooters = shooters;
 		} catch {
-			if (run === this.prefetchRun) this.prefetchedPages = null;
+			if (run === this.prefetchRun) {
+				this.prefetchedPages = null;
+				this.prefetchedShooters = null;
+			}
 		} finally {
 			if (run === this.prefetchRun) this.isPrefetching = false;
 		}
@@ -430,7 +445,9 @@ export class RankingComponent implements OnInit, OnDestroy {
 		// Dernière page du cycle → bascule sur les pages préchargées si dispo
 		if (this.prefetchedPages && this.prefetchedPages.length) {
 			this.pages = this.prefetchedPages;
+			this.allShooters = this.prefetchedShooters ?? this.allShooters;
 			this.prefetchedPages = null;
+			this.prefetchedShooters = null;
 			this.currentIndex = 0;
 			this.showPage(0);
 			this.playEnterAnimations(true); // nouvelle discipline en général
@@ -452,29 +469,54 @@ export class RankingComponent implements OnInit, OnDestroy {
 		if (this.isRefreshing || this.destroyed) return;
 		this.isRefreshing = true;
 		this.stopRotation();
+		clearTimeout(this.retryTimerId);
 
+		const wasEmpty = !this.pages.length;
+		let ok = false;
 		try {
 			const shooters = await this.supabase.getShootersByCompetitionId(this.competitionId);
+			this.allShooters = shooters;
 			this.pages = this.buildPagesFromShooters(shooters);
 
 			if (!this.pages.length) {
-				this.commonService.showSwalToast('Aucun tireur pour cette compétition.', 'info');
-				return;
+				// Toast uniquement au passage à vide (évite un toast toutes les 15 s)
+				if (!wasEmpty || !this.hasLoadedOnce) this.commonService.showSwalToast('Aucun tireur pour cette compétition.', 'info');
+			} else {
+				ok = true;
 			}
-
-			this.showPage(0);
-			this.playEnterAnimations(true);
+			this.hasLoadedOnce = true;
 		} catch (err: any) {
+			// Erreur réseau : si un classement est déjà affiché, on continue de faire tourner
+			// les données actuelles ; un nouveau rafraîchissement sera tenté en fin de cycle
+			ok = this.pages.length > 0;
 			this.commonService.showSwalToast(err?.message ?? 'Erreur lors de la mise à jour du classement.', 'error');
-			return;
 		} finally {
 			this.isRefreshing = false;
 			// invalide toute ancienne précharge
-			this.prefetchRun++;
-			this.prefetchedPages = null;
+			this.invalidatePrefetch();
 		}
 
-		this.scheduleNextTick();
+		if (this.destroyed) return;
+
+		if (ok) {
+			this.showPage(0);
+			this.playEnterAnimations(true);
+			this.scheduleNextTick();
+			return;
+		}
+
+		// Échec ou compétition vide : on retente plus tard plutôt que de figer l'affichage
+		this.retryTimerId = window.setTimeout(() => void this.refreshAndRestart(), this.RETRY_MS);
+	}
+
+	/**
+	 * Invalide la précharge en cours ou terminée (son résultat sera ignoré).
+	 */
+	private invalidatePrefetch(): void {
+		this.prefetchRun++;
+		this.prefetchedPages = null;
+		this.prefetchedShooters = null;
+		this.isPrefetching = false;
 	}
 
 	// ──────────────────────────────────────────────────────────────────────────────
